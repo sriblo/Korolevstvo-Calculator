@@ -166,8 +166,56 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; }
 .rank-name { color: var(--text); font-weight: 500; }
 .rank-pts  { color: var(--text3); margin-left: auto; }
 
+/* ── CHECKBOX ── */
+.chk-wrap { display: flex; align-items: center; gap: 6px; cursor: pointer; flex-shrink: 0; }
+.chk-wrap input[type=checkbox] { width: 15px; height: 15px; accent-color: var(--greenl); cursor: pointer; }
+.chk-lbl { font-size: 11px; color: var(--text2); }
+
 /* ── RIGHT ── */
 .rcol { display: flex; flex-direction: column; gap: 14px; }
+
+/* ── GUIDE SECTION ── */
+.guide-section { grid-column: 1 / -1; margin-top: 10px; display: flex; flex-direction: column; gap: 14px; }
+.guide-card {
+  background: var(--glass); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--gb); border-radius: 12px; overflow: hidden;
+  box-shadow: 0 1px 0 rgba(220,190,100,.12) inset, 0 8px 32px rgba(0,0,0,.5);
+}
+.guide-card-title {
+  padding: 9px 16px; display: flex; align-items: center; gap: 6px;
+  background: rgba(200,160,60,.1); border-bottom: 1px solid var(--sep);
+  font-family: 'Cinzel', serif; font-size: 10px; font-weight: 600;
+  letter-spacing: 2px; text-transform: uppercase; color: rgba(200,165,70,.75);
+}
+.guide-body { padding: 14px 16px; display: flex; flex-direction: column; gap: 10px; }
+.guide-step { display: flex; gap: 10px; font-size: 12px; line-height: 1.5; }
+.guide-num {
+  font-family: 'Cinzel', serif; font-size: 10px; font-weight: 700;
+  background: rgba(200,160,60,.15); border: 1px solid rgba(200,160,60,.3); color: var(--goldl);
+  border-radius: 50%; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; margin-top: 1px;
+}
+.guide-step-text { color: var(--text2); }
+.guide-step-text b { color: var(--text); }
+
+.qtable { width: 100%; border-collapse: collapse; font-size: 12px; }
+.qtable th {
+  text-align: left; padding: 6px 10px; font-size: 10px; font-weight: 600;
+  letter-spacing: 1px; text-transform: uppercase; color: var(--text3);
+  border-bottom: 1px solid var(--sep);
+}
+.qtable td { padding: 8px 10px; border-bottom: 1px solid rgba(200,165,70,.06); color: var(--text2); vertical-align: top; }
+.qtable tr:last-child td { border-bottom: none; }
+.qtable .qname { color: var(--text); font-weight: 500; }
+.qtable .qtag {
+  display: inline-block; font-size: 9px; font-weight: 600; letter-spacing: .5px;
+  padding: 1px 5px; border-radius: 3px; margin-left: 4px; vertical-align: middle;
+}
+.qtag-once { background: rgba(200,160,60,.15); color: var(--goldl); border: 1px solid rgba(200,160,60,.3); }
+.qtag-day  { background: rgba(100,180,80,.12); color: var(--greenl); border: 1px solid rgba(100,180,80,.25); }
+.qtable .qrew { color: var(--greenl); font-weight: 600; white-space: nowrap; }
+.qtable .qtotal { color: var(--goldl); font-weight: 700; }
+.qtable .qtask { font-size: 11px; color: var(--text3); }
 
 /* ── ITEMS TABLE ── */
 .i-head {
@@ -350,7 +398,7 @@ select.on { border-color: rgba(200,165,70,.45); background: rgba(200,160,40,.06)
         <div class="ico-pill"><img src="../currency/leprecon_taylen.png"></div>
         <div class="ilbl">
           Дней до конца ивента
-          <small>макс. 760 тайл./день</small>
+          <small>760 тайл./день (6 квестов)</small>
         </div>
         <span class="tip" data-tip="Укажи сколько дней осталось до конца ивента.&#10;Каждый день даёт максимум 760 тайленов&#10;если выполнять все квесты.">?</span>
         <div class="nf">
@@ -367,6 +415,18 @@ select.on { border-color: rgba(200,165,70,.45); background: rgba(200,160,40,.06)
           <input type="number" id="have-t" value="0" min="0" oninput="calc()">
           <span class="unit">т.</span>
         </div>
+      </div>
+
+      <div class="irow">
+        <div class="ico-pill em">🍀</div>
+        <div class="ilbl">
+          Разовый квест выполнен
+          <small>«Праздничный подарок» +1 501 тайл.</small>
+        </div>
+        <label class="chk-wrap">
+          <input type="checkbox" id="one-time" checked onchange="calc()">
+          <span class="chk-lbl">Да</span>
+        </label>
       </div>
 
       <div class="irow">
@@ -394,7 +454,7 @@ select.on { border-color: rgba(200,165,70,.45); background: rgba(200,160,40,.06)
         <div class="ico-pill em">🏆</div>
         <div class="ilbl">Текущий ранг</div>
         <select class="rank-sel" id="have-rank" onchange="calc()">
-          <option value="0">Нет (0 оч.)</option>
+          <option value="0">Ранг 0 (0–19 999 оч.)</option>
           <option value="1">Ранг 1 — Празднующий</option>
           <option value="2">Ранг 2 — Имбирный забияка</option>
           <option value="3">Ранг 3 — Гроза Лепреконов</option>
@@ -416,6 +476,11 @@ select.on { border-color: rgba(200,165,70,.45); background: rgba(200,160,40,.06)
 
       <!-- Rank legend -->
       <div class="rank-legend">
+        <div class="rank-row">
+          <span class="rank-badge rb0">Ранг 0</span>
+          <span class="rank-name">Нет ранга</span>
+          <span class="rank-pts">0–19 999 оч.</span>
+        </div>
         <div class="rank-row">
           <span class="rank-badge rb1">Ранг 1</span>
           <span class="rank-name">Празднующий</span>
@@ -486,6 +551,98 @@ select.on { border-color: rgba(200,165,70,.45); background: rgba(200,160,40,.06)
     </div>
 
   </div>
+
+  <!-- GUIDE -->
+  <div class="guide-section">
+
+    <div class="guide-card">
+      <div class="guide-card-title">Как пользоваться калькулятором</div>
+      <div class="guide-body">
+        <div class="guide-step">
+          <div class="guide-num">1</div>
+          <div class="guide-step-text">Укажи <b>сколько дней осталось</b> до конца ивента (12–26 апреля). Если ивент уже закончился — поставь 0.</div>
+        </div>
+        <div class="guide-step">
+          <div class="guide-num">2</div>
+          <div class="guide-step-text">Укажи <b>сколько тайленов уже накоплено</b> — проверь кошелёк в игре.</div>
+        </div>
+        <div class="guide-step">
+          <div class="guide-num">3</div>
+          <div class="guide-step-text">Отметь <b>разовый квест</b>, если ещё не выполнял — добавит 1 501 тайлен к расчёту.</div>
+        </div>
+        <div class="guide-step">
+          <div class="guide-num">4</div>
+          <div class="guide-step-text">Укажи свой <b>текущий ранг репутации</b> и очки сверх него. Это позволяет точно рассчитать донат на репутацию.</div>
+        </div>
+        <div class="guide-step">
+          <div class="guide-num">5</div>
+          <div class="guide-step-text">В таблице справа выбери <b>что хочешь получить</b> — для каждого предмета укажи что есть сейчас и до какого уровня хочешь прокачать.</div>
+        </div>
+        <div class="guide-step">
+          <div class="guide-num">6</div>
+          <div class="guide-step-text">Калькулятор покажет <b>минимальный расход рубинов</b> с оптимальным использованием тайленов — сначала тайлены, рубины только на остаток.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="guide-card">
+      <div class="guide-card-title">Квесты ивента — источники тайленов</div>
+      <div class="guide-body" style="padding: 0">
+        <table class="qtable">
+          <thead>
+            <tr>
+              <th>Квест</th>
+              <th>Задание</th>
+              <th>Награда</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="qname">Праздничный подарок</span><span class="qtag qtag-once">Разовый</span></td>
+              <td class="qtask">—</td>
+              <td class="qrew">1 501 тайл.</td>
+            </tr>
+            <tr>
+              <td><span class="qname">Враг хмеля</span><span class="qtag qtag-day">Ежедневный</span></td>
+              <td class="qtask">Убить 1 Мотра</td>
+              <td class="qrew">150 тайл.</td>
+            </tr>
+            <tr>
+              <td><span class="qname">Ларвафобия</span><span class="qtag qtag-day">Ежедневный</span></td>
+              <td class="qtask">Убить 10 Ларва</td>
+              <td class="qrew">80 тайл.</td>
+            </tr>
+            <tr>
+              <td><span class="qname">Вождь безумцев</span><span class="qtag qtag-day">Ежедневный</span></td>
+              <td class="qtask">Убить 1 Пивной Лепрекон</td>
+              <td class="qrew">150 тайл.</td>
+            </tr>
+            <tr>
+              <td><span class="qname">Безумие лепреконов</span><span class="qtag qtag-day">Ежедневный</span></td>
+              <td class="qtask">Убить 5 Лепрекон Двайер, 5 Лепрекон Хили, 5 Лепрекон Доннел</td>
+              <td class="qrew">80 тайл.</td>
+            </tr>
+            <tr>
+              <td><span class="qname">Уцелевшие бочки</span><span class="qtag qtag-day">Ежедневный</span></td>
+              <td class="qtask">Собрать 10 бочек</td>
+              <td class="qrew">80 тайл.</td>
+            </tr>
+            <tr>
+              <td><span class="qname">Сложности упаковки</span><span class="qtag qtag-day">Ежедневный</span></td>
+              <td class="qtask">Собрать 10 ремней</td>
+              <td class="qrew">220 тайл.</td>
+            </tr>
+            <tr style="background: rgba(200,160,60,.05)">
+              <td colspan="2" style="color:var(--text3); font-size:11px; padding: 8px 10px;">Итого ежедневно (все квесты)</td>
+              <td class="qtotal">760 тайл./день</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
 </div>
 
 <script>
@@ -620,7 +777,8 @@ function calc() {
   const haveRank  = parseInt(document.getElementById('have-rank').value)||0;
   const haveRepX  = Math.max(0, parseInt(document.getElementById('have-rep-extra').value)||0);
 
-  const earned  = days * 760;
+  const oneTime = document.getElementById('one-time').checked ? 1501 : 0;
+  const earned  = days * 760 + oneTime;
   const total   = earned + haveT - miss;
   const haveRep = REP[haveRank] + haveRepX;
 
