@@ -76,6 +76,20 @@ header::after {
   transform: translateY(-2px);
   box-shadow: 0 1px 0 rgba(220,190,100,.18) inset, 0 16px 40px rgba(0,0,0,.6), 0 0 40px rgba(200,160,60,.06);
 }
+
+/* ── CURRENT EVENT CARD (highlighted) ── */
+.calc-card.current-event {
+  border-color: rgba(100,200,80,.45);
+  box-shadow: 0 1px 0 rgba(120,220,80,.15) inset, 0 8px 32px rgba(0,0,0,.5), 0 0 30px rgba(80,160,50,.12);
+}
+.calc-card.current-event::before {
+  background: linear-gradient(90deg, transparent, rgba(100,200,80,.5), transparent);
+}
+.calc-card.current-event:hover {
+  border-color: rgba(120,220,80,.65);
+  box-shadow: 0 1px 0 rgba(120,220,80,.2) inset, 0 16px 40px rgba(0,0,0,.6), 0 0 40px rgba(80,160,50,.18);
+}
+
 .card-top {
   padding: 20px 20px 14px;
   display: flex; align-items: flex-start; gap: 14px;
@@ -103,8 +117,9 @@ header::after {
   font-size: 10px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase;
   padding: 3px 8px; border-radius: 4px;
 }
-.tag-active { background: rgba(78,138,58,.2); color: var(--greenl); border: 1px solid rgba(78,138,58,.35); }
-.card-arrow { font-size: 16px; color: var(--text3); transition: color .15s; }
+.tag-active  { background: rgba(78,138,58,.2);  color: var(--greenl); border: 1px solid rgba(78,138,58,.35); }
+.tag-ready   { background: rgba(200,160,60,.12); color: var(--goldl);  border: 1px solid rgba(200,160,60,.25); }
+.card-arrow  { font-size: 16px; color: var(--text3); transition: color .15s; }
 .calc-card:hover .card-arrow { color: var(--goldl); }
 
 /* ── SOON CARD ── */
@@ -113,16 +128,26 @@ header::after {
   border: 1px solid rgba(255,255,255,.05); border-radius: 12px; overflow: hidden;
   position: relative; cursor: default;
 }
+.soon-card.current-event {
+  border-color: rgba(100,200,80,.25);
+  box-shadow: 0 0 20px rgba(80,160,50,.08);
+}
 .soon-card .card-ico { filter: grayscale(1) opacity(.4); }
-.soon-card .card-name { color: var(--text3); }
+.soon-card.current-event .card-ico { filter: grayscale(.3) opacity(.7); }
+.soon-card .card-name  { color: var(--text3); }
+.soon-card.current-event .card-name { color: var(--text2); }
 .soon-card .card-dates { color: rgba(74,63,48,.8); }
-.soon-card .card-desc { color: rgba(74,63,48,.8); border-bottom-color: rgba(255,255,255,.04); }
+.soon-card.current-event .card-dates { color: var(--text3); }
+.soon-card .card-desc  { color: rgba(74,63,48,.8); border-bottom-color: rgba(255,255,255,.04); }
 .tag-soon {
   background: rgba(255,255,255,.04); color: var(--text3);
   border: 1px solid rgba(255,255,255,.08);
 }
+.tag-soon-current {
+  background: rgba(100,180,70,.1); color: rgba(120,200,80,.7);
+  border: 1px solid rgba(100,180,70,.2);
+}
 /* сКОРо pun */
-.kor-pun { letter-spacing: 0; }
 .kor-pun .kor { color: rgba(200,165,70,.5); font-weight: 700; }
 </style>
 </head>
@@ -137,98 +162,152 @@ header::after {
 
 <div class="page">
   <div class="section-title">Ивентовые калькуляторы</div>
-
-  <div class="grid">
-
-    <!-- ACTIVE -->
-    <a class="calc-card" href="leprecon/hmeli_calc.html">
-      <div class="card-top">
-        <div class="card-ico">🍺</div>
-        <div class="card-info">
-          <div class="card-name">Месяц цветущего хмеля</div>
-          <div class="card-dates">12–26 апреля 2026</div>
-        </div>
-      </div>
-      <div class="card-desc">Лепрекон, Медовый хмель, Фляжка, Талисман клевера — сколько тайленов и рубинов нужно для желаемых предметов.</div>
-      <div class="card-footer">
-        <span class="card-tag tag-active">● Идёт сейчас</span>
-        <span class="card-arrow">→</span>
-      </div>
-    </a>
-
-    <!-- SOON cards -->
-    <div class="soon-card">
-      <div class="card-top">
-        <div class="card-ico">🐉</div>
-        <div class="card-info">
-          <div class="card-name">Небесные Драконы</div>
-          <div class="card-dates">скоро</div>
-        </div>
-      </div>
-      <div class="card-desc">Калькулятор для ивента с небесными драконами.</div>
-      <div class="card-footer">
-        <span class="card-tag tag-soon"><span class="kor-pun">с<span class="kor">КОР</span>о!</span></span>
-      </div>
-    </div>
-
-    <div class="soon-card">
-      <div class="card-top">
-        <div class="card-ico">🎃</div>
-        <div class="card-info">
-          <div class="card-name">Тыквенный Фестиваль</div>
-          <div class="card-dates">скоро</div>
-        </div>
-      </div>
-      <div class="card-desc">Калькулятор для осеннего тыквенного ивента.</div>
-      <div class="card-footer">
-        <span class="card-tag tag-soon"><span class="kor-pun">с<span class="kor">КОР</span>о!</span></span>
-      </div>
-    </div>
-
-    <div class="soon-card">
-      <div class="card-top">
-        <div class="card-ico">🌊</div>
-        <div class="card-info">
-          <div class="card-name">Зов Глубин</div>
-          <div class="card-dates">скоро</div>
-        </div>
-      </div>
-      <div class="card-desc">Калькулятор для подводного ивента.</div>
-      <div class="card-footer">
-        <span class="card-tag tag-soon"><span class="kor-pun">с<span class="kor">КОР</span>о!</span></span>
-      </div>
-    </div>
-
-    <div class="soon-card">
-      <div class="card-top">
-        <div class="card-ico">⚓</div>
-        <div class="card-info">
-          <div class="card-name">Пиратский день</div>
-          <div class="card-dates">скоро</div>
-        </div>
-      </div>
-      <div class="card-desc">Калькулятор для пиратского ивента.</div>
-      <div class="card-footer">
-        <span class="card-tag tag-soon"><span class="kor-pun">с<span class="kor">КОР</span>о!</span></span>
-      </div>
-    </div>
-
-    <div class="soon-card">
-      <div class="card-top">
-        <div class="card-ico">🎪</div>
-        <div class="card-info">
-          <div class="card-name">Ярмарка</div>
-          <div class="card-dates">ежемесячно</div>
-        </div>
-      </div>
-      <div class="card-desc">Калькулятор ярмарочных тайленов и ставок.</div>
-      <div class="card-footer">
-        <span class="card-tag tag-soon"><span class="kor-pun">с<span class="kor">КОР</span>о!</span></span>
-      </div>
-    </div>
-
-  </div>
+  <div class="grid" id="grid"></div>
 </div>
 
+<script>
+const MONTH_NAMES = ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
+
+// months: массив месяцев (1-12) когда проходит ивент
+const EVENTS = [
+  {
+    name: 'Месяц цветущего хмеля',
+    months: [4],
+    ico: '🍺',
+    desc: 'Лепрекон, Медовый хмель, Фляжка, Талисман клевера — сколько тайленов и рубинов нужно для желаемых предметов.',
+    url: 'leprecon/hmeli_calc.html',
+  },
+  {
+    name: 'Месяц пробуждения цветов',
+    months: [3],
+    ico: '🌸',
+    desc: 'Весенний ивент — калькулятор в разработке.',
+  },
+  {
+    name: 'Экспедиция: Сбор припасов!',
+    months: [2],
+    ico: '🎒',
+    desc: 'Февральская экспедиция — калькулятор в разработке.',
+  },
+  {
+    name: 'Новый год. Колдер',
+    months: [12, 1],
+    ico: '❄️',
+    desc: 'Новогодний ивент — калькулятор в разработке.',
+  },
+  {
+    name: 'День Рождения Королевства',
+    months: [11, 12],
+    ico: '🎂',
+    desc: 'Юбилейный ивент — калькулятор в разработке.',
+  },
+  {
+    name: 'Тыквенный Фестиваль',
+    months: [10],
+    ico: '🎃',
+    desc: 'Осенний ивент — калькулятор в разработке.',
+  },
+  {
+    name: 'Небесные Драконы',
+    months: [9],
+    ico: '🐉',
+    desc: 'Сентябрьский ивент — калькулятор в разработке.',
+  },
+  {
+    name: 'Гоблинский Рай',
+    months: [8],
+    ico: '👺',
+    desc: 'Августовский ивент — калькулятор в разработке.',
+  },
+  {
+    name: 'Экспедиция: Ледяные острова',
+    months: [7],
+    ico: '🧊',
+    desc: 'Июльская экспедиция — калькулятор в разработке.',
+  },
+  {
+    name: 'День Пирата',
+    months: [6],
+    ico: '⚓',
+    desc: 'Пиратский ивент — калькулятор в разработке.',
+  },
+  {
+    name: 'Зов глубин',
+    months: [5],
+    ico: '🌊',
+    desc: 'Майский ивент — калькулятор в разработке.',
+  },
+];
+
+function monthLabel(months) {
+  if (months.length === 1) return MONTH_NAMES[months[0] - 1];
+  return months.map(m => MONTH_NAMES[m - 1]).join(' — ');
+}
+
+function renderCard(ev, isCurrent) {
+  const hasCalc = !!ev.url;
+  const monthsLabel = monthLabel(ev.months);
+
+  if (hasCalc) {
+    const tag = isCurrent
+      ? `<span class="card-tag tag-active">● Идёт сейчас</span>`
+      : `<span class="card-tag tag-ready">Калькулятор готов</span>`;
+    return `<a class="calc-card${isCurrent ? ' current-event' : ''}" href="${ev.url}">
+      <div class="card-top">
+        <div class="card-ico">${ev.ico}</div>
+        <div class="card-info">
+          <div class="card-name">${ev.name}</div>
+          <div class="card-dates">${monthsLabel}</div>
+        </div>
+      </div>
+      <div class="card-desc">${ev.desc}</div>
+      <div class="card-footer">${tag}<span class="card-arrow">→</span></div>
+    </a>`;
+  } else {
+    const tag = isCurrent
+      ? `<span class="card-tag tag-soon-current">● Идёт сейчас</span>`
+      : `<span class="card-tag tag-soon"><span class="kor-pun">с<span class="kor">КОР</span>о!</span></span>`;
+    return `<div class="soon-card${isCurrent ? ' current-event' : ''}">
+      <div class="card-top">
+        <div class="card-ico">${ev.ico}</div>
+        <div class="card-info">
+          <div class="card-name">${ev.name}</div>
+          <div class="card-dates">${monthsLabel}</div>
+        </div>
+      </div>
+      <div class="card-desc">${ev.desc}</div>
+      <div class="card-footer">${tag}</div>
+    </div>`;
+  }
+}
+
+function render() {
+  const now = new Date();
+  const curMonth = now.getMonth() + 1; // 1–12
+
+  // Разделяем на текущие и остальные
+  const current = EVENTS.filter(ev => ev.months.includes(curMonth));
+  const others  = EVENTS.filter(ev => !ev.months.includes(curMonth));
+
+  // Остальные сортируем: ближайший следующий месяц вперёд
+  others.sort((a, b) => {
+    const nextMonth = m => {
+      // Ближайший месяц вперёд от curMonth
+      const future = m.map(mo => (mo - curMonth + 12) % 12 || 12);
+      return Math.min(...future);
+    };
+    return nextMonth(a.months) - nextMonth(b.months);
+  });
+
+  const html = [
+    ...current.map(ev => renderCard(ev, true)),
+    ...others.map(ev => renderCard(ev, false)),
+  ].join('');
+
+  document.getElementById('grid').innerHTML = html;
+}
+
+render();
+</script>
 </body>
 </html>
