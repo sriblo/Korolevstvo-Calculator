@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Калькуляторы Королевства</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=MedievalSharp&family=Crimson+Pro:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@400;500;600&display=swap');
+
+:root {
+  --amber:   #b8860b;
+  --gold:    #d4a843;
+  --goldl:   #f0cc6a;
+  --sage:    #5a7a3a;
+  --sagel:   #8ab860;
+  --ember:   #8b3a2a;
+  --emberl:  #c86040;
+  --text:    #e8dfc8;
+  --text2:   #9a8a6a;
+  --text3:   #4a3f2e;
+  --bg:      #0a0704;
+  --glass:   rgba(18,12,6,.78);
+  --glass2:  rgba(10,7,3,.88);
+  --gb:      rgba(184,134,11,.22);
+  --sep:     rgba(184,134,11,.12);
+  --glow-amber: rgba(184,134,11,.18);
+  --glow-sage:  rgba(90,122,58,.18);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  min-height: 100vh;
+  color: var(--text);
+  font-family: 'Crimson Pro', 'Inter', serif;
+  font-size: 15px;
+  background-color: var(--bg);
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E"),
+    radial-gradient(ellipse 80% 60% at 0% 0%,   rgba(120,70,10,.6) 0%, transparent 55%),
+    radial-gradient(ellipse 60% 70% at 100% 100%, rgba(90,30,20,.5) 0%, transparent 50%),
+    radial-gradient(ellipse 90% 45% at 50% 5%,  rgba(40,75,22,.3) 0%, transparent 50%),
+    radial-gradient(ellipse 40% 40% at 50% 50%, rgba(10,6,2,.0) 0%, rgba(10,6,2,.55) 100%);
+  overflow-x: hidden;
+}
+
+/* ── NOISE OVERLAY ── */
+body::before {
+  content: '';
+  position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  opacity: .5;
+}
+
+/* ── VIGNETTE ── */
+body::after {
+  content: '';
+  position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  background: radial-gradient(ellipse 120% 100% at 50% 50%, transparent 40%, rgba(5,3,1,.8) 100%);
+}
+
+/* ── HEADER ── */
+header {
+  position: relative; z-index: 10;
+  padding: 0 40px;
+  background: linear-gradient(180deg, rgba(20,13,6,.9) 0%, rgba(10,7,3,.7) 100%);
+  backdrop-filter: blur(32px); -webkit-backdrop-filter: blur(32px);
+  border-bottom: 1px solid rgba(184,134,11,.15);
+}
+header::before {
+  content: '';
+  position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(90deg, rgba(184,134,11,.04) 0%, transparent 30%, transparent 70%, rgba(184,134,11,.04) 100%);
+}
+header::after {
+  content: '';
+  position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent 0%, rgba(184,134,11,.35) 20%, var(--gold) 50%, rgba(184,134,11,.35) 80%, transparent 100%);
+}
+.h-inner {
+  max-width: 1100px; margin: 0 auto;
+  padding: 18px 0;
+  display: flex; align-items: center; gap: 20px;
+}
+.h-sigil {
+  font-size: 28px; line-height: 1;
+  filter: drop-shadow(0 0 16px rgba(184,134,11,.5));
+  flex-shrink: 0;
+}
+.h-titles { flex: 1; }
+.h-title {
+  font-family: 'UnifrakturMaguntia', cursive;
+  font-size: 26px; line-height: 1.1;
+  color: var(--gold);
+  text-shadow: 0 0 40px rgba(184,134,11,.4), 0 2px 4px rgba(0,0,0,.8);
+  letter-spacing: .02em;
+}
+.h-sub {
+  font-family: 'Crimson Pro', serif;
+  font-size: 13px; color: var(--text2);
+  margin-top: 3px; font-style: italic; letter-spacing: .04em;
+}
+.h-ornament {
+  display: flex; align-items: center; gap: 10px;
+  flex-shrink: 0;
+}
+.h-ornament-line {
+  width: 60px; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(184,134,11,.4));
+}
+.h-ornament-diamond {
+  width: 8px; height: 8px;
+  background: var(--amber);
+  transform: rotate(45deg);
+  box-shadow: 0 0 8px rgba(184,134,11,.6);
+}
+
+/* ── HERO ── */
+.hero {
+  position: relative; z-index: 5;
+  max-width: 1100px; margin: 0 auto;
+  padding: 64px 40px 48px;
+  text-align: center;
+}
+.hero-ornament-top {
+  display: flex; align-items: center; justify-content: center; gap: 16px;
+  margin-bottom: 28px;
+}
+.orn-line {
+  height: 1px; flex: 1; max-width: 200px;
+  background: linear-gradient(90deg, transparent, rgba(184,134,11,.5));
+}
+.orn-line.r { background: linear-gradient(270deg, transparent, rgba(184,134,11,.5)); }
+.orn-center {
+  display: flex; align-items: center; gap: 8px;
+}
+.orn-diamond {
+  width: 6px; height: 6px; background: var(--amber); transform: rotate(45deg);
+  box-shadow: 0 0 6px rgba(184,134,11,.5);
+}
+.orn-cross {
+  width: 12px; height: 12px; position: relative; flex-shrink: 0;
+}
+.orn-cross::before, .orn-cross::after {
+  content: ''; position: absolute; background: var(--gold);
+  box-shadow: 0 0 8px rgba(212,168,67,.5);
+}
+.orn-cross::before { width: 12px; height: 2px; top: 5px; left: 0; }
+.orn-cross::after  { width: 2px; height: 12px; top: 0; left: 5px; }
+
+.hero-title {
+  font-family: 'UnifrakturMaguntia', cursive;
+  font-size: clamp(42px, 7vw, 72px);
+  line-height: 1;
+  background: linear-gradient(160deg, var(--goldl) 0%, var(--gold) 40%, var(--amber) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  filter: drop-shadow(0 4px 20px rgba(184,134,11,.3));
+  margin-bottom: 16px;
+  letter-spacing: .02em;
+}
+.hero-subtitle {
+  font-family: 'Crimson Pro', serif;
+  font-size: 18px; color: var(--text2);
+  font-style: italic; letter-spacing: .06em;
+  margin-bottom: 40px;
+  line-height: 1.6;
+}
+.hero-subtitle strong { color: var(--text); font-style: normal; font-weight: 600; }
+
+/* ── SECTION LABEL ── */
+.section-label {
+  display: flex; align-items: center; gap: 14px;
+  margin-bottom: 24px;
+}
+.section-label-text {
+  font-family: 'Inter', sans-serif;
+  font-size: 10px; font-weight: 600; letter-spacing: 3.5px;
+  text-transform: uppercase; color: rgba(184,134,11,.6);
+  flex-shrink: 0;
+}
+.section-label-line {
+  flex: 1; height: 1px;
+  background: linear-gradient(90deg, rgba(184,134,11,.2), transparent);
+}
+
+/* ── PAGE ── */
+.page {
+  position: relative; z-index: 5;
+  max-width: 1100px; margin: 0 auto; padding: 0 40px 80px;
+}
+
+/* ── GRID ── */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  align-items: start;
+}
+.grid-full {
+  grid-column: 1 / -1;
+  margin-bottom: 4px;
+}
+
+/* ── BASE CARD SHELL ── */
+.card-shell {
+  position: relative;
+  border-radius: 14px; overflow: hidden;
+}
+/* outer etched border */
+.card-shell::before {
+  content: ''; position: absolute; inset: 0; border-radius: 14px;
+  border: 1px solid rgba(184,134,11,.12);
+  pointer-events: none; z-index: 3;
+}
+/* inner gold line */
+.card-shell::after {
+  content: ''; position: absolute; inset: 2px; border-radius: 12px;
+  border: 1px solid rgba(212,168,67,.10);
+  pointer-events: none; z-index: 3;
+}
+
+/* ── ACTIVE CALC CARD ── */
+.calc-card {
+  background: var(--glass);
+  backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+  border: 1px solid var(--gb);
+  border-radius: 14px; overflow: hidden;
+  text-decoration: none; color: inherit; display: block;
+  box-shadow:
+    0 1px 0 rgba(230,200,100,.1) inset,
+    0 12px 40px rgba(0,0,0,.55),
+    0 0 0 1px rgba(0,0,0,.6);
+  transition: border-color .25s, transform .2s, box-shadow .25s;
+  position: relative;
+}
+.calc-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(212,168,67,.5), transparent);
+  pointer-events: none; z-index: 2;
+}
+/* shimmer sweep */
+.calc-card::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(105deg, transparent 40%, rgba(255,255,255,.025) 50%, transparent 60%);
+  background-size: 200% 100%; background-position: -100% 0;
+  transition: background-position .6s ease;
+  pointer-events: none; z-index: 1;
+}
+.calc-card:hover::after { background-position: 200% 0; }
+.calc-card:hover {
+  border-color: rgba(212,168,67,.5);
+  transform: translateY(-3px);
+  box-shadow:
+    0 1px 0 rgba(230,200,100,.18) inset,
+    0 20px 50px rgba(0,0,0,.65),
+    0 0 50px rgba(184,134,11,.08);
+}
+
+/* ── CURRENT EVENT — FEATURED FULL WIDTH ── */
+.calc-card.current-event {
+  border-color: rgba(90,120,58,.55);
+  box-shadow:
+    0 1px 0 rgba(140,210,80,.12) inset,
+    0 12px 40px rgba(0,0,0,.6),
+    0 0 60px rgba(90,122,58,.15);
+}
+.calc-card.current-event::before {
+  background: linear-gradient(90deg, transparent, rgba(140,210,80,.55), rgba(212,168,67,.4), transparent);
+  height: 3px;
+}
+.calc-card.current-event:hover {
+  border-color: rgba(138,184,96,.7);
+  box-shadow:
+    0 1px 0 rgba(140,210,80,.2) inset,
+    0 24px 60px rgba(0,0,0,.7),
+    0 0 80px rgba(90,122,58,.2);
+}
+/* featured layout for current event */
+.calc-card.current-event .card-inner {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  grid-template-rows: auto auto auto;
+}
+.calc-card.current-event .card-ico-wrap {
+  grid-row: 1 / 3; grid-column: 1;
+  display: flex; align-items: center;
+  padding: 28px 24px 28px 28px;
+}
+.calc-card.current-event .card-ico {
+  font-size: 72px;
+  filter: drop-shadow(0 0 24px rgba(140,210,80,.5));
+}
+.calc-card.current-event .card-info-wrap {
+  grid-row: 1; grid-column: 2;
+  padding: 28px 20px 0;
+}
+.calc-card.current-event .card-name {
+  font-size: 22px; margin-bottom: 5px;
+}
+.calc-card.current-event .card-dates {
+  font-size: 13px;
+}
+.calc-card.current-event .card-desc-wrap {
+  grid-row: 2; grid-column: 2;
+  padding: 8px 20px 24px;
+}
+.calc-card.current-event .card-desc {
+  font-size: 14px;
+  border-bottom: none; padding: 0;
+}
+.calc-card.current-event .card-footer-wrap {
+  grid-row: 1 / 3; grid-column: 3;
+  display: flex; align-items: center; justify-content: center;
+  padding: 28px 28px 28px 16px;
+  border-left: 1px solid rgba(140,210,80,.12);
+}
+.calc-card.current-event .card-footer { padding: 0; border-top: none; }
+
+/* ── CARD INNER (non-featured) ── */
+.card-inner { display: flex; flex-direction: column; }
+
+.card-ico-wrap { padding: 20px 20px 0; }
+.card-ico {
+  font-size: 38px; line-height: 1;
+  filter: drop-shadow(0 0 14px rgba(184,134,11,.35));
+}
+.card-info-wrap { padding: 14px 20px 0; }
+.card-name {
+  font-family: 'Crimson Pro', serif;
+  font-size: 17px; font-weight: 700; color: var(--goldl);
+  margin-bottom: 3px; line-height: 1.25;
+  letter-spacing: .01em;
+}
+.card-dates { font-size: 12px; color: var(--text2); font-style: italic; }
+.card-desc-wrap { padding: 10px 20px 0; }
+.card-desc {
+  font-size: 13px; color: var(--text2); line-height: 1.55;
+}
+.card-footer-wrap {
+  padding: 12px 20px 16px;
+  border-top: 1px solid var(--sep);
+  margin-top: 14px;
+}
+.card-footer {
+  display: flex; align-items: center; justify-content: space-between;
+}
+.card-tag {
+  font-family: 'Inter', sans-serif;
+  font-size: 10px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase;
+  padding: 4px 10px; border-radius: 5px; display: flex; align-items: center; gap: 5px;
+}
+.tag-active {
+  background: rgba(90,122,58,.2); color: var(--sagel);
+  border: 1px solid rgba(90,122,58,.4);
+}
+.tag-active::before {
+  content: '';
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--sagel);
+  box-shadow: 0 0 6px var(--sagel);
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; box-shadow: 0 0 6px var(--sagel); }
+  50% { opacity: .6; box-shadow: 0 0 12px var(--sagel); }
+}
+.tag-ready {
+  background: rgba(184,134,11,.1); color: var(--gold);
+  border: 1px solid rgba(184,134,11,.28);
+}
+.card-arrow {
+  font-size: 20px; color: var(--text3);
+  transition: color .2s, transform .2s;
+  line-height: 1;
+}
+.calc-card:hover .card-arrow { color: var(--goldl); transform: translateX(3px); }
+
+/* ── SOON CARD ── */
+.soon-card {
+  background: rgba(10,7,3,.65);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(255,255,255,.05);
+  border-radius: 14px; overflow: hidden;
+  position: relative; cursor: default;
+  box-shadow: 0 8px 24px rgba(0,0,0,.4);
+}
+.soon-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.06), transparent);
+  pointer-events: none;
+}
+.soon-card.current-event {
+  border-color: rgba(90,122,58,.2);
+  box-shadow: 0 0 30px rgba(90,122,58,.06);
+}
+.soon-card .card-ico { filter: grayscale(1) opacity(.3); }
+.soon-card.current-event .card-ico { filter: grayscale(.4) opacity(.55); }
+.soon-card .card-name  { color: var(--text3); }
+.soon-card.current-event .card-name { color: var(--text2); }
+.soon-card .card-dates { color: rgba(74,63,48,.7); }
+.soon-card .card-desc  { color: rgba(74,63,48,.7); }
+.tag-soon {
+  background: rgba(255,255,255,.04); color: var(--text3);
+  border: 1px solid rgba(255,255,255,.07);
+  font-family: 'Inter', sans-serif;
+  font-size: 10px; font-weight: 600; letter-spacing: 1.5px;
+  padding: 4px 10px; border-radius: 5px;
+}
+.tag-soon-current {
+  background: rgba(90,122,58,.1); color: rgba(138,184,96,.65);
+  border: 1px solid rgba(90,122,58,.2);
+  font-family: 'Inter', sans-serif;
+  font-size: 10px; font-weight: 600; letter-spacing: 1.5px;
+  padding: 4px 10px; border-radius: 5px;
+  display: flex; align-items: center; gap: 5px;
+}
+.tag-soon-current::before {
+  content: '';
+  width: 5px; height: 5px; border-radius: 50%;
+  background: rgba(138,184,96,.65);
+  animation: pulse-dot 2.5s ease-in-out infinite;
+}
+.kor-pun .kor { color: rgba(184,134,11,.5); font-weight: 700; }
+
+/* ── ORNAMENTAL DIVIDER ── */
+.orn-divider {
+  display: flex; align-items: center; gap: 12px;
+  margin: 40px 0 28px;
+}
+.orn-div-line {
+  flex: 1; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(184,134,11,.25), transparent);
+}
+.orn-div-center {
+  display: flex; align-items: center; gap: 6px; flex-shrink: 0;
+}
+.orn-div-dot {
+  width: 4px; height: 4px; border-radius: 50%;
+  background: rgba(184,134,11,.4);
+}
+.orn-div-diamond {
+  width: 8px; height: 8px;
+  border: 1px solid rgba(184,134,11,.5);
+  transform: rotate(45deg);
+  background: rgba(184,134,11,.1);
+}
+.orn-div-cross {
+  width: 14px; height: 14px; position: relative;
+}
+.orn-div-cross::before, .orn-div-cross::after {
+  content: ''; position: absolute; background: rgba(184,134,11,.45);
+}
+.orn-div-cross::before { width: 14px; height: 1px; top: 6px; left: 0; }
+.orn-div-cross::after  { width: 1px; height: 14px; left: 6px; top: 0; }
+
+/* ── FOOTER ── */
+.page-footer {
+  position: relative; z-index: 5;
+  max-width: 1100px; margin: 0 auto;
+  padding: 0 40px 60px;
+  text-align: center;
+}
+.footer-ornament {
+  display: flex; align-items: center; justify-content: center; gap: 16px;
+  margin-bottom: 20px;
+}
+.footer-text {
+  font-family: 'Crimson Pro', serif;
+  font-size: 13px; color: var(--text3);
+  font-style: italic; letter-spacing: .05em;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 700px) {
+  header, .page, .hero, .page-footer { padding-left: 20px; padding-right: 20px; }
+  .hero { padding-top: 40px; padding-bottom: 32px; }
+  .hero-title { font-size: 38px; }
+  .calc-card.current-event .card-inner { grid-template-columns: 1fr; }
+  .calc-card.current-event .card-ico-wrap { grid-row: 1; grid-column: 1; padding: 20px 20px 0; }
+  .calc-card.current-event .card-ico { font-size: 48px; }
+  .calc-card.current-event .card-info-wrap { grid-row: 2; grid-column: 1; padding: 14px 20px 0; }
+  .calc-card.current-event .card-name { font-size: 18px; }
+  .calc-card.current-event .card-desc-wrap { grid-row: 3; grid-column: 1; padding: 10px 20px 0; }
+  .calc-card.current-event .card-footer-wrap { grid-row: 4; grid-column: 1; border-left: none; border-top: 1px solid rgba(140,210,80,.12); padding: 12px 20px 16px; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="h-inner">
+    <div class="h-sigil">⚜</div>
+    <div class="h-titles">
+      <div class="h-title">Калькуляторы Королевства</div>
+      <div class="h-sub">Сайт создан игроками для игроков · kor.ru</div>
+    </div>
+    <div class="h-ornament">
+      <div class="h-ornament-line"></div>
+      <div class="h-ornament-diamond"></div>
+    </div>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="hero-ornament-top">
+    <div class="orn-line"></div>
+    <div class="orn-center">
+      <div class="orn-diamond"></div>
+      <div style="width:6px;height:1px;background:rgba(184,134,11,.4)"></div>
+      <div class="orn-cross"></div>
+      <div style="width:6px;height:1px;background:rgba(184,134,11,.4)"></div>
+      <div class="orn-diamond"></div>
+    </div>
+    <div class="orn-line r"></div>
+  </div>
+  <div class="hero-title">Арканный Кодекс</div>
+  <div class="hero-subtitle">
+    Выбери ивент и открой свиток знаний —<br>
+    <strong>точный расчёт тайленов, рубинов и репутации</strong>
+  </div>
+</div>
+
+<div class="page">
+  <div class="section-label">
+    <div class="section-label-text">Ивентовые калькуляторы</div>
+    <div class="section-label-line"></div>
+  </div>
+
+  <div class="grid" id="grid"></div>
+
+  <div class="orn-divider">
+    <div class="orn-div-line"></div>
+    <div class="orn-div-center">
+      <div class="orn-div-dot"></div>
+      <div style="width:8px;height:1px;background:rgba(184,134,11,.3)"></div>
+      <div class="orn-div-diamond"></div>
+      <div class="orn-div-cross"></div>
+      <div class="orn-div-diamond"></div>
+      <div style="width:8px;height:1px;background:rgba(184,134,11,.3)"></div>
+      <div class="orn-div-dot"></div>
+    </div>
+    <div class="orn-div-line"></div>
+  </div>
+</div>
+
+<div class="page-footer">
+  <div class="footer-ornament">
+    <div class="orn-line" style="max-width:120px"></div>
+    <div class="orn-diamond" style="width:5px;height:5px;background:rgba(184,134,11,.35);box-shadow:none"></div>
+    <div class="orn-line r" style="max-width:120px"></div>
+  </div>
+  <div class="footer-text">Сделано с любовью к Королевству · не является официальным ресурсом</div>
+</div>
+
+<script>
+const MONTH_NAMES = ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
+
+// months: массив месяцев (1-12) когда проходит ивент
+const EVENTS = [
+  {
+    name: 'Месяц цветущего хмеля',
+    months: [4],
+    ico: '🍺',
+    desc: 'Лепрекон, Медовый хмель, Фляжка, Талисман клевера — сколько тайленов и рубинов нужно для желаемых предметов.',
+    url: 'leprecon/hmeli_calc2.html',
+  },
+  {
+    name: 'Месяц пробуждения цветов',
+    months: [3],
+    ico: '🌸',
+    desc: 'Весенний ивент — калькулятор в разработке.',
+  },
+  {
+    name: 'Экспедиция: Сбор припасов!',
+    months: [2],
+    ico: '🎒',
+    desc: 'Февральская экспедиция — калькулятор в разработке.',
+  },
+  {
+    name: 'Новый год. Колдер',
+    months: [12, 1],
+    ico: '❄️',
+    desc: 'Новогодний ивент — калькулятор в разработке.',
+  },
+  {
+    name: 'День Рождения Королевства',
+    months: [11, 12],
+    ico: '🎂',
+    desc: 'Юбилейный ивент — калькулятор в разработке.',
+  },
+  {
+    name: 'Тыквенный Фестиваль',
+    months: [10],
+    ico: '🎃',
+    desc: 'Осенний ивент — калькулятор в разработке.',
+  },
+  {
+    name: 'Небесные Драконы',
+    months: [9],
+    ico: '🐉',
+    desc: 'Сентябрьский ивент — калькулятор в разработке.',
+  },
+  {
+    name: 'Гоблинский Рай',
+    months: [8],
+    ico: '👺',
+    desc: 'Августовский ивент — калькулятор в разработке.',
+  },
+  {
+    name: 'Экспедиция: Ледяные острова',
+    months: [7],
+    ico: '🧊',
+    desc: 'Июльская экспедиция — калькулятор в разработке.',
+  },
+  {
+    name: 'День Пирата',
+    months: [6],
+    ico: '⚓',
+    desc: 'Пиратский ивент — калькулятор в разработке.',
+  },
+  {
+    name: 'Зов глубин',
+    months: [5],
+    ico: '🌊',
+    desc: 'Майский ивент — калькулятор в разработке.',
+  },
+];
+
+function monthLabel(months) {
+  if (months.length === 1) return MONTH_NAMES[months[0] - 1];
+  return months.map(m => MONTH_NAMES[m - 1]).join(' — ');
+}
+
+function renderCard(ev, isCurrent) {
+  const hasCalc = !!ev.url;
+  const monthsLabel = monthLabel(ev.months);
+
+  if (hasCalc) {
+    const tag = isCurrent
+      ? `<span class="card-tag tag-active">Идёт сейчас</span>`
+      : `<span class="card-tag tag-ready">Калькулятор готов</span>`;
+
+    if (isCurrent) {
+      return `<a class="calc-card current-event grid-full" href="${ev.url}">
+        <div class="card-inner">
+          <div class="card-ico-wrap">
+            <div class="card-ico">${ev.ico}</div>
+          </div>
+          <div class="card-info-wrap">
+            <div class="card-name">${ev.name}</div>
+            <div class="card-dates">${monthsLabel}</div>
+          </div>
+          <div class="card-desc-wrap">
+            <div class="card-desc">${ev.desc}</div>
+          </div>
+          <div class="card-footer-wrap">
+            <div class="card-footer">
+              ${tag}
+              <span class="card-arrow">→</span>
+            </div>
+          </div>
+        </div>
+      </a>`;
+    }
+
+    return `<a class="calc-card" href="${ev.url}">
+      <div class="card-inner">
+        <div class="card-ico-wrap"><div class="card-ico">${ev.ico}</div></div>
+        <div class="card-info-wrap">
+          <div class="card-name">${ev.name}</div>
+          <div class="card-dates">${monthsLabel}</div>
+        </div>
+        <div class="card-desc-wrap"><div class="card-desc">${ev.desc}</div></div>
+        <div class="card-footer-wrap">
+          <div class="card-footer">${tag}<span class="card-arrow">→</span></div>
+        </div>
+      </div>
+    </a>`;
+  } else {
+    const tag = isCurrent
+      ? `<span class="tag-soon-current">Идёт сейчас</span>`
+      : `<span class="tag-soon"><span class="kor-pun">с<span class="kor">КОР</span>о!</span></span>`;
+    return `<div class="soon-card${isCurrent ? ' current-event' : ''}">
+      <div class="card-inner">
+        <div class="card-ico-wrap"><div class="card-ico">${ev.ico}</div></div>
+        <div class="card-info-wrap">
+          <div class="card-name">${ev.name}</div>
+          <div class="card-dates">${monthsLabel}</div>
+        </div>
+        <div class="card-desc-wrap"><div class="card-desc">${ev.desc}</div></div>
+        <div class="card-footer-wrap">
+          <div class="card-footer">${tag}</div>
+        </div>
+      </div>
+    </div>`;
+  }
+}
+
+function render() {
+  const now = new Date();
+  const curMonth = now.getMonth() + 1; // 1–12
+
+  // Разделяем на текущие и остальные
+  const current = EVENTS.filter(ev => ev.months.includes(curMonth));
+  const others  = EVENTS.filter(ev => !ev.months.includes(curMonth));
+
+  // Остальные сортируем: ближайший следующий месяц вперёд
+  others.sort((a, b) => {
+    const nextMonth = m => {
+      // Ближайший месяц вперёд от curMonth
+      const future = m.map(mo => (mo - curMonth + 12) % 12 || 12);
+      return Math.min(...future);
+    };
+    return nextMonth(a.months) - nextMonth(b.months);
+  });
+
+  const html = [
+    ...current.map(ev => renderCard(ev, true)),
+    ...others.map(ev => renderCard(ev, false)),
+  ].join('');
+
+  document.getElementById('grid').innerHTML = html;
+}
+
+render();
+</script>
+</body>
+</html>
