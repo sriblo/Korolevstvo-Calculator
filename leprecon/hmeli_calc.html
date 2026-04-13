@@ -180,6 +180,7 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; }
   background: rgba(0,0,0,.2);
 }
 .tab-btn {
+  flex: 1; text-align: center;
   padding: 10px 18px; font-family: 'Cinzel', serif; font-size: 10px; font-weight: 600;
   letter-spacing: 1.5px; text-transform: uppercase; color: var(--text3);
   background: none; border: none; cursor: pointer;
@@ -608,7 +609,6 @@ select.on { border-color: rgba(200,165,70,.45); background: rgba(200,160,40,.06)
         <button class="tab-btn active" onclick="switchTab('instr',this)">Инструкция</button>
         <button class="tab-btn" onclick="switchTab('quests',this)">Квесты</button>
         <button class="tab-btn" onclick="switchTab('items',this)">Предметы</button>
-        <button class="tab-btn" onclick="switchTab('ref',this)">Справка</button>
       </div>
 
       <!-- Инструкция -->
@@ -665,41 +665,6 @@ select.on { border-color: rgba(200,165,70,.45); background: rgba(200,160,40,.06)
         <div id="items-guide"></div>
       </div>
 
-      <!-- Справка -->
-      <div id="tab-ref" class="tab-pane">
-        <div class="ref-section-title">Откуда берётся 760 тайленов в день</div>
-        <table class="qtable">
-          <tbody>
-            <tr><td class="qname">Враг хмеля</td><td class="qrew">150 тайленов</td></tr>
-            <tr><td class="qname">Ларвафобия</td><td class="qrew">80 тайленов</td></tr>
-            <tr><td class="qname">Вождь безумцев</td><td class="qrew">150 тайленов</td></tr>
-            <tr><td class="qname">Безумие лепреконов</td><td class="qrew">80 тайленов</td></tr>
-            <tr><td class="qname">Уцелевшие бочки</td><td class="qrew">80 тайленов</td></tr>
-            <tr><td class="qname">Сложности упаковки</td><td class="qrew">220 тайленов</td></tr>
-            <tr style="background:rgba(200,160,60,.05)"><td style="color:var(--text3);font-size:11px;padding:8px 10px">Итого (6 ежедневных квестов)</td><td class="qtotal">760 тайленов/день</td></tr>
-            <tr><td class="qname">Праздничный подарок <span class="qtag qtag-once">Разовый</span></td><td class="qrew">+1 501 тайлен</td></tr>
-          </tbody>
-        </table>
-        <div class="ref-section-title" style="border-top:2px solid rgba(200,165,70,.1)">Прокачка репутации — стоимость</div>
-        <table class="qtable">
-          <thead><tr><th>Способ</th><th>Стоимость</th><th>Репутации</th></tr></thead>
-          <tbody>
-            <tr><td class="qname">Пивная кружка (тайлены)</td><td class="qrew">50 тайленов</td><td class="qrew">500 очков</td></tr>
-            <tr><td class="qname">Пивная кружка (рубины)</td><td class="qrew">0.5 рубина</td><td class="qrew">500 очков</td></tr>
-            <tr><td class="qname">Пивная кружка (пакет, −40%)</td><td class="qrew">3 рубина</td><td class="qrew">5 000 очков</td></tr>
-            <tr style="background:rgba(200,160,60,.05)"><td colspan="2" style="color:var(--text3);font-size:11px;padding:8px 10px">Курс в Королевской лавке</td><td class="qtotal">100 тайленов = 1 рубин</td></tr>
-          </tbody>
-        </table>
-        <div class="ref-section-title" style="border-top:2px solid rgba(200,165,70,.1)">Пороги рангов репутации</div>
-        <table class="qtable">
-          <tbody>
-            <tr><td><span class="rank-badge rb0" style="font-size:10px">Ранг 0</span></td><td class="qname">Празднующий</td><td class="qtask">0–19 999 очков</td></tr>
-            <tr><td><span class="rank-badge rb1" style="font-size:10px">Ранг 1</span></td><td class="qname">Помощник Патрика</td><td class="qtask">от 20 000 очков</td></tr>
-            <tr><td><span class="rank-badge rb2" style="font-size:10px">Ранг 2</span></td><td class="qname">Имбирный Забияка</td><td class="qtask">от 50 000 очков</td></tr>
-            <tr><td><span class="rank-badge rb3" style="font-size:10px">Ранг 3</span></td><td class="qname">Гроза Лепреконов</td><td class="qtask">от 100 000 очков</td></tr>
-          </tbody>
-        </table>
-      </div>
 
     </div>
   </div>
