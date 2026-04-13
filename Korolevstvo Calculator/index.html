@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Калькуляторы Королевства</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@400;500;600&display=swap');
+
+:root {
+  --gold:  #c8a040; --goldl: #e2c96a;
+  --green: #4e8a3a; --greenl: #7abf5a;
+  --text:  #e0d8c0; --text2: #8a7a60; --text3: #4a3f30;
+  --glass: rgba(22,14,6,.72); --gb: rgba(200,165,70,.18); --sep: rgba(200,165,70,.1);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  min-height: 100vh; color: var(--text);
+  font-family: 'Inter', sans-serif; font-size: 14px;
+  background-color: #0c0804;
+  background-image:
+    radial-gradient(ellipse 70% 50% at 5% 0%,   rgba(90,55,10,.55) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 60% at 95% 100%, rgba(70,25,25,.45) 0%, transparent 50%),
+    radial-gradient(ellipse 80% 40% at 50% 10%,  rgba(30,65,20,.28) 0%, transparent 45%);
+}
+
+header {
+  padding: 20px 32px;
+  background: linear-gradient(180deg, rgba(25,55,18,.55) 0%, rgba(10,22,8,.3) 100%);
+  backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+  border-bottom: 1px solid rgba(120,200,80,.22);
+  position: relative;
+}
+header::after {
+  content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(160,220,80,.35) 30%, rgba(200,165,70,.3) 60%, transparent);
+}
+.h-inner { max-width: 980px; margin: 0 auto; }
+.h-title {
+  font-family: 'Cinzel', serif; font-size: 24px; font-weight: 700;
+  background: linear-gradient(100deg, var(--greenl) 0%, #a8e870 35%, var(--goldl) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.h-sub { font-size: 12px; color: var(--text2); margin-top: 4px; }
+
+.page { max-width: 980px; margin: 0 auto; padding: 32px 24px 80px; }
+
+.section-title {
+  font-family: 'Cinzel', serif; font-size: 11px; font-weight: 600;
+  letter-spacing: 3px; text-transform: uppercase; color: rgba(200,165,70,.6);
+  margin-bottom: 16px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 14px;
+}
+
+/* ── ACTIVE CARD ── */
+.calc-card {
+  background: var(--glass); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--gb); border-radius: 12px; overflow: hidden;
+  text-decoration: none; color: inherit; display: block;
+  box-shadow: 0 1px 0 rgba(220,190,100,.12) inset, 0 8px 32px rgba(0,0,0,.5);
+  transition: border-color .2s, transform .15s, box-shadow .2s;
+  position: relative;
+}
+.calc-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(200,165,70,.4), transparent);
+  pointer-events: none;
+}
+.calc-card:hover {
+  border-color: rgba(200,165,70,.45);
+  transform: translateY(-2px);
+  box-shadow: 0 1px 0 rgba(220,190,100,.18) inset, 0 16px 40px rgba(0,0,0,.6), 0 0 40px rgba(200,160,60,.06);
+}
+.card-top {
+  padding: 20px 20px 14px;
+  display: flex; align-items: flex-start; gap: 14px;
+}
+.card-ico {
+  font-size: 36px; line-height: 1;
+  filter: drop-shadow(0 0 12px rgba(100,230,80,.4));
+  flex-shrink: 0;
+}
+.card-info { flex: 1; }
+.card-name {
+  font-family: 'Cinzel', serif; font-size: 15px; font-weight: 700; color: var(--goldl);
+  margin-bottom: 3px; line-height: 1.2;
+}
+.card-dates { font-size: 11px; color: var(--text2); }
+.card-desc {
+  padding: 0 20px 14px; font-size: 12px; color: var(--text2); line-height: 1.5;
+  border-bottom: 1px solid var(--sep);
+}
+.card-footer {
+  padding: 10px 20px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.card-tag {
+  font-size: 10px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase;
+  padding: 3px 8px; border-radius: 4px;
+}
+.tag-active { background: rgba(78,138,58,.2); color: var(--greenl); border: 1px solid rgba(78,138,58,.35); }
+.card-arrow { font-size: 16px; color: var(--text3); transition: color .15s; }
+.calc-card:hover .card-arrow { color: var(--goldl); }
+
+/* ── SOON CARD ── */
+.soon-card {
+  background: rgba(12,8,4,.6); backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,.05); border-radius: 12px; overflow: hidden;
+  position: relative; cursor: default;
+}
+.soon-card .card-ico { filter: grayscale(1) opacity(.4); }
+.soon-card .card-name { color: var(--text3); }
+.soon-card .card-dates { color: rgba(74,63,48,.8); }
+.soon-card .card-desc { color: rgba(74,63,48,.8); border-bottom-color: rgba(255,255,255,.04); }
+.tag-soon {
+  background: rgba(255,255,255,.04); color: var(--text3);
+  border: 1px solid rgba(255,255,255,.08);
+}
+/* сКОРо pun */
+.kor-pun { letter-spacing: 0; }
+.kor-pun .kor { color: rgba(200,165,70,.5); font-weight: 700; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="h-inner">
+    <div class="h-title">Калькуляторы Королевства</div>
+    <div class="h-sub">Сайт создан игроками для игроков · kor.ru</div>
+  </div>
+</header>
+
+<div class="page">
+  <div class="section-title">Ивентовые калькуляторы</div>
+
+  <div class="grid">
+
+    <!-- ACTIVE -->
+    <a class="calc-card" href="leprecon/hmeli_calc.html">
+      <div class="card-top">
+        <div class="card-ico">🍺</div>
+        <div class="card-info">
+          <div class="card-name">Месяц цветущего хмеля</div>
+          <div class="card-dates">12–26 апреля 2026</div>
+        </div>
+      </div>
+      <div class="card-desc">Лепрекон, Медовый хмель, Фляжка, Талисман клевера — сколько тайленов и рубинов нужно для желаемых предметов.</div>
+      <div class="card-footer">
+        <span class="card-tag tag-active">● Идёт сейчас</span>
+        <span class="card-arrow">→</span>
+      </div>
+    </a>
+
+    <!-- SOON cards -->
+    <div class="soon-card">
+      <div class="card-top">
+        <div class="card-ico">🐉</div>
+        <div class="card-info">
+          <div class="card-name">Небесные Драконы</div>
+          <div class="card-dates">скоро</div>
+        </div>
+      </div>
+      <div class="card-desc">Калькулятор для ивента с небесными драконами.</div>
+      <div class="card-footer">
+        <span class="card-tag tag-soon"><span class="kor-pun">с<span class="kor">КОР</span>о!</span></span>
+      </div>
+    </div>
+
+    <div class="soon-card">
+      <div class="card-top">
+        <div class="card-ico">🎃</div>
+        <div class="card-info">
+          <div class="card-name">Тыквенный Фестиваль</div>
+          <div class="card-dates">скоро</div>
+        </div>
+      </div>
+      <div class="card-desc">Калькулятор для осеннего тыквенного ивента.</div>
+      <div class="card-footer">
+        <span class="card-tag tag-soon"><span class="kor-pun">с<span class="kor">КОР</span>о!</span></span>
+      </div>
+    </div>
+
+    <div class="soon-card">
+      <div class="card-top">
+        <div class="card-ico">🌊</div>
+        <div class="card-info">
+          <div class="card-name">Зов Глубин</div>
+          <div class="card-dates">скоро</div>
+        </div>
+      </div>
+      <div class="card-desc">Калькулятор для подводного ивента.</div>
+      <div class="card-footer">
+        <span class="card-tag tag-soon"><span class="kor-pun">с<span class="kor">КОР</span>о!</span></span>
+      </div>
+    </div>
+
+    <div class="soon-card">
+      <div class="card-top">
+        <div class="card-ico">⚓</div>
+        <div class="card-info">
+          <div class="card-name">Пиратский день</div>
+          <div class="card-dates">скоро</div>
+        </div>
+      </div>
+      <div class="card-desc">Калькулятор для пиратского ивента.</div>
+      <div class="card-footer">
+        <span class="card-tag tag-soon"><span class="kor-pun">с<span class="kor">КОР</span>о!</span></span>
+      </div>
+    </div>
+
+    <div class="soon-card">
+      <div class="card-top">
+        <div class="card-ico">🎪</div>
+        <div class="card-info">
+          <div class="card-name">Ярмарка</div>
+          <div class="card-dates">ежемесячно</div>
+        </div>
+      </div>
+      <div class="card-desc">Калькулятор ярмарочных тайленов и ставок.</div>
+      <div class="card-footer">
+        <span class="card-tag tag-soon"><span class="kor-pun">с<span class="kor">КОР</span>о!</span></span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Месяц хмеля — Калькулятор</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@400;500;600&display=swap');
+
+:root {
+  --gold:   #c8a040;
+  --goldl:  #e2c96a;
+  --green:  #4e8a3a;
+  --greenl: #7abf5a;
+  --red:    #a83030;
+  --redl:   #e07070;
+  --blue:   #4870a8;
+  --bluel:  #80aad8;
+  --text:   #e0d8c0;
+  --text2:  #8a7a60;
+  --text3:  #4a3f30;
+  --glass:  rgba(22,14,6,.72);
+  --glass2: rgba(14,9,4,.85);
+  --gb:     rgba(200,165,70,.18);
+  --sep:    rgba(200,165,70,.1);
+  --inp:    rgba(8,5,2,.7);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { min-height: 100%; }
+body {
+  min-height: 100vh; color: var(--text);
+  font-family: 'Inter', sans-serif; font-size: 14px; line-height: 1.45;
+  background-color: #0c0804;
+  background-image:
+    radial-gradient(ellipse 70% 50% at 5% 0%,   rgba(90,55,10,.55) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 60% at 95% 100%, rgba(70,25,25,.45) 0%, transparent 50%),
+    radial-gradient(ellipse 80% 40% at 50% 10%,  rgba(30,65,20,.28) 0%, transparent 45%);
+}
+
+/* ── HEADER ── */
+header {
+  padding: 16px 32px;
+  background: linear-gradient(180deg, rgba(25,55,18,.55) 0%, rgba(10,22,8,.3) 100%);
+  backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+  border-bottom: 1px solid rgba(120,200,80,.22);
+  position: relative;
+}
+header::after {
+  content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(160,220,80,.35) 30%, rgba(200,165,70,.3) 60%, transparent);
+}
+.h-inner {
+  max-width: 980px; margin: 0 auto;
+  display: flex; align-items: center; gap: 14px;
+}
+.h-back {
+  font-size: 11px; color: var(--text2); text-decoration: none; letter-spacing: .02em;
+  transition: color .15s; white-space: nowrap;
+}
+.h-back:hover { color: var(--goldl); }
+.h-sep { color: var(--text3); }
+.h-ico { font-size: 28px; filter: drop-shadow(0 0 12px rgba(100,230,80,.5)); }
+.h-title {
+  font-family: 'Cinzel', serif; font-size: 20px; font-weight: 700;
+  background: linear-gradient(100deg, var(--greenl) 0%, #a8e870 35%, var(--goldl) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.h-sub { font-size: 11px; color: var(--text2); margin-top: 2px; }
+
+/* ── PAGE ── */
+.page {
+  max-width: 980px; margin: 0 auto; padding: 20px 24px 80px;
+  display: grid; grid-template-columns: 300px 1fr; gap: 18px; align-items: start;
+}
+
+/* ── CARD ── */
+.card {
+  background: var(--glass); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--gb); border-radius: 12px; overflow: hidden; position: relative;
+  box-shadow: 0 1px 0 rgba(220,190,100,.12) inset, 0 8px 32px rgba(0,0,0,.5);
+}
+.card::after {
+  content: ''; position: absolute; top: 0; left: 16px; right: 16px; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(220,185,90,.2), transparent);
+  pointer-events: none;
+}
+.card-title {
+  padding: 9px 16px; display: flex; align-items: center; gap: 6px;
+  background: rgba(200,160,60,.1); border-bottom: 1px solid var(--sep);
+  font-family: 'Cinzel', serif; font-size: 10px; font-weight: 600;
+  letter-spacing: 2px; text-transform: uppercase; color: rgba(200,165,70,.75);
+}
+
+/* ── TOOLTIP ── */
+.tip {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 15px; height: 15px; border-radius: 50%;
+  background: rgba(200,165,70,.18); border: 1px solid rgba(200,165,70,.3);
+  font-size: 9px; font-weight: 700; color: var(--gold); font-family: 'Inter', sans-serif;
+  cursor: help; position: relative; flex-shrink: 0; line-height: 1;
+  font-style: normal; letter-spacing: 0; text-transform: none;
+}
+.tip::after {
+  content: attr(data-tip); position: absolute; bottom: calc(100% + 7px); left: 50%;
+  transform: translateX(-50%); background: rgba(10,7,3,.97);
+  border: 1px solid rgba(200,165,70,.25); border-radius: 7px;
+  padding: 9px 12px; font-size: 12px; line-height: 1.55; color: var(--text);
+  white-space: pre; min-width: 200px; max-width: 260px; white-space: pre-wrap;
+  pointer-events: none; opacity: 0; transition: opacity .15s; z-index: 200;
+  box-shadow: 0 8px 24px rgba(0,0,0,.6);
+}
+.tip:hover::after { opacity: 1; }
+
+/* ── INPUT ROWS ── */
+.irow {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 16px; border-bottom: 1px solid var(--sep);
+}
+.irow:last-child { border-bottom: none; }
+.ico-pill {
+  width: 32px; height: 32px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(0,0,0,.4); border: 1px solid var(--sep); border-radius: 7px;
+}
+.ico-pill img { width: 18px; height: 18px; }
+.ico-pill.em { font-size: 14px; }
+.ilbl { flex: 1; font-size: 13px; font-weight: 500; color: var(--text); }
+.ilbl small { display: block; font-size: 10px; color: var(--text3); font-weight: 400; margin-top: 1px; }
+.nf { display: flex; align-items: center; gap: 5px; flex-shrink: 0; }
+input[type=number] {
+  width: 80px; background: var(--inp); border: 1px solid rgba(200,165,70,.28);
+  border-radius: 7px; color: var(--goldl); padding: 6px 9px;
+  font-size: 17px; font-family: 'Inter', sans-serif; font-weight: 600;
+  text-align: right; outline: none; -moz-appearance: textfield;
+  transition: border-color .15s; box-shadow: 0 2px 8px rgba(0,0,0,.4) inset;
+}
+input[type=number]:focus { border-color: rgba(200,165,70,.6); }
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; }
+.unit { font-size: 10px; color: var(--text3); }
+
+/* rep rank select inside irow */
+.rank-sel {
+  flex-shrink: 0; width: 180px;
+  background: var(--inp); border: 1px solid rgba(200,165,70,.28);
+  border-radius: 7px; color: var(--text); padding: 7px 8px;
+  font-size: 12px; font-family: 'Inter', sans-serif;
+  outline: none; cursor: pointer;
+}
+.rank-sel:focus { border-color: rgba(200,165,70,.5); }
+
+/* ── LEFT COLUMN ── */
+.lcol { display: flex; flex-direction: column; gap: 14px; }
+
+/* ── RANK LEGEND inside card ── */
+.rank-legend { padding: 10px 16px; display: flex; flex-direction: column; gap: 5px; background: rgba(0,0,0,.15); }
+.rank-row { display: flex; align-items: center; gap: 8px; font-size: 11px; }
+.rank-badge {
+  font-family: 'Cinzel', serif; font-size: 9px; font-weight: 700;
+  padding: 2px 6px; border-radius: 4px; flex-shrink: 0; letter-spacing: .5px;
+}
+.rb0 { background: rgba(255,255,255,.07); color: var(--text2); }
+.rb1 { background: rgba(100,180,80,.15); color: var(--greenl); border: 1px solid rgba(100,180,80,.3); }
+.rb2 { background: rgba(100,140,220,.15); color: var(--bluel); border: 1px solid rgba(100,140,220,.3); }
+.rb3 { background: rgba(200,160,60,.15); color: var(--goldl); border: 1px solid rgba(200,160,60,.3); }
+.rank-name { color: var(--text); font-weight: 500; }
+.rank-pts  { color: var(--text3); margin-left: auto; }
+
+/* ── RIGHT ── */
+.rcol { display: flex; flex-direction: column; gap: 14px; }
+
+/* ── ITEMS TABLE ── */
+.i-head {
+  display: grid; grid-template-columns: 170px 1fr 26px 1fr 36px;
+  padding: 8px 16px; gap: 10px;
+  background: rgba(0,0,0,.2); border-bottom: 1px solid var(--sep);
+}
+.i-head span {
+  font-family: 'Cinzel', serif; font-size: 9px; font-weight: 600;
+  letter-spacing: 2px; text-transform: uppercase;
+}
+.th-p { color: var(--text3); }
+.th-h { color: var(--bluel); }
+.th-w { color: var(--gold); }
+.irow2 {
+  display: grid; grid-template-columns: 170px 1fr 26px 1fr 36px;
+  align-items: center; padding: 28px 16px; gap: 10px;
+  border-bottom: 1px solid var(--sep); transition: background .1s;
+  overflow: visible;
+}
+.irow2:last-child { border-bottom: none; }
+.irow2:hover { background: rgba(200,165,70,.025); }
+.iname-c { display: flex; align-items: center; gap: 9px; min-width: 0; max-width: 100%; width: 100%; overflow: hidden; }
+.iname-c > div:last-child { min-width: 0; }
+.inn { font-size: 13px; font-weight: 600; color: var(--text); }
+.inote { font-size: 10px; color: var(--text3); margin-top: 2px; line-height: 1.4; }
+
+/* ── GAME ICONS ── */
+.gico { position: relative; width: 32px; height: 32px; flex-shrink: 0; }
+.gico img.base { position: absolute; inset: 0; width: 32px; height: 32px; }
+.gico img.fr   { position: absolute; inset: 0; width: 32px; height: 32px; }
+.gico[data-q="1"] { filter: drop-shadow(0 0 4px rgba(140,80,220,.55)); }
+.gico[data-q="2"] { filter: drop-shadow(0 0 5px rgba(200,60,60,.55)); }
+.gico[data-q="3"] { filter: drop-shadow(0 0 6px rgba(220,140,40,.6)); }
+.gico.bw img, .gempty.bw { filter: grayscale(1) opacity(.35); }
+.gempty {
+  width: 32px; height: 32px; flex-shrink: 0;
+  background: rgba(0,0,0,.5); border: 1px solid rgba(200,165,70,.1); border-radius: 4px;
+}
+select {
+  width: 100%; background: rgba(8,5,2,.8); border: 1px solid rgba(255,255,255,.1);
+  border-radius: 7px; color: var(--text); padding: 6px 7px;
+  font-size: 12px; font-family: 'Inter', sans-serif;
+  outline: none; cursor: pointer; transition: border-color .15s;
+  box-shadow: 0 2px 6px rgba(0,0,0,.3) inset;
+}
+select:focus { border-color: rgba(255,255,255,.2); }
+select.on { border-color: rgba(200,165,70,.45); background: rgba(200,160,40,.06); color: var(--goldl); }
+.arr { text-align: center; color: var(--text3); font-size: 18px; }
+.wcell { min-width: 0; position: relative; }
+.wico { display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.chint {
+  position: absolute; top: 100%; left: 0; margin-top: 6px;
+  font-size: 10px; color: var(--gold); line-height: 1.3; pointer-events: none;
+  white-space: nowrap;
+}
+
+/* ── RESULT CARD ── */
+.res-card {
+  background: var(--glass2); backdrop-filter: blur(28px); -webkit-backdrop-filter: blur(28px);
+  border: 1px solid rgba(200,165,70,.28); border-radius: 12px; overflow: hidden; position: relative;
+  box-shadow: 0 1px 0 rgba(230,200,110,.16) inset, 0 12px 48px rgba(0,0,0,.65);
+}
+.res-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold) 30%, var(--goldl) 55%, transparent 100%);
+  pointer-events: none;
+}
+.res-top { display: grid; grid-template-columns: 180px 1fr; }
+.res-main {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 18px 14px; gap: 5px; border-right: 1px solid var(--sep);
+  background: rgba(200,160,60,.03);
+}
+.rlbl { font-family: 'Cinzel', serif; font-size: 9px; letter-spacing: 2.5px; text-transform: uppercase; color: var(--text2); }
+.ramt { display: flex; align-items: center; gap: 8px; }
+.ramt img { width: 13px; height: 13px; image-rendering: pixelated; }
+.rnum { font-family: 'Cinzel', serif; font-size: 50px; font-weight: 700; line-height: 1; }
+.rnum.free { color: var(--greenl); text-shadow: 0 0 30px rgba(120,210,80,.3); }
+.rnum.paid {
+  background: linear-gradient(135deg, var(--gold), var(--goldl));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  filter: drop-shadow(0 0 18px rgba(200,160,60,.3));
+}
+.rtag { font-size: 11px; color: var(--text2); }
+
+/* Stats 2×2 */
+.res-stats { display: grid; grid-template-columns: 1fr 1fr; }
+.st { padding: 11px 14px; border-bottom: 1px solid var(--sep); border-right: 1px solid var(--sep); }
+.st:nth-child(2n) { border-right: none; }
+.st:nth-child(3), .st:nth-child(4) { border-bottom: none; }
+.slbl { font-size: 10px; color: var(--text3); margin-bottom: 3px; }
+.sval { font-size: 14px; font-weight: 600; color: var(--text); display: flex; align-items: center; gap: 4px; }
+.sval img { width: 13px; height: 13px; }
+.sval.g { color: var(--greenl); }
+.sval.r { color: var(--redl); }
+.sval.o { color: var(--gold); }
+
+/* ── VERDICT GRID ── */
+.verdict-block {
+  padding: 14px 18px; border-top: 1px solid var(--sep);
+  display: flex; flex-direction: column; gap: 6px;
+}
+.vrow { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.vkey { font-size: 12px; color: var(--text2); flex-shrink: 0; }
+.vval { font-size: 12px; font-weight: 600; color: var(--text); text-align: right; }
+.vval.g { color: var(--greenl); }
+.vval.r { color: var(--redl); }
+.vval.o { color: var(--gold); }
+.vval.b { color: var(--bluel); }
+.vsep { height: 1px; background: var(--sep); margin: 3px 0; }
+
+/* ── STRATEGY BLOCK ── */
+.strat-block {
+  border-top: 2px solid rgba(200,165,70,.2);
+  background: rgba(0,0,0,.2);
+  padding: 14px 18px;
+}
+.strat-title {
+  font-family: 'Cinzel', serif; font-size: 11px; font-weight: 600;
+  letter-spacing: 2px; text-transform: uppercase; color: var(--gold); margin-bottom: 10px;
+  display: flex; align-items: center; gap: 6px;
+}
+.strat-title::before {
+  content: ''; display: block; width: 3px; height: 14px;
+  background: var(--gold); border-radius: 2px;
+}
+.sline {
+  font-size: 13px; color: var(--text); line-height: 1.65;
+  padding: 7px 0; border-bottom: 1px solid var(--sep);
+  display: flex; gap: 10px; align-items: flex-start;
+}
+.sline:last-child { border-bottom: none; padding-bottom: 0; }
+.sline-ico {
+  width: 32px; height: 32px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  margin-top: 2px;
+}
+.sline-ico img { width: 32px; height: 32px; }
+.sline-ico.emoji { font-size: 18px; width: 32px; height: 32px; }
+.sline-body { flex: 1; padding-top: 5px; }
+.sn { color: var(--goldl); font-weight: 700; }
+.sg { color: var(--greenl); font-weight: 600; }
+.sr { color: var(--redl); font-weight: 600; }
+
+.idle-msg { padding: 20px 18px; font-size: 13px; color: var(--text3); font-style: italic; border-top: 1px solid var(--sep); }
+
+@media (max-width: 700px) {
+  .page { grid-template-columns: 1fr; }
+  .i-head, .irow2 { grid-template-columns: 120px 1fr 22px 1fr 32px; }
+  .res-top { grid-template-columns: 1fr; }
+  .res-main { border-right: none; border-bottom: 1px solid var(--sep); }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="h-inner">
+    <a class="h-back" href="../index.html">← Все калькуляторы</a>
+    <span class="h-sep">·</span>
+    <div class="h-ico">🍺</div>
+    <div>
+      <div class="h-title">Месяц цветущего хмеля</div>
+      <div class="h-sub">12–26 апреля 2026 · Калькулятор тайленов и рубинов</div>
+    </div>
+  </div>
+</header>
+
+<div class="page">
+
+  <!-- LEFT -->
+  <div class="lcol">
+
+    <!-- Тайлены -->
+    <div class="card">
+      <div class="card-title">Тайлены лепреконов</div>
+
+      <div class="irow">
+        <div class="ico-pill"><img src="../currency/leprecon_taylen.png"></div>
+        <div class="ilbl">
+          Дней до конца ивента
+          <small>макс. 760 тайл./день</small>
+        </div>
+        <span class="tip" data-tip="Укажи сколько дней осталось до конца ивента.&#10;Каждый день даёт максимум 760 тайленов&#10;если выполнять все квесты.">?</span>
+        <div class="nf">
+          <input type="number" id="days" value="15" min="0" max="15" oninput="calc()">
+          <span class="unit">дн.</span>
+        </div>
+      </div>
+
+      <div class="irow">
+        <div class="ico-pill"><img src="../currency/leprecon_taylen.png"></div>
+        <div class="ilbl">Уже накоплено тайленов</div>
+        <span class="tip" data-tip="Сколько тайленов лепреконов&#10;уже есть в твоём кошельке прямо сейчас.">?</span>
+        <div class="nf">
+          <input type="number" id="have-t" value="0" min="0" oninput="calc()">
+          <span class="unit">т.</span>
+        </div>
+      </div>
+
+      <div class="irow">
+        <div class="ico-pill em">✂️</div>
+        <div class="ilbl">
+          Пропущу квестов
+          <small>тайлены которые не заработаешь</small>
+        </div>
+        <span class="tip" data-tip="Если знаешь что пропустишь часть дней&#10;или квестов — впиши количество тайленов&#10;которые не заработаешь.&#10;Например: 2 пропущенных дня = 1 520 тайл.">?</span>
+        <div class="nf">
+          <input type="number" id="miss" value="0" min="0" oninput="calc()">
+          <span class="unit">т.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Репутация -->
+    <div class="card">
+      <div class="card-title">
+        Репутация Месяц Хмеля
+        <span class="tip" data-tip="Укажи свой текущий ранг репутации&#10;и сколько очков набрал сверх него.&#10;Это учитывается при расчёте донатa на репутацию.">?</span>
+      </div>
+
+      <div class="irow">
+        <div class="ico-pill em">🏆</div>
+        <div class="ilbl">Текущий ранг</div>
+        <select class="rank-sel" id="have-rank" onchange="calc()">
+          <option value="0">Нет (0 оч.)</option>
+          <option value="1">Ранг 1 — Празднующий</option>
+          <option value="2">Ранг 2 — Имбирный забияка</option>
+          <option value="3">Ранг 3 — Гроза Лепреконов</option>
+        </select>
+      </div>
+
+      <div class="irow">
+        <div class="ico-pill em">⭐</div>
+        <div class="ilbl">
+          Очков сверх ранга
+          <small>набрал уже в текущем ранге</small>
+        </div>
+        <span class="tip" data-tip="Сколько очков ты набрал&#10;в своём текущем ранге.&#10;Например: ранг 1, и ещё 5 000 оч. → итого 25 000.">?</span>
+        <div class="nf">
+          <input type="number" id="have-rep-extra" value="0" min="0" oninput="calc()">
+          <span class="unit">оч.</span>
+        </div>
+      </div>
+
+      <!-- Rank legend -->
+      <div class="rank-legend">
+        <div class="rank-row">
+          <span class="rank-badge rb1">Ранг 1</span>
+          <span class="rank-name">Празднующий</span>
+          <span class="rank-pts">20 000 оч.</span>
+        </div>
+        <div class="rank-row">
+          <span class="rank-badge rb2">Ранг 2</span>
+          <span class="rank-name">Имбирный забияка</span>
+          <span class="rank-pts">50 000 оч.</span>
+        </div>
+        <div class="rank-row">
+          <span class="rank-badge rb3">Ранг 3</span>
+          <span class="rank-name">Гроза Лепреконов</span>
+          <span class="rank-pts">100 000 оч.</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- RIGHT -->
+  <div class="rcol">
+
+    <!-- Items -->
+    <div class="card">
+      <div class="i-head">
+        <span class="th-p">Предмет</span>
+        <span class="th-h">Есть сейчас</span>
+        <span></span>
+        <span class="th-w">Хочу получить</span>
+        <span></span>
+      </div>
+      <div id="items-list"></div>
+    </div>
+
+    <!-- Result -->
+    <div class="res-card">
+      <div class="res-top">
+        <div class="res-main">
+          <div class="rlbl">Нужно рубинов</div>
+          <div class="ramt">
+            <img id="res-ruby-ico" src="../currency/ruby.png">
+            <div class="rnum free" id="res-num">0</div>
+          </div>
+        </div>
+        <div class="res-stats">
+          <div class="st">
+            <div class="slbl">Заработаю тайленов</div>
+            <div class="sval g"><img src="../currency/leprecon_taylen.png"><span id="sv-earn">—</span></div>
+          </div>
+          <div class="st">
+            <div class="slbl">Итого тайленов</div>
+            <div class="sval o"><img src="../currency/leprecon_taylen.png"><span id="sv-total">—</span></div>
+          </div>
+          <div class="st">
+            <div class="slbl">Уйдёт на предметы</div>
+            <div class="sval"><img src="../currency/leprecon_taylen.png"><span id="sv-items">—</span></div>
+          </div>
+          <div class="st">
+            <div class="slbl">Нужно купить репутации</div>
+            <div class="sval r"><span id="sv-repgap">—</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div id="verdict-block" class="idle-msg">Выбери предметы которые хочешь получить →</div>
+      <div id="strat-block" style="display:none"></div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const REP        = [0, 20000, 50000, 100000];
+const RANK_NAMES = ['—', 'Празднующий', 'Имбирный забияка', 'Гроза Лепреконов'];
+const RANK_BADGES = ['rb0','rb1','rb2','rb3'];
+
+const CUM = {
+  lep:   [0,  800, 1800, 3800],
+  hops:  [0, 1400, 3000, 5000],
+  flask: [0,  300,  800, 1500],
+  tal:   [0,  300,  800, 1500],
+  stone: [0,    1],
+};
+const REQ_RANK = { lep:[0,1,2,3], hops:[0,1,2,3], flask:[0,1,2,3], tal:[0,1,2,3], stone:[0,3] };
+
+const ITEMS = [
+  { id:'lep',   name:'Лепрекон',          note:'вечный',        img:'leprecon_coin.png',
+    levels:['Нет','Злобный (фиол.)','Хитрый (красн.)','Сильный (оранж.)'],
+    frames:[null,'border_high','border_exclusive','border_special'] },
+  { id:'hops',  name:'Медовый хмель',     note:'вечный',        img:'elixir_attackmagic_11.png',
+    levels:['Нет','Фиолетовый','Красный','Оранжевый'],
+    frames:[null,'border_high','border_exclusive','border_special'] },
+  { id:'flask', name:'Фляжка Патрика',    note:'до 1 июня',     img:'flask_icon_clover.png',
+    levels:['Нет','Зелёная','Синяя','Фляжка Клевера'],
+    frames:[null,'border_low','border_medium','border_high'] },
+  { id:'tal',   name:'Талисман клевера',  note:'до 1 июня',     img:'golden_clover_quest.png',
+    levels:['Нет','Талисман Сквайра','Талисман Рыцаря','Талисман Лорда'],
+    frames:[null,'border_medium','border_high','border_exclusive'] },
+  { id:'stone', name:'Камень путешествий',note:'',              img:'../other%20items/artefact_stone_fire.png',
+    levels:['Нет','Красный (1 тайл.)'],
+    frames:[null,'border_exclusive'], noHave:true },
+];
+
+const _cosCfg = { imgs:[null,'clover_girl_2.png','clover_girl_3.png'], frames:[null,'border_high','border_exclusive'] };
+
+function gico(cfg, lv) {
+  const baseImg = cfg.imgs ? cfg.imgs[lv] : cfg.img;
+  const bw = lv === 0 ? ' bw' : '';
+  if (!baseImg) {
+    const fr = lv > 0 ? cfg.frames[lv] : null;
+    if (!fr) return `<div class="gempty${bw}"></div>`;
+    return `<div class="gico${bw}" data-q="${lv}" style="background:rgba(0,0,0,.55);border-radius:5px;border:1px solid rgba(255,255,255,.06)"><img class="fr" src="../frames/${fr}.png"></div>`;
+  }
+  const fr = cfg.frames[lv];
+  return `<div class="gico${bw}"${lv>0?` data-q="${lv}"`:''}><img class="base" src="${baseImg}">${fr?`<img class="fr" src="../frames/${fr}.png">`:''}
+  </div>`;
+}
+
+function renderItems() {
+  const el = document.getElementById('items-list');
+  const rows = ITEMS.map(cfg => `
+    <div class="irow2">
+      <div class="iname-c">
+        <div id="gi-have-${cfg.id}">${gico(cfg, 0)}</div>
+        <div><div class="inn">${cfg.name}</div>${cfg.note?`<div class="inote">${cfg.note}</div>`:''}</div>
+      </div>
+      <select id="have-${cfg.id}" style="min-width:0" onchange="syncBoth('${cfg.id}');calc()"${cfg.noHave?' disabled':''}>
+        ${cfg.noHave ? '<option value="0">Нет</option>' : cfg.levels.map((l,i)=>`<option value="${i}">${l}</option>`).join('')}
+      </select>
+      <div class="arr">›</div>
+      <div class="wcell">
+        <select id="want-${cfg.id}" onchange="syncBoth('${cfg.id}');calc()">
+          ${cfg.levels.map((l,i)=>`<option value="${i}">${l}</option>`).join('')}
+        </select>
+        <div class="chint" id="hint-${cfg.id}"></div>
+      </div>
+      <div class="wico" id="gi-want-${cfg.id}">${gico(cfg,0)}</div>
+    </div>`).join('');
+
+  const cosRow = `
+    <div class="irow2">
+      <div class="iname-c">
+        <div id="gi-have-cos">${gico({img:'mask.png', frames:[null,'border_high','border_exclusive']}, 0)}</div>
+        <div><div class="inn">Костюм</div><div class="inote">обычный до 1 июня / прочный на год</div></div>
+      </div>
+      <select id="have-cos" style="min-width:0" onchange="syncCos();calc()" disabled>
+        <option value="0">Нет</option>
+      </select>
+      <div class="arr">›</div>
+      <div class="wcell">
+        <select id="want-cos" onchange="syncCos();calc()">
+          <option value="0">Не нужен</option>
+          <option value="1">Обычный — 300 тайл.</option>
+          <option value="2">Прочный — 900 тайл.</option>
+        </select>
+        <div class="chint" id="hint-cos"></div>
+      </div>
+      <div class="wico" id="gi-want-cos">${gico(_maskCfg,0)}</div>
+    </div>`;
+
+  el.innerHTML = rows + cosRow;
+}
+
+function syncBoth(id) {
+  const cfg = ITEMS.find(c=>c.id===id);
+  const hv = parseInt(document.getElementById('have-'+id).value);
+  const wv = parseInt(document.getElementById('want-'+id).value);
+  document.getElementById('gi-have-'+id).innerHTML = gico(cfg, hv);
+  document.getElementById('gi-want-'+id).innerHTML = gico(cfg, wv);
+}
+const _maskCfg = {img:'mask.png', frames:[null,'border_high','border_exclusive']};
+function syncCos() {
+  const hv = parseInt(document.getElementById('have-cos').value);
+  const wv = parseInt(document.getElementById('want-cos').value);
+  document.getElementById('gi-have-cos').innerHTML = gico(_maskCfg, hv);
+  document.getElementById('gi-want-cos').innerHTML = wv === 0 ? gico(_maskCfg, 0) : gico(_cosCfg, wv);
+}
+
+function fmt(n)  { return Math.round(n).toLocaleString('ru-RU'); }
+function fmtR(n) { return (Math.round(n*10)/10).toLocaleString('ru-RU'); }
+function set(id,v) { document.getElementById(id).textContent = v; }
+
+function optRubies(gap) {
+  if (gap <= 0) return { r:0, nPrem:0, nReg:0 };
+  const nA = Math.ceil(gap/5000), rA = nA*3;
+  const nB = Math.floor(gap/5000), rem = gap - nB*5000;
+  const nR = rem > 0 ? Math.ceil(rem/500) : 0;
+  const rB = nB*3 + nR*0.5;
+  if (rA < rB) return { r:rA, nPrem:nA, nReg:0 };
+  return { r:rB, nPrem:nB, nReg:nR };
+}
+
+function rankBadge(r) {
+  return `<span class="rank-badge ${RANK_BADGES[r]}" style="font-size:10px">Ранг ${r}${r>0?' «'+RANK_NAMES[r]+'»':''}</span>`;
+}
+
+function calc() {
+  const days      = Math.max(0, parseInt(document.getElementById('days').value)||0);
+  const haveT     = Math.max(0, parseInt(document.getElementById('have-t').value)||0);
+  const miss      = Math.max(0, parseInt(document.getElementById('miss').value)||0);
+  const haveRank  = parseInt(document.getElementById('have-rank').value)||0;
+  const haveRepX  = Math.max(0, parseInt(document.getElementById('have-rep-extra').value)||0);
+
+  const earned  = days * 760;
+  const total   = earned + haveT - miss;
+  const haveRep = REP[haveRank] + haveRepX;
+
+  let itemCost = 0, maxRank = 0, anyWant = false;
+  const wantedNames = [];
+
+  ITEMS.forEach(cfg => {
+    const h = parseInt(document.getElementById('have-'+cfg.id).value);
+    const w = parseInt(document.getElementById('want-'+cfg.id).value);
+    const cost = w > h ? CUM[cfg.id][w] - CUM[cfg.id][h] : 0;
+    if (w > h) {
+      itemCost += cost;
+      maxRank = Math.max(maxRank, REQ_RANK[cfg.id][w]);
+      anyWant = true;
+      wantedNames.push(cfg.levels[w]);
+    }
+    document.getElementById('want-'+cfg.id).classList.toggle('on', w > h);
+    const hintEl = document.getElementById('hint-'+cfg.id);
+    if (hintEl) {
+      if (w > h) {
+        const steps = [];
+        for (let i = h; i < w; i++) steps.push(CUM[cfg.id][i+1]-CUM[cfg.id][i]);
+        const bd = steps.length > 1 ? ` (${steps.map(fmt).join(' + ')})` : '';
+        hintEl.textContent = `Итого: ${fmt(cost)} тайл.${bd}`;
+      } else { hintEl.textContent = ''; }
+    }
+  });
+
+  const hCos = parseInt(document.getElementById('have-cos').value);
+  const wCos = parseInt(document.getElementById('want-cos').value);
+  const cosCosts = [0,300,900];
+  const cosCost = wCos > hCos ? cosCosts[wCos]-cosCosts[hCos] : 0;
+  if (wCos > hCos) { itemCost += cosCost; anyWant = true; wantedNames.push(['Обычный костюм','Прочный костюм'][wCos-1]); }
+  document.getElementById('want-cos').classList.toggle('on', wCos > hCos);
+  const cosHint = document.getElementById('hint-cos');
+  if (cosHint) cosHint.textContent = wCos > hCos ? `Стоимость: ${fmt(cosCost)} тайл.` : '';
+
+  const afterItems = total - itemCost;
+  const forRep     = Math.max(0, afterItems);
+  const rubDef     = afterItems < 0 ? Math.ceil(-afterItems/100) : 0;
+
+  const targetRep  = REP[maxRank];
+  const repNeeded  = Math.max(0, targetRep - haveRep);
+  const freeKr     = Math.floor(forRep/50);
+  const freeRep    = Math.min(freeKr*500, repNeeded);
+  const tUsedRep   = Math.ceil(freeRep/500)*50;
+  const repGap     = repNeeded - freeRep;
+  const rc         = optRubies(repGap);
+  const totalRub   = rubDef + rc.r;
+  // Корректируем: если рубиновые кружки дают overshoot — снижаем тайлены на эту разницу
+  const repFromRubies = rc.nPrem*5000 + rc.nReg*500;
+  const overshoot  = Math.max(0, freeRep + repFromRubies - repNeeded);
+  const adjFreeRep = freeRep - overshoot;
+  const adjTUsed   = adjFreeRep > 0 ? Math.ceil(adjFreeRep/500)*50 : 0;
+  const leftover   = forRep - adjTUsed;
+
+  // Stats
+  set('sv-earn',  fmt(earned));
+  set('sv-total', fmt(Math.max(0,total)));
+  set('sv-items', itemCost > 0 ? '−'+fmt(itemCost) : '—');
+  set('sv-repgap', repGap > 0 ? fmt(repGap)+' оч.' : repNeeded===0&&anyWant ? 'Достигнута ✓' : '—');
+
+  // Big number
+  const numEl = document.getElementById('res-num');
+  const icoEl = document.getElementById('res-ruby-ico');
+  numEl.textContent = fmtR(totalRub);
+  numEl.className = 'rnum '+(totalRub===0?'free':'paid');
+  icoEl.style.opacity = totalRub > 0 ? '1' : '0.25';
+
+  const vb = document.getElementById('verdict-block');
+  const sb = document.getElementById('strat-block');
+
+  if (!anyWant) {
+    vb.className = 'idle-msg';
+    vb.innerHTML = 'Выбери предметы которые хочешь получить →';
+    sb.style.display = 'none';
+    return;
+  }
+
+  // ── VERDICT GRID ──
+  const rows = [];
+
+  // Rep status
+  rows.push(`<div class="vrow">
+    <span class="vkey">Репутация сейчас</span>
+    <span class="vval b">${haveRep > 0 ? `Ранг ${haveRank} «${RANK_NAMES[haveRank]}» — ${fmt(haveRep)} оч.` : 'Нет (0 оч.)'}</span>
+  </div>`);
+
+  if (maxRank > 0) {
+    rows.push(`<div class="vrow">
+      <span class="vkey">Нужен ранг для желаемых предметов</span>
+      <span class="vval ${haveRep>=targetRep?'g':'o'}">Ранг ${maxRank} «${RANK_NAMES[maxRank]}» — ${fmt(targetRep)} оч.</span>
+    </div>`);
+  }
+
+  rows.push('<div class="vsep"></div>');
+
+  if (itemCost > 0) {
+    rows.push(`<div class="vrow">
+      <span class="vkey">Тайленов на предметы</span>
+      <span class="vval ${afterItems>=0?'':'r'}">${fmt(itemCost)} тайл. ${afterItems<0?`<span style="font-weight:400;font-size:11px">(не хватает ${fmt(-afterItems)} т.)</span>`:''}</span>
+    </div>`);
+  }
+
+  if (haveRep < targetRep) {
+    rows.push(`<div class="vrow">
+      <span class="vkey">Осталось набрать репутации</span>
+      <span class="vval r">${fmt(repNeeded)} оч.</span>
+    </div>`);
+    if (adjFreeRep > 0) {
+      rows.push(`<div class="vrow">
+        <span class="vkey">Бесплатно тайленами</span>
+        <span class="vval g">${fmt(adjFreeRep)} оч. (${fmt(adjTUsed)} тайл.)</span>
+      </div>`);
+    }
+    if (rc.r > 0) {
+      rows.push(`<div class="vrow">
+        <span class="vkey">Докупить репутацию</span>
+        <span class="vval r">${fmt(repNeeded - adjFreeRep)} оч. → ${fmtR(rc.r)} рубинов</span>
+      </div>`);
+    }
+  } else if (anyWant) {
+    rows.push(`<div class="vrow">
+      <span class="vkey">Репутация</span>
+      <span class="vval g">Уже достигнута ✓</span>
+    </div>`);
+  }
+
+  if (rubDef > 0) {
+    rows.push('<div class="vsep"></div>');
+    rows.push(`<div class="vrow">
+      <span class="vkey">Не хватает тайленов на предметы</span>
+      <span class="vval r">${fmt(-afterItems)} тайл. → ${fmtR(rubDef)} рубинов</span>
+    </div>`);
+  }
+
+  vb.className = 'verdict-block';
+  vb.innerHTML = rows.join('');
+
+  // ── STRATEGY BLOCK ──
+  const lines = [];
+
+  const icoMug     = `<div class="sline-ico"><div class="gico"><img class="base" src="good_beer_10.png"><img class="fr" src="../frames/border_none.png"></div></div>`;
+  const icoMugPrem = `<div class="sline-ico"><div class="gico"><img class="base" src="good_beer_10.png"><img class="fr" src="../frames/border_low.png"></div></div>`;
+  const icoTaylen  = `<div class="sline-ico"><img src="../currency/leprecon_taylen.png" style="width:13px;height:13px;margin:auto"></div>`;
+  const icoRuby    = `<div class="sline-ico"><img src="../currency/ruby.png" style="width:13px;height:13px;margin:auto"></div>`;
+  const icoOk      = `<div class="sline-ico emoji">✅</div>`;
+
+  if (totalRub === 0) {
+    lines.push(`<div class="sline">
+      ${icoOk}
+      <div class="sline-body">Донат не нужен — тайленов хватает на все предметы и репутацию.</div>
+    </div>`);
+    if (leftover > 0) {
+      if (haveRep < REP[3]) {
+        const extraMugs = Math.floor(leftover/50);
+        if (extraMugs > 0) lines.push(`<div class="sline">
+          ${icoMug}
+          <div class="sline-body">Останется <span class="sg">${fmt(leftover)} тайленов</span> — хватит ещё на <span class="sn">${extraMugs}</span> обычных кружек = <span class="sg">+${fmt(extraMugs*500)} оч.</span> репутации сверху.</div>
+        </div>`);
+      } else {
+        lines.push(`<div class="sline">
+          ${icoTaylen}
+          <div class="sline-body">Останется <span class="sg">${fmt(leftover)} свободных тайленов</span>.</div>
+        </div>`);
+      }
+    }
+  } else {
+    if (rubDef > 0) {
+      lines.push(`<div class="sline">
+        ${icoRuby}
+        <div class="sline-body">Докупи тайлены в Королевской лавке: нужно <span class="sr">${fmt(Math.ceil(-afterItems/100)*100)} тайл.</span> → <span class="sr">${fmtR(rubDef)} рубинов</span> (курс: 100 тайл. = 1 рубин).</div>
+      </div>`);
+    }
+    if (adjFreeRep > 0 && adjTUsed > 0) {
+      lines.push(`<div class="sline">
+        ${icoMug}
+        <div class="sline-body">Потрать <span class="sn">${fmt(adjTUsed)} тайленов</span> на <b>Пивную кружку</b> — получишь <span class="sg">+${fmt(adjFreeRep)} оч.</span> репутации бесплатно.</div>
+      </div>`);
+    }
+    if (rc.nPrem > 0) {
+      lines.push(`<div class="sline">
+        ${icoMugPrem}
+        <div class="sline-body">Купи <span class="sn">${rc.nPrem} × Пивная кружка (скидка 40%)</span> — по <span class="sn">3 рубина/шт</span> = <span class="sr">${rc.nPrem*3} рубинов</span> → <span class="sg">+${fmt(rc.nPrem*5000)} оч.</span> репутации.</div>
+      </div>`);
+    }
+    if (rc.nReg > 0) {
+      lines.push(`<div class="sline">
+        ${icoMug}
+        <div class="sline-body">Купи <span class="sn">${rc.nReg} × Пивная кружка</span> — по <span class="sn">0.5 рубина/шт</span> = <span class="sr">${fmtR(rc.nReg*0.5)} рубинов</span> → <span class="sg">+${fmt(rc.nReg*500)} оч.</span> репутации.</div>
+      </div>`);
+    }
+    if (leftover > 0) {
+      lines.push(`<div class="sline">
+        ${icoTaylen}
+        <div class="sline-body">Останется <span class="sg">${fmt(leftover)} свободных тайленов</span>.</div>
+      </div>`);
+    }
+  }
+
+  sb.style.display = 'block';
+  sb.innerHTML = `<div class="strat-block">
+    <div class="strat-title">Что купить</div>
+    ${lines.join('')}
+  </div>`;
+}
+
+renderItems();
+calc();
+</script>
+</body>
+</html>
