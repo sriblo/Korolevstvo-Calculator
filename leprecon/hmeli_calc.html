@@ -1077,16 +1077,6 @@ function renderItemsGuide() {
         { lv:2, label:'Талисман Рыцаря клевера',  cost:500, rank:2, ingr:ingrIco('clover_talisman_pattern.png','border_high','Сияющий клевер') },
         { lv:3, label:'Талисман Лорда клевера',   cost:700, rank:3, ingr:ingrIco('clover_talisman_pattern.png','border_exclusive','Сияющий клевер') },
       ]},
-    { name:'Камень путешествий', note:'90 дней', cfg: ITEMS[4],
-      steps:[
-        { lv:1, label:'Камень путешествий', cost:1, rank:3, ingr:null },
-      ]},
-    { name:'Костюм', note:'обычный до 1 июня · прочный на год',
-      cfg:{ img:'mask.png', imgs:[null,'clover_girl_2.png','clover_girl_3.png'], frames:[null,'border_high','border_exclusive'] },
-      steps:[
-        { lv:1, label:'Обычный костюм', cost:300, rank:null, ingr:null },
-        { lv:2, label:'Прочный костюм', cost:600, rank:null, ingr:null },
-      ]},
   ];
 
   const html = GUIDE_ITEMS.map(({name, note, cfg, steps}) => {
