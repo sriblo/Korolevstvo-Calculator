@@ -55,16 +55,22 @@ header::after {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 14px;
+  align-items: stretch;
+}
+
+/* ── BASE CARD ── */
+.calc-card, .soon-card {
+  border-radius: 12px; overflow: hidden; position: relative;
+  display: flex; flex-direction: column; /* одинаковая высота */
 }
 
 /* ── ACTIVE CARD ── */
 .calc-card {
   background: var(--glass); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-  border: 1px solid var(--gb); border-radius: 12px; overflow: hidden;
-  text-decoration: none; color: inherit; display: block;
+  border: 1px solid var(--gb);
+  text-decoration: none; color: inherit;
   box-shadow: 0 1px 0 rgba(220,190,100,.12) inset, 0 8px 32px rgba(0,0,0,.5);
   transition: border-color .2s, transform .15s, box-shadow .2s;
-  position: relative;
 }
 .calc-card::before {
   content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
@@ -77,17 +83,22 @@ header::after {
   box-shadow: 0 1px 0 rgba(220,190,100,.18) inset, 0 16px 40px rgba(0,0,0,.6), 0 0 40px rgba(200,160,60,.06);
 }
 
-/* ── CURRENT EVENT CARD (highlighted) ── */
-.calc-card.current-event {
+/* ── CURRENT EVENT ── */
+.current-event.calc-card {
   border-color: rgba(100,200,80,.45);
   box-shadow: 0 1px 0 rgba(120,220,80,.15) inset, 0 8px 32px rgba(0,0,0,.5), 0 0 30px rgba(80,160,50,.12);
 }
-.calc-card.current-event::before {
+.current-event.calc-card::before {
   background: linear-gradient(90deg, transparent, rgba(100,200,80,.5), transparent);
 }
-.calc-card.current-event:hover {
+.current-event.calc-card:hover {
   border-color: rgba(120,220,80,.65);
-  box-shadow: 0 1px 0 rgba(120,220,80,.2) inset, 0 16px 40px rgba(0,0,0,.6), 0 0 40px rgba(80,160,50,.18);
+}
+/* Полоска "идёт сейчас" слева */
+.current-event::after {
+  content: ''; position: absolute; top: 0; left: 0; bottom: 0; width: 3px;
+  background: linear-gradient(180deg, rgba(100,200,80,.8), rgba(100,200,80,.2));
+  pointer-events: none;
 }
 
 .card-top {
@@ -107,48 +118,40 @@ header::after {
 .card-dates { font-size: 11px; color: var(--text2); }
 .card-desc {
   padding: 0 20px 14px; font-size: 12px; color: var(--text2); line-height: 1.5;
-  border-bottom: 1px solid var(--sep);
+  flex: 1; /* растягивает desc чтобы footer был внизу */
 }
 .card-footer {
-  padding: 10px 20px;
+  padding: 10px 20px; margin-top: auto;
+  border-top: 1px solid var(--sep);
   display: flex; align-items: center; justify-content: space-between;
 }
-.card-tag {
-  font-size: 10px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase;
-  padding: 3px 8px; border-radius: 4px;
+.card-status {
+  font-size: 10px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;
+  color: var(--text3);
 }
-.tag-active  { background: rgba(78,138,58,.2);  color: var(--greenl); border: 1px solid rgba(78,138,58,.35); }
-.tag-ready   { background: rgba(200,160,60,.12); color: var(--goldl);  border: 1px solid rgba(200,160,60,.25); }
-.card-arrow  { font-size: 16px; color: var(--text3); transition: color .15s; }
-.calc-card:hover .card-arrow { color: var(--goldl); }
+.current-event .card-status { color: var(--greenl); }
+.calc-card .card-status { color: var(--goldl); }
+.card-arrow { font-size: 16px; color: var(--text3); transition: color .15s, transform .15s; }
+.calc-card:hover .card-arrow { color: var(--goldl); transform: translateX(3px); }
 
 /* ── SOON CARD ── */
 .soon-card {
   background: rgba(12,8,4,.6); backdrop-filter: blur(12px);
-  border: 1px solid rgba(255,255,255,.05); border-radius: 12px; overflow: hidden;
-  position: relative; cursor: default;
+  border: 1px solid rgba(255,255,255,.05);
+  cursor: default;
 }
 .soon-card.current-event {
-  border-color: rgba(100,200,80,.25);
-  box-shadow: 0 0 20px rgba(80,160,50,.08);
+  border-color: rgba(100,200,80,.2);
 }
-.soon-card .card-ico { filter: grayscale(1) opacity(.4); }
-.soon-card.current-event .card-ico { filter: grayscale(.3) opacity(.7); }
+.soon-card .card-ico { filter: grayscale(1) opacity(.35); }
+.soon-card.current-event .card-ico { filter: grayscale(.2) opacity(.65); }
 .soon-card .card-name  { color: var(--text3); }
 .soon-card.current-event .card-name { color: var(--text2); }
 .soon-card .card-dates { color: rgba(74,63,48,.8); }
-.soon-card.current-event .card-dates { color: var(--text3); }
-.soon-card .card-desc  { color: rgba(74,63,48,.8); border-bottom-color: rgba(255,255,255,.04); }
-.tag-soon {
-  background: rgba(255,255,255,.04); color: var(--text3);
-  border: 1px solid rgba(255,255,255,.08);
-}
-.tag-soon-current {
-  background: rgba(100,180,70,.1); color: rgba(120,200,80,.7);
-  border: 1px solid rgba(100,180,70,.2);
-}
+.soon-card .card-desc  { color: rgba(74,63,48,.7); }
+.soon-card .card-footer { border-top-color: rgba(255,255,255,.04); }
 /* сКОРо pun */
-.kor-pun .kor { color: rgba(200,165,70,.5); font-weight: 700; }
+.kor-pun .kor { color: rgba(200,165,70,.45); font-weight: 700; }
 </style>
 </head>
 <body>
@@ -249,9 +252,7 @@ function renderCard(ev, isCurrent) {
   const monthsLabel = monthLabel(ev.months);
 
   if (hasCalc) {
-    const tag = isCurrent
-      ? `<span class="card-tag tag-active">● Идёт сейчас</span>`
-      : `<span class="card-tag tag-ready">Калькулятор готов</span>`;
+    const status = isCurrent ? 'Идёт сейчас' : 'Калькулятор готов';
     return `<a class="calc-card${isCurrent ? ' current-event' : ''}" href="${ev.url}">
       <div class="card-top">
         <div class="card-ico">${ev.ico}</div>
@@ -261,12 +262,13 @@ function renderCard(ev, isCurrent) {
         </div>
       </div>
       <div class="card-desc">${ev.desc}</div>
-      <div class="card-footer">${tag}<span class="card-arrow">→</span></div>
+      <div class="card-footer">
+        <span class="card-status">${status}</span>
+        <span class="card-arrow">→</span>
+      </div>
     </a>`;
   } else {
-    const tag = isCurrent
-      ? `<span class="card-tag tag-soon-current">● Идёт сейчас</span>`
-      : `<span class="card-tag tag-soon"><span class="kor-pun">с<span class="kor">КОР</span>о!</span></span>`;
+    const status = isCurrent ? 'Идёт сейчас' : `<span class="kor-pun">с<span class="kor">КОР</span>о!</span>`;
     return `<div class="soon-card${isCurrent ? ' current-event' : ''}">
       <div class="card-top">
         <div class="card-ico">${ev.ico}</div>
@@ -276,7 +278,9 @@ function renderCard(ev, isCurrent) {
         </div>
       </div>
       <div class="card-desc">${ev.desc}</div>
-      <div class="card-footer">${tag}</div>
+      <div class="card-footer">
+        <span class="card-status">${status}</span>
+      </div>
     </div>`;
   }
 }
