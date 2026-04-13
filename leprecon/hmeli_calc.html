@@ -454,9 +454,9 @@ select.on { border-color: rgba(200,165,70,.45); background: rgba(200,160,40,.06)
         <div class="ico-pill em">🏆</div>
         <div class="ilbl">Текущий ранг</div>
         <select class="rank-sel" id="have-rank" onchange="calc()">
-          <option value="0">Ранг 0 (0–19 999 оч.)</option>
-          <option value="1">Ранг 1 — Празднующий</option>
-          <option value="2">Ранг 2 — Имбирный забияка</option>
+          <option value="0">Ранг 0 — Празднующий</option>
+          <option value="1">Ранг 1 — Помощник Патрика</option>
+          <option value="2">Ранг 2 — Имбирный Забияка</option>
           <option value="3">Ранг 3 — Гроза Лепреконов</option>
         </select>
       </div>
@@ -478,17 +478,17 @@ select.on { border-color: rgba(200,165,70,.45); background: rgba(200,160,40,.06)
       <div class="rank-legend">
         <div class="rank-row">
           <span class="rank-badge rb0">Ранг 0</span>
-          <span class="rank-name">Нет ранга</span>
+          <span class="rank-name">Празднующий</span>
           <span class="rank-pts">0–19 999 оч.</span>
         </div>
         <div class="rank-row">
           <span class="rank-badge rb1">Ранг 1</span>
-          <span class="rank-name">Празднующий</span>
+          <span class="rank-name">Помощник Патрика</span>
           <span class="rank-pts">20 000 оч.</span>
         </div>
         <div class="rank-row">
           <span class="rank-badge rb2">Ранг 2</span>
-          <span class="rank-name">Имбирный забияка</span>
+          <span class="rank-name">Имбирный Забияка</span>
           <span class="rank-pts">50 000 оч.</span>
         </div>
         <div class="rank-row">
@@ -647,7 +647,7 @@ select.on { border-color: rgba(200,165,70,.45); background: rgba(200,160,40,.06)
 
 <script>
 const REP        = [0, 20000, 50000, 100000];
-const RANK_NAMES = ['—', 'Празднующий', 'Имбирный забияка', 'Гроза Лепреконов'];
+const RANK_NAMES = ['Празднующий', 'Помощник Патрика', 'Имбирный Забияка', 'Гроза Лепреконов'];
 const RANK_BADGES = ['rb0','rb1','rb2','rb3'];
 
 const CUM = {
@@ -864,7 +864,7 @@ function calc() {
   // Rep status
   rows.push(`<div class="vrow">
     <span class="vkey">Репутация сейчас</span>
-    <span class="vval b">${haveRep > 0 ? `Ранг ${haveRank} «${RANK_NAMES[haveRank]}» — ${fmt(haveRep)} оч.` : 'Нет (0 оч.)'}</span>
+    <span class="vval b">Ранг ${haveRank} «${RANK_NAMES[haveRank]}» — ${fmt(haveRep)} оч.</span>
   </div>`);
 
   if (maxRank > 0) {
