@@ -198,27 +198,39 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; }
 
 /* ── ITEMS GUIDE ── */
 .iup-row {
-  display: grid; grid-template-columns: 130px 1fr;
-  gap: 12px; padding: 12px 16px; border-bottom: 1px solid var(--sep);
-  align-items: center;
+  padding: 14px 16px; border-bottom: 1px solid var(--sep);
 }
 .iup-row:last-child { border-bottom: none; }
-.iup-row-title { display: flex; align-items: center; gap: 8px; }
-.iup-row-ico { flex-shrink: 0; }
-.iup-name { font-size: 12px; font-weight: 600; color: var(--text); }
-.iup-note { font-size: 10px; color: var(--text3); margin-top: 1px; }
-.iup-steps { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
-.iup-cell { display: flex; align-items: center; gap: 4px; }
-.iup-arr { font-size: 16px; color: var(--text3); flex-shrink: 0; }
-.iup-cell-inner { display: flex; align-items: center; gap: 6px; }
-.iup-ingr-wrap { display: flex; align-items: center; gap: 3px; }
-.iup-plus { font-size: 12px; color: var(--text3); }
+.iup-row-header {
+  display: flex; align-items: baseline; gap: 7px; margin-bottom: 10px;
+}
+.iup-name { font-size: 12px; font-weight: 600; color: var(--text); letter-spacing: .02em; text-transform: uppercase; }
+.iup-note { font-size: 10px; color: var(--text3); }
+.iup-chain { display: flex; align-items: center; gap: 0; flex-wrap: wrap; }
+
+/* step = icon + labels below, all same height */
+.iup-step {
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+  width: 72px;
+}
+.iup-step .gico, .iup-step .gempty { width: 40px; height: 40px; flex-shrink: 0; }
+.iup-step .gico img.base, .iup-step .gico img.fr { width: 40px; height: 40px; }
+.iup-step-name { font-size: 10px; color: var(--text2); text-align: center; line-height: 1.3; width: 100%; }
+.iup-step-cost { font-size: 10px; color: var(--greenl); font-weight: 600; white-space: nowrap; }
+.iup-step-rank { margin-top: 1px; }
+
+/* connector = arrow + ingredient, vertically centered with step icons */
+.iup-connector {
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: center; gap: 3px; padding: 0 2px;
+  /* push labels area down to align arrow with icon center */
+  padding-bottom: 46px;
+}
+.iup-connector-arr { font-size: 20px; color: var(--text3); line-height: 1; }
 .iup-ingr { display: flex; flex-direction: column; align-items: center; gap: 2px; }
-.iup-ingr-lbl { font-size: 9px; color: var(--text3); text-align: center; max-width: 52px; line-height: 1.2; }
-.iup-result { display: flex; align-items: center; gap: 6px; }
-.iup-rlbl { display: flex; flex-direction: column; gap: 2px; }
-.iup-rname { font-size: 11px; color: var(--text); font-weight: 500; white-space: nowrap; }
-.iup-rcost { font-size: 10px; color: var(--greenl); display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
+.iup-ingr .gico, .iup-ingr .gempty { width: 22px; height: 22px; }
+.iup-ingr .gico img.base, .iup-ingr .gico img.fr { width: 22px; height: 22px; }
+.iup-ingr-lbl { font-size: 9px; color: var(--text3); text-align: center; max-width: 46px; line-height: 1.2; }
 
 /* ── GUIDE SECTION ── */
 .guide-section { grid-column: 1 / -1; margin-top: 10px; display: flex; flex-direction: column; gap: 14px; }
@@ -1044,99 +1056,74 @@ function calc() {
 }
 
 function renderItemsGuide() {
-  // ingr(img, frame, name) — иконка ингредиента
-  function ingr(img, frame, name) {
-    const cfg = { img, frames:[null,frame], levels:['',name] };
-    return `<div class="iup-ingr">
-      ${gico(cfg, 1)}
-      <div class="iup-ingr-lbl">${name}</div>
-    </div>`;
+  function ingrIco(img, frame, name) {
+    const cfg = { img, frames:[null, frame] };
+    return `<div class="iup-ingr">${gico(cfg,1)}<div class="iup-ingr-lbl">${name}</div></div>`;
   }
 
   const GUIDE_ITEMS = [
-    {
-      cfg: ITEMS[0], note:'вечный',
-      steps: [
-        { result:'Злобный лепрекон', lv:1, cost:800,  rank:1, ingr:null },
-        { result:'Хитрый лепрекон',  lv:2, cost:1000, rank:2, ingr:ingr('leprecon_coin.png','border_exclusive','Волшебная монетка') },
-        { result:'Сильный лепрекон', lv:3, cost:2000, rank:3, ingr:ingr('gold_pot.png','border_special','Волшебное золото') },
-      ]
-    },
-    {
-      cfg: ITEMS[1], note:'вечный',
-      steps: [
-        { result:'Медовый хмель',  lv:1, cost:1400, rank:1, ingr:null },
-        { result:'Медовый хмель',  lv:2, cost:1600, rank:2, ingr:ingr('rainbow_bottle.png','border_exclusive','Концентрат магии') },
-        { result:'Медовый хмель',  lv:3, cost:2000, rank:3, ingr:ingr('rainbow_bottle.png','border_special','Концентрат магии') },
-      ]
-    },
-    {
-      cfg: ITEMS[2], note:'до 1 июня',
-      steps: [
-        { result:'Фляжка Патрика', lv:1, cost:300, rank:1, ingr:null },
-        { result:'Фляжка Патрика', lv:2, cost:500, rank:2, ingr:ingr('hop_silver.png','border_medium','Серебряный хмель') },
-        { result:'Фляжка Клевера', lv:3, cost:700, rank:3, ingr:ingr('hop_golden.png','border_high','Золотой хмель') },
-      ]
-    },
-    {
-      cfg: ITEMS[3], note:'до 1 июня',
-      steps: [
-        { result:'Талисман Сквайра', lv:1, cost:300, rank:1, ingr:null },
-        { result:'Талисман Рыцаря',  lv:2, cost:500, rank:2, ingr:ingr('clover_talisman_pattern.png','border_high','Сияющий клевер') },
-        { result:'Талисман Лорда',   lv:3, cost:700, rank:3, ingr:ingr('clover_talisman_pattern.png','border_exclusive','Сияющий клевер') },
-      ]
-    },
-    {
-      cfg: ITEMS[4], note:'90 дней',
-      steps: [
-        { result:'Камень путешествий', lv:1, cost:1, rank:3, ingr:null },
-      ]
-    },
-    {
-      cfg: { name:'Костюм', img:'mask.png', imgs:[null,'clover_girl_2.png','clover_girl_3.png'],
-             frames:[null,'border_high','border_exclusive'], levels:['Нет','Обычный','Прочный'] },
-      note:'обычный до 1 июня / прочный на год',
-      steps: [
-        { result:'Обычный костюм', lv:1, cost:300,  rank:null, ingr:null },
-        { result:'Прочный костюм', lv:2, cost:600,  rank:null, ingr:null },
-      ]
-    },
+    { name:'Лепрекон', note:'вечный', cfg: ITEMS[0],
+      steps:[
+        { lv:1, label:'Злобный',  cost:800,  rank:1, ingr:null },
+        { lv:2, label:'Хитрый',   cost:1000, rank:2, ingr:ingrIco('leprecon_coin.png','border_exclusive','Волшебная монетка') },
+        { lv:3, label:'Сильный',  cost:2000, rank:3, ingr:ingrIco('gold_pot.png','border_special','Волшебное золото') },
+      ]},
+    { name:'Медовый хмель', note:'вечный', cfg: ITEMS[1],
+      steps:[
+        { lv:1, label:'Фиолетовый', cost:1400, rank:1, ingr:null },
+        { lv:2, label:'Красный',    cost:1600, rank:2, ingr:ingrIco('rainbow_bottle.png','border_exclusive','Концентрат магии') },
+        { lv:3, label:'Оранжевый',  cost:2000, rank:3, ingr:ingrIco('rainbow_bottle.png','border_special','Концентрат магии') },
+      ]},
+    { name:'Фляжка Патрика', note:'до 1 июня', cfg: ITEMS[2],
+      steps:[
+        { lv:1, label:'Зелёная',        cost:300, rank:1, ingr:null },
+        { lv:2, label:'Синяя',          cost:500, rank:2, ingr:ingrIco('hop_silver.png','border_medium','Серебряный хмель') },
+        { lv:3, label:'Фляжка Клевера', cost:700, rank:3, ingr:ingrIco('hop_golden.png','border_high','Золотой хмель') },
+      ]},
+    { name:'Талисман клевера', note:'до 1 июня', cfg: ITEMS[3],
+      steps:[
+        { lv:1, label:'Сквайра', cost:300, rank:1, ingr:null },
+        { lv:2, label:'Рыцаря',  cost:500, rank:2, ingr:ingrIco('clover_talisman_pattern.png','border_high','Сияющий клевер') },
+        { lv:3, label:'Лорда',   cost:700, rank:3, ingr:ingrIco('clover_talisman_pattern.png','border_exclusive','Сияющий клевер') },
+      ]},
+    { name:'Камень путешествий', note:'90 дней', cfg: ITEMS[4],
+      steps:[
+        { lv:1, label:'Красный', cost:1, rank:3, ingr:null },
+      ]},
+    { name:'Костюм', note:'обычный до 1 июня · прочный на год',
+      cfg:{ img:'mask.png', imgs:[null,'clover_girl_2.png','clover_girl_3.png'], frames:[null,'border_high','border_exclusive'] },
+      steps:[
+        { lv:1, label:'Обычный', cost:300, rank:null, ingr:null },
+        { lv:2, label:'Прочный', cost:600, rank:null, ingr:null },
+      ]},
   ];
 
-  const rows = GUIDE_ITEMS.map(({cfg, note, steps}) => {
-    const stepsHtml = steps.map((s, i) => {
-      const rankBadgeHtml = s.rank != null
-        ? `<span class="rank-badge ${RANK_BADGES[s.rank]}" style="font-size:9px">Ранг ${s.rank}</span>` : '';
-      const ingrHtml = s.ingr
-        ? `<div class="iup-ingr-wrap"><div class="iup-plus">+</div>${s.ingr}</div>` : '';
-      return `<div class="iup-cell${i>0?' iup-cell-upgrade':''}">
-        ${i > 0 ? '<div class="iup-arr">›</div>' : ''}
-        <div class="iup-cell-inner">
-          ${ingrHtml}
-          <div class="iup-result">
-            ${gico(cfg, s.lv)}
-            <div class="iup-rlbl">
-              <div class="iup-rname">${s.result}</div>
-              <div class="iup-rcost">+${fmt(s.cost)} тайл. ${rankBadgeHtml}</div>
-            </div>
-          </div>
-        </div>
+  const html = GUIDE_ITEMS.map(({name, note, cfg, steps}) => {
+    const chain = steps.map((s, i) => {
+      const rankHtml = s.rank != null
+        ? `<span class="iup-step-rank rank-badge ${RANK_BADGES[s.rank]}" style="font-size:9px">Ранг ${s.rank}</span>` : '';
+      const connector = i === 0 ? '' : `<div class="iup-connector">
+        <div class="iup-connector-arr">›</div>
+        ${s.ingr || ''}
+      </div>`;
+      return `${connector}<div class="iup-step">
+        ${gico(cfg, s.lv)}
+        <div class="iup-step-name">${s.label}</div>
+        <div class="iup-step-cost">+${fmt(s.cost)} тайл.</div>
+        ${rankHtml}
       </div>`;
     }).join('');
 
     return `<div class="iup-row">
-      <div class="iup-row-title">
-        <div class="iup-row-ico">${gico(cfg, 0)}</div>
-        <div>
-          <div class="iup-name">${cfg.name}</div>
-          ${note ? `<div class="iup-note">${note}</div>` : ''}
-        </div>
+      <div class="iup-row-header">
+        <span class="iup-name">${name}</span>
+        ${note ? `<span class="iup-note">${note}</span>` : ''}
       </div>
-      <div class="iup-steps">${stepsHtml}</div>
+      <div class="iup-chain">${chain}</div>
     </div>`;
   }).join('');
 
-  document.getElementById('items-guide').innerHTML = rows;
+  document.getElementById('items-guide').innerHTML = html;
 }
 
 function switchTab(id, btn) {
