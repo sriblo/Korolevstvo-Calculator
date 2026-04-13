@@ -420,16 +420,12 @@ select.on { border-color: rgba(200,165,70,.45); background: rgba(200,160,40,.06)
         </div>
       </div>
 
-      <div class="irow">
+      <div class="irow" style="background: rgba(100,180,80,.05);">
         <div class="ico-pill em">🍀</div>
         <div class="ilbl">
-          Разовый квест выполнен
-          <small>«Праздничный подарок» +1 501 тайл.</small>
+          Разовый квест
+          <small>«Праздничный подарок» учтён в расчёте автоматически (+1 501 тайлен)</small>
         </div>
-        <label class="chk-wrap">
-          <input type="checkbox" id="one-time" checked onchange="calc()">
-          <span class="chk-lbl">Да</span>
-        </label>
       </div>
 
       <div class="irow">
@@ -644,6 +640,127 @@ select.on { border-color: rgba(200,165,70,.45); background: rgba(200,160,40,.06)
       </div>
     </div>
 
+    <div class="guide-card">
+      <div class="guide-card-title">Предметы ивента — стоимость улучшений</div>
+      <div class="guide-body" style="padding: 0">
+        <table class="qtable">
+          <thead>
+            <tr>
+              <th>Предмет</th>
+              <th>Уровень</th>
+              <th>Шаг</th>
+              <th>Итого</th>
+              <th>Ранг</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Лепрекон -->
+            <tr>
+              <td rowspan="3" style="color:var(--text); font-weight:600; vertical-align:top; padding-top:10px">Лепрекон<br><span style="font-size:10px;color:var(--text3);font-weight:400">вечный</span></td>
+              <td class="qtask">Злобный (фиол.)</td>
+              <td class="qrew">800 тайл.</td>
+              <td class="qrew">800 тайл.</td>
+              <td class="qtask">Ранг 1</td>
+            </tr>
+            <tr>
+              <td class="qtask">Хитрый (красн.)</td>
+              <td class="qrew">1 000 тайл.</td>
+              <td class="qrew">1 800 тайл.</td>
+              <td class="qtask">Ранг 2</td>
+            </tr>
+            <tr style="border-bottom: 2px solid rgba(200,165,70,.15)">
+              <td class="qtask">Сильный (оранж.)</td>
+              <td class="qrew">2 000 тайл.</td>
+              <td class="qrew">3 800 тайл.</td>
+              <td class="qtask">Ранг 3</td>
+            </tr>
+            <!-- Медовый хмель -->
+            <tr>
+              <td rowspan="3" style="color:var(--text); font-weight:600; vertical-align:top; padding-top:10px">Медовый хмель<br><span style="font-size:10px;color:var(--text3);font-weight:400">вечный</span></td>
+              <td class="qtask">Фиолетовый</td>
+              <td class="qrew">1 400 тайл.</td>
+              <td class="qrew">1 400 тайл.</td>
+              <td class="qtask">Ранг 1</td>
+            </tr>
+            <tr>
+              <td class="qtask">Красный</td>
+              <td class="qrew">1 600 тайл.</td>
+              <td class="qrew">3 000 тайл.</td>
+              <td class="qtask">Ранг 2</td>
+            </tr>
+            <tr style="border-bottom: 2px solid rgba(200,165,70,.15)">
+              <td class="qtask">Оранжевый</td>
+              <td class="qrew">2 000 тайл.</td>
+              <td class="qrew">5 000 тайл.</td>
+              <td class="qtask">Ранг 3</td>
+            </tr>
+            <!-- Фляжка -->
+            <tr>
+              <td rowspan="3" style="color:var(--text); font-weight:600; vertical-align:top; padding-top:10px">Фляжка Патрика<br><span style="font-size:10px;color:var(--text3);font-weight:400">до 1 июня</span></td>
+              <td class="qtask">Зелёная</td>
+              <td class="qrew">300 тайл.</td>
+              <td class="qrew">300 тайл.</td>
+              <td class="qtask">Ранг 1</td>
+            </tr>
+            <tr>
+              <td class="qtask">Синяя</td>
+              <td class="qrew">500 тайл.</td>
+              <td class="qrew">800 тайл.</td>
+              <td class="qtask">Ранг 2</td>
+            </tr>
+            <tr style="border-bottom: 2px solid rgba(200,165,70,.15)">
+              <td class="qtask">Фляжка Клевера</td>
+              <td class="qrew">700 тайл.</td>
+              <td class="qrew">1 500 тайл.</td>
+              <td class="qtask">Ранг 3</td>
+            </tr>
+            <!-- Талисман -->
+            <tr>
+              <td rowspan="3" style="color:var(--text); font-weight:600; vertical-align:top; padding-top:10px">Талисман клевера<br><span style="font-size:10px;color:var(--text3);font-weight:400">до 1 июня</span></td>
+              <td class="qtask">Талисман Сквайра</td>
+              <td class="qrew">300 тайл.</td>
+              <td class="qrew">300 тайл.</td>
+              <td class="qtask">Ранг 1</td>
+            </tr>
+            <tr>
+              <td class="qtask">Талисман Рыцаря</td>
+              <td class="qrew">500 тайл.</td>
+              <td class="qrew">800 тайл.</td>
+              <td class="qtask">Ранг 2</td>
+            </tr>
+            <tr style="border-bottom: 2px solid rgba(200,165,70,.15)">
+              <td class="qtask">Талисман Лорда</td>
+              <td class="qrew">700 тайл.</td>
+              <td class="qrew">1 500 тайл.</td>
+              <td class="qtask">Ранг 3</td>
+            </tr>
+            <!-- Камень -->
+            <tr>
+              <td style="color:var(--text); font-weight:600">Камень путешествий</td>
+              <td class="qtask">Красный (90 дней)</td>
+              <td class="qrew">1 тайлен</td>
+              <td class="qrew">1 тайлен</td>
+              <td class="qtask">Ранг 3</td>
+            </tr>
+            <!-- Костюм -->
+            <tr>
+              <td rowspan="2" style="color:var(--text); font-weight:600; vertical-align:top; padding-top:10px">Костюм</td>
+              <td class="qtask">Обычный (до 1 июня)</td>
+              <td class="qrew">300 тайл.</td>
+              <td class="qrew">300 тайл.</td>
+              <td class="qtask">—</td>
+            </tr>
+            <tr>
+              <td class="qtask">Прочный (на год)</td>
+              <td class="qrew">600 тайл.</td>
+              <td class="qrew">900 тайл.</td>
+              <td class="qtask">—</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
   </div>
 
 </div>
@@ -780,8 +897,7 @@ function calc() {
   const haveRank  = parseInt(document.getElementById('have-rank').value)||0;
   const haveRepX  = Math.max(0, parseInt(document.getElementById('have-rep-extra').value)||0);
 
-  const oneTime = document.getElementById('one-time').checked ? 1501 : 0;
-  const earned  = days * 760 + oneTime;
+  const earned  = days * 760 + 1501;
   const total   = earned + haveT - miss;
   const haveRep = REP[haveRank] + haveRepX;
 
