@@ -449,13 +449,13 @@ select.on { border-color: rgba(200,165,70,.45); background: rgba(200,160,40,.06)
     <!-- Репутация -->
     <div class="card">
       <div class="card-title">
-        Репутация Месяц Хмеля
+        Мой прогресс репутации
         <span class="tip" data-tip="Укажи свой текущий ранг репутации&#10;и сколько очков набрал сверх него.&#10;Это учитывается при расчёте донатa на репутацию.">?</span>
       </div>
 
       <div class="irow">
         <div class="ico-pill em">🏆</div>
-        <div class="ilbl">Текущий ранг</div>
+        <div class="ilbl">Ваш текущий ранг</div>
         <select class="rank-sel" id="have-rank" onchange="calc()">
           <option value="0">Ранг 0 — Празднующий</option>
           <option value="1">Ранг 1 — Помощник Патрика</option>
@@ -467,13 +467,13 @@ select.on { border-color: rgba(200,165,70,.45); background: rgba(200,160,40,.06)
       <div class="irow">
         <div class="ico-pill em">⭐</div>
         <div class="ilbl">
-          Очков сверх ранга
-          <small>набрал уже в текущем ранге</small>
+          Текущее количество очков репутации
+          <small>сколько очков набрал в текущем ранге</small>
         </div>
-        <span class="tip" data-tip="Сколько очков ты набрал&#10;в своём текущем ранге.&#10;Например: ранг 1, и ещё 5 000 оч. → итого 25 000.">?</span>
+        <span class="tip" data-tip="Сколько очков ты набрал&#10;в своём текущем ранге.&#10;Например: ранг 1, и ещё 5 000 очков → итого 25 000.">?</span>
         <div class="nf">
           <input type="number" id="have-rep-extra" value="0" min="0" oninput="calc()">
-          <span class="unit">оч.</span>
+          <span class="unit">очков</span>
         </div>
       </div>
 
@@ -482,22 +482,22 @@ select.on { border-color: rgba(200,165,70,.45); background: rgba(200,160,40,.06)
         <div class="rank-row">
           <span class="rank-badge rb0">Ранг 0</span>
           <span class="rank-name">Празднующий</span>
-          <span class="rank-pts">0–19 999 оч.</span>
+          <span class="rank-pts">0–19 999 очков</span>
         </div>
         <div class="rank-row">
           <span class="rank-badge rb1">Ранг 1</span>
           <span class="rank-name">Помощник Патрика</span>
-          <span class="rank-pts">20 000 оч.</span>
+          <span class="rank-pts">20 000 очков</span>
         </div>
         <div class="rank-row">
           <span class="rank-badge rb2">Ранг 2</span>
           <span class="rank-name">Имбирный Забияка</span>
-          <span class="rank-pts">50 000 оч.</span>
+          <span class="rank-pts">50 000 очков</span>
         </div>
         <div class="rank-row">
           <span class="rank-badge rb3">Ранг 3</span>
           <span class="rank-name">Гроза Лепреконов</span>
-          <span class="rank-pts">100 000 оч.</span>
+          <span class="rank-pts">100 000 очков</span>
         </div>
       </div>
     </div>
@@ -842,7 +842,7 @@ function calc() {
   set('sv-earn',  fmt(earned));
   set('sv-total', fmt(Math.max(0,total)));
   set('sv-items', itemCost > 0 ? '−'+fmt(itemCost) : '—');
-  set('sv-repgap', repGap > 0 ? fmt(repGap)+' оч.' : repNeeded===0&&anyWant ? 'Достигнута ✓' : '—');
+  set('sv-repgap', repGap > 0 ? fmt(repGap)+' очков' : repNeeded===0&&anyWant ? 'Достигнута ✓' : '—');
 
   // Big number
   const numEl = document.getElementById('res-num');
@@ -867,13 +867,13 @@ function calc() {
   // Rep status
   rows.push(`<div class="vrow">
     <span class="vkey">Репутация сейчас</span>
-    <span class="vval b">Ранг ${haveRank} «${RANK_NAMES[haveRank]}» — ${fmt(haveRep)} оч.</span>
+    <span class="vval b">Ранг ${haveRank} «${RANK_NAMES[haveRank]}» — ${fmt(haveRep)} очков</span>
   </div>`);
 
   if (maxRank > 0) {
     rows.push(`<div class="vrow">
       <span class="vkey">Нужен ранг для желаемых предметов</span>
-      <span class="vval ${haveRep>=targetRep?'g':'o'}">Ранг ${maxRank} «${RANK_NAMES[maxRank]}» — ${fmt(targetRep)} оч.</span>
+      <span class="vval ${haveRep>=targetRep?'g':'o'}">Ранг ${maxRank} «${RANK_NAMES[maxRank]}» — ${fmt(targetRep)} очков</span>
     </div>`);
   }
 
@@ -889,18 +889,18 @@ function calc() {
   if (haveRep < targetRep) {
     rows.push(`<div class="vrow">
       <span class="vkey">Осталось набрать репутации</span>
-      <span class="vval r">${fmt(repNeeded)} оч.</span>
+      <span class="vval r">${fmt(repNeeded)} очков</span>
     </div>`);
     if (adjFreeRep > 0) {
       rows.push(`<div class="vrow">
         <span class="vkey">Бесплатно тайленами</span>
-        <span class="vval g">${fmt(adjFreeRep)} оч. (${fmt(adjTUsed)} тайл.)</span>
+        <span class="vval g">${fmt(adjFreeRep)} очков (${fmt(adjTUsed)} тайл.)</span>
       </div>`);
     }
     if (rc.r > 0) {
       rows.push(`<div class="vrow">
         <span class="vkey">Докупить репутацию</span>
-        <span class="vval r">${fmt(repNeeded - adjFreeRep)} оч. → ${fmtR(rc.r)} рубинов</span>
+        <span class="vval r">${fmt(repNeeded - adjFreeRep)} очков → ${fmtR(rc.r)} рубинов</span>
       </div>`);
     }
   } else if (anyWant) {
@@ -940,7 +940,7 @@ function calc() {
         const extraMugs = Math.floor(leftover/50);
         if (extraMugs > 0) lines.push(`<div class="sline">
           ${icoMug}
-          <div class="sline-body">Останется <span class="sg">${fmt(leftover)} тайленов</span> — хватит ещё на <span class="sn">${extraMugs}</span> обычных кружек = <span class="sg">+${fmt(extraMugs*500)} оч.</span> репутации сверху.</div>
+          <div class="sline-body">Останется <span class="sg">${fmt(leftover)} тайленов</span> — хватит ещё на <span class="sn">${extraMugs}</span> обычных кружек = <span class="sg">+${fmt(extraMugs*500)} очков</span> репутации сверху.</div>
         </div>`);
       } else {
         lines.push(`<div class="sline">
@@ -959,19 +959,19 @@ function calc() {
     if (adjFreeRep > 0 && adjTUsed > 0) {
       lines.push(`<div class="sline">
         ${icoMug}
-        <div class="sline-body">Потрать <span class="sn">${fmt(adjTUsed)} тайленов</span> на <b>Пивную кружку</b> — получишь <span class="sg">+${fmt(adjFreeRep)} оч.</span> репутации бесплатно.</div>
+        <div class="sline-body">Потрать <span class="sn">${fmt(adjTUsed)} тайленов</span> на <b>Пивную кружку</b> — получишь <span class="sg">+${fmt(adjFreeRep)} очков</span> репутации бесплатно.</div>
       </div>`);
     }
     if (rc.nPrem > 0) {
       lines.push(`<div class="sline">
         ${icoMugPrem}
-        <div class="sline-body">Купи <span class="sn">${rc.nPrem} × Пивная кружка (скидка 40%)</span> — по <span class="sn">3 рубина/шт</span> = <span class="sr">${rc.nPrem*3} рубинов</span> → <span class="sg">+${fmt(rc.nPrem*5000)} оч.</span> репутации.</div>
+        <div class="sline-body">Купи <span class="sn">${rc.nPrem} × Пивная кружка (скидка 40%)</span> — по <span class="sn">3 рубина/шт</span> = <span class="sr">${rc.nPrem*3} рубинов</span> → <span class="sg">+${fmt(rc.nPrem*5000)} очков</span> репутации.</div>
       </div>`);
     }
     if (rc.nReg > 0) {
       lines.push(`<div class="sline">
         ${icoMug}
-        <div class="sline-body">Купи <span class="sn">${rc.nReg} × Пивная кружка</span> — по <span class="sn">0.5 рубина/шт</span> = <span class="sr">${fmtR(rc.nReg*0.5)} рубинов</span> → <span class="sg">+${fmt(rc.nReg*500)} оч.</span> репутации.</div>
+        <div class="sline-body">Купи <span class="sn">${rc.nReg} × Пивная кружка</span> — по <span class="sn">0.5 рубина/шт</span> = <span class="sr">${fmtR(rc.nReg*0.5)} рубинов</span> → <span class="sg">+${fmt(rc.nReg*500)} очков</span> репутации.</div>
       </div>`);
     }
     if (leftover > 0) {
