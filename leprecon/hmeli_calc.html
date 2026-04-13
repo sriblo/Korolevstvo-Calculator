@@ -392,7 +392,7 @@ select.on { border-color: rgba(200,165,70,.45); background: rgba(200,160,40,.06)
 
     <!-- Тайлены -->
     <div class="card">
-      <div class="card-title">Тайлены лепреконов</div>
+      <div class="card-title">Мои данные</div>
 
       <div class="irow">
         <div class="ico-pill"><img src="../currency/leprecon_taylen.png"></div>
@@ -400,7 +400,7 @@ select.on { border-color: rgba(200,165,70,.45); background: rgba(200,160,40,.06)
           Дней до конца ивента
           <small>760 тайл./день (6 квестов)</small>
         </div>
-        <span class="tip" data-tip="Укажи сколько дней осталось до конца ивента.&#10;Каждый день даёт максимум 760 тайленов&#10;если выполнять все квесты.">?</span>
+        <span class="tip" data-tip="Посчитай сколько дней осталось до конца ивента.&#10;&#10;Если сегодня ещё не выполнял квесты — считай&#10;включительно с сегодняшним днём.&#10;&#10;Если уже выполнил — сначала выполни все&#10;квесты за сегодня, потом вводи данные&#10;и считай без сегодняшнего дня.">?</span>
         <div class="nf">
           <input type="number" id="days" value="15" min="0" max="15" oninput="calc()">
           <span class="unit">дн.</span>
@@ -409,8 +409,11 @@ select.on { border-color: rgba(200,165,70,.45); background: rgba(200,160,40,.06)
 
       <div class="irow">
         <div class="ico-pill"><img src="../currency/leprecon_taylen.png"></div>
-        <div class="ilbl">Уже накоплено тайленов</div>
-        <span class="tip" data-tip="Сколько тайленов лепреконов&#10;уже есть в твоём кошельке прямо сейчас.">?</span>
+        <div class="ilbl">
+          Тайленов в кошельке сейчас
+          <small>открой игру и проверь</small>
+        </div>
+        <span class="tip" data-tip="Сколько тайленов лепреконов сейчас&#10;в твоём кошельке в игре.&#10;&#10;Именно столько — не считая то что&#10;ещё заработаешь за оставшиеся дни.">?</span>
         <div class="nf">
           <input type="number" id="have-t" value="0" min="0" oninput="calc()">
           <span class="unit">т.</span>
