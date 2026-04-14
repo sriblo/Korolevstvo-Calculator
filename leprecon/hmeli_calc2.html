@@ -163,24 +163,30 @@ header::after {
 
 /* ── INPUT ROWS ── */
 .irow {
-  display: flex; align-items: center; gap: 10px;
+  display: grid;
+  grid-template-columns: 34px 1fr 20px 88px 60px;
+  align-items: center; gap: 10px;
   padding: 11px 18px; border-bottom: 1px solid var(--sep);
   position: relative; z-index: 2;
   transition: background .15s;
 }
 .irow:last-child { border-bottom: none; }
 .irow:hover { background: rgba(184,134,11,.025); }
+/* строки без поля ввода (чекбокс) */
+.irow.irow-check {
+  grid-template-columns: 34px 1fr auto;
+}
 .ico-pill {
-  width: 34px; height: 34px; flex-shrink: 0;
+  width: 34px; height: 34px;
   display: flex; align-items: center; justify-content: center;
   background: rgba(0,0,0,.45); border: 1px solid var(--sep); border-radius: 8px;
   box-shadow: 0 2px 6px rgba(0,0,0,.4) inset;
 }
 .ico-pill img { width: 20px; height: 20px; }
 .ico-pill.em { font-size: 15px; }
-.ilbl { flex: 1; font-size: 14px; font-weight: 600; color: var(--text); line-height: 1.3; min-width: 0; }
+.ilbl { font-size: 14px; font-weight: 600; color: var(--text); line-height: 1.3; min-width: 0; }
 .ilbl small { display: block; font-size: 11px; color: var(--text3); font-weight: 400; margin-top: 2px; font-style: italic; font-family: 'Crimson Pro', serif; }
-.nf { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+.nf { display: contents; }
 
 input[type=number] {
   width: 84px; background: var(--inp); border: 1px solid rgba(184,134,11,.28);
@@ -196,7 +202,7 @@ input[type=number]:focus {
 }
 input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; }
-.unit { font-size: 12px; color: var(--text2); font-family: 'Inter', sans-serif; white-space: nowrap; }
+.unit { font-size: 12px; color: var(--text2); font-family: 'Inter', sans-serif; white-space: nowrap; align-self: center; }
 
 .rank-sel {
   flex-shrink: 0; width: 185px;
@@ -633,7 +639,6 @@ select.on { border-color: rgba(184,134,11,.5); background: rgba(184,134,11,.06);
         <div class="ico-pill em">📅</div>
         <div class="ilbl">
           Дней до конца ивента
-          <small>760 тайленов в день (6 квестов)</small>
         </div>
         <span class="tip" data-tip="Посчитай сколько дней осталось до конца ивента.&#10;&#10;Если сегодня ещё не выполнял квесты — считай&#10;включительно с сегодняшним днём.&#10;&#10;Если уже выполнил — сначала выполни все&#10;квесты за сегодня, потом вводи данные&#10;и считай без сегодняшнего дня.">?</span>
         <div class="nf">
@@ -652,7 +657,7 @@ select.on { border-color: rgba(184,134,11,.5); background: rgba(184,134,11,.06);
         </div>
       </div>
 
-      <div class="irow">
+      <div class="irow irow-check">
         <div class="ico-pill em">🍀</div>
         <div class="ilbl">Учитывать подарочные тайлены</div>
         <label class="chk-wrap">
