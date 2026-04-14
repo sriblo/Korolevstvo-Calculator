@@ -315,6 +315,30 @@ header::after {
   border-top: none;
   margin-top: 0;
 }
+/* Кнопка перехода на featured */
+.btn-enter {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 10px 22px;
+  background: linear-gradient(135deg, rgba(90,122,58,.35) 0%, rgba(60,90,35,.25) 100%);
+  border: 1px solid rgba(138,184,96,.45);
+  border-radius: 6px;
+  font-family: 'Inter', sans-serif;
+  font-size: 11px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase;
+  color: var(--sagel);
+  box-shadow: 0 0 20px rgba(90,122,58,.15), inset 0 1px 0 rgba(140,210,80,.1);
+  transition: background .2s, border-color .2s, box-shadow .2s, transform .15s;
+}
+.calc-card:hover .btn-enter {
+  background: linear-gradient(135deg, rgba(90,122,58,.5) 0%, rgba(60,90,35,.38) 100%);
+  border-color: rgba(138,184,96,.7);
+  box-shadow: 0 0 30px rgba(90,122,58,.3), inset 0 1px 0 rgba(140,210,80,.18);
+  transform: translateX(2px);
+}
+.btn-enter-arrow {
+  font-size: 16px; line-height: 1;
+  transition: transform .15s;
+}
+.calc-card:hover .btn-enter-arrow { transform: translateX(3px); }
 
 /* ── CARD INNER (regular) ── */
 .card-inner { display: flex; flex-direction: column; flex: 1; }
@@ -618,10 +642,25 @@ function renderCard(ev, isCurrent) {
   const monthsLabel = monthLabel(ev.months);
 
   if (hasCalc) {
-    const tag = isCurrent
-      ? `<span class="card-tag tag-active">Проходит сейчас</span>`
-      : `<span class="card-tag tag-ready">Калькулятор готов</span>`;
-    return `<a class="calc-card${isCurrent ? ' current-event' : ''}" href="${ev.url}">
+    if (isCurrent) {
+      return `<a class="calc-card current-event" href="${ev.url}">
+        <div class="card-inner">
+          <div class="card-ico-wrap"><div class="card-ico">${ev.ico}</div></div>
+          <div class="card-info-wrap">
+            <div class="card-name">${ev.name}</div>
+            <div class="card-dates">${monthsLabel}</div>
+          </div>
+          <div class="card-desc-wrap"><div class="card-desc">${ev.desc}</div></div>
+          <div class="card-footer-wrap">
+            <div class="card-footer">
+              <span class="card-tag tag-active">Проходит сейчас</span>
+              <span class="btn-enter">Открыть калькулятор <span class="btn-enter-arrow">→</span></span>
+            </div>
+          </div>
+        </div>
+      </a>`;
+    }
+    return `<a class="calc-card" href="${ev.url}">
       <div class="card-inner">
         <div class="card-ico-wrap"><div class="card-ico">${ev.ico}</div></div>
         <div class="card-info-wrap">
@@ -630,7 +669,7 @@ function renderCard(ev, isCurrent) {
         </div>
         <div class="card-desc-wrap"><div class="card-desc">${ev.desc}</div></div>
         <div class="card-footer-wrap">
-          <div class="card-footer">${tag}<span class="card-arrow">→</span></div>
+          <div class="card-footer"><span class="card-tag tag-ready">Калькулятор готов</span><span class="card-arrow">→</span></div>
         </div>
       </div>
     </a>`;
