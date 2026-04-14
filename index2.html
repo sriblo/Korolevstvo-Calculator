@@ -437,8 +437,9 @@ header::after {
 .soon-card .card-desc  { color: #6a5a40; }
 .tag-soon {
   font-family: 'Cinzel', serif;
-  font-size: 10px; font-weight: 600; letter-spacing: 2px;
-  color: #7a6a50;
+  font-size: 10px; font-weight: 400; letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #6a5840;
 }
 .tag-soon-current {
   font-family: 'Cinzel', serif;
@@ -769,7 +770,7 @@ function renderCard(ev, isCurrent) {
   } else {
     const tag = isCurrent
       ? `<span class="tag-soon-current">Проходит сейчас</span>`
-      : `<span class="tag-soon"><span class="kor-pun">с<span class="kor">КОР</span>о!</span></span>`;
+      : `<span class="tag-soon">Скоро</span>`;
     return `<div class="soon-card${isCurrent ? ' current-event' : ''}">
       <div class="card-inner">
         <div class="card-ico-wrap"><div class="card-ico">${ev.ico}</div></div>
