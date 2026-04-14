@@ -176,6 +176,11 @@ header::after {
 .irow.irow-check {
   grid-template-columns: 34px 1fr auto;
 }
+/* строки с select или сгруппированным контролом (репутация) */
+.irow.irow-rep {
+  grid-template-columns: 34px 1fr auto;
+}
+.rep-ctrl { display: flex; align-items: center; gap: 8px; }
 .ico-pill {
   width: 34px; height: 34px;
   display: flex; align-items: center; justify-content: center;
@@ -205,7 +210,7 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; }
 .unit { font-size: 12px; color: var(--text2); font-family: 'Inter', sans-serif; white-space: nowrap; align-self: center; }
 
 .rank-sel {
-  grid-column: 3 / -1;
+  width: 180px;
   background: var(--inp); border: 1px solid rgba(184,134,11,.25);
   border-radius: 8px; color: var(--text); padding: 8px 10px;
   font-size: 12px; font-family: 'Inter', sans-serif;
@@ -687,7 +692,7 @@ select.on { border-color: rgba(184,134,11,.5); background: rgba(184,134,11,.06);
         <span class="tip" data-tip="Укажи свой текущий ранг репутации&#10;и сколько очков набрал сверх него.&#10;Это учитывается при расчёте донатa на репутацию.">?</span>
       </div>
 
-      <div class="irow">
+      <div class="irow irow-rep">
         <div class="ico-pill em">🏆</div>
         <div class="ilbl">Текущий ранг</div>
         <select class="rank-sel" id="have-rank" onchange="calc()">
@@ -698,11 +703,11 @@ select.on { border-color: rgba(184,134,11,.5); background: rgba(184,134,11,.06);
         </select>
       </div>
 
-      <div class="irow">
+      <div class="irow irow-rep">
         <div class="ico-pill em">⭐</div>
         <div class="ilbl">Очков репутации сейчас</div>
-        <span class="tip" data-tip="Сколько очков ты набрал&#10;в своём текущем ранге.&#10;Например: ранг 1, и ещё 5 000 очков → итого 25 000.">?</span>
-        <div class="nf">
+        <div class="rep-ctrl">
+          <span class="tip" data-tip="Сколько очков ты набрал&#10;в своём текущем ранге.&#10;Например: ранг 1, и ещё 5 000 очков → итого 25 000.">?</span>
           <input type="number" id="have-rep-extra" value="0" min="0" oninput="calc()">
           <span class="unit">очков</span>
         </div>
