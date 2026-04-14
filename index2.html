@@ -498,14 +498,75 @@ header::after {
 }
 .footer-text {
   font-family: 'Cormorant Garamond', serif;
-  font-size: 13px; color: var(--text3);
-  font-style: italic; letter-spacing: .05em;
+  font-size: 16px; color: var(--text3);
+  font-style: italic; letter-spacing: .03em;
 }
 
 /* ── RESPONSIVE ── */
 @media (max-width: 700px) {
-  header, .page, .page-footer { padding-left: 20px; padding-right: 20px; }
-  .page { padding-top: 28px; }
+  /* Общие отступы */
+  header { padding-left: 16px; padding-right: 16px; }
+  .page { padding: 24px 16px 60px; }
+  .hero { padding: 36px 16px 32px; }
+  .page-footer { padding: 0 16px 48px; }
+
+  /* Хедер */
+  .h-inner { padding: 14px 0; gap: 12px; }
+  .h-title { font-size: 15px; }
+  .h-sub { font-size: 13px; }
+  .h-ornament { display: none; }
+  .h-sigil { font-size: 22px; }
+
+  /* Героблок */
+  .hero-title { font-size: 32px; letter-spacing: .02em; }
+  .hero-subtitle { font-size: 16px; }
+  .hero-ornament-top { margin-bottom: 20px; }
+
+  /* Сетка — одна колонка */
+  .grid { grid-template-columns: 1fr; gap: 12px; }
+
+  /* Featured карточка — вертикально */
+  .calc-card.current-event .card-inner {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto auto;
+  }
+  .calc-card.current-event .card-ico-wrap {
+    grid-row: 1; grid-column: 1;
+    padding: 24px 16px 8px;
+    justify-content: flex-start;
+  }
+  .calc-card.current-event .card-ico { font-size: 48px; }
+  .calc-card.current-event .card-info-wrap {
+    grid-row: 2; grid-column: 1;
+    padding: 0 16px 8px;
+  }
+  .calc-card.current-event .card-name { font-size: 18px; }
+  .calc-card.current-event .card-desc-wrap {
+    grid-row: 3; grid-column: 1;
+    padding: 0 16px 0;
+  }
+  .calc-card.current-event .card-footer-wrap {
+    grid-row: 4; grid-column: 1;
+    padding: 14px 16px 20px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  /* Обычные карточки */
+  .card-ico-wrap { padding: 16px 16px 0; }
+  .card-info-wrap { padding: 10px 16px 0; }
+  .card-name { font-size: 14px; }
+  .card-desc-wrap { padding: 8px 16px 0; }
+  .card-desc { font-size: 14px; }
+  .card-footer-wrap { padding: 10px 16px 14px; }
+
+  /* Разделитель и секции */
+  .orn-divider { margin: 28px 0 20px; }
+  .section-label { margin-bottom: 16px; }
+
+  /* Футер */
+  .footer-text { font-size: 14px; }
 }
 </style>
 </head>
