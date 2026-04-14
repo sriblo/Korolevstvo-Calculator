@@ -15,14 +15,14 @@
   --sagel:   #8ab860;
   --ember:   #8b3a2a;
   --emberl:  #c86040;
-  --text:    #e8dfc8;
-  --text2:   #9a8a6a;
-  --text3:   #4a3f2e;
+  --text:    #ede5cc;       /* основной текст — чуть теплее и ярче */
+  --text2:   #b8a882;       /* вторичный текст — был #9a8a6a, поднял */
+  --text3:   #7a6a50;       /* третичный — был #4a3f2e, почти невидимый */
   --bg:      #0a0704;
   --glass:   rgba(18,12,6,.78);
   --glass2:  rgba(10,7,3,.88);
-  --gb:      rgba(184,134,11,.22);
-  --sep:     rgba(184,134,11,.12);
+  --gb:      rgba(184,134,11,.28);
+  --sep:     rgba(184,134,11,.18);
   --glow-amber: rgba(184,134,11,.18);
   --glow-sage:  rgba(90,122,58,.18);
 }
@@ -174,13 +174,14 @@ header::after {
 }
 .section-label-text {
   font-family: 'Cinzel', serif;
-  font-size: 10px; font-weight: 600; letter-spacing: 3.5px;
-  text-transform: uppercase; color: rgba(184,134,11,.6);
+  font-size: 11px; font-weight: 600; letter-spacing: 3.5px;
+  text-transform: uppercase; color: rgba(212,168,67,.85);
   flex-shrink: 0;
+  text-shadow: 0 0 20px rgba(184,134,11,.35);
 }
 .section-label-line {
   flex: 1; height: 1px;
-  background: linear-gradient(90deg, rgba(184,134,11,.2), transparent);
+  background: linear-gradient(90deg, rgba(184,134,11,.35), transparent);
 }
 
 /* ── PAGE ── */
@@ -428,16 +429,16 @@ header::after {
   border-color: rgba(90,122,58,.2);
   box-shadow: 0 0 30px rgba(90,122,58,.06);
 }
-.soon-card .card-ico { filter: grayscale(1) opacity(.3); }
-.soon-card.current-event .card-ico { filter: grayscale(.4) opacity(.55); }
-.soon-card .card-name  { color: var(--text3); }
+.soon-card .card-ico { filter: grayscale(1) opacity(.45); }
+.soon-card.current-event .card-ico { filter: grayscale(.3) opacity(.7); }
+.soon-card .card-name  { color: #7a6a50; }
 .soon-card.current-event .card-name { color: var(--text2); }
-.soon-card .card-dates { color: rgba(74,63,48,.7); }
-.soon-card .card-desc  { color: rgba(74,63,48,.7); }
+.soon-card .card-dates { color: #6a5a40; }
+.soon-card .card-desc  { color: #6a5a40; }
 .tag-soon {
   font-family: 'Cinzel', serif;
   font-size: 10px; font-weight: 600; letter-spacing: 2px;
-  color: var(--text3);
+  color: #7a6a50;
 }
 .tag-soon-current {
   font-family: 'Cinzel', serif;
