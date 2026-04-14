@@ -93,7 +93,7 @@ header::after {
 .page {
   position: relative; z-index: 5;
   max-width: 1100px; margin: 0 auto; padding: 22px 28px 80px;
-  display: grid; grid-template-columns: 320px 1fr; gap: 20px; align-items: start;
+  display: grid; grid-template-columns: 360px 1fr; gap: 20px; align-items: start;
 }
 
 /* ── CARD (base glass panel) ── */
@@ -178,7 +178,7 @@ header::after {
 }
 .ico-pill img { width: 20px; height: 20px; }
 .ico-pill.em { font-size: 15px; }
-.ilbl { flex: 1; font-size: 15px; font-weight: 600; color: var(--text); line-height: 1.3; }
+.ilbl { flex: 1; font-size: 14px; font-weight: 600; color: var(--text); line-height: 1.3; min-width: 0; }
 .ilbl small { display: block; font-size: 11px; color: var(--text3); font-weight: 400; margin-top: 2px; font-style: italic; font-family: 'Crimson Pro', serif; }
 .nf { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
 
@@ -196,7 +196,7 @@ input[type=number]:focus {
 }
 input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; }
-.unit { font-size: 11px; color: var(--text3); font-family: 'Inter', sans-serif; }
+.unit { font-size: 12px; color: var(--text2); font-family: 'Inter', sans-serif; white-space: nowrap; }
 
 .rank-sel {
   flex-shrink: 0; width: 185px;
@@ -633,7 +633,7 @@ select.on { border-color: rgba(184,134,11,.5); background: rgba(184,134,11,.06);
         <div class="ico-pill em">📅</div>
         <div class="ilbl">
           Дней до конца ивента
-          <small>760 тайл./день (6 квестов)</small>
+          <small>760 тайленов в день (6 квестов)</small>
         </div>
         <span class="tip" data-tip="Посчитай сколько дней осталось до конца ивента.&#10;&#10;Если сегодня ещё не выполнял квесты — считай&#10;включительно с сегодняшним днём.&#10;&#10;Если уже выполнил — сначала выполни все&#10;квесты за сегодня, потом вводи данные&#10;и считай без сегодняшнего дня.">?</span>
         <div class="nf">
@@ -665,7 +665,6 @@ select.on { border-color: rgba(184,134,11,.5); background: rgba(184,134,11,.06);
         <div class="ico-pill em">⏳</div>
         <div class="ilbl">
           Упущенные тайлены
-          <small>тайлены которые не заработаешь</small>
         </div>
         <span class="tip" data-tip="Если знаешь что пропустишь часть дней&#10;или квестов — впиши количество тайленов&#10;которые не заработаешь.&#10;Например: 2 пропущенных дня = 1 520 тайл.">?</span>
         <div class="nf">
