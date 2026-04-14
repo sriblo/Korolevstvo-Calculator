@@ -325,6 +325,7 @@ header::after {
   position: relative;
   background: linear-gradient(160deg, rgba(50,80,28,.7) 0%, rgba(28,50,14,.8) 100%);
   border: 1px solid rgba(138,184,96,.5);
+  border-radius: 8px;
   font-family: 'Crimson Pro', serif;
   font-size: 16px; font-weight: 600; letter-spacing: .04em;
   color: #a8dc78;
@@ -398,12 +399,14 @@ header::after {
 }
 .tag-active {
   color: var(--sagel);
+  font-size: 11px; letter-spacing: 2.5px;
+  text-shadow: 0 0 16px rgba(138,184,96,.6);
 }
 .tag-active::before {
   content: '';
-  width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0;
+  width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0;
   background: var(--sagel);
-  box-shadow: 0 0 8px var(--sagel);
+  box-shadow: 0 0 10px var(--sagel), 0 0 20px rgba(138,184,96,.4);
   animation: pulse-dot 2s ease-in-out infinite;
 }
 @keyframes pulse-dot {
