@@ -282,84 +282,73 @@ header::after {
 /* ── FEATURED (current event full-width) ── */
 .calc-card.current-event {
   grid-column: 1 / -1;
+  min-height: 180px;
 }
 .calc-card.current-event .card-inner {
   display: grid;
-  grid-template-columns: auto 1fr;
-  grid-template-rows: auto auto 1fr auto;
-  align-items: start;
+  grid-template-columns: 120px 1fr;
+  grid-template-rows: auto 1fr auto;
+  min-height: 180px;
 }
 .calc-card.current-event .card-ico-wrap {
   grid-row: 1 / 4; grid-column: 1;
-  padding: 28px 8px 28px 28px;
-  display: flex; align-items: center;
+  display: flex; align-items: center; justify-content: center;
+  padding: 32px 16px;
+  border-right: 1px solid rgba(138,184,96,.1);
 }
 .calc-card.current-event .card-ico {
-  font-size: 72px;
-  filter: drop-shadow(0 0 24px rgba(140,210,80,.45));
+  font-size: 64px; line-height: 1;
+  filter: drop-shadow(0 0 24px rgba(140,210,80,.5));
 }
 .calc-card.current-event .card-info-wrap {
   grid-row: 1; grid-column: 2;
-  padding: 28px 28px 0;
+  padding: 28px 32px 10px;
 }
-.calc-card.current-event .card-name { font-size: 22px; }
+.calc-card.current-event .card-name {
+  font-size: 24px; margin-bottom: 4px;
+}
 .calc-card.current-event .card-dates { font-size: 13px; }
 .calc-card.current-event .card-desc-wrap {
   grid-row: 2; grid-column: 2;
-  padding: 10px 28px 0;
+  padding: 0 32px;
+  display: flex; align-items: center;
 }
-.calc-card.current-event .card-desc { font-size: 14px; }
+.calc-card.current-event .card-desc { font-size: 14px; line-height: 1.6; }
 .calc-card.current-event .card-footer-wrap {
   grid-row: 3; grid-column: 2;
-  padding: 20px 28px 28px;
+  padding: 16px 32px 24px;
   border-top: 1px solid rgba(138,184,96,.1);
   margin-top: 0;
+  display: flex; align-items: center; justify-content: space-between;
 }
-.calc-card.current-event .card-footer {
-  gap: 20px;
-}
+
 /* Кнопка перехода на featured */
 .btn-enter {
-  display: inline-flex; align-items: center; gap: 12px;
-  padding: 13px 28px;
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 12px 24px;
   position: relative;
-  background: linear-gradient(160deg, rgba(50,80,28,.7) 0%, rgba(28,50,14,.8) 100%);
-  border: 1px solid rgba(138,184,96,.5);
+  background: linear-gradient(160deg, rgba(50,80,28,.6) 0%, rgba(22,42,10,.75) 100%);
+  border: 1px solid rgba(138,184,96,.55);
   border-radius: 8px;
   font-family: 'Crimson Pro', serif;
-  font-size: 16px; font-weight: 600; letter-spacing: .04em;
-  color: #a8dc78;
-  text-shadow: 0 0 20px rgba(140,210,80,.5);
-  box-shadow:
-    0 0 24px rgba(90,122,58,.2),
-    inset 0 1px 0 rgba(140,210,80,.15),
-    inset 0 -1px 0 rgba(0,0,0,.3);
-  transition: background .25s, border-color .25s, box-shadow .25s, color .25s;
+  font-size: 17px; font-weight: 600; letter-spacing: .02em;
+  color: #b0e080;
+  text-shadow: 0 0 16px rgba(140,210,80,.4);
+  box-shadow: 0 0 20px rgba(90,122,58,.15), inset 0 1px 0 rgba(140,210,80,.12);
+  transition: background .25s, border-color .25s, box-shadow .25s, color .2s, transform .15s;
   white-space: nowrap;
+  cursor: pointer;
 }
-/* угловые засечки */
-.btn-enter::before, .btn-enter::after {
-  content: '';
-  position: absolute;
-  width: 8px; height: 8px;
-  border-color: rgba(138,184,96,.7);
-  border-style: solid;
-}
-.btn-enter::before { top: -1px; left: -1px; border-width: 2px 0 0 2px; }
-.btn-enter::after  { bottom: -1px; right: -1px; border-width: 0 2px 2px 0; }
 .calc-card:hover .btn-enter {
-  background: linear-gradient(160deg, rgba(70,110,38,.75) 0%, rgba(42,72,20,.85) 100%);
-  border-color: rgba(138,184,96,.8);
-  color: #c8f098;
-  text-shadow: 0 0 24px rgba(140,210,80,.7);
-  box-shadow:
-    0 0 40px rgba(90,122,58,.35),
-    0 0 80px rgba(90,122,58,.1),
-    inset 0 1px 0 rgba(140,210,80,.25),
-    inset 0 -1px 0 rgba(0,0,0,.3);
+  background: linear-gradient(160deg, rgba(65,105,35,.75) 0%, rgba(32,60,15,.88) 100%);
+  border-color: rgba(138,184,96,.85);
+  color: #cef0a0;
+  text-shadow: 0 0 20px rgba(140,210,80,.65);
+  box-shadow: 0 0 36px rgba(90,122,58,.3), inset 0 1px 0 rgba(140,210,80,.2);
+  transform: translateY(-1px);
 }
 .btn-enter-arrow {
-  font-size: 18px; line-height: 1;
+  font-size: 17px; line-height: 1;
   transition: transform .2s;
 }
 .calc-card:hover .btn-enter-arrow { transform: translateX(4px); }
@@ -678,10 +667,8 @@ function renderCard(ev, isCurrent) {
           </div>
           <div class="card-desc-wrap"><div class="card-desc">${ev.desc}</div></div>
           <div class="card-footer-wrap">
-            <div class="card-footer">
-              <span class="card-tag tag-active">Проходит сейчас</span>
-              <span class="btn-enter">Открыть калькулятор <span class="btn-enter-arrow">→</span></span>
-            </div>
+            <span class="card-tag tag-active">Проходит сейчас</span>
+            <span class="btn-enter">Открыть калькулятор <span class="btn-enter-arrow">→</span></span>
           </div>
         </div>
       </a>`;
