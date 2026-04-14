@@ -414,39 +414,44 @@ header::after {
 
 /* ── SOON CARD ── */
 .soon-card {
-  background: rgba(10,7,3,.65);
+  background: linear-gradient(160deg, rgba(22,16,8,.85) 0%, rgba(14,10,4,.9) 100%);
   backdrop-filter: blur(14px);
-  border: 1px solid rgba(255,255,255,.05);
+  border: 1px solid rgba(184,134,11,.18);
   border-radius: 14px; overflow: hidden;
   position: relative; cursor: default;
   display: flex; flex-direction: column;
-  box-shadow: 0 8px 24px rgba(0,0,0,.4);
+  box-shadow: 0 8px 32px rgba(0,0,0,.5);
+  transition: border-color .2s, box-shadow .2s;
 }
 .soon-card::before {
   content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,.06), transparent);
+  background: linear-gradient(90deg, transparent, rgba(184,134,11,.25), transparent);
   pointer-events: none;
 }
-.soon-card.current-event {
-  border-color: rgba(90,122,58,.2);
-  box-shadow: 0 0 30px rgba(90,122,58,.06);
+.soon-card:hover {
+  border-color: rgba(184,134,11,.32);
+  box-shadow: 0 12px 40px rgba(0,0,0,.6), 0 0 30px rgba(184,134,11,.05);
 }
-.soon-card .card-ico { filter: grayscale(1) opacity(.45); }
-.soon-card.current-event .card-ico { filter: grayscale(.3) opacity(.7); }
-.soon-card .card-name  { color: #a08858; text-shadow: none; }
-.soon-card.current-event .card-name { color: #c4a060; }
-.soon-card .card-dates { color: #6a5a40; }
-.soon-card .card-desc  { color: #5e5040; }
-.soon-card .card-footer-wrap { border-top-color: rgba(255,255,255,.04); }
+.soon-card .card-ico { filter: grayscale(.7) opacity(.55); }
+.soon-card .card-name  { color: #c8a855; text-shadow: none; }
+.soon-card .card-dates { color: #8a7450; }
+.soon-card .card-desc  { color: #7a6a50; }
+.soon-card .card-footer-wrap { border-top-color: rgba(184,134,11,.1); }
+
+/* сКОРо! badge */
 .tag-soon {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 14px; font-weight: 400; font-style: italic;
-  color: #6a5a3a;
-  letter-spacing: .02em;
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: 'Cinzel', serif;
+  font-size: 10px; font-weight: 600; letter-spacing: 2.5px;
+  color: #7a6040;
+  padding: 4px 10px;
+  border: 1px solid rgba(184,134,11,.2);
+  border-radius: 4px;
+  background: rgba(184,134,11,.06);
 }
 .tag-soon .kor {
-  font-style: normal; font-weight: 600;
-  color: rgba(212,168,67,.55);
+  color: #c8a040;
+  text-shadow: 0 0 12px rgba(184,134,11,.4);
 }
 .tag-soon-current {
   font-family: 'Cinzel', serif;
