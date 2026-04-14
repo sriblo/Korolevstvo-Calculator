@@ -178,7 +178,7 @@ header::after {
 }
 .ico-pill img { width: 20px; height: 20px; }
 .ico-pill.em { font-size: 15px; }
-.ilbl { flex: 1; font-size: 13px; font-weight: 600; color: var(--text); line-height: 1.3; }
+.ilbl { flex: 1; font-size: 15px; font-weight: 600; color: var(--text); line-height: 1.3; }
 .ilbl small { display: block; font-size: 11px; color: var(--text3); font-weight: 400; margin-top: 2px; font-style: italic; font-family: 'Crimson Pro', serif; }
 .nf { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
 
@@ -223,8 +223,8 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; }
 .rb1 { background: rgba(90,122,58,.15); color: var(--sagel); border: 1px solid rgba(90,122,58,.3); }
 .rb2 { background: rgba(72,112,168,.15); color: var(--bluel); border: 1px solid rgba(72,112,168,.3); }
 .rb3 { background: rgba(184,134,11,.15); color: var(--goldl); border: 1px solid rgba(184,134,11,.3); }
-.rank-name { color: var(--text); font-weight: 600; font-family: 'Crimson Pro', serif; }
-.rank-pts  { color: var(--text3); margin-left: auto; font-family: 'Inter', sans-serif; font-size: 11px; }
+.rank-name { color: var(--text); font-weight: 600; font-family: 'Crimson Pro', serif; font-size: 14px; }
+.rank-pts  { color: var(--text3); margin-left: auto; font-family: 'Inter', sans-serif; font-size: 13px; }
 
 /* ── SIDEBAR ORNAMENT SECTION ── */
 .sidebar-divider {
@@ -330,18 +330,18 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; }
   position: relative; z-index: 2;
 }
 .guide-body { padding: 16px 18px; display: flex; flex-direction: column; gap: 12px; position: relative; z-index: 2; }
-.guide-step { display: flex; gap: 12px; font-size: 13px; line-height: 1.55; }
+.guide-step { display: flex; gap: 12px; font-size: 15px; line-height: 1.55; }
 .guide-num {
   font-family: 'Inter', sans-serif; font-size: 10px; font-weight: 700;
   background: rgba(184,134,11,.15); border: 1px solid rgba(184,134,11,.3); color: var(--goldl);
   border-radius: 50%; width: 22px; height: 22px; display: flex; align-items: center; justify-content: center;
   flex-shrink: 0; margin-top: 1px;
 }
-.guide-step-text { color: var(--text2); font-family: 'Crimson Pro', serif; }
+.guide-step-text { color: var(--text2); font-family: 'Crimson Pro', serif; font-size: 15px; }
 .guide-step-text b { color: var(--text); font-weight: 700; }
 
 /* ── QUEST TABLE ── */
-.qtable { width: 100%; border-collapse: collapse; font-size: 13px; }
+.qtable { width: 100%; border-collapse: collapse; font-size: 15px; }
 .qtable th {
   text-align: left; padding: 8px 12px; font-family: 'Inter', sans-serif; font-size: 10px; font-weight: 600;
   letter-spacing: 1.5px; text-transform: uppercase; color: var(--text3);
@@ -447,7 +447,7 @@ select.on { border-color: rgba(184,134,11,.5); background: rgba(184,134,11,.06);
   background: linear-gradient(135deg, rgba(184,134,11,.06), rgba(0,0,0,.1));
 }
 .rlbl {
-  font-family: 'Inter', sans-serif; font-size: 9px; letter-spacing: 3px;
+  font-family: 'Inter', sans-serif; font-size: 11px; letter-spacing: 3px;
   text-transform: uppercase; color: var(--text2);
   margin-bottom: 2px;
 }
@@ -489,7 +489,7 @@ select.on { border-color: rgba(184,134,11,.5); background: rgba(184,134,11,.06);
 .st:hover { background: rgba(184,134,11,.02); }
 .st:nth-child(2n) { border-right: none; }
 .st:nth-child(3), .st:nth-child(4) { border-bottom: none; }
-.slbl { font-family: 'Inter', sans-serif; font-size: 10px; color: var(--text3); margin-bottom: 4px; letter-spacing: .5px; }
+.slbl { font-family: 'Inter', sans-serif; font-size: 12px; color: var(--text3); margin-bottom: 4px; letter-spacing: .5px; }
 .sval {
   font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 600;
   color: var(--text); display: flex; align-items: center; gap: 5px;
@@ -506,8 +506,8 @@ select.on { border-color: rgba(184,134,11,.5); background: rgba(184,134,11,.06);
   position: relative; z-index: 3;
 }
 .vrow { display: flex; justify-content: space-between; align-items: baseline; gap: 14px; }
-.vkey { font-size: 13px; color: var(--text2); flex-shrink: 0; font-family: 'Crimson Pro', serif; }
-.vval { font-size: 13px; font-weight: 700; color: var(--text); text-align: right; font-family: 'Inter', sans-serif; }
+.vkey { font-size: 15px; color: var(--text2); flex-shrink: 0; font-family: 'Crimson Pro', serif; }
+.vval { font-size: 15px; font-weight: 700; color: var(--text); text-align: right; font-family: 'Inter', sans-serif; }
 .vval.g { color: var(--sagel); }
 .vval.r { color: var(--emberl); }
 .vval.o { color: var(--gold); }
@@ -571,6 +571,24 @@ select.on { border-color: rgba(184,134,11,.5); background: rgba(184,134,11,.06);
 .chk-wrap input[type=checkbox] { width: 15px; height: 15px; accent-color: var(--sagel); cursor: pointer; }
 .chk-lbl { font-size: 11px; color: var(--text2); font-family: 'Inter', sans-serif; }
 
+.page-footer {
+  position: relative; z-index: 5;
+  max-width: 1100px; margin: 0 auto;
+  padding: 0 28px 60px;
+  text-align: center;
+}
+.footer-text {
+  font-family: 'Crimson Pro', serif;
+  font-size: 16px; color: var(--text3);
+  font-style: italic; letter-spacing: .03em;
+}
+.footer-link {
+  color: rgba(212,168,67,.6);
+  text-decoration: none;
+  transition: color .15s;
+}
+.footer-link:hover { color: var(--goldl); }
+
 /* ── RESPONSIVE ── */
 @media (max-width: 740px) {
   .page { grid-template-columns: 1fr; padding-left: 16px; padding-right: 16px; }
@@ -608,11 +626,11 @@ select.on { border-color: rgba(184,134,11,.5); background: rgba(184,134,11,.06);
     <div class="card">
       <div class="card-title">
         <div class="card-title-ornament"></div>
-        Мои данные
+        Исходные данные
       </div>
 
       <div class="irow">
-        <div class="ico-pill"><img src="../currency/leprecon_taylen.png"></div>
+        <div class="ico-pill em">📅</div>
         <div class="ilbl">
           Дней до конца ивента
           <small>760 тайл./день (6 квестов)</small>
@@ -620,41 +638,39 @@ select.on { border-color: rgba(184,134,11,.5); background: rgba(184,134,11,.06);
         <span class="tip" data-tip="Посчитай сколько дней осталось до конца ивента.&#10;&#10;Если сегодня ещё не выполнял квесты — считай&#10;включительно с сегодняшним днём.&#10;&#10;Если уже выполнил — сначала выполни все&#10;квесты за сегодня, потом вводи данные&#10;и считай без сегодняшнего дня.">?</span>
         <div class="nf">
           <input type="number" id="days" value="15" min="0" max="15" oninput="calc()">
-          <span class="unit">дн.</span>
+          <span class="unit">дней</span>
         </div>
       </div>
 
       <div class="irow">
-        <div class="ico-pill"><img src="../currency/leprecon_taylen.png"></div>
-        <div class="ilbl">
-          Тайленов в кошельке сейчас
-          <small>открой игру и проверь</small>
-        </div>
+        <div class="ico-pill"><img src="../currency/leprecon_taylen.png" style="width:13px;height:13px;image-rendering:pixelated"></div>
+        <div class="ilbl">Тайленов сейчас</div>
         <span class="tip" data-tip="Сколько тайленов лепреконов сейчас&#10;в твоём кошельке в игре.&#10;&#10;Именно столько — не считая то что&#10;ещё заработаешь за оставшиеся дни.">?</span>
         <div class="nf">
           <input type="number" id="have-t" value="0" min="0" oninput="calc()">
-          <span class="unit">т.</span>
-        </div>
-      </div>
-
-      <div class="irow" style="background: rgba(90,122,58,.06);">
-        <div class="ico-pill em">🍀</div>
-        <div class="ilbl">
-          Разовый квест
-          <small>«Праздничный подарок» учтён в расчёте автоматически (+1 501 тайлен)</small>
+          <span class="unit">тайленов</span>
         </div>
       </div>
 
       <div class="irow">
-        <div class="ico-pill em">✂️</div>
+        <div class="ico-pill em">🍀</div>
+        <div class="ilbl">Учитывать подарочные тайлены</div>
+        <label class="chk-wrap">
+          <input type="checkbox" id="one-time" checked onchange="calc()">
+          <span class="chk-lbl">+1 501 тайлен</span>
+        </label>
+      </div>
+
+      <div class="irow">
+        <div class="ico-pill em">⏳</div>
         <div class="ilbl">
-          Пропущу квестов
+          Упущенные тайлены
           <small>тайлены которые не заработаешь</small>
         </div>
         <span class="tip" data-tip="Если знаешь что пропустишь часть дней&#10;или квестов — впиши количество тайленов&#10;которые не заработаешь.&#10;Например: 2 пропущенных дня = 1 520 тайл.">?</span>
         <div class="nf">
           <input type="number" id="miss" value="0" min="0" oninput="calc()">
-          <span class="unit">т.</span>
+          <span class="unit">тайленов</span>
         </div>
       </div>
     </div>
@@ -663,13 +679,13 @@ select.on { border-color: rgba(184,134,11,.5); background: rgba(184,134,11,.06);
     <div class="card">
       <div class="card-title">
         <div class="card-title-ornament"></div>
-        Мой прогресс репутации
+        Прогресс репутации
         <span class="tip" data-tip="Укажи свой текущий ранг репутации&#10;и сколько очков набрал сверх него.&#10;Это учитывается при расчёте донатa на репутацию.">?</span>
       </div>
 
       <div class="irow">
         <div class="ico-pill em">🏆</div>
-        <div class="ilbl">Ваш текущий ранг</div>
+        <div class="ilbl">Текущий ранг</div>
         <select class="rank-sel" id="have-rank" onchange="calc()">
           <option value="0">Ранг 0 — Празднующий</option>
           <option value="1">Ранг 1 — Помощник Патрика</option>
@@ -680,10 +696,7 @@ select.on { border-color: rgba(184,134,11,.5); background: rgba(184,134,11,.06);
 
       <div class="irow">
         <div class="ico-pill em">⭐</div>
-        <div class="ilbl">
-          Текущее количество очков репутации
-          <small>сколько очков набрал в текущем ранге</small>
-        </div>
+        <div class="ilbl">Очков репутации сейчас</div>
         <span class="tip" data-tip="Сколько очков ты набрал&#10;в своём текущем ранге.&#10;Например: ранг 1, и ещё 5 000 очков → итого 25 000.">?</span>
         <div class="nf">
           <input type="number" id="have-rep-extra" value="0" min="0" oninput="calc()">
@@ -739,7 +752,7 @@ select.on { border-color: rgba(184,134,11,.5); background: rgba(184,134,11,.06);
         <div class="res-main">
           <div class="rlbl">Нужно рубинов</div>
           <div class="ramt">
-            <img id="res-ruby-ico" src="../currency/ruby.png">
+            <img id="res-ruby-ico" src="../currency/ruby_dealer_transparent.png">
             <div class="rnum free" id="res-num">0</div>
           </div>
         </div>
@@ -783,7 +796,7 @@ select.on { border-color: rgba(184,134,11,.5); background: rgba(184,134,11,.06);
       <div id="tab-instr" class="tab-pane active">
         <div class="codex-chapter">
           <div class="codex-chapter-icon">I</div>
-          <div class="codex-chapter-title">Свиток наставлений</div>
+          <div class="codex-chapter-title">Как пользоваться калькулятором</div>
           <div class="codex-chapter-rule"></div>
         </div>
         <div class="guide-body">
@@ -797,18 +810,14 @@ select.on { border-color: rgba(184,134,11,.5); background: rgba(184,134,11,.06);
           </div>
           <div class="guide-step">
             <div class="guide-num">3</div>
-            <div class="guide-step-text">Разовый квест «Праздничный подарок» (+1 501 тайлен) <b>учитывается в расчёте автоматически</b>.</div>
-          </div>
-          <div class="guide-step">
-            <div class="guide-num">4</div>
             <div class="guide-step-text">Укажи свой <b>текущий ранг репутации</b> и сколько очков набрал в нём. Это позволяет точно рассчитать донат на репутацию.</div>
           </div>
           <div class="guide-step">
-            <div class="guide-num">5</div>
+            <div class="guide-num">4</div>
             <div class="guide-step-text">В таблице справа выбери <b>что хочешь получить</b> — для каждого предмета укажи что есть сейчас и до какого уровня хочешь прокачать.</div>
           </div>
           <div class="guide-step">
-            <div class="guide-num">6</div>
+            <div class="guide-num">5</div>
             <div class="guide-step-text">Калькулятор покажет <b>минимальный расход рубинов</b> с оптимальным использованием тайленов — сначала тайлены, рубины только на остаток.</div>
           </div>
         </div>
@@ -818,7 +827,7 @@ select.on { border-color: rgba(184,134,11,.5); background: rgba(184,134,11,.06);
       <div id="tab-quests" class="tab-pane">
         <div class="codex-chapter">
           <div class="codex-chapter-icon">II</div>
-          <div class="codex-chapter-title">Книга поручений</div>
+          <div class="codex-chapter-title">Квесты и награды за них</div>
           <div class="codex-chapter-rule"></div>
         </div>
         <table class="qtable">
@@ -851,6 +860,12 @@ select.on { border-color: rgba(184,134,11,.5); background: rgba(184,134,11,.06);
     </div>
   </div>
 
+</div>
+
+<div class="page-footer">
+  <div class="footer-text">
+    Разработано <a href="https://xkasperx.kor.ru/" class="footer-link">x KASPER x</a>, за расчёты спасибо <a href="https://merciless.kor.ru/" class="footer-link">Merciless</a>
+  </div>
 </div>
 
 <script>
@@ -985,7 +1000,8 @@ function calc() {
   const haveRank  = parseInt(document.getElementById('have-rank').value)||0;
   const haveRepX  = Math.max(0, parseInt(document.getElementById('have-rep-extra').value)||0);
 
-  const earned  = days * 760 + 1501;
+  const oneTime = document.getElementById('one-time').checked ? 1501 : 0;
+  const earned  = days * 760 + oneTime;
   const total   = earned + haveT - miss;
   const haveRep = REP[haveRank] + haveRepX;
 
@@ -1009,7 +1025,7 @@ function calc() {
         const steps = [];
         for (let i = h; i < w; i++) steps.push(CUM[cfg.id][i+1]-CUM[cfg.id][i]);
         const bd = steps.length > 1 ? ` (${steps.map(fmt).join(' + ')})` : '';
-        hintEl.textContent = `Итого: ${fmt(cost)} тайл.${bd}`;
+        hintEl.textContent = `Итого: ${fmt(cost)} тайленов${bd}`;
       } else { hintEl.textContent = ''; }
     }
   });
@@ -1021,7 +1037,7 @@ function calc() {
   if (wCos > hCos) { itemCost += cosCost; anyWant = true; wantedNames.push(['Обычный костюм','Прочный костюм'][wCos-1]); }
   document.getElementById('want-cos').classList.toggle('on', wCos > hCos);
   const cosHint = document.getElementById('hint-cos');
-  if (cosHint) cosHint.textContent = wCos > hCos ? `Стоимость: ${fmt(cosCost)} тайл.` : '';
+  if (cosHint) cosHint.textContent = wCos > hCos ? `Стоимость: ${fmt(cosCost)} тайленов` : '';
 
   const afterItems = total - itemCost;
   const forRep     = Math.max(0, afterItems);
@@ -1086,7 +1102,7 @@ function calc() {
   if (itemCost > 0) {
     rows.push(`<div class="vrow">
       <span class="vkey">Тайленов на предметы</span>
-      <span class="vval ${afterItems>=0?'':'r'}">${fmt(itemCost)} тайл. ${afterItems<0?`<span style="font-weight:400;font-size:11px">(не хватает ${fmt(-afterItems)} т.)</span>`:''}</span>
+      <span class="vval ${afterItems>=0?'':'r'}">${fmt(itemCost)} тайленов ${afterItems<0?`<span style="font-weight:400;font-size:11px">(не хватает ${fmt(-afterItems)} тайленов)</span>`:''}</span>
     </div>`);
   }
 
@@ -1098,7 +1114,7 @@ function calc() {
     if (adjFreeRep > 0) {
       rows.push(`<div class="vrow">
         <span class="vkey">Бесплатно тайленами</span>
-        <span class="vval g">${fmt(adjFreeRep)} очков (${fmt(adjTUsed)} тайл.)</span>
+        <span class="vval g">${fmt(adjFreeRep)} очков (${fmt(adjTUsed)} тайленов)</span>
       </div>`);
     }
     if (rc.r > 0) {
@@ -1118,7 +1134,7 @@ function calc() {
     rows.push('<div class="vsep"></div>');
     rows.push(`<div class="vrow">
       <span class="vkey">Не хватает тайленов на предметы</span>
-      <span class="vval r">${fmt(-afterItems)} тайл. → ${fmtR(rubDef)} рубинов</span>
+      <span class="vval r">${fmt(-afterItems)} тайленов → ${fmtR(rubDef)} рубинов</span>
     </div>`);
   }
 
@@ -1131,7 +1147,7 @@ function calc() {
   const icoMug     = `<div class="sline-ico"><div class="gico"><img class="base" src="good_beer_10.png"><img class="fr" src="../frames/border_none.png"></div></div>`;
   const icoMugPrem = `<div class="sline-ico"><div class="gico"><img class="base" src="good_beer_10.png"><img class="fr" src="../frames/border_low.png"></div></div>`;
   const icoTaylen  = `<div class="sline-ico"><img src="../currency/leprecon_taylen.png" style="width:13px;height:13px;margin:auto"></div>`;
-  const icoRuby    = `<div class="sline-ico"><img src="../currency/ruby.png" style="width:13px;height:13px;margin:auto"></div>`;
+  const icoRuby    = `<div class="sline-ico"><img src="../currency/ruby_dealer_transparent.png" style="width:13px;height:13px;margin:auto"></div>`;
   const icoOk      = `<div class="sline-ico emoji">✅</div>`;
 
   if (totalRub === 0) {
@@ -1157,7 +1173,7 @@ function calc() {
     if (rubDef > 0) {
       lines.push(`<div class="sline">
         ${icoRuby}
-        <div class="sline-body">Докупи тайлены в Королевской лавке: нужно <span class="sr">${fmt(Math.ceil(-afterItems/100)*100)} тайл.</span> → <span class="sr">${fmtR(rubDef)} рубинов</span> (курс: 100 тайл. = 1 рубин).</div>
+        <div class="sline-body">Докупи тайлены в Королевской лавке: нужно <span class="sr">${fmt(Math.ceil(-afterItems/100)*100)} тайленов</span> → <span class="sr">${fmtR(rubDef)} рубинов</span> (курс: 100 тайл. = 1 рубин).</div>
       </div>`);
     }
     if (adjFreeRep > 0 && adjTUsed > 0) {
