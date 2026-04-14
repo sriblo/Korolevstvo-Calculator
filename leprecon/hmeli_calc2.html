@@ -662,6 +662,16 @@ select.on { border-color: rgba(184,134,11,.5); background: rgba(184,134,11,.06);
         </div>
       </div>
 
+      <div class="irow">
+        <div class="ico-pill em">⏳</div>
+        <div class="ilbl">Упущенные тайлены</div>
+        <span class="tip" data-tip="Если знаешь что пропустишь часть дней&#10;или квестов — впиши количество тайленов&#10;которые не заработаешь.&#10;Например: 2 пропущенных дня = 1 520 тайл.">?</span>
+        <div class="nf">
+          <input type="number" id="miss" value="0" min="0" oninput="calc()">
+          <span class="unit">тайленов</span>
+        </div>
+      </div>
+
       <div class="irow irow-check">
         <div class="ico-pill em">🍀</div>
         <div class="ilbl">Учитывать подарочные тайлены</div>
@@ -669,18 +679,6 @@ select.on { border-color: rgba(184,134,11,.5); background: rgba(184,134,11,.06);
           <input type="checkbox" id="one-time" checked onchange="calc()">
           <span class="chk-lbl">+1 501 тайлен</span>
         </label>
-      </div>
-
-      <div class="irow">
-        <div class="ico-pill em">⏳</div>
-        <div class="ilbl">
-          Упущенные тайлены
-        </div>
-        <span class="tip" data-tip="Если знаешь что пропустишь часть дней&#10;или квестов — впиши количество тайленов&#10;которые не заработаешь.&#10;Например: 2 пропущенных дня = 1 520 тайл.">?</span>
-        <div class="nf">
-          <input type="number" id="miss" value="0" min="0" oninput="calc()">
-          <span class="unit">тайленов</span>
-        </div>
       </div>
     </div>
 
