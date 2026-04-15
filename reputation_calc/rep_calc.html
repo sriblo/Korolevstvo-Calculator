@@ -540,7 +540,25 @@ const REPUTATIONS = [
   { id: 'arxeolog',    name: 'Археолог',            ico: '🏺',  wip: true },
   { id: 'hunter',      name: 'Охотник на демонов',  ico: '👁️',  wip: true },
   { id: 'dresser',     name: 'Дрессировщик',        ico: '🐾',  wip: true },
-  { id: 'vlast',       name: 'Властитель земель',   ico: '🗺️',  wip: true },
+  {
+    id: 'vlast',
+    name: 'Властитель земель',
+    ico: '🗺️',
+    folder: 'reputations/vlast',
+    wip: true,
+    ranks: [
+      { name: 'Безземельный', pts: 0,      ico: null },
+      { name: 'Чужестранец',  pts: 30000,  ico: null },
+      { name: 'Налетчик',     pts: 45000,  ico: null },
+      { name: 'Землевладелец',pts: 65000,  ico: null },
+      { name: 'Смотритель',   pts: 90000,  ico: null },
+      { name: 'Феодал',       pts: 120000, ico: null },
+      { name: 'Губернатор',   pts: 150000, ico: null },
+      { name: 'Черный барон', pts: 150000, ico: null },
+      { name: 'Наместник',    pts: 150000, ico: null },
+      { name: 'Лорд',         pts: 150000, ico: null },
+    ]
+  },
   { id: 'guard',       name: 'Королевская гвардия', ico: '🛡️',  wip: true },
   {
     id: 'orden',
