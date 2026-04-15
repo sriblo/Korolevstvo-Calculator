@@ -499,9 +499,9 @@ const REPUTATIONS = [
       { name: 'Спаситель',            pts: 97700,   ico: 'vedmak_spasitel_6.png' },
       { name: 'Надежда Королевства',  pts: 228000,  ico: 'vedmak_nadezhda_korolevstva_7.png' },
       { name: 'Проклятье чудовищ',    pts: 456000,  ico: 'vedmak_proklyatiye_chudovisch_8.png' },
-      { name: 'Великий ведьмак',      pts: 490950,  ico: 'vedmak_velikii_vedmak_9.png',     wip: true },
-      { name: 'Легендарный ведьмак I',pts: 510000,  ico: 'vedmak_legendarnyi_vedmak_i_10.png', wip: true },
-      { name: 'Легендарный ведьмак II',pts: 530000, ico: 'vedmak_legendarnyi_vedmak_ii_11.png', wip: true },
+      { name: 'Великий ведьмак',       pts: 490950,  ico: 'vedmak_velikii_vedmak_9.png' },
+      { name: 'Легендарный ведьмак I', pts: 510000,  ico: 'vedmak_legendarnyi_vedmak_i_10.png' },
+      { name: 'Легендарный ведьмак II',pts: 530000,  ico: 'vedmak_legendarnyi_vedmak_ii_11.png' },
     ]
   },
   { id: 'gladiator',   name: 'Гладиатор',          ico: '⚔️',  wip: true },
@@ -528,13 +528,19 @@ function icoPath(rep, rank) {
 /* ── BUILD REP GRID ── */
 function buildRepGrid() {
   const grid = document.getElementById('rep-grid');
-  grid.innerHTML = REPUTATIONS.map(r => `
-    <div class="rep-btn${r.wip ? ' wip' : ''}${r.id === activeRep.id ? ' active' : ''}"
-         onclick="selectRep('${r.id}')">
-      <div class="rep-btn-ico">${r.ico}</div>
-      <div class="rep-btn-name">${r.name}</div>
-    </div>
-  `).join('');
+  grid.innerHTML = REPUTATIONS.map(r => {
+    const maxRank = r.ranks ? r.ranks[r.ranks.length - 1] : null;
+    const icoHtml = maxRank
+      ? `<img src="${r.folder}/${maxRank.ico}" style="width:36px;height:36px;image-rendering:pixelated;filter:drop-shadow(0 0 8px rgba(180,100,255,.4))">`
+      : `<span style="font-size:24px">${r.ico}</span>`;
+    return `
+      <div class="rep-btn${r.wip ? ' wip' : ''}${r.id === activeRep.id ? ' active' : ''}"
+           onclick="selectRep('${r.id}')">
+        <div class="rep-btn-ico">${icoHtml}</div>
+        <div class="rep-btn-name">${r.name}</div>
+      </div>
+    `;
+  }).join('');
 }
 
 /* ── BUILD RANK SELECTS ── */
