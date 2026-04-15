@@ -362,6 +362,43 @@ select:focus { border-color: rgba(160,80,220,.5); }
   pointer-events: none;
 }
 
+/* ── BUFFS ── */
+.buff-row {
+  display: grid; grid-template-columns: 34px 1fr auto;
+  align-items: center; gap: 10px;
+  padding: 10px 18px; border-bottom: 1px solid var(--sep);
+  position: relative; z-index: 2;
+}
+.buff-row:last-child { border-bottom: none; }
+.buff-quality {
+  font-family: 'Inter', sans-serif; font-size: 10px; font-weight: 600;
+  letter-spacing: .5px; padding: 2px 7px; border-radius: 4px;
+}
+.bq-white  { background: rgba(255,255,255,.07); color: #ccc; border: 1px solid rgba(255,255,255,.12); }
+.bq-green  { background: rgba(60,140,60,.15);  color: #7dc87d; border: 1px solid rgba(60,140,60,.3); }
+.bq-blue   { background: rgba(60,100,200,.15); color: #80aad8; border: 1px solid rgba(60,100,200,.3); }
+.bq-seal   { background: rgba(184,134,11,.15); color: var(--goldl); border: 1px solid rgba(184,134,11,.3); }
+.buff-ctrl { display: flex; align-items: center; gap: 8px; }
+.buff-pct  { font-family: 'Inter', sans-serif; font-size: 11px; color: rgba(180,120,220,.7); min-width: 40px; text-align: right; }
+.buff-count-btn {
+  width: 22px; height: 22px; border-radius: 5px; border: 1px solid rgba(160,80,220,.25);
+  background: rgba(0,0,0,.4); color: var(--text2); font-size: 14px; font-family: 'Inter', sans-serif;
+  display: flex; align-items: center; justify-content: center; cursor: pointer;
+  transition: border-color .12s, color .12s; line-height: 1; user-select: none;
+}
+.buff-count-btn:hover { border-color: rgba(160,80,220,.5); color: #c090e0; }
+.buff-count-val {
+  font-family: 'Inter', sans-serif; font-size: 16px; font-weight: 600;
+  color: #c090e0; min-width: 16px; text-align: center;
+}
+.buff-total {
+  padding: 10px 18px;
+  display: flex; justify-content: space-between; align-items: center;
+  border-top: 1px solid var(--sep);
+  font-family: 'Inter', sans-serif; font-size: 11px; color: var(--text3);
+}
+.buff-total-val { font-size: 13px; font-weight: 600; color: #c090e0; }
+
 @media (max-width: 740px) {
   .page { grid-template-columns: 1fr; padding: 16px 16px 60px; }
   header { padding-left: 16px; padding-right: 16px; }
@@ -427,6 +464,12 @@ select:focus { border-color: rgba(160,80,220,.5); }
         <div class="ilbl">Очков в день</div>
         <input type="number" id="ppd" value="100" min="1" oninput="calc()">
       </div>
+    </div>
+
+    <!-- Бафы -->
+    <div class="card" id="buffs-card">
+      <div class="card-title"><div class="card-title-ornament"></div>Бафы</div>
+      <div id="buffs-body"></div>
     </div>
 
   </div>
@@ -591,6 +634,23 @@ const REPUTATIONS = [
   { id: 'exorcist',    name: 'Экзорцист',           ico: '✝️',  wip: true },
 ];
 
+// Бафы советов: [белый%, зелёный%, синий%] для каждой репутации
+const BUFFS = {
+  vedmak:          { council: [7, 14, 21], seal: 25 },
+  gladiator:       { council: [5, 10, 15] },
+  zavoevatel:      { council: [17, 34, 51] },
+  vlast:           { council: [5, 6, 7] },
+  arxeolog:        { council: [5, 10, 15] },
+  hunter:          { council: [10, 20, 30] },
+  dresser:         { council: [13, 26, 39] },
+  guard:           { council: [17, 34, 51] },
+  orden:           { council: [0, 0, 0] }, // нет данных
+  exorcist:        { council: [100, 100, 100] },
+};
+
+// Состояние бафов
+let buffState = { white: 0, green: 0, blue: 0, seal: false };
+
 let activeRep = REPUTATIONS[0];
 
 function fmt(n) {
@@ -647,11 +707,99 @@ function buildRankSelects() {
   tgt.value = Math.max(tgtVal, curVal + 1);
 }
 
+/* ── BUFFS ── */
+function getTotalBuff() {
+  const b = BUFFS[activeRep.id];
+  if (!b) return 0;
+  const [w, g, bl] = b.council;
+  let total = buffState.white * w + buffState.green * g + buffState.blue * bl;
+  if (b.seal && buffState.seal) total += b.seal;
+  return total;
+}
+
+function buildBuffs() {
+  const b = BUFFS[activeRep.id];
+  const body = document.getElementById('buffs-body');
+  if (!b || (b.council[2] === 0 && !b.seal)) {
+    body.innerHTML = `<div style="padding:14px 18px;font-family:'Inter',sans-serif;font-size:11px;color:var(--text3)">Нет данных по бафам</div>`;
+    return;
+  }
+
+  const qualities = [
+    { key: 'white', label: 'Белый',  cls: 'bq-white',  pct: b.council[0] },
+    { key: 'green', label: 'Зелёный',cls: 'bq-green',  pct: b.council[1] },
+    { key: 'blue',  label: 'Синий',  cls: 'bq-blue',   pct: b.council[2] },
+  ];
+
+  let html = qualities.map(q => `
+    <div class="buff-row">
+      <div class="ico-pill em" style="font-size:13px">📜</div>
+      <div>
+        <div style="font-family:'Inter',sans-serif;font-size:12px;font-weight:600;color:var(--text)">Совет</div>
+        <div style="display:flex;align-items:center;gap:6px;margin-top:3px">
+          <span class="buff-quality ${q.cls}">${q.label}</span>
+          <span style="font-family:'Inter',sans-serif;font-size:10px;color:var(--text3)">+${q.pct}% за штуку</span>
+        </div>
+      </div>
+      <div class="buff-ctrl">
+        <div class="buff-pct" id="buff-pct-${q.key}">+${buffState[q.key] * q.pct}%</div>
+        <div class="buff-count-btn" onclick="changeCount('${q.key}',-1)">−</div>
+        <div class="buff-count-val" id="buff-val-${q.key}">${buffState[q.key]}</div>
+        <div class="buff-count-btn" onclick="changeCount('${q.key}',1)">+</div>
+      </div>
+    </div>
+  `).join('');
+
+  if (b.seal) {
+    html += `
+      <div class="buff-row">
+        <div class="ico-pill em" style="font-size:13px">🔱</div>
+        <div>
+          <div style="font-family:'Inter',sans-serif;font-size:12px;font-weight:600;color:var(--text)">Королевская печать</div>
+          <div style="margin-top:3px"><span class="buff-quality bq-seal">+${b.seal}%</span></div>
+        </div>
+        <div class="buff-ctrl">
+          <label style="display:flex;align-items:center;gap:6px;cursor:pointer">
+            <input type="checkbox" id="buff-seal" ${buffState.seal ? 'checked' : ''} onchange="toggleSeal()" style="accent-color:#c090e0;width:16px;height:16px">
+            <span style="font-family:'Inter',sans-serif;font-size:11px;color:var(--text2)">есть</span>
+          </label>
+        </div>
+      </div>
+    `;
+  }
+
+  const total = getTotalBuff();
+  html += `
+    <div class="buff-total">
+      <span>Суммарный баф</span>
+      <span class="buff-total-val">+${total}%</span>
+    </div>
+  `;
+
+  body.innerHTML = html;
+}
+
+function changeCount(key, delta) {
+  const total = buffState.white + buffState.green + buffState.blue;
+  if (delta > 0 && total >= 4) return;
+  buffState[key] = Math.max(0, buffState[key] + delta);
+  buildBuffs();
+  calc();
+}
+
+function toggleSeal() {
+  buffState.seal = document.getElementById('buff-seal').checked;
+  buildBuffs();
+  calc();
+}
+
 /* ── SELECT REP ── */
 function selectRep(id) {
   activeRep = REPUTATIONS.find(r => r.id === id);
+  buffState = { white: 0, green: 0, blue: 0, seal: false };
   buildRepGrid();
   buildRankSelects();
+  buildBuffs();
   calc();
 }
 
@@ -679,7 +827,9 @@ function calc() {
     need += (i === curIdx) ? Math.max(0, stepReq - curPts) : stepReq;
   }
 
-  const days   = need > 0 ? Math.ceil(need / ppd) : 0;
+  const buffPct  = getTotalBuff();
+  const ppdFinal = Math.round(ppd * (1 + buffPct / 100));
+  const days   = need > 0 ? Math.ceil(need / ppdFinal) : 0;
   const nextReq = ranks[curIdx + 1] ? ranks[curIdx + 1].pts : 1;
   const pct    = Math.min(100, Math.round(curPts / nextReq * 100));
 
@@ -690,8 +840,10 @@ function calc() {
     document.getElementById('res-sub').textContent = 'Целевой ранг уже получен';
   } else {
     daysEl.innerHTML = `${fmt(days)}<span>дней</span>`;
-    document.getElementById('res-sub').textContent =
-      `при ${fmt(ppd)} очков/день · ещё ${fmt(need)} очков`;
+    const subText = buffPct > 0
+      ? `${fmt(ppdFinal)} очков/день (×${(1+buffPct/100).toFixed(2)} с бафом) · ещё ${fmt(need)} очков`
+      : `при ${fmt(ppd)} очков/день · ещё ${fmt(need)} очков`;
+    document.getElementById('res-sub').textContent = subText;
   }
 
   document.getElementById('prog-cur').textContent = fmt(curPts) + ' очков';
@@ -699,7 +851,7 @@ function calc() {
   document.getElementById('prog-fill').style.width = pct + '%';
 
   document.getElementById('stat-need').textContent = need > 0 ? fmt(need) : '0';
-  document.getElementById('stat-ppd').textContent  = fmt(ppd);
+  document.getElementById('stat-ppd').textContent  = buffPct > 0 ? `${fmt(ppdFinal)} (+${buffPct}%)` : fmt(ppd);
   document.getElementById('stat-cur-rank').textContent = ranks[curIdx].name;
   document.getElementById('stat-tgt-rank').textContent = ranks[tgtIdx].name;
 
@@ -750,6 +902,7 @@ function buildRankPath(curIdx, tgtIdx, curPts) {
 /* ── INIT ── */
 buildRepGrid();
 buildRankSelects();
+buildBuffs();
 calc();
 
 /* prevent tgt <= cur */
