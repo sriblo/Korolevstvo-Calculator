@@ -504,7 +504,23 @@ const REPUTATIONS = [
       { name: 'Легендарный ведьмак II',pts: 530000,  ico: 'vedmak_legendarnyi_vedmak_ii_11.png' },
     ]
   },
-  { id: 'gladiator',   name: 'Гладиатор',          ico: '⚔️',  wip: true },
+  {
+    id: 'gladiator',
+    name: 'Гладиатор',
+    ico: '⚔️',
+    folder: 'reputations/gladiator',
+    wip: true, // иконки не загружены
+    ranks: [
+      { name: 'Деревянный меч',  pts: 0,     ico: null },
+      { name: 'Железный меч',    pts: 450,   ico: null },
+      { name: 'Бронзовый меч',   pts: 2100,  ico: null },
+      { name: 'Серебряный меч',  pts: 3500,  ico: null },
+      { name: 'Золотой меч',     pts: 10300, ico: null },
+      { name: 'Платиновый меч',  pts: 33650, ico: null },
+      { name: 'Алмазный меч',    pts: 36000, ico: null },
+      { name: 'Рубиновый меч',   pts: 40000, ico: null },
+    ]
+  },
   { id: 'zavoevatel',  name: 'Завоеватель',         ico: '🏆',  wip: true },
   { id: 'arxeolog',    name: 'Археолог',            ico: '🏺',  wip: true },
   { id: 'hunter',      name: 'Охотник на демонов',  ico: '👁️',  wip: true },
@@ -550,7 +566,14 @@ function fmt(n) {
 }
 
 function icoPath(rep, rank) {
+  if (!rank.ico) return null;
   return `${rep.folder}/${rank.ico}`;
+}
+
+function icoHtmlSmall(rep, rank, size) {
+  const src = icoPath(rep, rank);
+  if (!src) return `<span style="font-size:${size*0.7}px;opacity:.4">${rep.ico}</span>`;
+  return `<img src="${src}" style="width:${size}px;height:${size}px;image-rendering:pixelated">`;
 }
 
 /* ── BUILD REP GRID ── */
@@ -558,8 +581,9 @@ function buildRepGrid() {
   const grid = document.getElementById('rep-grid');
   grid.innerHTML = REPUTATIONS.map(r => {
     const maxRank = r.ranks ? r.ranks[r.ranks.length - 1] : null;
-    const icoHtml = maxRank
-      ? `<img src="${r.folder}/${maxRank.ico}" style="width:36px;height:36px;image-rendering:pixelated;filter:drop-shadow(0 0 8px rgba(180,100,255,.4))">`
+    const src = maxRank && maxRank.ico ? `${r.folder}/${maxRank.ico}` : null;
+    const icoHtml = src
+      ? `<img src="${src}" style="width:36px;height:36px;image-rendering:pixelated;filter:drop-shadow(0 0 8px rgba(180,100,255,.4))">`
       : `<span style="font-size:24px">${r.ico}</span>`;
     return `
       <div class="rep-btn${r.wip ? ' wip' : ''}${r.id === activeRep.id ? ' active' : ''}"
@@ -677,7 +701,7 @@ function buildRankPath(curIdx, tgtIdx, curPts) {
     rows.push(`
       <div class="rp-row${isTgt ? ' active' : (isCur ? ' active' : '')}">
         <div class="rp-ico${(!isCur && !isTgt) ? ' dim' : ''}">
-          <img src="${icoPath(activeRep, r)}" alt="${r.name}">
+          ${icoHtmlSmall(activeRep, r, 28)}
         </div>
         <div style="flex:1;min-width:0">
           <div class="rp-name${isCur ? ' current' : (isTgt ? ' current' : '')}">${r.name}</div>
