@@ -600,83 +600,90 @@ function selectRep(id) {
 }
 
 /* ── CALC ── */
+// ranks[i].pts = очков нужно набрать с 0 на ранге i чтобы перейти на ранг i+1
+// ranks[0].pts = 0 (стартовый ранг)
+// При каждом переходе счётчик сбрасывается в 0
 function calc() {
-  const ranks   = activeRep.ranks;
-  const curIdx  = parseInt(document.getElementById('cur-rank').value) || 0;
-  const tgtIdx  = parseInt(document.getElementById('tgt-rank').value) || 1;
-  const curPts  = Math.max(0, parseInt(document.getElementById('cur-pts').value) || 0);
-  const ppd     = Math.max(1, parseInt(document.getElementById('ppd').value) || 1);
+  const ranks  = activeRep.ranks;
+  const curIdx = parseInt(document.getElementById('cur-rank').value) || 0;
+  let   tgtIdx = parseInt(document.getElementById('tgt-rank').value) || 1;
+  const curPts = Math.max(0, parseInt(document.getElementById('cur-pts').value) || 0);
+  const ppd    = Math.max(1, parseInt(document.getElementById('ppd').value) || 1);
 
-  // enforce target > current
-  const tgtSel = document.getElementById('tgt-rank');
   if (tgtIdx <= curIdx) {
-    tgtSel.value = Math.min(curIdx + 1, ranks.length - 1);
+    tgtIdx = Math.min(curIdx + 1, ranks.length - 1);
+    document.getElementById('tgt-rank').value = tgtIdx;
   }
-  const tgtIdxFinal = Math.max(tgtIdx, curIdx + 1);
 
-  const curBase  = ranks[curIdx].pts;
-  const tgtBase  = ranks[tgtIdxFinal].pts;
-  const haveTotal = curBase + curPts;
-  const need     = Math.max(0, tgtBase - haveTotal);
-  const days     = need > 0 ? Math.ceil(need / ppd) : 0;
-  const pct      = Math.min(100, Math.round(haveTotal / tgtBase * 100));
+  // Суммируем: для каждого перехода i→i+1 нужно ranks[i+1].pts очков
+  // На текущем ранге уже набрано curPts — вычитаем из первого шага
+  let need = 0;
+  for (let i = curIdx; i < tgtIdx; i++) {
+    const stepReq = ranks[i + 1].pts;
+    need += (i === curIdx) ? Math.max(0, stepReq - curPts) : stepReq;
+  }
 
-  // main result
+  const days   = need > 0 ? Math.ceil(need / ppd) : 0;
+  const nextReq = ranks[curIdx + 1] ? ranks[curIdx + 1].pts : 1;
+  const pct    = Math.min(100, Math.round(curPts / nextReq * 100));
+
+  // результат
   const daysEl = document.getElementById('res-days');
   if (need === 0) {
-    daysEl.className = 'res-days';
     daysEl.innerHTML = `Достигнут <span>✓</span>`;
     document.getElementById('res-sub').textContent = 'Целевой ранг уже получен';
   } else {
-    daysEl.className = 'res-days';
     daysEl.innerHTML = `${fmt(days)}<span>дней</span>`;
     document.getElementById('res-sub').textContent =
       `при ${fmt(ppd)} очков/день · ещё ${fmt(need)} очков`;
   }
 
-  // progress
-  document.getElementById('prog-cur').textContent = fmt(haveTotal) + ' очков';
-  document.getElementById('prog-tgt').textContent = fmt(tgtBase) + ' очков';
+  document.getElementById('prog-cur').textContent = fmt(curPts) + ' очков';
+  document.getElementById('prog-tgt').textContent = fmt(nextReq) + ' очков';
   document.getElementById('prog-fill').style.width = pct + '%';
 
-  // stats
   document.getElementById('stat-need').textContent = need > 0 ? fmt(need) : '0';
   document.getElementById('stat-ppd').textContent  = fmt(ppd);
   document.getElementById('stat-cur-rank').textContent = ranks[curIdx].name;
-  document.getElementById('stat-tgt-rank').textContent = ranks[tgtIdxFinal].name;
+  document.getElementById('stat-tgt-rank').textContent = ranks[tgtIdx].name;
 
-  // rank path
-  buildRankPath(curIdx, tgtIdxFinal, haveTotal);
+  buildRankPath(curIdx, tgtIdx, curPts);
 }
 
 /* ── RANK PATH ── */
-function buildRankPath(curIdx, tgtIdx, haveTotal) {
+function buildRankPath(curIdx, tgtIdx, curPts) {
   const ranks = activeRep.ranks;
   const path  = document.getElementById('rank-path');
+  const rows  = [];
 
-  // show from curIdx to tgtIdx
-  const rows = [];
   for (let i = curIdx; i <= tgtIdx; i++) {
-    const r    = ranks[i];
-    const done = haveTotal >= r.pts && i < tgtIdx;
-    const curr = i === curIdx;
-    const need = i > curIdx ? r.pts - haveTotal : 0;
+    const r      = ranks[i];
+    const isCur  = i === curIdx;
+    const isTgt  = i === tgtIdx;
+    const stepReq = ranks[i + 1] ? ranks[i + 1].pts : null; // нужно для перехода i→i+1
+
+    let statusText, statusClass;
+    if (isTgt) {
+      statusText  = 'Цель';
+      statusClass = 'need';
+    } else if (isCur) {
+      statusText  = stepReq ? `${fmt(curPts)} / ${fmt(stepReq)} очков` : '';
+      statusClass = '';
+    } else {
+      statusText  = stepReq ? `${fmt(stepReq)} очков с нуля` : '';
+      statusClass = 'need';
+    }
 
     rows.push(`
-      <div class="rp-row">
-        <div class="rp-ico${done ? '' : (curr ? '' : ' dim')}">
+      <div class="rp-row${isTgt ? ' active' : (isCur ? ' active' : '')}">
+        <div class="rp-ico${(!isCur && !isTgt) ? ' dim' : ''}">
           <img src="${icoPath(activeRep, r)}" alt="${r.name}">
         </div>
-        <div class="rp-info" style="flex:1;min-width:0">
-          <div class="rp-name${done ? ' done' : (curr ? ' current' : '')}">${r.name}</div>
-          <div class="rp-pts${need > 0 ? ' need' : ''}">${
-            i === tgtIdx ? 'Цель' :
-            done ? 'Получен ✓' :
-            curr ? `${fmt(haveTotal - r.pts >= 0 ? haveTotal - r.pts : 0)} / ${fmt(ranks[i+1] ? ranks[i+1].pts - r.pts : 0)} очков` :
-            `ещё ${fmt(need)} очков`
-          }</div>
+        <div style="flex:1;min-width:0">
+          <div class="rp-name${isCur ? ' current' : (isTgt ? ' current' : '')}">${r.name}</div>
+          <div class="rp-pts ${statusClass}">${statusText}</div>
         </div>
-        ${done ? '<div class="rp-check">✓</div>' : ''}
+        ${isCur ? '<div style="font-size:10px;color:rgba(180,120,220,.6);font-family:Inter,sans-serif">сейчас</div>' : ''}
       </div>
     `);
   }
