@@ -648,8 +648,10 @@ const BUFFS = {
   exorcist:        { council: [100, 100, 100] },
 };
 
-// Состояние бафов
-let buffState = { white: 0, green: 0, blue: 0, seal: false };
+// Советы: 4 конкретных предмета, каждый может быть 0=нет/1=белый/2=зелёный/3=синий
+const COUNCILS = ['Попугая', 'Орка', 'Кабана', 'Индюка'];
+// Состояние бафов: councils[0..3] = 0|1|2|3, seal = bool
+let buffState = { councils: [0, 0, 0, 0], seal: false };
 
 let activeRep = REPUTATIONS[0];
 
@@ -712,7 +714,8 @@ function getTotalBuff() {
   const b = BUFFS[activeRep.id];
   if (!b) return 0;
   const [w, g, bl] = b.council;
-  let total = buffState.white * w + buffState.green * g + buffState.blue * bl;
+  const pctByQ = [0, w, g, bl];
+  let total = buffState.councils.reduce((sum, q) => sum + pctByQ[q], 0);
   if (b.seal && buffState.seal) total += b.seal;
   return total;
 }
@@ -720,35 +723,37 @@ function getTotalBuff() {
 function buildBuffs() {
   const b = BUFFS[activeRep.id];
   const body = document.getElementById('buffs-body');
-  if (!b || (b.council[2] === 0 && !b.seal)) {
+  if (!b || (b.council[0] === 0 && b.council[1] === 0 && b.council[2] === 0 && !b.seal)) {
     body.innerHTML = `<div style="padding:14px 18px;font-family:'Inter',sans-serif;font-size:11px;color:var(--text3)">Нет данных по бафам</div>`;
     return;
   }
 
-  const qualities = [
-    { key: 'white', label: 'Белый',  cls: 'bq-white',  pct: b.council[0] },
-    { key: 'green', label: 'Зелёный',cls: 'bq-green',  pct: b.council[1] },
-    { key: 'blue',  label: 'Синий',  cls: 'bq-blue',   pct: b.council[2] },
-  ];
+  const [w, g, bl] = b.council;
+  const pctByQ  = [0, w, g, bl];
+  const lblByQ  = ['Нет', 'Белый', 'Зелёный', 'Синий'];
+  const clsByQ  = ['', 'bq-white', 'bq-green', 'bq-blue'];
 
-  let html = qualities.map(q => `
-    <div class="buff-row">
-      <div class="ico-pill em" style="font-size:13px">📜</div>
-      <div>
-        <div style="font-family:'Inter',sans-serif;font-size:12px;font-weight:600;color:var(--text)">Совет</div>
-        <div style="display:flex;align-items:center;gap:6px;margin-top:3px">
-          <span class="buff-quality ${q.cls}">${q.label}</span>
-          <span style="font-family:'Inter',sans-serif;font-size:10px;color:var(--text3)">+${q.pct}% за штуку</span>
+  let html = COUNCILS.map((name, i) => {
+    const q   = buffState.councils[i];
+    const pct = pctByQ[q];
+    const opts = [0,1,2,3].map(v =>
+      `<option value="${v}"${q===v?' selected':''}>${lblByQ[v]}${v>0?' (+'+pctByQ[v]+'%)':''}</option>`
+    ).join('');
+    return `
+      <div class="buff-row">
+        <div class="ico-pill em" style="font-size:13px">📜</div>
+        <div>
+          <div style="font-family:'Inter',sans-serif;font-size:12px;font-weight:600;color:var(--text)">Совет ${name}</div>
+          ${q > 0 ? `<div style="margin-top:3px"><span class="buff-quality ${clsByQ[q]}">${lblByQ[q]}</span></div>` : ''}
+        </div>
+        <div class="buff-ctrl">
+          <div class="buff-pct">${q > 0 ? '+'+pct+'%' : ''}</div>
+          <select style="grid-column:unset;padding:5px 8px;font-size:11px;width:auto"
+                  onchange="setCouncil(${i}, this.value)">${opts}</select>
         </div>
       </div>
-      <div class="buff-ctrl">
-        <div class="buff-pct" id="buff-pct-${q.key}">+${buffState[q.key] * q.pct}%</div>
-        <div class="buff-count-btn" onclick="changeCount('${q.key}',-1)">−</div>
-        <div class="buff-count-val" id="buff-val-${q.key}">${buffState[q.key]}</div>
-        <div class="buff-count-btn" onclick="changeCount('${q.key}',1)">+</div>
-      </div>
-    </div>
-  `).join('');
+    `;
+  }).join('');
 
   if (b.seal) {
     html += `
@@ -779,10 +784,8 @@ function buildBuffs() {
   body.innerHTML = html;
 }
 
-function changeCount(key, delta) {
-  const total = buffState.white + buffState.green + buffState.blue;
-  if (delta > 0 && total >= 4) return;
-  buffState[key] = Math.max(0, buffState[key] + delta);
+function setCouncil(i, val) {
+  buffState.councils[i] = parseInt(val);
   buildBuffs();
   calc();
 }
@@ -796,7 +799,7 @@ function toggleSeal() {
 /* ── SELECT REP ── */
 function selectRep(id) {
   activeRep = REPUTATIONS.find(r => r.id === id);
-  buffState = { white: 0, green: 0, blue: 0, seal: false };
+  buffState = { councils: [0, 0, 0, 0], seal: false };
   buildRepGrid();
   buildRankSelects();
   buildBuffs();
