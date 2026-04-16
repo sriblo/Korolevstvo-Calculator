@@ -363,72 +363,39 @@ select:focus { border-color: rgba(160,80,220,.5); }
 }
 
 /* ── BUFFS ── */
-.buff-slots {
-  display: grid; grid-template-columns: repeat(4, 1fr);
-  gap: 8px; padding: 12px 14px 10px;
+.buff-row {
+  display: grid; grid-template-columns: 34px 1fr auto;
+  align-items: center; gap: 10px;
+  padding: 10px 18px; border-bottom: 1px solid var(--sep);
   position: relative; z-index: 2;
 }
-.buff-slot {
-  display: flex; flex-direction: column; align-items: center; gap: 5px;
-  padding: 10px 4px 8px; border-radius: 10px; cursor: pointer;
-  border: 1px solid rgba(160,80,220,.12);
-  background: rgba(0,0,0,.25);
-  transition: border-color .15s, background .15s;
-  user-select: none;
-}
-.buff-slot:hover { border-color: rgba(160,80,220,.3); background: rgba(160,80,220,.05); }
-.buff-slot.qs-white { border-color: rgba(200,200,200,.35); background: rgba(200,200,200,.05); }
-.buff-slot.qs-green { border-color: rgba(60,160,60,.4);   background: rgba(60,140,60,.07); }
-.buff-slot.qs-blue  { border-color: rgba(80,130,220,.45); background: rgba(60,100,200,.09); }
-.buff-slot-ico {
-  width: 32px; height: 32px;
-  border-radius: 7px; overflow: hidden;
-  display: flex; align-items: center; justify-content: center;
-  background: rgba(0,0,0,.35); border: 1px solid rgba(160,80,220,.1);
-  font-size: 17px; transition: border-color .15s;
-}
-.buff-slot.qs-white .buff-slot-ico { border-color: rgba(200,200,200,.25); }
-.buff-slot.qs-green .buff-slot-ico { border-color: rgba(60,160,60,.35); }
-.buff-slot.qs-blue  .buff-slot-ico { border-color: rgba(80,130,220,.4); }
-.buff-slot-num {
-  font-family: 'Inter', sans-serif; font-size: 8px; font-weight: 700;
-  letter-spacing: .5px; text-transform: uppercase;
-  color: var(--text3); line-height: 1;
-}
-.buff-slot-badge {
-  font-family: 'Inter', sans-serif; font-size: 9px; font-weight: 600;
-  padding: 2px 6px; border-radius: 3px; letter-spacing: .3px; line-height: 1.4;
-  opacity: 0; transition: opacity .15s;
-}
-.buff-slot.qs-white .buff-slot-badge { opacity: 1; background: rgba(200,200,200,.1); color: #ccc; border: 1px solid rgba(200,200,200,.18); }
-.buff-slot.qs-green .buff-slot-badge { opacity: 1; background: rgba(60,140,60,.15); color: #7dc87d; border: 1px solid rgba(60,140,60,.3); }
-.buff-slot.qs-blue  .buff-slot-badge { opacity: 1; background: rgba(60,100,200,.15); color: #80aad8; border: 1px solid rgba(60,100,200,.3); }
-.buff-slot-pct {
+.buff-row:last-child { border-bottom: none; }
+.buff-quality {
   font-family: 'Inter', sans-serif; font-size: 10px; font-weight: 600;
-  color: rgba(180,120,220,.7); min-height: 14px; line-height: 1.4;
+  letter-spacing: .5px; padding: 2px 7px; border-radius: 4px;
 }
-
-.buff-seal-row {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 9px 14px; border-top: 1px solid var(--sep);
-  position: relative; z-index: 2;
+.bq-white  { background: rgba(255,255,255,.07); color: #ccc; border: 1px solid rgba(255,255,255,.12); }
+.bq-green  { background: rgba(60,140,60,.15);  color: #7dc87d; border: 1px solid rgba(60,140,60,.3); }
+.bq-blue   { background: rgba(60,100,200,.15); color: #80aad8; border: 1px solid rgba(60,100,200,.3); }
+.bq-seal   { background: rgba(184,134,11,.15); color: var(--goldl); border: 1px solid rgba(184,134,11,.3); }
+.buff-ctrl { display: flex; align-items: center; gap: 8px; }
+.buff-pct  { font-family: 'Inter', sans-serif; font-size: 11px; color: rgba(180,120,220,.7); min-width: 40px; text-align: right; }
+.buff-count-btn {
+  width: 22px; height: 22px; border-radius: 5px; border: 1px solid rgba(160,80,220,.25);
+  background: rgba(0,0,0,.4); color: var(--text2); font-size: 14px; font-family: 'Inter', sans-serif;
+  display: flex; align-items: center; justify-content: center; cursor: pointer;
+  transition: border-color .12s, color .12s; line-height: 1; user-select: none;
 }
-.buff-seal-label {
-  display: flex; align-items: center; gap: 8px;
-  font-family: 'Inter', sans-serif; font-size: 11px; color: var(--text2);
+.buff-count-btn:hover { border-color: rgba(160,80,220,.5); color: #c090e0; }
+.buff-count-val {
+  font-family: 'Inter', sans-serif; font-size: 16px; font-weight: 600;
+  color: #c090e0; min-width: 16px; text-align: center;
 }
-.buff-seal-badge {
-  font-family: 'Inter', sans-serif; font-size: 9px; font-weight: 600;
-  padding: 2px 6px; border-radius: 3px;
-  background: rgba(184,134,11,.15); color: var(--goldl); border: 1px solid rgba(184,134,11,.3);
-}
-
 .buff-total {
-  padding: 9px 14px;
+  padding: 10px 18px;
   display: flex; justify-content: space-between; align-items: center;
   border-top: 1px solid var(--sep);
   font-family: 'Inter', sans-serif; font-size: 11px; color: var(--text3);
-  position: relative; z-index: 2;
 }
 .buff-total-val { font-size: 13px; font-weight: 600; color: #c090e0; }
 
@@ -681,14 +648,8 @@ const BUFFS = {
   exorcist:        { council: [100, 100, 100] },
 };
 
-// Состояние бафов: slots[0..3] = 0(нет)|1(белый)|2(зелёный)|3(синий), seal = bool
-let buffState = { slots: [0, 0, 0, 0], seal: false };
-const SLOT_QUALITY = [
-  { key: 0, label: 'Нет',     cls: '',        qi: 0 },
-  { key: 1, label: 'Белый',   cls: 'qs-white', qi: 0 },
-  { key: 2, label: 'Зелёный', cls: 'qs-green', qi: 1 },
-  { key: 3, label: 'Синий',   cls: 'qs-blue',  qi: 2 },
-];
+// Состояние бафов
+let buffState = { white: 0, green: 0, blue: 0, seal: false };
 
 let activeRep = REPUTATIONS[0];
 
@@ -751,12 +712,7 @@ function getTotalBuff() {
   const b = BUFFS[activeRep.id];
   if (!b) return 0;
   const [w, g, bl] = b.council;
-  let total = 0;
-  for (const q of buffState.slots) {
-    if (q === 1) total += w;
-    else if (q === 2) total += g;
-    else if (q === 3) total += bl;
-  }
+  let total = buffState.white * w + buffState.green * g + buffState.blue * bl;
   if (b.seal && buffState.seal) total += b.seal;
   return total;
 }
@@ -764,66 +720,69 @@ function getTotalBuff() {
 function buildBuffs() {
   const b = BUFFS[activeRep.id];
   const body = document.getElementById('buffs-body');
-
-  if (!b || (b.council[0] === 0 && b.council[1] === 0 && b.council[2] === 0 && !b.seal)) {
+  if (!b || (b.council[2] === 0 && !b.seal)) {
     body.innerHTML = `<div style="padding:14px 18px;font-family:'Inter',sans-serif;font-size:11px;color:var(--text3)">Нет данных по бафам</div>`;
     return;
   }
 
-  const [w, g, bl] = b.council;
-  const qPct = [0, w, g, bl]; // индексы 0=нет, 1=белый, 2=зелёный, 3=синий
-  const qLabel = ['Нет', 'Белый', 'Зелёный', 'Синий'];
-  const qCls   = ['', 'qs-white', 'qs-green', 'qs-blue'];
+  const qualities = [
+    { key: 'white', label: 'Белый',  cls: 'bq-white',  pct: b.council[0] },
+    { key: 'green', label: 'Зелёный',cls: 'bq-green',  pct: b.council[1] },
+    { key: 'blue',  label: 'Синий',  cls: 'bq-blue',   pct: b.council[2] },
+  ];
 
-  let slotsHtml = `<div class="buff-slots">`;
-  for (let i = 0; i < 4; i++) {
-    const q   = buffState.slots[i];
-    const pct = qPct[q];
-    slotsHtml += `
-      <div class="buff-slot ${qCls[q]}" onclick="cycleSlot(${i})" title="Нажмите для смены качества">
-        <div class="buff-slot-ico">📜</div>
-        <div class="buff-slot-badge">${q > 0 ? qLabel[q] : '&nbsp;'}</div>
-        <div class="buff-slot-pct">${q > 0 ? '+' + pct + '%' : '—'}</div>
+  let html = qualities.map(q => `
+    <div class="buff-row">
+      <div class="ico-pill em" style="font-size:13px">📜</div>
+      <div>
+        <div style="font-family:'Inter',sans-serif;font-size:12px;font-weight:600;color:var(--text)">Совет</div>
+        <div style="display:flex;align-items:center;gap:6px;margin-top:3px">
+          <span class="buff-quality ${q.cls}">${q.label}</span>
+          <span style="font-family:'Inter',sans-serif;font-size:10px;color:var(--text3)">+${q.pct}% за штуку</span>
+        </div>
       </div>
-    `;
-  }
-  slotsHtml += `</div>`;
+      <div class="buff-ctrl">
+        <div class="buff-pct" id="buff-pct-${q.key}">+${buffState[q.key] * q.pct}%</div>
+        <div class="buff-count-btn" onclick="changeCount('${q.key}',-1)">−</div>
+        <div class="buff-count-val" id="buff-val-${q.key}">${buffState[q.key]}</div>
+        <div class="buff-count-btn" onclick="changeCount('${q.key}',1)">+</div>
+      </div>
+    </div>
+  `).join('');
 
-  let sealHtml = '';
   if (b.seal) {
-    sealHtml = `
-      <div class="buff-seal-row">
-        <label class="buff-seal-label" style="cursor:pointer">
-          <input type="checkbox" id="buff-seal" ${buffState.seal ? 'checked' : ''} onchange="toggleSeal()" style="accent-color:#c090e0;width:15px;height:15px">
-          <span>🔱 Королевская печать</span>
-        </label>
-        <span class="buff-seal-badge">+${b.seal}%</span>
+    html += `
+      <div class="buff-row">
+        <div class="ico-pill em" style="font-size:13px">🔱</div>
+        <div>
+          <div style="font-family:'Inter',sans-serif;font-size:12px;font-weight:600;color:var(--text)">Королевская печать</div>
+          <div style="margin-top:3px"><span class="buff-quality bq-seal">+${b.seal}%</span></div>
+        </div>
+        <div class="buff-ctrl">
+          <label style="display:flex;align-items:center;gap:6px;cursor:pointer">
+            <input type="checkbox" id="buff-seal" ${buffState.seal ? 'checked' : ''} onchange="toggleSeal()" style="accent-color:#c090e0;width:16px;height:16px">
+            <span style="font-family:'Inter',sans-serif;font-size:11px;color:var(--text2)">есть</span>
+          </label>
+        </div>
       </div>
     `;
   }
 
   const total = getTotalBuff();
-  const hintParts = [];
-  const counts = [0,0,0,0];
-  for (const q of buffState.slots) counts[q]++;
-  if (counts[1]) hintParts.push(`${counts[1]}×бел (+${counts[1]*w}%)`);
-  if (counts[2]) hintParts.push(`${counts[2]}×зел (+${counts[2]*g}%)`);
-  if (counts[3]) hintParts.push(`${counts[3]}×синий (+${counts[3]*bl}%)`);
-  if (b.seal && buffState.seal) hintParts.push(`печать (+${b.seal}%)`);
-
-  const totalHtml = `
+  html += `
     <div class="buff-total">
-      <span>${hintParts.length ? hintParts.join(' · ') : 'нет активных бафов'}</span>
+      <span>Суммарный баф</span>
       <span class="buff-total-val">+${total}%</span>
     </div>
   `;
 
-  body.innerHTML = slotsHtml + sealHtml + totalHtml;
+  body.innerHTML = html;
 }
 
-function cycleSlot(i) {
-  const next = (buffState.slots[i] + 1) % 4;
-  buffState.slots[i] = next;
+function changeCount(key, delta) {
+  const total = buffState.white + buffState.green + buffState.blue;
+  if (delta > 0 && total >= 4) return;
+  buffState[key] = Math.max(0, buffState[key] + delta);
   buildBuffs();
   calc();
 }
@@ -837,7 +796,7 @@ function toggleSeal() {
 /* ── SELECT REP ── */
 function selectRep(id) {
   activeRep = REPUTATIONS.find(r => r.id === id);
-  buffState = { slots: [0, 0, 0, 0], seal: false };
+  buffState = { white: 0, green: 0, blue: 0, seal: false };
   buildRepGrid();
   buildRankSelects();
   buildBuffs();
