@@ -602,11 +602,24 @@ select.on { border-color: rgba(184,134,11,.5); background: rgba(184,134,11,.06);
 
 /* ── RESPONSIVE ── */
 @media (max-width: 740px) {
-  .page { grid-template-columns: 1fr; padding-left: 16px; padding-right: 16px; }
-  .i-head, .irow2 { grid-template-columns: 130px 1fr 24px 1fr 34px; }
+  .page { grid-template-columns: 1fr; padding-left: 14px; padding-right: 14px; }
+  header { padding-left: 14px; padding-right: 14px; }
+  .h-inner { gap: 10px; }
+  .h-title { font-size: 17px; }
+  .h-sub { font-size: 11px; }
+  .h-right-orn { display: none; }
+  .h-ico { font-size: 22px; }
+
+  .i-head, .irow2 { grid-template-columns: 110px 1fr 22px 1fr 30px; gap: 6px; }
+  .iname { font-size: 12px; }
+  .iname-sub { font-size: 9px; }
+
   .res-top { grid-template-columns: 1fr; }
   .res-main { border-right: none; border-bottom: 1px solid var(--sep); }
-  header { padding-left: 16px; padding-right: 16px; }
+
+  .irow { grid-template-columns: 28px 1fr auto; gap: 8px; padding: 9px 14px; }
+  .ico-pill { width: 28px; height: 28px; }
+  input[type=number] { width: 80px; font-size: 16px; padding: 6px 8px; }
 }
 </style>
 </head>
