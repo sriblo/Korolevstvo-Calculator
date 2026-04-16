@@ -581,7 +581,22 @@ const REPUTATIONS = [
     ]
   },
   { id: 'arxeolog',    name: 'Археолог',            ico: '🏺',  wip: true },
-  { id: 'hunter',      name: 'Охотник на демонов',  ico: '👁️',  wip: true },
+  {
+    id: 'hunter',
+    name: 'Охотник на демонов',
+    ico: '👁️',
+    folder: 'reputations/ohotnik_na_demonov',
+    ranks: [
+      { name: 'Охотник 1-го круга', pts: 0,      ico: 'ohotnik_i_kruga_0.png' },
+      { name: 'Охотник 2-го круга', pts: 500,    ico: 'ohotnik_ii_kruga_1.png' },
+      { name: 'Охотник 3-го круга', pts: 2800,   ico: 'ohotnik_iii_kruga_2.png' },
+      { name: 'Охотник 4-го круга', pts: 7300,   ico: 'ohotnik_iv_kruga_3.png' },
+      { name: 'Охотник 5-го круга', pts: 15700,  ico: 'ohotnik_v_kruga_4.png' },
+      { name: 'Охотник 6-го круга', pts: 34000,  ico: 'ohotnik_vi_kruga_5.png' },
+      { name: 'Охотник 7-го круга', pts: 79700,  ico: 'ohotnik_vii_kruga_6.png' },
+      { name: 'Охотник 8-го круга', pts: 110000, ico: 'ohotnik_viii_kruga_7.png' },
+    ]
+  },
   { id: 'dresser',     name: 'Дрессировщик',        ico: '🐾',  wip: true },
   {
     id: 'vlast',
@@ -650,6 +665,8 @@ const BUFFS = {
 
 // Советы: 4 конкретных предмета, каждый может быть 0=нет/1=белый/2=зелёный/3=синий
 const COUNCILS = ['Попугая', 'Орка', 'Кабана', 'Индюка'];
+const COUNCIL_ICO = '../buff/parrot_weapon.png'; // иконка совета
+const SEAL_ICO    = '../buff/kingdom_seal_1.png'; // иконка королевской печати
 // Состояние бафов: councils[0..3] = 0|1|2|3, seal = bool
 let buffState = { councils: [0, 0, 0, 0], seal: false };
 
@@ -741,7 +758,7 @@ function buildBuffs() {
     ).join('');
     return `
       <div class="buff-row">
-        <div class="ico-pill em" style="font-size:13px">📜</div>
+        <div class="ico-pill"><img src="${COUNCIL_ICO}" style="width:28px;height:28px;image-rendering:pixelated"></div>
         <div>
           <div style="font-family:'Inter',sans-serif;font-size:12px;font-weight:600;color:var(--text)">Совет ${name}</div>
           ${q > 0 ? `<div style="margin-top:3px"><span class="buff-quality ${clsByQ[q]}">${lblByQ[q]}</span></div>` : ''}
@@ -758,7 +775,7 @@ function buildBuffs() {
   if (b.seal) {
     html += `
       <div class="buff-row">
-        <div class="ico-pill em" style="font-size:13px">🔱</div>
+        <div class="ico-pill"><img src="${SEAL_ICO}" style="width:28px;height:28px;image-rendering:pixelated"></div>
         <div>
           <div style="font-family:'Inter',sans-serif;font-size:12px;font-weight:600;color:var(--text)">Королевская печать</div>
           <div style="margin-top:3px"><span class="buff-quality bq-seal">+${b.seal}%</span></div>
