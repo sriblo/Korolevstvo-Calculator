@@ -191,8 +191,11 @@ select:focus { border-color: rgba(160,80,220,.5); }
   box-shadow: 0 0 16px rgba(160,80,220,.15);
 }
 .rep-btn.wip {
-  opacity: .35; cursor: default; pointer-events: none;
+  cursor: default; pointer-events: none;
 }
+.rep-btn.wip .rep-btn-ico img,
+.rep-btn.wip .rep-btn-ico span { filter: grayscale(1); opacity: .5; }
+.rep-btn.wip .rep-btn-name { color: var(--text3); }
 .rep-btn-ico { font-size: 22px; line-height: 1; }
 .rep-btn-name {
   font-family: 'Inter', sans-serif; font-size: 9px; font-weight: 600;
@@ -656,7 +659,10 @@ const REPUTATIONS = [
       { name: 'Лорд',         pts: 150000, ico: 'vlastitel_zemel_lord_9.png' },
     ]
   },
-  { id: 'guard',       name: 'Королевская гвардия', ico: '🛡️',  wip: true },
+  { id: 'guard', name: 'Королевская гвардия', ico: '🛡️', wip: true,
+    folder: 'reputations/korolevskaya_gvardiya',
+    ranks: [{ name: '—', pts: 0, ico: 'korolevskaya_gvardiya_opora_trona_i_10.png' }]
+  },
   {
     id: 'orden',
     name: 'Орден Короны',
@@ -686,7 +692,10 @@ const REPUTATIONS = [
       { name: 'Магистр V',     pts: 968000,  ico: 'orden_magistr_v_20.png' },
     ]
   },
-  { id: 'exorcist',    name: 'Экзорцист',           ico: '✝️',  wip: true },
+  { id: 'exorcist', name: 'Экзорцист', ico: '✝️', wip: true,
+    folder: 'reputations/eksorcist',
+    ranks: [{ name: '—', pts: 0, ico: 'eksorcist_verkhovnyi_eksorcist_11.png' }]
+  },
 ];
 
 // Бафы советов: [белый%, зелёный%, синий%] для каждой репутации
