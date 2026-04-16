@@ -758,11 +758,11 @@ function buildBuffs() {
     ).join('');
     return `
       <div class="buff-row">
-        <div class="ico-pill" style="position:relative;overflow:visible;border-color:transparent">
-          <img src="${COUNCIL_ICO}" style="width:28px;height:28px;image-rendering:pixelated">
-          ${q===1?`<img src="../frames/border_none.png"   style="position:absolute;inset:-1px;width:calc(100% + 2px);height:calc(100% + 2px);pointer-events:none">`:
-            q===2?`<img src="../frames/border_low.png"    style="position:absolute;inset:-1px;width:calc(100% + 2px);height:calc(100% + 2px);pointer-events:none">`:
-            q===3?`<img src="../frames/border_medium.png" style="position:absolute;inset:-1px;width:calc(100% + 2px);height:calc(100% + 2px);pointer-events:none">`:''}
+        <div class="ico-pill" style="position:relative;border:none;padding:0">
+          <img src="${COUNCIL_ICO}" style="width:34px;height:34px;image-rendering:pixelated;display:block">
+          ${q===1?`<img src="../frames/border_none.png"   style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none">`:
+            q===2?`<img src="../frames/border_low.png"    style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none">`:
+            q===3?`<img src="../frames/border_medium.png" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none">`:''}
         </div>
         <div>
           <div style="font-family:'Inter',sans-serif;font-size:12px;font-weight:600;color:var(--text)">Совет ${name}</div>
@@ -780,9 +780,9 @@ function buildBuffs() {
   if (b.seal) {
     html += `
       <div class="buff-row">
-        <div class="ico-pill" style="position:relative;overflow:visible;border-color:transparent">
-          <img src="${SEAL_ICO}" style="width:28px;height:28px;image-rendering:pixelated">
-          <img src="../frames/border_exclusive.png" style="position:absolute;inset:-1px;width:calc(100% + 2px);height:calc(100% + 2px);pointer-events:none">
+        <div class="ico-pill" style="position:relative;border:none;padding:0">
+          <img src="${SEAL_ICO}" style="width:34px;height:34px;image-rendering:pixelated;display:block">
+          <img src="../frames/border_exclusive.png" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none">
         </div>
         <div>
           <div style="font-family:'Inter',sans-serif;font-size:12px;font-weight:600;color:var(--text)">Королевская печать</div>
