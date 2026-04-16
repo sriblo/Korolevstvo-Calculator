@@ -780,7 +780,10 @@ function buildBuffs() {
   if (b.seal) {
     html += `
       <div class="buff-row">
-        <div class="ico-pill"><img src="${SEAL_ICO}" style="width:28px;height:28px;image-rendering:pixelated"></div>
+        <div class="ico-pill" style="position:relative;overflow:visible;border-color:transparent">
+          <img src="${SEAL_ICO}" style="width:28px;height:28px;image-rendering:pixelated">
+          <img src="../frames/border_exclusive.png" style="position:absolute;inset:-1px;width:calc(100% + 2px);height:calc(100% + 2px);pointer-events:none">
+        </div>
         <div>
           <div style="font-family:'Inter',sans-serif;font-size:12px;font-weight:600;color:var(--text)">Королевская печать</div>
           <div style="margin-top:3px"><span class="buff-quality bq-seal">+${b.seal}%</span></div>
