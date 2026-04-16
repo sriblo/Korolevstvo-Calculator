@@ -758,9 +758,10 @@ function buildBuffs() {
     ).join('');
     return `
       <div class="buff-row">
-        <div class="ico-pill" style="position:relative;overflow:visible;${q===1?'border-color:rgba(220,220,220,.55)':'border-color:transparent'}">
+        <div class="ico-pill" style="position:relative;overflow:visible;border-color:transparent">
           <img src="${COUNCIL_ICO}" style="width:28px;height:28px;image-rendering:pixelated">
-          ${q===2?`<img src="../frames/border_low.png"    style="position:absolute;inset:-1px;width:calc(100% + 2px);height:calc(100% + 2px);pointer-events:none">`:
+          ${q===1?`<img src="../frames/border_none.png"   style="position:absolute;inset:-1px;width:calc(100% + 2px);height:calc(100% + 2px);pointer-events:none">`:
+            q===2?`<img src="../frames/border_low.png"    style="position:absolute;inset:-1px;width:calc(100% + 2px);height:calc(100% + 2px);pointer-events:none">`:
             q===3?`<img src="../frames/border_medium.png" style="position:absolute;inset:-1px;width:calc(100% + 2px);height:calc(100% + 2px);pointer-events:none">`:''}
         </div>
         <div>
