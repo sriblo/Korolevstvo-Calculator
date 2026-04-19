@@ -1019,7 +1019,7 @@ function calc() {
   const haveRank  = parseInt(document.getElementById('have-rank').value)||0;
   const haveRepX  = Math.max(0, parseInt(document.getElementById('have-rep-extra').value)||0);
 
-  const oneTime = document.getElementById('one-time').checked ? 1501 : 0;
+  const oneTime = document.getElementById('one-time').checked ? 0 : 1501;
   const earned  = days * 760 + oneTime;
   const total   = earned + haveT - miss;
   const haveRep = REP[haveRank] + haveRepX;
