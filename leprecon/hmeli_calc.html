@@ -1175,18 +1175,10 @@ function calc() {
       <div class="sline-body">Донат не нужен — тайленов хватает на все предметы и репутацию.</div>
     </div>`);
     if (leftover > 0) {
-      if (haveRep < REP[3]) {
-        const extraMugs = Math.floor(leftover/50);
-        if (extraMugs > 0) lines.push(`<div class="sline">
-          ${icoMug}
-          <div class="sline-body">Останется <span class="sg">${fmt(leftover)} тайленов</span> — хватит ещё на <span class="sn">${extraMugs}</span> обычных кружек = <span class="sg">+${fmt(extraMugs*500)} очков</span> репутации сверху.</div>
-        </div>`);
-      } else {
-        lines.push(`<div class="sline">
-          ${icoTaylen}
-          <div class="sline-body">Останется <span class="sg">${fmt(leftover)} свободных тайленов</span>.</div>
-        </div>`);
-      }
+      lines.push(`<div class="sline">
+        ${icoTaylen}
+        <div class="sline-body">Останется <span class="sg">${fmt(leftover)} свободных тайленов</span>.</div>
+      </div>`);
     }
   } else {
     if (rubDef > 0) {
