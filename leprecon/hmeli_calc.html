@@ -1056,7 +1056,7 @@ function calc() {
 
   const afterItems = total - itemCost;
   const forRep     = Math.max(0, afterItems);
-  const rubDef     = afterItems < 0 ? Math.ceil(-afterItems/100) * 3 : 0;
+  const rubDef     = afterItems < 0 ? Math.ceil(-afterItems/100) : 0;
 
   const targetRep  = REP[maxRank];
   const repNeeded  = Math.max(0, targetRep - haveRep);
@@ -1180,7 +1180,7 @@ function calc() {
     if (rubDef > 0) {
       lines.push(`<div class="sline">
         ${icoRuby}
-        <div class="sline-body">Докупи тайлены в Королевской лавке: нужно <span class="sr">${fmt(Math.ceil(-afterItems/100)*100)} тайленов</span> → <span class="sr">${fmtR(rubDef)} рубинов</span> (курс: 100 тайл. = 3 рубина).</div>
+        <div class="sline-body">Докупи недостающие предметы напрямую за рубины: не хватает <span class="sr">${fmt(-afterItems)} тайленов</span> → <span class="sr">${fmtR(rubDef)} рубинов</span>.</div>
       </div>`);
     }
     if (adjFreeRep > 0 && adjTUsed > 0) {
