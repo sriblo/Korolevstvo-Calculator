@@ -1074,13 +1074,14 @@ function calc() {
   // покупаем за тайлены пока хватает, остальное — за рубины по конкретной цене
   allSteps.sort((a, b) => a.t - b.t);
   let remT = total;
-  let rubDef = 0;
+  let rubDef = 0, rubStepTCost = 0;
   for (const step of allSteps) {
     if (remT >= step.t) { remT -= step.t; }
-    else { rubDef += step.r; }
+    else { rubDef += step.r; rubStepTCost += step.t; }
   }
   const tItemSpent = total - remT;
   const afterItems = remT; // тайлены оставшиеся после покупки предметов
+  const shortfall  = rubStepTCost > 0 ? rubStepTCost - remT : 0; // реальная нехватка тайленов
   const forRep     = afterItems;
 
   const targetRep  = REP[maxRank];
@@ -1142,7 +1143,7 @@ function calc() {
   if (itemCost > 0) {
     rows.push(`<div class="vrow">
       <span class="vkey">Тайленов на предметы</span>
-      <span class="vval ${afterItems>=0?'':'r'}">${fmt(itemCost)} тайленов ${afterItems<0?`<span style="font-weight:400;font-size:11px">(не хватает ${fmt(-afterItems)} тайленов)</span>`:''}</span>
+      <span class="vval ${rubDef>0?'r':''}">${rubDef>0?'−':''}${fmt(itemCost)} тайленов ${rubDef>0?`<span style="font-weight:400;font-size:11px">(не хватает ${fmt(shortfall)} тайленов)</span>`:''}</span>
     </div>`);
   }
 
@@ -1174,7 +1175,7 @@ function calc() {
     rows.push('<div class="vsep"></div>');
     rows.push(`<div class="vrow">
       <span class="vkey">Не хватает тайленов на предметы</span>
-      <span class="vval r">${fmt(-afterItems)} тайленов → ${fmtR(rubDef)} рубинов</span>
+      <span class="vval r">не хватает ${fmt(shortfall)} тайленов → ${fmtR(rubDef)} рубинов</span>
     </div>`);
   }
 
@@ -1205,7 +1206,7 @@ function calc() {
     if (rubDef > 0) {
       lines.push(`<div class="sline">
         ${icoRuby}
-        <div class="sline-body">Докупи недостающие предметы напрямую за рубины: не хватает <span class="sr">${fmt(-afterItems)} тайленов</span> → <span class="sr">${fmtR(rubDef)} рубинов</span>.</div>
+        <div class="sline-body">Докупи недостающие предметы напрямую за рубины: не хватает <span class="sr">${fmt(shortfall)} тайленов</span> → <span class="sr">${fmtR(rubDef)} рубинов</span>.</div>
       </div>`);
     }
     if (adjFreeRep > 0 && adjTUsed > 0) {
