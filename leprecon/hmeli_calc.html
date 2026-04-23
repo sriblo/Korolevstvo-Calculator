@@ -172,10 +172,6 @@ header::after {
 }
 .irow:last-child { border-bottom: none; }
 .irow:hover { background: rgba(184,134,11,.025); }
-/* строки без поля ввода (чекбокс) */
-.irow.irow-check {
-  grid-template-columns: 34px 1fr auto;
-}
 /* строки с select или сгруппированным контролом (репутация) */
 .irow.irow-rep {
   grid-template-columns: 34px 1fr auto;
@@ -688,14 +684,6 @@ select.on { border-color: rgba(184,134,11,.5); background: rgba(184,134,11,.06);
         </div>
       </div>
 
-      <div class="irow irow-check">
-        <div class="ico-pill em">🍀</div>
-        <div class="ilbl">Учитывать подарочные тайлены</div>
-        <label class="chk-wrap">
-          <input type="checkbox" id="one-time" checked onchange="calc()">
-          <span class="chk-lbl">+1 501 тайлен</span>
-        </label>
-      </div>
     </div>
 
     <!-- Репутация -->
@@ -1028,8 +1016,7 @@ function calc() {
   const haveRank  = parseInt(document.getElementById('have-rank').value)||0;
   const haveRepX  = Math.max(0, parseInt(document.getElementById('have-rep-extra').value)||0);
 
-  const oneTime = document.getElementById('one-time').checked ? 1501 : 0;
-  const earned  = days * 760 + oneTime;
+  const earned  = days * 760;
   const total   = earned + haveT - miss;
   const haveRep = REP[haveRank] + haveRepX;
 
