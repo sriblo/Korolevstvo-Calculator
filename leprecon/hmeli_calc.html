@@ -896,6 +896,15 @@ const CUM = {
   tal:   [0,  300,  800, 1500],
   stone: [0,    1],
 };
+// Цены в рубинах (накопительные) — конкретные цены из игры
+const CUM_R = {
+  lep:   [0,   8,  18,  38],
+  hops:  [0,  14,  30,  50],
+  flask: [0,   3,   8,  15],
+  tal:   [0,   3,   8,  15],
+  stone: [0,   0],
+};
+const COS_R = [0, 3, 9];
 const REQ_RANK = { lep:[0,1,2,3], hops:[0,1,2,3], flask:[0,1,2,3], tal:[0,1,2,3], stone:[0,3] };
 
 const ITEMS = [
@@ -1022,6 +1031,7 @@ function calc() {
 
   let itemCost = 0, maxRank = 0, anyWant = false;
   const wantedNames = [];
+  const allSteps = []; // {t, r} — каждый шаг апгрейда
 
   ITEMS.forEach(cfg => {
     const h = parseInt(document.getElementById('have-'+cfg.id).value);
@@ -1032,6 +1042,9 @@ function calc() {
       maxRank = Math.max(maxRank, REQ_RANK[cfg.id][w]);
       anyWant = true;
       wantedNames.push(cfg.levels[w]);
+      for (let i = h; i < w; i++) {
+        allSteps.push({ t: CUM[cfg.id][i+1]-CUM[cfg.id][i], r: CUM_R[cfg.id][i+1]-CUM_R[cfg.id][i] });
+      }
     }
     document.getElementById('want-'+cfg.id).classList.toggle('on', w > h);
     const hintEl = document.getElementById('hint-'+cfg.id);
@@ -1049,14 +1062,26 @@ function calc() {
   const wCos = parseInt(document.getElementById('want-cos').value);
   const cosCosts = [0,300,900];
   const cosCost = wCos > hCos ? cosCosts[wCos]-cosCosts[hCos] : 0;
-  if (wCos > hCos) { itemCost += cosCost; anyWant = true; wantedNames.push(['Обычный костюм','Прочный костюм'][wCos-1]); }
+  if (wCos > hCos) {
+    itemCost += cosCost; anyWant = true; wantedNames.push(['Обычный костюм','Прочный костюм'][wCos-1]);
+    allSteps.push({ t: cosCost, r: COS_R[wCos]-COS_R[hCos] });
+  }
   document.getElementById('want-cos').classList.toggle('on', wCos > hCos);
   const cosHint = document.getElementById('hint-cos');
   if (cosHint) cosHint.textContent = wCos > hCos ? `Стоимость: ${fmt(cosCost)} тайленов` : '';
 
-  const afterItems = total - itemCost;
-  const forRep     = Math.max(0, afterItems);
-  const rubDef     = afterItems < 0 ? Math.ceil(-afterItems/100) : 0;
+  // Жадный алгоритм: сортируем шаги по цене тайленов (дешёвые сначала),
+  // покупаем за тайлены пока хватает, остальное — за рубины по конкретной цене
+  allSteps.sort((a, b) => a.t - b.t);
+  let remT = total;
+  let rubDef = 0;
+  for (const step of allSteps) {
+    if (remT >= step.t) { remT -= step.t; }
+    else { rubDef += step.r; }
+  }
+  const tItemSpent = total - remT;
+  const afterItems = remT; // тайлены оставшиеся после покупки предметов
+  const forRep     = afterItems;
 
   const targetRep  = REP[maxRank];
   const repNeeded  = Math.max(0, targetRep - haveRep);
