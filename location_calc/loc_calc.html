@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Калькулятор копий — Калькуляторы Королевства</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=Crimson+Pro:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@400;500;600&display=swap');
+
+:root {
+  --amber:   #b8860b;
+  --gold:    #d4a843;
+  --goldl:   #f0cc6a;
+  --sage:    #5a7a3a;
+  --sagel:   #8ab860;
+  --ember:   #8b3a2a;
+  --emberl:  #c86040;
+  --blue:    #4870a8;
+  --bluel:   #80aad8;
+  --text:    #e8dfc8;
+  --text2:   #9a8a6a;
+  --text3:   #4a3f2e;
+  --bg:      #0a0704;
+  --glass:   rgba(18,12,6,.8);
+  --glass2:  rgba(10,7,3,.9);
+  --gb:      rgba(184,134,11,.2);
+  --sep:     rgba(184,134,11,.1);
+  --inp:     rgba(6,4,2,.75);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { min-height: 100%; }
+
+body {
+  min-height: 100vh; color: var(--text);
+  font-family: 'Crimson Pro', serif; font-size: 15px; line-height: 1.5;
+  background-color: var(--bg);
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E"),
+    radial-gradient(ellipse 80% 60% at 0% 0%,   rgba(120,70,10,.6) 0%, transparent 55%),
+    radial-gradient(ellipse 60% 70% at 100% 100%, rgba(90,30,20,.5) 0%, transparent 50%),
+    radial-gradient(ellipse 90% 45% at 50% 5%,  rgba(30,60,80,.2) 0%, transparent 50%);
+  overflow-x: hidden;
+}
+
+body::after {
+  content: '';
+  position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  background: radial-gradient(ellipse 130% 100% at 50% 50%, transparent 35%, rgba(5,3,1,.75) 100%);
+}
+
+/* ── HEADER ── */
+header {
+  position: relative; z-index: 10;
+  padding: 0 32px;
+  background: linear-gradient(180deg, rgba(20,13,6,.92) 0%, rgba(10,7,3,.75) 100%);
+  backdrop-filter: blur(32px); -webkit-backdrop-filter: blur(32px);
+  border-bottom: 1px solid rgba(184,134,11,.14);
+}
+header::after {
+  content: '';
+  position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent 0%, rgba(184,134,11,.3) 20%, var(--gold) 50%, rgba(184,134,11,.3) 80%, transparent 100%);
+}
+.h-inner {
+  max-width: 900px; margin: 0 auto; padding: 14px 0;
+  display: flex; align-items: center; gap: 14px;
+}
+.h-back {
+  font-family: 'Inter', sans-serif;
+  font-size: 11px; color: var(--text2); text-decoration: none; letter-spacing: .04em;
+  transition: color .15s; white-space: nowrap; display: flex; align-items: center; gap: 5px;
+}
+.h-back:hover { color: var(--goldl); }
+.h-back::before { content: '←'; font-size: 13px; }
+.h-sep { color: var(--text3); }
+.h-ico { font-size: 28px; filter: drop-shadow(0 0 16px rgba(72,112,168,.5)); flex-shrink: 0; }
+.h-title {
+  font-family: 'UnifrakturMaguntia', cursive;
+  font-size: 22px; line-height: 1.1;
+  color: var(--bluel);
+  text-shadow: 0 0 30px rgba(72,112,168,.4), 0 2px 4px rgba(0,0,0,.8);
+}
+.h-sub { font-family: 'Crimson Pro', serif; font-size: 12px; color: var(--text2); margin-top: 2px; font-style: italic; }
+.h-right-orn {
+  margin-left: auto; display: flex; align-items: center; gap: 8px; flex-shrink: 0;
+}
+.h-orn-line { width: 50px; height: 1px; background: linear-gradient(90deg, transparent, rgba(72,112,168,.3)); }
+.h-orn-diamond { width: 6px; height: 6px; background: rgba(72,112,168,.5); transform: rotate(45deg); }
+
+/* ── PAGE ── */
+.page {
+  position: relative; z-index: 5;
+  max-width: 900px; margin: 0 auto; padding: 22px 28px 80px;
+  display: grid; grid-template-columns: 320px 1fr; gap: 20px; align-items: start;
+}
+
+/* ── CARD ── */
+.card {
+  background: var(--glass);
+  backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+  border: 1px solid var(--gb); border-radius: 14px; overflow: hidden; position: relative;
+  box-shadow: 0 1px 0 rgba(220,185,90,.1) inset, 0 10px 40px rgba(0,0,0,.55), 0 0 0 1px rgba(0,0,0,.5);
+}
+.card::before {
+  content: ''; position: absolute; inset: 2px; border-radius: 12px;
+  border: 1px solid rgba(212,168,67,.07); pointer-events: none; z-index: 1;
+}
+.card::after {
+  content: ''; position: absolute; top: 0; left: 20px; right: 20px; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(220,180,80,.2), transparent); pointer-events: none;
+}
+.card-title {
+  padding: 10px 18px; display: flex; align-items: center; gap: 8px;
+  background: linear-gradient(90deg, rgba(184,134,11,.12), rgba(184,134,11,.05));
+  border-bottom: 1px solid var(--sep);
+  font-family: 'Inter', sans-serif; font-size: 10px; font-weight: 600;
+  letter-spacing: 2.5px; text-transform: uppercase; color: rgba(212,168,67,.7);
+  position: relative; z-index: 2;
+}
+.card-title-orn {
+  width: 14px; height: 14px; position: relative; flex-shrink: 0;
+}
+.card-title-orn::before, .card-title-orn::after {
+  content: ''; position: absolute; background: rgba(212,168,67,.45);
+}
+.card-title-orn::before { width: 14px; height: 1px; top: 6px; left: 0; }
+.card-title-orn::after  { width: 1px; height: 14px; left: 6px; top: 0; }
+
+/* ── INPUT ROW ── */
+.irow {
+  display: flex; align-items: center; gap: 10px;
+  padding: 12px 18px; border-bottom: 1px solid var(--sep);
+  position: relative; z-index: 2;
+}
+.irow:last-child { border-bottom: none; }
+.irow-ico {
+  width: 34px; height: 34px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(0,0,0,.45); border: 1px solid var(--sep); border-radius: 8px;
+  font-size: 16px;
+}
+.irow-lbl { flex: 1; font-size: 14px; font-weight: 600; color: var(--text); }
+
+input[type=number] {
+  width: 80px; background: var(--inp); border: 1px solid rgba(184,134,11,.28);
+  border-radius: 8px; color: var(--goldl); padding: 7px 10px;
+  font-size: 18px; font-family: 'Inter', sans-serif; font-weight: 600;
+  text-align: right; outline: none; -moz-appearance: textfield;
+  transition: border-color .2s, box-shadow .2s;
+  box-shadow: 0 2px 10px rgba(0,0,0,.5) inset;
+}
+input[type=number]:focus {
+  border-color: rgba(184,134,11,.65);
+  box-shadow: 0 2px 10px rgba(0,0,0,.5) inset, 0 0 0 2px rgba(184,134,11,.08);
+}
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; }
+.unit { font-size: 12px; color: var(--text2); font-family: 'Inter', sans-serif; white-space: nowrap; }
+
+/* ── COPY ROWS ── */
+.copies-body { position: relative; z-index: 2; }
+
+.copy-row {
+  display: grid;
+  grid-template-columns: 42px 1fr 60px 72px 32px;
+  align-items: center; gap: 8px;
+  padding: 10px 18px; border-bottom: 1px solid var(--sep);
+  transition: background .15s;
+}
+.copy-row:hover { background: rgba(184,134,11,.02); }
+.copy-row:last-child { border-bottom: none; }
+
+.copy-num {
+  width: 36px; height: 36px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 700;
+  background: rgba(72,112,168,.12); border: 1px solid rgba(72,112,168,.3);
+  color: var(--bluel); flex-shrink: 0;
+  transition: background .2s, border-color .2s, color .2s;
+}
+.copy-row.is-mine .copy-num {
+  background: rgba(72,112,168,.25); border-color: rgba(72,112,168,.6);
+  box-shadow: 0 0 10px rgba(72,112,168,.2);
+}
+
+.copy-pct-wrap { display: flex; align-items: center; gap: 6px; }
+.copy-pct-wrap input[type=number] { width: 60px; font-size: 16px; padding: 6px 8px; }
+.copy-pct-sign { font-size: 13px; color: var(--text3); font-family: 'Inter', sans-serif; }
+
+.copy-mine-btn {
+  padding: 5px 8px; border-radius: 6px; cursor: pointer;
+  font-family: 'Inter', sans-serif; font-size: 9px; font-weight: 600;
+  letter-spacing: .5px; text-transform: uppercase;
+  background: rgba(72,112,168,.08); border: 1px solid rgba(72,112,168,.2);
+  color: rgba(128,170,216,.5); transition: all .2s; white-space: nowrap;
+}
+.copy-mine-btn:hover { background: rgba(72,112,168,.15); border-color: rgba(72,112,168,.4); color: var(--bluel); }
+.copy-row.is-mine .copy-mine-btn {
+  background: rgba(72,112,168,.2); border-color: rgba(72,112,168,.55);
+  color: var(--bluel); box-shadow: 0 0 8px rgba(72,112,168,.15);
+}
+
+.copy-rm-btn {
+  width: 28px; height: 28px; border-radius: 6px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(139,58,42,.08); border: 1px solid rgba(139,58,42,.15);
+  color: rgba(200,96,64,.4); font-size: 16px; line-height: 1;
+  transition: all .15s;
+}
+.copy-rm-btn:hover { background: rgba(139,58,42,.2); border-color: rgba(139,58,42,.4); color: var(--emberl); }
+.copy-rm-btn.hidden { visibility: hidden; pointer-events: none; }
+
+.add-copy-btn {
+  width: 100%; padding: 11px 18px;
+  background: none; border: none; border-top: 1px solid var(--sep);
+  cursor: pointer; text-align: left;
+  font-family: 'Inter', sans-serif; font-size: 10px; font-weight: 600;
+  letter-spacing: 2px; text-transform: uppercase; color: var(--text3);
+  display: flex; align-items: center; gap: 8px;
+  transition: color .15s, background .15s;
+  position: relative; z-index: 2;
+}
+.add-copy-btn::before { content: '+'; font-size: 16px; line-height: 1; }
+.add-copy-btn:hover { color: var(--goldl); background: rgba(184,134,11,.03); }
+
+/* ── LEFT COLUMN ── */
+.lcol { display: flex; flex-direction: column; gap: 16px; }
+
+/* ── RIGHT COLUMN ── */
+.rcol { display: flex; flex-direction: column; gap: 16px; }
+
+/* ── RESULT CARD ── */
+.res-card {
+  background: var(--glass2);
+  backdrop-filter: blur(32px); -webkit-backdrop-filter: blur(32px);
+  border: 1px solid rgba(72,112,168,.35); border-radius: 14px; overflow: hidden; position: relative;
+  box-shadow: 0 1px 0 rgba(128,170,216,.12) inset, 0 16px 56px rgba(0,0,0,.7), 0 0 60px rgba(72,112,168,.06);
+}
+.res-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg, transparent, rgba(72,112,168,.6) 25%, var(--bluel) 50%, rgba(72,112,168,.6) 75%, transparent 100%);
+  pointer-events: none; z-index: 2;
+}
+.res-card::after {
+  content: ''; position: absolute; inset: 3px 2px 2px; border-radius: 12px;
+  border: 1px solid rgba(128,170,216,.07); pointer-events: none; z-index: 2;
+}
+
+.res-top {
+  display: grid; grid-template-columns: 180px 1fr;
+  position: relative; z-index: 3;
+}
+.res-main {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 22px 16px; gap: 4px; border-right: 1px solid var(--sep);
+  background: linear-gradient(135deg, rgba(72,112,168,.06), rgba(0,0,0,.1));
+}
+.rlbl {
+  font-family: 'Inter', sans-serif; font-size: 11px; letter-spacing: 3px;
+  text-transform: uppercase; color: var(--text2); margin-bottom: 2px;
+}
+
+@keyframes breathe-blue {
+  0%, 100% { text-shadow: 0 0 20px rgba(72,112,168,.25); }
+  50%       { text-shadow: 0 0 40px rgba(72,112,168,.55); }
+}
+@keyframes breathe-green {
+  0%, 100% { text-shadow: 0 0 20px rgba(120,200,80,.2); }
+  50%       { text-shadow: 0 0 40px rgba(120,200,80,.45); }
+}
+
+.rnum {
+  font-family: 'UnifrakturMaguntia', cursive;
+  font-size: 56px; font-weight: 400; line-height: 1; letter-spacing: .02em;
+}
+.rnum.danger { color: var(--emberl); animation: breathe-blue 3s ease-in-out infinite; }
+.rnum.safe   { color: var(--sagel);  animation: breathe-green 3s ease-in-out infinite; }
+.rtag { font-size: 12px; color: var(--text2); font-style: italic; font-family: 'Crimson Pro', serif; }
+
+.res-stats { display: grid; grid-template-columns: 1fr 1fr 1fr; position: relative; z-index: 3; }
+.st {
+  padding: 12px 14px; border-right: 1px solid var(--sep);
+}
+.st:last-child { border-right: none; }
+.slbl { font-family: 'Inter', sans-serif; font-size: 11px; color: var(--text3); margin-bottom: 3px; }
+.sval { font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 600; color: var(--text); }
+.sval.g { color: var(--sagel); }
+.sval.r { color: var(--emberl); }
+.sval.b { color: var(--bluel); }
+
+/* ── COPIES TABLE ── */
+.copies-result {
+  border-top: 1px solid var(--sep);
+  position: relative; z-index: 3;
+}
+.copies-result-head {
+  display: grid; grid-template-columns: 52px 1fr 90px;
+  padding: 8px 18px; gap: 10px;
+  background: rgba(0,0,0,.2); border-bottom: 1px solid var(--sep);
+}
+.copies-result-head span {
+  font-family: 'Inter', sans-serif; font-size: 9px; font-weight: 600;
+  letter-spacing: 2px; text-transform: uppercase; color: var(--text3);
+}
+
+.cr-row {
+  display: grid; grid-template-columns: 52px 1fr 90px;
+  align-items: center; padding: 11px 18px; gap: 10px;
+  border-bottom: 1px solid rgba(184,134,11,.05);
+  transition: background .15s;
+}
+.cr-row:last-child { border-bottom: none; }
+.cr-row.is-mine { background: rgba(72,112,168,.05); }
+.cr-row.is-safest { background: rgba(90,122,58,.04); }
+.cr-row.is-mine.is-safest { background: rgba(72,112,168,.06); }
+
+.cr-num {
+  width: 34px; height: 34px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 700;
+  background: rgba(0,0,0,.3); border: 1px solid rgba(255,255,255,.06); color: var(--text2);
+}
+.cr-row.is-mine .cr-num {
+  background: rgba(72,112,168,.2); border-color: rgba(72,112,168,.5); color: var(--bluel);
+  box-shadow: 0 0 8px rgba(72,112,168,.15);
+}
+.cr-row.is-safest .cr-num {
+  border-color: rgba(90,122,58,.4); color: var(--sagel);
+}
+.cr-row.is-mine.is-safest .cr-num {
+  background: rgba(72,112,168,.2); border-color: rgba(72,112,168,.5); color: var(--bluel);
+}
+
+.cr-info { display: flex; flex-direction: column; gap: 3px; }
+.cr-players { font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 600; color: var(--text); }
+.cr-players span { font-size: 11px; color: var(--text3); font-weight: 400; margin-left: 4px; }
+.cr-tag { display: flex; gap: 6px; flex-wrap: wrap; }
+.cr-badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-family: 'Inter', sans-serif; font-size: 9px; font-weight: 600;
+  letter-spacing: .5px; text-transform: uppercase;
+  padding: 2px 7px; border-radius: 4px;
+}
+.badge-mine    { background: rgba(72,112,168,.15); border: 1px solid rgba(72,112,168,.35); color: var(--bluel); }
+.badge-safest  { background: rgba(90,122,58,.12);  border: 1px solid rgba(90,122,58,.3);  color: var(--sagel); }
+.badge-danger  { background: rgba(139,58,42,.12);  border: 1px solid rgba(139,58,42,.3);  color: var(--emberl); }
+.badge-empty   { background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.08); color: var(--text3); }
+
+.cr-bar-wrap { display: flex; align-items: center; gap: 8px; }
+.cr-bar {
+  flex: 1; height: 6px; border-radius: 3px;
+  background: rgba(255,255,255,.05); overflow: hidden;
+}
+.cr-bar-fill {
+  height: 100%; border-radius: 3px;
+  transition: width .3s ease;
+}
+.cr-bar-fill.blue  { background: linear-gradient(90deg, rgba(72,112,168,.6), var(--bluel)); }
+.cr-bar-fill.green { background: linear-gradient(90deg, rgba(90,122,58,.6), var(--sagel)); }
+.cr-bar-fill.red   { background: linear-gradient(90deg, rgba(139,58,42,.6), var(--emberl)); }
+.cr-bar-fill.gray  { background: rgba(255,255,255,.1); }
+.cr-pct-lbl { font-family: 'Inter', sans-serif; font-size: 11px; color: var(--text3); white-space: nowrap; min-width: 28px; text-align: right; }
+
+/* ── IDLE / VERDICT ── */
+.idle-msg {
+  padding: 22px 20px; font-size: 14px; color: var(--text3);
+  font-style: italic; border-top: 1px solid var(--sep);
+  font-family: 'Crimson Pro', serif; position: relative; z-index: 3;
+}
+
+/* ── RECOMMENDATION ── */
+.rec-block {
+  border-top: 2px solid rgba(72,112,168,.18);
+  background: rgba(0,0,0,.2);
+  padding: 14px 18px;
+  position: relative; z-index: 3;
+  display: flex; flex-direction: column; gap: 8px;
+}
+.rec-title {
+  font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 600;
+  letter-spacing: 2.5px; text-transform: uppercase; color: var(--bluel); margin-bottom: 4px;
+  display: flex; align-items: center; gap: 8px;
+}
+.rec-title::before {
+  content: ''; display: block; width: 3px; height: 15px;
+  background: linear-gradient(180deg, var(--bluel), rgba(72,112,168,.4));
+  border-radius: 2px;
+}
+.rec-line {
+  font-size: 14px; color: var(--text2); line-height: 1.6;
+  font-family: 'Crimson Pro', serif;
+}
+.rec-line b { color: var(--text); }
+.rec-line .g { color: var(--sagel); font-weight: 700; }
+.rec-line .r { color: var(--emberl); font-weight: 700; }
+.rec-line .b { color: var(--bluel); font-weight: 700; }
+
+/* ── FOOTER ── */
+.page-footer {
+  position: relative; z-index: 5;
+  max-width: 900px; margin: 0 auto; padding: 0 28px 60px; text-align: center;
+}
+.footer-text { font-family: 'Crimson Pro', serif; font-size: 15px; color: var(--text3); font-style: italic; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 680px) {
+  .page { grid-template-columns: 1fr; padding: 16px 14px 60px; }
+  header { padding: 0 14px; }
+  .h-right-orn { display: none; }
+  .res-top { grid-template-columns: 1fr; }
+  .res-main { border-right: none; border-bottom: 1px solid var(--sep); }
+  .copy-row { grid-template-columns: 36px 1fr 54px 66px 28px; gap: 6px; padding: 9px 14px; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="h-inner">
+    <a class="h-back" href="../index.html">Все калькуляторы</a>
+    <span class="h-sep">·</span>
+    <div class="h-ico">🗺️</div>
+    <div>
+      <div class="h-title">Калькулятор локации</div>
+      <div class="h-sub">Распределение игроков по копиям · Оценка угрозы</div>
+    </div>
+    <div class="h-right-orn">
+      <div class="h-orn-line"></div>
+      <div class="h-orn-diamond"></div>
+    </div>
+  </div>
+</header>
+
+<div class="page">
+
+  <!-- LEFT COLUMN -->
+  <div class="lcol">
+
+    <div class="card">
+      <div class="card-title"><div class="card-title-orn"></div>Моя раса</div>
+      <div class="irow">
+        <div class="irow-ico">👥</div>
+        <div class="irow-lbl">Игроков моей расы</div>
+        <input type="number" id="my-race" value="1" min="0" oninput="calc()">
+        <span class="unit">игр.</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="card-title-orn"></div>Копии локации</div>
+      <div class="copies-body" id="copies-body"></div>
+      <button class="add-copy-btn" onclick="addCopy()">Добавить копию</button>
+    </div>
+
+  </div>
+
+  <!-- RIGHT COLUMN -->
+  <div class="rcol">
+
+    <div class="res-card">
+      <div class="res-top">
+        <div class="res-main">
+          <div class="rlbl">Врагов в локации</div>
+          <div class="rnum safe" id="res-num">0</div>
+          <div class="rtag" id="res-tag">нет угрозы</div>
+        </div>
+        <div class="res-stats">
+          <div class="st">
+            <div class="slbl">Всего в локации</div>
+            <div class="sval" id="sv-total">—</div>
+          </div>
+          <div class="st">
+            <div class="slbl">Моя раса</div>
+            <div class="sval g" id="sv-mine">—</div>
+          </div>
+          <div class="st">
+            <div class="slbl">Копий</div>
+            <div class="sval b" id="sv-copies">—</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="copies-result" id="copies-result" style="display:none">
+        <div class="copies-result-head">
+          <span>Копия</span>
+          <span>Игроков</span>
+          <span>Заполнено</span>
+        </div>
+        <div id="copies-rows"></div>
+      </div>
+
+      <div id="rec-block"></div>
+    </div>
+
+  </div>
+</div>
+
+<div class="page-footer">
+  <div class="footer-text">Сделано с любовью к Королевству · не является официальным ресурсом</div>
+</div>
+
+<script>
+const MAX_PER_COPY = 80;
+
+// copies[i] = { pct: number, isMine: boolean }
+let copies = [{ pct: 0, isMine: true }];
+
+function playersFromPct(pct) {
+  if (!pct || pct <= 0) return 0;
+  return Math.ceil(pct * MAX_PER_COPY / 100);
+}
+
+function fmt(n) { return Math.round(n).toLocaleString('ru-RU'); }
+
+function renderCopyInputs() {
+  const el = document.getElementById('copies-body');
+  el.innerHTML = copies.map((c, i) => `
+    <div class="copy-row${c.isMine ? ' is-mine' : ''}" id="crow-${i}">
+      <div class="copy-num">${i + 1}</div>
+      <div class="copy-pct-wrap">
+        <input type="number" value="${c.pct}" min="0" max="100" placeholder="0"
+               oninput="copies[${i}].pct = Math.max(0,Math.min(100,parseInt(this.value)||0)); calc()">
+        <span class="copy-pct-sign">%</span>
+      </div>
+      <button class="copy-mine-btn" onclick="setMine(${i})">${c.isMine ? 'Вы здесь' : 'Вы здесь?'}</button>
+      <button class="copy-rm-btn${copies.length <= 1 ? ' hidden' : ''}" onclick="removeCopy(${i})">×</button>
+    </div>
+  `).join('');
+}
+
+function addCopy() {
+  copies.push({ pct: 0, isMine: false });
+  renderCopyInputs();
+  calc();
+}
+
+function removeCopy(i) {
+  const wasMine = copies[i].isMine;
+  copies.splice(i, 1);
+  if (wasMine && copies.length > 0) copies[0].isMine = true;
+  renderCopyInputs();
+  calc();
+}
+
+function setMine(i) {
+  copies.forEach((c, j) => c.isMine = j === i);
+  renderCopyInputs();
+  calc();
+}
+
+function calc() {
+  const myRace = Math.max(0, parseInt(document.getElementById('my-race').value) || 0);
+
+  const rows = copies.map((c, i) => ({
+    num: i + 1,
+    pct: c.pct,
+    isMine: c.isMine,
+    total: playersFromPct(c.pct),
+  }));
+
+  const totalAll = rows.reduce((s, r) => s + r.total, 0);
+  const enemies  = Math.max(0, totalAll - myRace);
+  const mineRow  = rows.find(r => r.isMine);
+  const minTotal = Math.min(...rows.filter(r => r.total > 0).map(r => r.total));
+
+  // Stats
+  document.getElementById('sv-total').textContent  = fmt(totalAll);
+  document.getElementById('sv-mine').textContent   = fmt(myRace);
+  document.getElementById('sv-copies').textContent = rows.length;
+
+  // Big number
+  const numEl = document.getElementById('res-num');
+  const tagEl = document.getElementById('res-tag');
+  numEl.textContent = fmt(enemies);
+  numEl.className = 'rnum ' + (enemies === 0 ? 'safe' : 'danger');
+  tagEl.textContent = enemies === 0
+    ? 'нет угрозы'
+    : enemies === 1 ? '1 враг в локации'
+    : `${fmt(enemies)} врага в локации`;
+
+  // Copies result table
+  const crEl = document.getElementById('copies-result');
+  const crRows = document.getElementById('copies-rows');
+
+  if (rows.every(r => r.total === 0)) {
+    crEl.style.display = 'none';
+  } else {
+    crEl.style.display = 'block';
+    const maxTotal = Math.max(...rows.map(r => r.total));
+
+    crRows.innerHTML = rows.map(r => {
+      const isSafest = r.total === minTotal && r.total > 0;
+      const isEmpty  = r.total === 0;
+      const fillPct  = maxTotal > 0 ? Math.round(r.total / maxTotal * 100) : 0;
+
+      let barColor = 'blue';
+      if (isEmpty) barColor = 'gray';
+      else if (r.total === maxTotal && maxTotal > 0) barColor = 'red';
+      else if (isSafest) barColor = 'green';
+
+      const badges = [];
+      if (r.isMine)   badges.push(`<span class="cr-badge badge-mine">Вы здесь</span>`);
+      if (isSafest && !r.isMine)  badges.push(`<span class="cr-badge badge-safest">Безопаснее</span>`);
+      if (isSafest && r.isMine)   badges.push(`<span class="cr-badge badge-safest">✓ Хорошее место</span>`);
+      if (isEmpty)    badges.push(`<span class="cr-badge badge-empty">Пусто</span>`);
+
+      return `<div class="cr-row${r.isMine ? ' is-mine' : ''}${isSafest ? ' is-safest' : ''}">
+        <div class="cr-num">${r.num}</div>
+        <div class="cr-info">
+          <div class="cr-players">${fmt(r.total)}<span>игр.</span></div>
+          ${badges.length ? `<div class="cr-tag">${badges.join('')}</div>` : ''}
+        </div>
+        <div class="cr-bar-wrap">
+          <div class="cr-bar"><div class="cr-bar-fill ${barColor}" style="width:${fillPct}%"></div></div>
+          <div class="cr-pct-lbl">${r.pct}%</div>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  // Recommendation
+  const recEl = document.getElementById('rec-block');
+  const lines = [];
+
+  if (enemies > 0 && mineRow) {
+    const safestRows = rows.filter(r => r.total === minTotal && r.total > 0 && !r.isMine);
+    if (mineRow.total > minTotal && safestRows.length > 0) {
+      const nums = safestRows.map(r => `Копию ${r.num}`).join(' или ');
+      lines.push(`<div class="rec-line">Перейди в <b class="g">${nums}</b> — там меньше всего игроков <b>(${fmt(minTotal)} чел.)</b>.</div>`);
+    } else if (mineRow.total === minTotal) {
+      lines.push(`<div class="rec-line">Ты в <b class="g">самой малолюдной копии</b> (${fmt(mineRow.total)} игр.) — оставайся здесь.</div>`);
+    }
+    lines.push(`<div class="rec-line">В локации <b class="r">${fmt(enemies)} ${enemies === 1 ? 'враг' : 'врага'}</b> — они могут быть в любой копии.</div>`);
+  } else if (enemies === 0 && totalAll > 0) {
+    lines.push(`<div class="rec-line">Врагов в локации <b class="g">нет</b> — всё твоё.</div>`);
+  }
+
+  if (lines.length > 0) {
+    recEl.innerHTML = `<div class="rec-block">
+      <div class="rec-title">Рекомендация</div>
+      ${lines.join('')}
+    </div>`;
+  } else {
+    recEl.innerHTML = '';
+  }
+}
+
+renderCopyInputs();
+calc();
+</script>
+</body>
+</html>
