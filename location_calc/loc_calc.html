@@ -3,29 +3,29 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Калькулятор копий — Калькуляторы Королевства</title>
+<title>Загруженность копий — Калькуляторы Королевства</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=Crimson+Pro:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@400;500;600&display=swap');
 
 :root {
-  --amber:   #b8860b;
-  --gold:    #d4a843;
-  --goldl:   #f0cc6a;
-  --sage:    #5a7a3a;
-  --sagel:   #8ab860;
-  --ember:   #8b3a2a;
-  --emberl:  #c86040;
-  --blue:    #4870a8;
-  --bluel:   #80aad8;
-  --text:    #e8dfc8;
-  --text2:   #9a8a6a;
-  --text3:   #4a3f2e;
-  --bg:      #0a0704;
-  --glass:   rgba(18,12,6,.8);
-  --glass2:  rgba(10,7,3,.9);
-  --gb:      rgba(184,134,11,.2);
-  --sep:     rgba(184,134,11,.1);
-  --inp:     rgba(6,4,2,.75);
+  --amber:  #b8860b;
+  --gold:   #d4a843;
+  --goldl:  #f0cc6a;
+  --sage:   #5a7a3a;
+  --sagel:  #8ab860;
+  --ember:  #8b3a2a;
+  --emberl: #c86040;
+  --blue:   #4870a8;
+  --bluel:  #80aad8;
+  --text:   #e8dfc8;
+  --text2:  #9a8a6a;
+  --text3:  #4a3f2e;
+  --bg:     #0a0704;
+  --glass:  rgba(18,12,6,.8);
+  --glass2: rgba(10,7,3,.9);
+  --gb:     rgba(184,134,11,.2);
+  --sep:    rgba(184,134,11,.1);
+  --inp:    rgba(6,4,2,.75);
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -37,62 +37,55 @@ body {
   background-color: var(--bg);
   background-image:
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E"),
-    radial-gradient(ellipse 80% 60% at 0% 0%,   rgba(120,70,10,.6) 0%, transparent 55%),
-    radial-gradient(ellipse 60% 70% at 100% 100%, rgba(90,30,20,.5) 0%, transparent 50%),
-    radial-gradient(ellipse 90% 45% at 50% 5%,  rgba(30,60,80,.2) 0%, transparent 50%);
+    radial-gradient(ellipse 80% 60% at 0% 0%,    rgba(20,40,80,.55) 0%, transparent 55%),
+    radial-gradient(ellipse 60% 70% at 100% 100%, rgba(90,30,20,.45) 0%, transparent 50%),
+    radial-gradient(ellipse 90% 45% at 50% 5%,   rgba(10,30,60,.3)  0%, transparent 50%);
   overflow-x: hidden;
 }
-
 body::after {
-  content: '';
-  position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 0;
   background: radial-gradient(ellipse 130% 100% at 50% 50%, transparent 35%, rgba(5,3,1,.75) 100%);
 }
 
 /* ── HEADER ── */
 header {
-  position: relative; z-index: 10;
-  padding: 0 32px;
-  background: linear-gradient(180deg, rgba(20,13,6,.92) 0%, rgba(10,7,3,.75) 100%);
+  position: relative; z-index: 10; padding: 0 32px;
+  background: linear-gradient(180deg, rgba(15,20,35,.95) 0%, rgba(10,7,3,.8) 100%);
   backdrop-filter: blur(32px); -webkit-backdrop-filter: blur(32px);
-  border-bottom: 1px solid rgba(184,134,11,.14);
+  border-bottom: 1px solid rgba(72,112,168,.2);
 }
 header::after {
-  content: '';
-  position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
-  background: linear-gradient(90deg, transparent 0%, rgba(184,134,11,.3) 20%, var(--gold) 50%, rgba(184,134,11,.3) 80%, transparent 100%);
+  content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent 0%, rgba(72,112,168,.4) 20%, var(--bluel) 50%, rgba(72,112,168,.4) 80%, transparent 100%);
 }
 .h-inner {
-  max-width: 900px; margin: 0 auto; padding: 14px 0;
+  max-width: 1100px; margin: 0 auto; padding: 14px 0;
   display: flex; align-items: center; gap: 14px;
 }
 .h-back {
-  font-family: 'Inter', sans-serif;
-  font-size: 11px; color: var(--text2); text-decoration: none; letter-spacing: .04em;
-  transition: color .15s; white-space: nowrap; display: flex; align-items: center; gap: 5px;
+  font-family: 'Inter', sans-serif; font-size: 11px; color: var(--text2);
+  text-decoration: none; letter-spacing: .04em; transition: color .15s;
+  white-space: nowrap; display: flex; align-items: center; gap: 5px;
 }
-.h-back:hover { color: var(--goldl); }
+.h-back:hover { color: var(--bluel); }
 .h-back::before { content: '←'; font-size: 13px; }
 .h-sep { color: var(--text3); }
 .h-ico { font-size: 28px; filter: drop-shadow(0 0 16px rgba(72,112,168,.5)); flex-shrink: 0; }
 .h-title {
-  font-family: 'UnifrakturMaguntia', cursive;
-  font-size: 22px; line-height: 1.1;
+  font-family: 'UnifrakturMaguntia', cursive; font-size: 22px; line-height: 1.1;
   color: var(--bluel);
-  text-shadow: 0 0 30px rgba(72,112,168,.4), 0 2px 4px rgba(0,0,0,.8);
+  text-shadow: 0 0 30px rgba(72,112,168,.45), 0 2px 4px rgba(0,0,0,.8);
 }
 .h-sub { font-family: 'Crimson Pro', serif; font-size: 12px; color: var(--text2); margin-top: 2px; font-style: italic; }
-.h-right-orn {
-  margin-left: auto; display: flex; align-items: center; gap: 8px; flex-shrink: 0;
-}
-.h-orn-line { width: 50px; height: 1px; background: linear-gradient(90deg, transparent, rgba(72,112,168,.3)); }
-.h-orn-diamond { width: 6px; height: 6px; background: rgba(72,112,168,.5); transform: rotate(45deg); }
+.h-right-orn { margin-left: auto; display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+.h-orn-line { width: 50px; height: 1px; background: linear-gradient(90deg, transparent, rgba(72,112,168,.35)); }
+.h-orn-diamond { width: 6px; height: 6px; background: rgba(72,112,168,.55); transform: rotate(45deg); }
 
 /* ── PAGE ── */
 .page {
   position: relative; z-index: 5;
-  max-width: 900px; margin: 0 auto; padding: 22px 28px 80px;
-  display: grid; grid-template-columns: 320px 1fr; gap: 20px; align-items: start;
+  max-width: 1100px; margin: 0 auto; padding: 22px 28px 80px;
+  display: grid; grid-template-columns: 360px 1fr; gap: 20px; align-items: start;
 }
 
 /* ── CARD ── */
@@ -118,32 +111,54 @@ header::after {
   letter-spacing: 2.5px; text-transform: uppercase; color: rgba(212,168,67,.7);
   position: relative; z-index: 2;
 }
-.card-title-orn {
-  width: 14px; height: 14px; position: relative; flex-shrink: 0;
-}
-.card-title-orn::before, .card-title-orn::after {
+.card-title-ornament { width: 14px; height: 14px; position: relative; flex-shrink: 0; }
+.card-title-ornament::before, .card-title-ornament::after {
   content: ''; position: absolute; background: rgba(212,168,67,.45);
 }
-.card-title-orn::before { width: 14px; height: 1px; top: 6px; left: 0; }
-.card-title-orn::after  { width: 1px; height: 14px; left: 6px; top: 0; }
+.card-title-ornament::before { width: 14px; height: 1px; top: 6px; left: 0; }
+.card-title-ornament::after  { width: 1px; height: 14px; left: 6px; top: 0; }
+
+/* ── TOOLTIP ── */
+.tip {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 16px; height: 16px; border-radius: 50%;
+  background: rgba(184,134,11,.15); border: 1px solid rgba(184,134,11,.3);
+  font-family: 'Inter', sans-serif; font-size: 9px; font-weight: 700;
+  color: var(--amber); font-style: normal; letter-spacing: 0; text-transform: none;
+  cursor: help; position: relative; flex-shrink: 0; line-height: 1;
+  transition: background .15s, border-color .15s;
+}
+.tip:hover { background: rgba(184,134,11,.25); border-color: rgba(184,134,11,.5); }
+.tip::after {
+  content: attr(data-tip); position: absolute; bottom: calc(100% + 8px); left: 50%;
+  transform: translateX(-50%);
+  background: rgba(8,5,2,.97); border: 1px solid rgba(184,134,11,.3); border-radius: 8px;
+  padding: 10px 14px; font-size: 12px; line-height: 1.6; color: var(--text);
+  white-space: pre-wrap; min-width: 210px; max-width: 270px;
+  pointer-events: none; opacity: 0; transition: opacity .15s; z-index: 200;
+  box-shadow: 0 10px 30px rgba(0,0,0,.7); font-family: 'Crimson Pro', serif;
+}
+.tip:hover::after { opacity: 1; }
 
 /* ── INPUT ROW ── */
 .irow {
-  display: flex; align-items: center; gap: 10px;
-  padding: 12px 18px; border-bottom: 1px solid var(--sep);
-  position: relative; z-index: 2;
+  display: grid; grid-template-columns: 34px 1fr 20px 88px 60px;
+  align-items: center; gap: 10px;
+  padding: 11px 18px; border-bottom: 1px solid var(--sep);
+  position: relative; z-index: 2; transition: background .15s;
 }
 .irow:last-child { border-bottom: none; }
-.irow-ico {
-  width: 34px; height: 34px; flex-shrink: 0;
-  display: flex; align-items: center; justify-content: center;
+.irow:hover { background: rgba(184,134,11,.025); }
+.ico-pill {
+  width: 34px; height: 34px; display: flex; align-items: center; justify-content: center;
   background: rgba(0,0,0,.45); border: 1px solid var(--sep); border-radius: 8px;
-  font-size: 16px;
+  font-size: 15px; box-shadow: 0 2px 6px rgba(0,0,0,.4) inset;
 }
-.irow-lbl { flex: 1; font-size: 14px; font-weight: 600; color: var(--text); }
+.ilbl { font-size: 14px; font-weight: 600; color: var(--text); line-height: 1.3; }
+.ilbl small { display: block; font-size: 11px; color: var(--text3); font-weight: 400; margin-top: 2px; font-style: italic; }
 
 input[type=number] {
-  width: 80px; background: var(--inp); border: 1px solid rgba(184,134,11,.28);
+  width: 84px; background: var(--inp); border: 1px solid rgba(184,134,11,.28);
   border-radius: 8px; color: var(--goldl); padding: 7px 10px;
   font-size: 18px; font-family: 'Inter', sans-serif; font-weight: 600;
   text-align: right; outline: none; -moz-appearance: textfield;
@@ -159,87 +174,80 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; }
 .unit { font-size: 12px; color: var(--text2); font-family: 'Inter', sans-serif; white-space: nowrap; }
 
 /* ── COPY ROWS ── */
-.copies-body { position: relative; z-index: 2; }
-
 .copy-row {
-  display: grid;
-  grid-template-columns: 42px 1fr 60px 72px 32px;
-  align-items: center; gap: 8px;
+  display: grid; grid-template-columns: 34px 60px 14px 90px 28px;
+  align-items: center; gap: 10px;
   padding: 10px 18px; border-bottom: 1px solid var(--sep);
-  transition: background .15s;
+  position: relative; z-index: 2; transition: background .15s;
 }
-.copy-row:hover { background: rgba(184,134,11,.02); }
 .copy-row:last-child { border-bottom: none; }
+.copy-row:hover { background: rgba(72,112,168,.03); }
+.copy-row.is-mine { background: rgba(72,112,168,.06); }
+.copy-row.is-mine::before {
+  content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+  background: linear-gradient(180deg, rgba(128,170,216,.8), rgba(128,170,216,.2));
+  pointer-events: none;
+}
 
-.copy-num {
-  width: 36px; height: 36px; border-radius: 50%;
+.copy-num-chip {
+  width: 34px; height: 34px; border-radius: 50%; flex-shrink: 0;
   display: flex; align-items: center; justify-content: center;
   font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 700;
-  background: rgba(72,112,168,.12); border: 1px solid rgba(72,112,168,.3);
-  color: var(--bluel); flex-shrink: 0;
-  transition: background .2s, border-color .2s, color .2s;
+  background: rgba(0,0,0,.4); border: 1px solid rgba(255,255,255,.08); color: var(--text3);
+  transition: all .2s;
 }
-.copy-row.is-mine .copy-num {
-  background: rgba(72,112,168,.25); border-color: rgba(72,112,168,.6);
+.copy-row.is-mine .copy-num-chip {
+  background: rgba(72,112,168,.22); border-color: rgba(72,112,168,.55); color: var(--bluel);
   box-shadow: 0 0 10px rgba(72,112,168,.2);
 }
 
-.copy-pct-wrap { display: flex; align-items: center; gap: 6px; }
-.copy-pct-wrap input[type=number] { width: 60px; font-size: 16px; padding: 6px 8px; }
+.copy-pct-input { width: 60px !important; font-size: 16px !important; padding: 6px 8px !important; }
 .copy-pct-sign { font-size: 13px; color: var(--text3); font-family: 'Inter', sans-serif; }
 
 .copy-mine-btn {
-  padding: 5px 8px; border-radius: 6px; cursor: pointer;
+  padding: 5px 8px; border-radius: 6px; cursor: pointer; white-space: nowrap;
   font-family: 'Inter', sans-serif; font-size: 9px; font-weight: 600;
   letter-spacing: .5px; text-transform: uppercase;
-  background: rgba(72,112,168,.08); border: 1px solid rgba(72,112,168,.2);
-  color: rgba(128,170,216,.5); transition: all .2s; white-space: nowrap;
+  background: transparent; border: 1px solid rgba(72,112,168,.2);
+  color: rgba(128,170,216,.4); transition: all .2s; text-align: center;
 }
-.copy-mine-btn:hover { background: rgba(72,112,168,.15); border-color: rgba(72,112,168,.4); color: var(--bluel); }
-.copy-row.is-mine .copy-mine-btn {
-  background: rgba(72,112,168,.2); border-color: rgba(72,112,168,.55);
-  color: var(--bluel); box-shadow: 0 0 8px rgba(72,112,168,.15);
-}
+.copy-mine-btn:hover { border-color: rgba(72,112,168,.5); color: var(--bluel); background: rgba(72,112,168,.1); }
+.copy-row.is-mine .copy-mine-btn { background: rgba(72,112,168,.18); border-color: rgba(72,112,168,.55); color: var(--bluel); }
 
 .copy-rm-btn {
-  width: 28px; height: 28px; border-radius: 6px; cursor: pointer;
+  width: 26px; height: 26px; border-radius: 6px; cursor: pointer; justify-self: end;
   display: flex; align-items: center; justify-content: center;
-  background: rgba(139,58,42,.08); border: 1px solid rgba(139,58,42,.15);
-  color: rgba(200,96,64,.4); font-size: 16px; line-height: 1;
-  transition: all .15s;
+  background: transparent; border: 1px solid transparent;
+  color: var(--text3); font-size: 15px; line-height: 1; transition: all .15s;
 }
 .copy-rm-btn:hover { background: rgba(139,58,42,.2); border-color: rgba(139,58,42,.4); color: var(--emberl); }
 .copy-rm-btn.hidden { visibility: hidden; pointer-events: none; }
 
 .add-copy-btn {
-  width: 100%; padding: 11px 18px;
-  background: none; border: none; border-top: 1px solid var(--sep);
-  cursor: pointer; text-align: left;
+  width: 100%; padding: 10px 18px; background: none; border: none;
+  border-top: 1px solid var(--sep); cursor: pointer; text-align: left;
   font-family: 'Inter', sans-serif; font-size: 10px; font-weight: 600;
   letter-spacing: 2px; text-transform: uppercase; color: var(--text3);
   display: flex; align-items: center; gap: 8px;
-  transition: color .15s, background .15s;
-  position: relative; z-index: 2;
+  transition: color .15s, background .15s; position: relative; z-index: 2;
 }
-.add-copy-btn::before { content: '+'; font-size: 16px; line-height: 1; }
+.add-copy-btn::before { content: '+'; font-size: 15px; color: inherit; }
 .add-copy-btn:hover { color: var(--goldl); background: rgba(184,134,11,.03); }
 
-/* ── LEFT COLUMN ── */
+/* ── COLS ── */
 .lcol { display: flex; flex-direction: column; gap: 16px; }
-
-/* ── RIGHT COLUMN ── */
 .rcol { display: flex; flex-direction: column; gap: 16px; }
 
 /* ── RESULT CARD ── */
 .res-card {
   background: var(--glass2);
   backdrop-filter: blur(32px); -webkit-backdrop-filter: blur(32px);
-  border: 1px solid rgba(72,112,168,.35); border-radius: 14px; overflow: hidden; position: relative;
-  box-shadow: 0 1px 0 rgba(128,170,216,.12) inset, 0 16px 56px rgba(0,0,0,.7), 0 0 60px rgba(72,112,168,.06);
+  border: 1px solid rgba(72,112,168,.3); border-radius: 14px; overflow: hidden; position: relative;
+  box-shadow: 0 1px 0 rgba(128,170,216,.1) inset, 0 16px 56px rgba(0,0,0,.7), 0 0 60px rgba(72,112,168,.06);
 }
 .res-card::before {
   content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
-  background: linear-gradient(90deg, transparent, rgba(72,112,168,.6) 25%, var(--bluel) 50%, rgba(72,112,168,.6) 75%, transparent 100%);
+  background: linear-gradient(90deg, transparent, rgba(72,112,168,.5) 25%, var(--bluel) 50%, rgba(72,112,168,.5) 75%, transparent);
   pointer-events: none; z-index: 2;
 }
 .res-card::after {
@@ -247,170 +255,157 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; }
   border: 1px solid rgba(128,170,216,.07); pointer-events: none; z-index: 2;
 }
 
-.res-top {
-  display: grid; grid-template-columns: 180px 1fr;
-  position: relative; z-index: 3;
-}
+.res-top { display: grid; grid-template-columns: 200px 1fr; position: relative; z-index: 3; }
 .res-main {
   display: flex; flex-direction: column; align-items: center; justify-content: center;
-  padding: 22px 16px; gap: 4px; border-right: 1px solid var(--sep);
+  padding: 24px 16px; gap: 6px; border-right: 1px solid var(--sep);
   background: linear-gradient(135deg, rgba(72,112,168,.06), rgba(0,0,0,.1));
 }
-.rlbl {
-  font-family: 'Inter', sans-serif; font-size: 11px; letter-spacing: 3px;
-  text-transform: uppercase; color: var(--text2); margin-bottom: 2px;
-}
+.rlbl { font-family: 'Inter', sans-serif; font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--text2); margin-bottom: 2px; }
 
-@keyframes breathe-blue {
-  0%, 100% { text-shadow: 0 0 20px rgba(72,112,168,.25); }
-  50%       { text-shadow: 0 0 40px rgba(72,112,168,.55); }
-}
-@keyframes breathe-green {
-  0%, 100% { text-shadow: 0 0 20px rgba(120,200,80,.2); }
-  50%       { text-shadow: 0 0 40px rgba(120,200,80,.45); }
-}
+@keyframes breathe-ember { 0%,100% { text-shadow: 0 0 20px rgba(139,58,42,.2); } 50% { text-shadow: 0 0 40px rgba(200,96,64,.5); } }
+@keyframes breathe-green { 0%,100% { text-shadow: 0 0 20px rgba(90,122,58,.2); } 50% { text-shadow: 0 0 40px rgba(138,184,96,.5); } }
 
-.rnum {
-  font-family: 'UnifrakturMaguntia', cursive;
-  font-size: 56px; font-weight: 400; line-height: 1; letter-spacing: .02em;
-}
-.rnum.danger { color: var(--emberl); animation: breathe-blue 3s ease-in-out infinite; }
+.rnum { font-family: 'UnifrakturMaguntia', cursive; font-size: 56px; font-weight: 400; line-height: 1; letter-spacing: .02em; }
 .rnum.safe   { color: var(--sagel);  animation: breathe-green 3s ease-in-out infinite; }
+.rnum.danger { color: var(--emberl); animation: breathe-ember 3s ease-in-out infinite; }
+.rnum.idle   { color: var(--text3); }
 .rtag { font-size: 12px; color: var(--text2); font-style: italic; font-family: 'Crimson Pro', serif; }
 
 .res-stats { display: grid; grid-template-columns: 1fr 1fr 1fr; position: relative; z-index: 3; }
-.st {
-  padding: 12px 14px; border-right: 1px solid var(--sep);
-}
+.st { padding: 13px 16px; border-bottom: 1px solid var(--sep); border-right: 1px solid var(--sep); transition: background .15s; }
+.st:hover { background: rgba(72,112,168,.02); }
 .st:last-child { border-right: none; }
-.slbl { font-family: 'Inter', sans-serif; font-size: 11px; color: var(--text3); margin-bottom: 3px; }
+.slbl { font-family: 'Inter', sans-serif; font-size: 11px; color: var(--text3); margin-bottom: 4px; letter-spacing: .5px; }
 .sval { font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 600; color: var(--text); }
 .sval.g { color: var(--sagel); }
 .sval.r { color: var(--emberl); }
 .sval.b { color: var(--bluel); }
 
 /* ── COPIES TABLE ── */
-.copies-result {
-  border-top: 1px solid var(--sep);
+.ctable-head {
+  display: grid; grid-template-columns: 52px 1fr 100px;
+  padding: 8px 18px; gap: 10px;
+  background: rgba(0,0,0,.25); border-top: 1px solid var(--sep); border-bottom: 1px solid var(--sep);
   position: relative; z-index: 3;
 }
-.copies-result-head {
-  display: grid; grid-template-columns: 52px 1fr 90px;
-  padding: 8px 18px; gap: 10px;
-  background: rgba(0,0,0,.2); border-bottom: 1px solid var(--sep);
-}
-.copies-result-head span {
-  font-family: 'Inter', sans-serif; font-size: 9px; font-weight: 600;
-  letter-spacing: 2px; text-transform: uppercase; color: var(--text3);
-}
+.ctable-head span { font-family: 'Inter', sans-serif; font-size: 9px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--text3); }
 
-.cr-row {
-  display: grid; grid-template-columns: 52px 1fr 90px;
-  align-items: center; padding: 11px 18px; gap: 10px;
-  border-bottom: 1px solid rgba(184,134,11,.05);
-  transition: background .15s;
+.ct-row {
+  display: grid; grid-template-columns: 52px 1fr 100px;
+  align-items: center; padding: 12px 18px; gap: 10px;
+  border-bottom: 1px solid rgba(72,112,168,.06);
+  position: relative; z-index: 3; transition: background .15s;
 }
-.cr-row:last-child { border-bottom: none; }
-.cr-row.is-mine { background: rgba(72,112,168,.05); }
-.cr-row.is-safest { background: rgba(90,122,58,.04); }
-.cr-row.is-mine.is-safest { background: rgba(72,112,168,.06); }
+.ct-row:last-child { border-bottom: none; }
+.ct-row.is-mine { background: rgba(72,112,168,.05); }
+.ct-row.is-mine::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: linear-gradient(180deg, rgba(128,170,216,.7), rgba(128,170,216,.15)); }
+.ct-row.is-safest { background: rgba(90,122,58,.04); }
 
-.cr-num {
+.ct-chip {
   width: 34px; height: 34px; border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
   font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 700;
-  background: rgba(0,0,0,.3); border: 1px solid rgba(255,255,255,.06); color: var(--text2);
+  background: rgba(0,0,0,.35); border: 1px solid rgba(255,255,255,.07); color: var(--text3);
 }
-.cr-row.is-mine .cr-num {
-  background: rgba(72,112,168,.2); border-color: rgba(72,112,168,.5); color: var(--bluel);
-  box-shadow: 0 0 8px rgba(72,112,168,.15);
-}
-.cr-row.is-safest .cr-num {
-  border-color: rgba(90,122,58,.4); color: var(--sagel);
-}
-.cr-row.is-mine.is-safest .cr-num {
-  background: rgba(72,112,168,.2); border-color: rgba(72,112,168,.5); color: var(--bluel);
-}
+.ct-row.is-mine .ct-chip { background: rgba(72,112,168,.2); border-color: rgba(72,112,168,.5); color: var(--bluel); box-shadow: 0 0 8px rgba(72,112,168,.15); }
+.ct-row.is-safest:not(.is-mine) .ct-chip { border-color: rgba(90,122,58,.4); color: var(--sagel); }
 
-.cr-info { display: flex; flex-direction: column; gap: 3px; }
-.cr-players { font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 600; color: var(--text); }
-.cr-players span { font-size: 11px; color: var(--text3); font-weight: 400; margin-left: 4px; }
-.cr-tag { display: flex; gap: 6px; flex-wrap: wrap; }
-.cr-badge {
-  display: inline-flex; align-items: center; gap: 4px;
-  font-family: 'Inter', sans-serif; font-size: 9px; font-weight: 600;
-  letter-spacing: .5px; text-transform: uppercase;
-  padding: 2px 7px; border-radius: 4px;
-}
-.badge-mine    { background: rgba(72,112,168,.15); border: 1px solid rgba(72,112,168,.35); color: var(--bluel); }
-.badge-safest  { background: rgba(90,122,58,.12);  border: 1px solid rgba(90,122,58,.3);  color: var(--sagel); }
-.badge-danger  { background: rgba(139,58,42,.12);  border: 1px solid rgba(139,58,42,.3);  color: var(--emberl); }
-.badge-empty   { background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.08); color: var(--text3); }
+.ct-info { display: flex; flex-direction: column; gap: 4px; }
+.ct-count { font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 600; color: var(--text); display: flex; align-items: baseline; gap: 5px; }
+.ct-count span { font-size: 11px; color: var(--text3); font-weight: 400; }
+.ct-badges { display: flex; gap: 5px; flex-wrap: wrap; }
+.cbadge { display: inline-flex; align-items: center; font-family: 'Inter', sans-serif; font-size: 9px; font-weight: 600; letter-spacing: .5px; text-transform: uppercase; padding: 2px 7px; border-radius: 4px; }
+.cbadge-mine   { background: rgba(72,112,168,.15); border: 1px solid rgba(72,112,168,.35); color: var(--bluel); }
+.cbadge-safest { background: rgba(90,122,58,.12);  border: 1px solid rgba(90,122,58,.3);  color: var(--sagel); }
+.cbadge-empty  { background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.08); color: var(--text3); }
 
-.cr-bar-wrap { display: flex; align-items: center; gap: 8px; }
-.cr-bar {
-  flex: 1; height: 6px; border-radius: 3px;
-  background: rgba(255,255,255,.05); overflow: hidden;
-}
-.cr-bar-fill {
-  height: 100%; border-radius: 3px;
-  transition: width .3s ease;
-}
-.cr-bar-fill.blue  { background: linear-gradient(90deg, rgba(72,112,168,.6), var(--bluel)); }
-.cr-bar-fill.green { background: linear-gradient(90deg, rgba(90,122,58,.6), var(--sagel)); }
-.cr-bar-fill.red   { background: linear-gradient(90deg, rgba(139,58,42,.6), var(--emberl)); }
-.cr-bar-fill.gray  { background: rgba(255,255,255,.1); }
-.cr-pct-lbl { font-family: 'Inter', sans-serif; font-size: 11px; color: var(--text3); white-space: nowrap; min-width: 28px; text-align: right; }
+.ct-bar-col { display: flex; align-items: center; gap: 8px; }
+.ct-bar { flex: 1; height: 5px; border-radius: 3px; background: rgba(255,255,255,.06); overflow: hidden; }
+.ct-bar-fill { height: 100%; border-radius: 3px; transition: width .35s ease; }
+.ct-bar-fill.blue  { background: linear-gradient(90deg, rgba(72,112,168,.5), var(--bluel)); }
+.ct-bar-fill.green { background: linear-gradient(90deg, rgba(90,122,58,.5), var(--sagel)); }
+.ct-bar-fill.red   { background: linear-gradient(90deg, rgba(139,58,42,.5), var(--emberl)); }
+.ct-bar-fill.gray  { background: rgba(255,255,255,.08); }
+.ct-pct { font-family: 'Inter', sans-serif; font-size: 11px; color: var(--text3); white-space: nowrap; min-width: 26px; text-align: right; }
 
-/* ── IDLE / VERDICT ── */
-.idle-msg {
-  padding: 22px 20px; font-size: 14px; color: var(--text3);
-  font-style: italic; border-top: 1px solid var(--sep);
-  font-family: 'Crimson Pro', serif; position: relative; z-index: 3;
-}
+/* ── VERDICT / STRAT ── */
+.verdict-block { padding: 16px 20px; border-top: 1px solid var(--sep); display: flex; flex-direction: column; gap: 7px; position: relative; z-index: 3; }
+.vrow { display: flex; justify-content: space-between; align-items: baseline; gap: 14px; }
+.vkey { font-size: 15px; color: var(--text2); flex-shrink: 0; font-family: 'Crimson Pro', serif; }
+.vval { font-size: 15px; font-weight: 700; color: var(--text); text-align: right; font-family: 'Inter', sans-serif; }
+.vval.g { color: var(--sagel); }
+.vval.r { color: var(--emberl); }
+.vval.b { color: var(--bluel); }
+.vsep { height: 1px; background: var(--sep); margin: 4px 0; position: relative; }
+.vsep::before { content: '◆'; position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); font-size: 7px; color: rgba(184,134,11,.35); background: var(--glass2); padding: 0 4px; }
 
-/* ── RECOMMENDATION ── */
-.rec-block {
-  border-top: 2px solid rgba(72,112,168,.18);
-  background: rgba(0,0,0,.2);
-  padding: 14px 18px;
-  position: relative; z-index: 3;
-  display: flex; flex-direction: column; gap: 8px;
+.strat-block { border-top: 2px solid rgba(72,112,168,.18); background: rgba(0,0,0,.2); padding: 16px 20px; position: relative; z-index: 3; }
+.strat-title { font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase; color: var(--bluel); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+.strat-title::before { content: ''; display: block; width: 3px; height: 15px; background: linear-gradient(180deg, var(--bluel), rgba(72,112,168,.4)); border-radius: 2px; }
+.sline { font-size: 14px; color: var(--text2); line-height: 1.65; padding: 8px 0; border-bottom: 1px solid rgba(72,112,168,.07); font-family: 'Crimson Pro', serif; }
+.sline:last-child { border-bottom: none; padding-bottom: 0; }
+.sg { color: var(--sagel); font-weight: 700; }
+.sr { color: var(--emberl); font-weight: 700; }
+.sb { color: var(--bluel); font-weight: 700; }
+
+.idle-msg { padding: 22px 20px; font-size: 14px; color: var(--text3); font-style: italic; border-top: 1px solid var(--sep); font-family: 'Crimson Pro', serif; position: relative; z-index: 3; }
+
+/* ── GUIDE ── */
+.guide-section { grid-column: 1 / -1; margin-top: 8px; }
+.guide-card {
+  background: var(--glass);
+  backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+  border: 1px solid var(--gb); border-radius: 14px; overflow: hidden;
+  box-shadow: 0 1px 0 rgba(220,185,90,.1) inset, 0 10px 40px rgba(0,0,0,.55);
+  position: relative;
 }
-.rec-title {
-  font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 600;
-  letter-spacing: 2.5px; text-transform: uppercase; color: var(--bluel); margin-bottom: 4px;
-  display: flex; align-items: center; gap: 8px;
-}
-.rec-title::before {
-  content: ''; display: block; width: 3px; height: 15px;
-  background: linear-gradient(180deg, var(--bluel), rgba(72,112,168,.4));
-  border-radius: 2px;
-}
-.rec-line {
-  font-size: 14px; color: var(--text2); line-height: 1.6;
-  font-family: 'Crimson Pro', serif;
-}
-.rec-line b { color: var(--text); }
-.rec-line .g { color: var(--sagel); font-weight: 700; }
-.rec-line .r { color: var(--emberl); font-weight: 700; }
-.rec-line .b { color: var(--bluel); font-weight: 700; }
+.guide-card::before { content: ''; position: absolute; inset: 2px; border-radius: 12px; border: 1px solid rgba(212,168,67,.07); pointer-events: none; z-index: 1; }
+
+.tab-bar { display: flex; border-bottom: 1px solid var(--sep); background: rgba(0,0,0,.25); position: relative; z-index: 2; }
+.tab-btn { flex: 1; text-align: center; padding: 11px 18px; font-family: 'Inter', sans-serif; font-size: 10px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--text3); background: none; border: none; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; transition: color .2s, border-color .2s, background .2s; }
+.tab-btn:hover { color: var(--text2); background: rgba(184,134,11,.04); }
+.tab-btn.active { color: var(--goldl); border-bottom-color: var(--gold); }
+.tab-pane { display: none; }
+.tab-pane.active { display: block; }
+
+.codex-chapter { display: flex; align-items: center; gap: 12px; padding: 12px 18px; border-bottom: 1px solid var(--sep); background: linear-gradient(90deg, rgba(184,134,11,.08), transparent); }
+.codex-chapter-icon { width: 22px; height: 22px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(184,134,11,.35); border-radius: 50%; background: rgba(184,134,11,.1); font-family: 'Inter', sans-serif; font-size: 10px; font-weight: 700; color: var(--gold); }
+.codex-chapter-title { font-family: 'Crimson Pro', serif; font-size: 12px; font-weight: 700; color: rgba(212,168,67,.8); letter-spacing: .05em; text-transform: uppercase; }
+.codex-chapter-rule { flex: 1; height: 1px; background: linear-gradient(90deg, rgba(184,134,11,.2), transparent); }
+
+.guide-body { padding: 16px 18px; display: flex; flex-direction: column; gap: 12px; position: relative; z-index: 2; }
+.guide-step { display: flex; gap: 12px; }
+.guide-num { font-family: 'Inter', sans-serif; font-size: 10px; font-weight: 700; background: rgba(184,134,11,.15); border: 1px solid rgba(184,134,11,.3); color: var(--goldl); border-radius: 50%; width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+.guide-step-text { color: var(--text2); font-family: 'Crimson Pro', serif; font-size: 15px; line-height: 1.55; }
+.guide-step-text b { color: var(--text); font-weight: 700; }
+
+.ftable { width: 100%; border-collapse: collapse; font-size: 15px; }
+.ftable th { text-align: left; padding: 8px 14px; font-family: 'Inter', sans-serif; font-size: 10px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text3); border-bottom: 1px solid var(--sep); background: rgba(0,0,0,.1); }
+.ftable td { padding: 10px 14px; border-bottom: 1px solid rgba(184,134,11,.06); color: var(--text2); font-family: 'Crimson Pro', serif; vertical-align: top; }
+.ftable tr:last-child td { border-bottom: none; }
+.ftable tr:hover td { background: rgba(184,134,11,.02); }
+.ftable .fname { color: var(--text); font-weight: 600; }
+.ftable .fcode { font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 600; color: var(--bluel); background: rgba(72,112,168,.1); border: 1px solid rgba(72,112,168,.2); border-radius: 5px; padding: 2px 8px; display: inline-block; white-space: nowrap; }
+.ftable .fval { color: var(--goldl); font-weight: 700; font-family: 'Inter', sans-serif; font-size: 13px; }
+.formula-note { padding: 12px 18px; font-size: 13px; color: var(--text3); font-style: italic; border-top: 1px solid var(--sep); font-family: 'Crimson Pro', serif; position: relative; z-index: 2; }
 
 /* ── FOOTER ── */
-.page-footer {
-  position: relative; z-index: 5;
-  max-width: 900px; margin: 0 auto; padding: 0 28px 60px; text-align: center;
-}
-.footer-text { font-family: 'Crimson Pro', serif; font-size: 15px; color: var(--text3); font-style: italic; }
+.page-footer { position: relative; z-index: 5; max-width: 1100px; margin: 0 auto; padding: 0 28px 60px; text-align: center; }
+.footer-text { font-family: 'Crimson Pro', serif; font-size: 16px; color: var(--text3); font-style: italic; letter-spacing: .03em; }
 
 /* ── RESPONSIVE ── */
-@media (max-width: 680px) {
+@media (max-width: 740px) {
   .page { grid-template-columns: 1fr; padding: 16px 14px 60px; }
   header { padding: 0 14px; }
   .h-right-orn { display: none; }
+  .h-title { font-size: 17px; }
   .res-top { grid-template-columns: 1fr; }
   .res-main { border-right: none; border-bottom: 1px solid var(--sep); }
-  .copy-row { grid-template-columns: 36px 1fr 54px 66px 28px; gap: 6px; padding: 9px 14px; }
+  .irow { grid-template-columns: 34px 1fr 20px 72px auto; gap: 8px; padding: 9px 14px; }
+  input[type=number] { width: 72px; font-size: 16px; padding: 6px 8px; }
+  .copy-row { grid-template-columns: 34px 54px 12px 80px 24px; gap: 7px; padding: 9px 14px; }
+  .copy-pct-input { width: 50px !important; }
 }
 </style>
 </head>
@@ -422,8 +417,8 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; }
     <span class="h-sep">·</span>
     <div class="h-ico">🗺️</div>
     <div>
-      <div class="h-title">Калькулятор локации</div>
-      <div class="h-sub">Распределение игроков по копиям · Оценка угрозы</div>
+      <div class="h-title">Загруженность копий</div>
+      <div class="h-sub">Оцени угрозу перед фармом · Найди безопасную копию</div>
     </div>
     <div class="h-right-orn">
       <div class="h-orn-line"></div>
@@ -438,18 +433,22 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; }
   <div class="lcol">
 
     <div class="card">
-      <div class="card-title"><div class="card-title-orn"></div>Моя раса</div>
+      <div class="card-title"><div class="card-title-ornament"></div>Исходные данные</div>
       <div class="irow">
-        <div class="irow-ico">👥</div>
-        <div class="irow-lbl">Игроков моей расы</div>
-        <input type="number" id="my-race" value="1" min="0" oninput="calc()">
-        <span class="unit">игр.</span>
+        <div class="ico-pill">👥</div>
+        <div class="ilbl">
+          Игроков моей расы
+          <small>Число внизу списка игроков</small>
+        </div>
+        <span class="tip" data-tip="Открой список игроков в локации.&#10;Внизу есть иконка с цифрой — это&#10;суммарное число игроков твоей расы&#10;во всех копиях. Введи это число.">?</span>
+        <input type="number" id="my-race" value="0" min="0" oninput="calc()">
+        <span class="unit">игроков</span>
       </div>
     </div>
 
     <div class="card">
-      <div class="card-title"><div class="card-title-orn"></div>Копии локации</div>
-      <div class="copies-body" id="copies-body"></div>
+      <div class="card-title"><div class="card-title-ornament"></div>Копии локации</div>
+      <div id="copies-body"></div>
       <button class="add-copy-btn" onclick="addCopy()">Добавить копию</button>
     </div>
 
@@ -459,11 +458,12 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; }
   <div class="rcol">
 
     <div class="res-card">
+
       <div class="res-top">
         <div class="res-main">
           <div class="rlbl">Врагов в локации</div>
-          <div class="rnum safe" id="res-num">0</div>
-          <div class="rtag" id="res-tag">нет угрозы</div>
+          <div class="rnum idle" id="res-num">—</div>
+          <div class="rtag" id="res-tag">введи данные</div>
         </div>
         <div class="res-stats">
           <div class="st">
@@ -481,19 +481,100 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; }
         </div>
       </div>
 
-      <div class="copies-result" id="copies-result" style="display:none">
-        <div class="copies-result-head">
+      <div id="copies-table" style="display:none">
+        <div class="ctable-head">
           <span>Копия</span>
           <span>Игроков</span>
-          <span>Заполнено</span>
+          <span>% из окна</span>
         </div>
         <div id="copies-rows"></div>
       </div>
 
-      <div id="rec-block"></div>
+      <div id="verdict-block" class="idle-msg">Введи данные из окна «Копии» →</div>
+      <div id="strat-block" style="display:none"></div>
+
     </div>
 
   </div>
+
+  <!-- GUIDE -->
+  <div class="guide-section">
+    <div class="guide-card">
+
+      <div class="tab-bar">
+        <button class="tab-btn active" onclick="switchTab('instr', this)">Инструкция</button>
+        <button class="tab-btn" onclick="switchTab('formulas', this)">Формулы</button>
+      </div>
+
+      <div id="tab-instr" class="tab-pane active">
+        <div class="codex-chapter">
+          <div class="codex-chapter-icon">I</div>
+          <div class="codex-chapter-title">Как пользоваться</div>
+          <div class="codex-chapter-rule"></div>
+        </div>
+        <div class="guide-body">
+          <div class="guide-step">
+            <div class="guide-num">1</div>
+            <div class="guide-step-text">Зайди в локацию и открой <b>список игроков</b>. Внизу будет иконка с цифрой — это число игроков твоей расы во всех копиях сразу. Введи его в поле «Игроков моей расы».</div>
+          </div>
+          <div class="guide-step">
+            <div class="guide-num">2</div>
+            <div class="guide-step-text">Открой окно <b>«Копии»</b>. Для каждой видимой копии введи процент из колонки «Игроков».</div>
+          </div>
+          <div class="guide-step">
+            <div class="guide-num">3</div>
+            <div class="guide-step-text">Нажми <b>«Здесь?»</b> напротив копии, в которой ты сейчас находишься — кнопка станет активной.</div>
+          </div>
+          <div class="guide-step">
+            <div class="guide-num">4</div>
+            <div class="guide-step-text">Калькулятор покажет <b>сколько врагов</b> в локации и сколько игроков в каждой копии. Точное расположение врагов по копиям неизвестно — видна только суммарная картина.</div>
+          </div>
+          <div class="guide-step">
+            <div class="guide-num">5</div>
+            <div class="guide-step-text">Если врагов <b>нет</b> — можно спокойно фармить. Если есть — рекомендуется перейти в наименее населённую копию, чтобы снизить шанс столкновения.</div>
+          </div>
+        </div>
+      </div>
+
+      <div id="tab-formulas" class="tab-pane">
+        <div class="codex-chapter">
+          <div class="codex-chapter-icon">II</div>
+          <div class="codex-chapter-title">Как работает расчёт</div>
+          <div class="codex-chapter-rule"></div>
+        </div>
+        <table class="ftable">
+          <thead>
+            <tr><th>Что считаем</th><th>Формула</th><th>Пример</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="fname">Макс. игроков в копии</span><br><span style="font-size:12px;color:var(--text3)">Константа игры</span></td>
+              <td><span class="fcode">80 игроков</span></td>
+              <td class="fval">80</td>
+            </tr>
+            <tr>
+              <td><span class="fname">Игроков в копии</span><br><span style="font-size:12px;color:var(--text3)">По проценту из окна</span></td>
+              <td><span class="fcode">⌈ % × 80 ÷ 100 ⌉</span></td>
+              <td class="fval">16% → 13 игр.</td>
+            </tr>
+            <tr>
+              <td><span class="fname">Всего в локации</span><br><span style="font-size:12px;color:var(--text3)">Сумма всех копий</span></td>
+              <td><span class="fcode">Σ игроков в копиях</span></td>
+              <td class="fval">13+4+2+4 = 23</td>
+            </tr>
+            <tr>
+              <td><span class="fname">Врагов</span><br><span style="font-size:12px;color:var(--text3)">Чужая раса не видна</span></td>
+              <td><span class="fcode">Всего − Моя раса</span></td>
+              <td class="fval">23 − 12 = 11</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="formula-note">⌈ x ⌉ — округление вверх (потолок). Формула выведена эмпирически на основе нескольких снимков экрана из игры.</div>
+      </div>
+
+    </div>
+  </div>
+
 </div>
 
 <div class="page-footer">
@@ -501,29 +582,25 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; }
 </div>
 
 <script>
-const MAX_PER_COPY = 80;
-
-// copies[i] = { pct: number, isMine: boolean }
+const MAX = 80;
 let copies = [{ pct: 0, isMine: true }];
 
 function playersFromPct(pct) {
   if (!pct || pct <= 0) return 0;
-  return Math.ceil(pct * MAX_PER_COPY / 100);
+  return Math.ceil(pct * MAX / 100);
 }
 
 function fmt(n) { return Math.round(n).toLocaleString('ru-RU'); }
+function set(id, v) { document.getElementById(id).textContent = v; }
 
 function renderCopyInputs() {
-  const el = document.getElementById('copies-body');
-  el.innerHTML = copies.map((c, i) => `
-    <div class="copy-row${c.isMine ? ' is-mine' : ''}" id="crow-${i}">
-      <div class="copy-num">${i + 1}</div>
-      <div class="copy-pct-wrap">
-        <input type="number" value="${c.pct}" min="0" max="100" placeholder="0"
-               oninput="copies[${i}].pct = Math.max(0,Math.min(100,parseInt(this.value)||0)); calc()">
-        <span class="copy-pct-sign">%</span>
-      </div>
-      <button class="copy-mine-btn" onclick="setMine(${i})">${c.isMine ? 'Вы здесь' : 'Вы здесь?'}</button>
+  document.getElementById('copies-body').innerHTML = copies.map((c, i) => `
+    <div class="copy-row${c.isMine ? ' is-mine' : ''}">
+      <div class="copy-num-chip">${i + 1}</div>
+      <input type="number" class="copy-pct-input" value="${c.pct}" min="0" max="100" placeholder="0"
+             oninput="copies[${i}].pct = Math.min(100, Math.max(0, parseInt(this.value)||0)); calc()">
+      <span class="copy-pct-sign">%</span>
+      <button class="copy-mine-btn" onclick="setMine(${i})">${c.isMine ? 'Здесь ✓' : 'Здесь?'}</button>
       <button class="copy-rm-btn${copies.length <= 1 ? ' hidden' : ''}" onclick="removeCopy(${i})">×</button>
     </div>
   `).join('');
@@ -538,7 +615,7 @@ function addCopy() {
 function removeCopy(i) {
   const wasMine = copies[i].isMine;
   copies.splice(i, 1);
-  if (wasMine && copies.length > 0) copies[0].isMine = true;
+  if (wasMine) copies[0].isMine = true;
   renderCopyInputs();
   calc();
 }
@@ -550,100 +627,125 @@ function setMine(i) {
 }
 
 function calc() {
-  const myRace = Math.max(0, parseInt(document.getElementById('my-race').value) || 0);
+  const myRace  = Math.max(0, parseInt(document.getElementById('my-race').value) || 0);
+  const hasData = copies.some(c => c.pct > 0);
 
   const rows = copies.map((c, i) => ({
-    num: i + 1,
-    pct: c.pct,
-    isMine: c.isMine,
+    num: i + 1, pct: c.pct, isMine: c.isMine,
     total: playersFromPct(c.pct),
   }));
 
   const totalAll = rows.reduce((s, r) => s + r.total, 0);
   const enemies  = Math.max(0, totalAll - myRace);
   const mineRow  = rows.find(r => r.isMine);
-  const minTotal = Math.min(...rows.filter(r => r.total > 0).map(r => r.total));
+  const nonEmpty = rows.filter(r => r.total > 0);
+  const minTotal = nonEmpty.length ? Math.min(...nonEmpty.map(r => r.total)) : 0;
+  const maxTotal = nonEmpty.length ? Math.max(...nonEmpty.map(r => r.total)) : 1;
 
-  // Stats
-  document.getElementById('sv-total').textContent  = fmt(totalAll);
-  document.getElementById('sv-mine').textContent   = fmt(myRace);
-  document.getElementById('sv-copies').textContent = rows.length;
+  set('sv-total',  hasData ? fmt(totalAll) : '—');
+  set('sv-mine',   hasData ? fmt(myRace)   : '—');
+  set('sv-copies', rows.length);
 
-  // Big number
   const numEl = document.getElementById('res-num');
   const tagEl = document.getElementById('res-tag');
-  numEl.textContent = fmt(enemies);
-  numEl.className = 'rnum ' + (enemies === 0 ? 'safe' : 'danger');
-  tagEl.textContent = enemies === 0
-    ? 'нет угрозы'
-    : enemies === 1 ? '1 враг в локации'
-    : `${fmt(enemies)} врага в локации`;
-
-  // Copies result table
-  const crEl = document.getElementById('copies-result');
-  const crRows = document.getElementById('copies-rows');
-
-  if (rows.every(r => r.total === 0)) {
-    crEl.style.display = 'none';
+  if (!hasData) {
+    numEl.textContent = '—'; numEl.className = 'rnum idle';
+    tagEl.textContent = 'введи данные';
   } else {
-    crEl.style.display = 'block';
-    const maxTotal = Math.max(...rows.map(r => r.total));
+    numEl.textContent = fmt(enemies);
+    numEl.className = 'rnum ' + (enemies === 0 ? 'safe' : 'danger');
+    tagEl.textContent = enemies === 0 ? 'угрозы нет'
+      : enemies === 1 ? '1 враг в локации'
+      : `${fmt(enemies)} врага в локации`;
+  }
 
-    crRows.innerHTML = rows.map(r => {
-      const isSafest = r.total === minTotal && r.total > 0;
+  const ctEl = document.getElementById('copies-table');
+  const crEl = document.getElementById('copies-rows');
+  if (!hasData) {
+    ctEl.style.display = 'none';
+  } else {
+    ctEl.style.display = 'block';
+    crEl.innerHTML = rows.map(r => {
+      const isSafest = r.total > 0 && r.total === minTotal;
       const isEmpty  = r.total === 0;
       const fillPct  = maxTotal > 0 ? Math.round(r.total / maxTotal * 100) : 0;
-
-      let barColor = 'blue';
-      if (isEmpty) barColor = 'gray';
-      else if (r.total === maxTotal && maxTotal > 0) barColor = 'red';
-      else if (isSafest) barColor = 'green';
+      let barColor = r.total === maxTotal && !isSafest ? 'red' : isSafest ? 'green' : isEmpty ? 'gray' : 'blue';
 
       const badges = [];
-      if (r.isMine)   badges.push(`<span class="cr-badge badge-mine">Вы здесь</span>`);
-      if (isSafest && !r.isMine)  badges.push(`<span class="cr-badge badge-safest">Безопаснее</span>`);
-      if (isSafest && r.isMine)   badges.push(`<span class="cr-badge badge-safest">✓ Хорошее место</span>`);
-      if (isEmpty)    badges.push(`<span class="cr-badge badge-empty">Пусто</span>`);
+      if (r.isMine)  badges.push(`<span class="cbadge cbadge-mine">Вы здесь</span>`);
+      if (isSafest)  badges.push(`<span class="cbadge cbadge-safest">Меньше всего</span>`);
+      if (isEmpty)   badges.push(`<span class="cbadge cbadge-empty">Пусто</span>`);
 
-      return `<div class="cr-row${r.isMine ? ' is-mine' : ''}${isSafest ? ' is-safest' : ''}">
-        <div class="cr-num">${r.num}</div>
-        <div class="cr-info">
-          <div class="cr-players">${fmt(r.total)}<span>игр.</span></div>
-          ${badges.length ? `<div class="cr-tag">${badges.join('')}</div>` : ''}
+      return `<div class="ct-row${r.isMine ? ' is-mine' : ''}${isSafest ? ' is-safest' : ''}">
+        <div class="ct-chip">${r.num}</div>
+        <div class="ct-info">
+          <div class="ct-count">${fmt(r.total)}<span>игр.</span></div>
+          ${badges.length ? `<div class="ct-badges">${badges.join('')}</div>` : ''}
         </div>
-        <div class="cr-bar-wrap">
-          <div class="cr-bar"><div class="cr-bar-fill ${barColor}" style="width:${fillPct}%"></div></div>
-          <div class="cr-pct-lbl">${r.pct}%</div>
+        <div class="ct-bar-col">
+          <div class="ct-bar"><div class="ct-bar-fill ${barColor}" style="width:${fillPct}%"></div></div>
+          <div class="ct-pct">${r.pct}%</div>
         </div>
       </div>`;
     }).join('');
   }
 
-  // Recommendation
-  const recEl = document.getElementById('rec-block');
-  const lines = [];
+  const vb = document.getElementById('verdict-block');
+  const sb = document.getElementById('strat-block');
 
-  if (enemies > 0 && mineRow) {
-    const safestRows = rows.filter(r => r.total === minTotal && r.total > 0 && !r.isMine);
-    if (mineRow.total > minTotal && safestRows.length > 0) {
-      const nums = safestRows.map(r => `Копию ${r.num}`).join(' или ');
-      lines.push(`<div class="rec-line">Перейди в <b class="g">${nums}</b> — там меньше всего игроков <b>(${fmt(minTotal)} чел.)</b>.</div>`);
+  if (!hasData) {
+    vb.className = 'idle-msg';
+    vb.innerHTML = 'Введи данные из окна «Копии» →';
+    sb.style.display = 'none';
+    return;
+  }
+
+  const vrows = [];
+  vrows.push(`<div class="vrow"><span class="vkey">Всего игроков в локации</span><span class="vval">${fmt(totalAll)}</span></div>`);
+  vrows.push(`<div class="vrow"><span class="vkey">Игроков моей расы</span><span class="vval g">${fmt(myRace)}</span></div>`);
+  vrows.push('<div class="vsep"></div>');
+  vrows.push(`<div class="vrow"><span class="vkey">Врагов в локации</span><span class="vval ${enemies > 0 ? 'r' : 'g'}">${fmt(enemies)}</span></div>`);
+
+  if (mineRow && enemies > 0) {
+    const safestNotMine = rows.filter(r => r.total === minTotal && r.total > 0 && !r.isMine);
+    if (safestNotMine.length && mineRow.total > minTotal) {
+      vrows.push('<div class="vsep"></div>');
+      vrows.push(`<div class="vrow"><span class="vkey">Твоя копия ${mineRow.num}</span><span class="vval r">${fmt(mineRow.total)} игр.</span></div>`);
+      vrows.push(`<div class="vrow"><span class="vkey">Рекомендуется перейти</span><span class="vval g">Копия ${safestNotMine.map(r => r.num).join('/')} · ${fmt(minTotal)} игр.</span></div>`);
     } else if (mineRow.total === minTotal) {
-      lines.push(`<div class="rec-line">Ты в <b class="g">самой малолюдной копии</b> (${fmt(mineRow.total)} игр.) — оставайся здесь.</div>`);
+      vrows.push('<div class="vsep"></div>');
+      vrows.push(`<div class="vrow"><span class="vkey">Твоя копия ${mineRow.num}</span><span class="vval g">Самая малолюдная ✓</span></div>`);
     }
-    lines.push(`<div class="rec-line">В локации <b class="r">${fmt(enemies)} ${enemies === 1 ? 'враг' : 'врага'}</b> — они могут быть в любой копии.</div>`);
-  } else if (enemies === 0 && totalAll > 0) {
-    lines.push(`<div class="rec-line">Врагов в локации <b class="g">нет</b> — всё твоё.</div>`);
   }
 
-  if (lines.length > 0) {
-    recEl.innerHTML = `<div class="rec-block">
-      <div class="rec-title">Рекомендация</div>
-      ${lines.join('')}
-    </div>`;
+  vb.className = 'verdict-block';
+  vb.innerHTML = vrows.join('');
+
+  const lines = [];
+  if (enemies === 0) {
+    lines.push(`<div class="sline">Врагов в локации нет — можно спокойно фармить.</div>`);
+    if (mineRow && mineRow.total > 0)
+      lines.push(`<div class="sline">В твоей копии <span class="sb">${fmt(mineRow.total)} игроков</span> — все своей расы.</div>`);
   } else {
-    recEl.innerHTML = '';
+    lines.push(`<div class="sline">В локации <span class="sr">${fmt(enemies)} ${enemies === 1 ? 'враг' : 'врага'}</span> — они невидимы и могут быть в любой копии.</div>`);
+    if (mineRow) {
+      const safestNotMine = rows.filter(r => r.total === minTotal && r.total > 0 && !r.isMine);
+      if (safestNotMine.length && mineRow.total > minTotal)
+        lines.push(`<div class="sline">Перейди в <span class="sg">Копию ${safestNotMine.map(r => r.num).join(' или ')}</span> — там <span class="sg">${fmt(minTotal)} игроков</span>, ниже шанс встретить врага.</div>`);
+      else
+        lines.push(`<div class="sline">Ты уже в <span class="sg">наименее населённой копии</span> (${fmt(mineRow.total)} игр.) — лучшего варианта нет.</div>`);
+    }
   }
+
+  sb.style.display = 'block';
+  sb.innerHTML = `<div class="strat-block"><div class="strat-title">Что делать</div>${lines.join('')}</div>`;
+}
+
+function switchTab(id, btn) {
+  document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
 }
 
 renderCopyInputs();
