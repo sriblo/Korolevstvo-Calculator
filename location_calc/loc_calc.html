@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Загруженность копий — Калькуляторы Королевства</title>
+<title>Калькулятор загруженности копий — Калькуляторы Королевства</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=Crimson+Pro:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@400;500;600&display=swap');
 
@@ -130,13 +130,14 @@ header::after {
 }
 .tip:hover { background: rgba(184,134,11,.25); border-color: rgba(184,134,11,.5); }
 .tip::after {
-  content: attr(data-tip); position: absolute; bottom: calc(100% + 8px); left: 50%;
-  transform: translateX(-50%);
+  content: attr(data-tip); position: fixed; bottom: auto; top: auto; left: auto;
+  margin-top: 8px;
   background: rgba(8,5,2,.97); border: 1px solid rgba(184,134,11,.3); border-radius: 8px;
   padding: 10px 14px; font-size: 12px; line-height: 1.6; color: var(--text);
   white-space: pre-wrap; min-width: 210px; max-width: 270px;
-  pointer-events: none; opacity: 0; transition: opacity .15s; z-index: 200;
+  pointer-events: none; opacity: 0; transition: opacity .15s; z-index: 9999;
   box-shadow: 0 10px 30px rgba(0,0,0,.7); font-family: 'Crimson Pro', serif;
+  transform: none;
 }
 .tip:hover::after { opacity: 1; }
 
@@ -417,7 +418,7 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; }
     <span class="h-sep">·</span>
     <div class="h-ico">🗺️</div>
     <div>
-      <div class="h-title">Загруженность копий</div>
+      <div class="h-title">Калькулятор загруженности копий</div>
       <div class="h-sub">Оцени угрозу перед фармом · Найди безопасную копию</div>
     </div>
     <div class="h-right-orn">
@@ -436,10 +437,7 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; }
       <div class="card-title"><div class="card-title-ornament"></div>Исходные данные</div>
       <div class="irow">
         <div class="ico-pill">👥</div>
-        <div class="ilbl">
-          Игроков моей расы
-          <small>Число внизу списка игроков</small>
-        </div>
+        <div class="ilbl">Игроков моей расы</div>
         <span class="tip" data-tip="Открой список игроков в локации.&#10;Внизу есть иконка с цифрой — это&#10;суммарное число игроков твоей расы&#10;во всех копиях. Введи это число.">?</span>
         <input type="number" id="my-race" value="0" min="0" oninput="calc()">
         <span class="unit">игроков</span>
@@ -523,7 +521,7 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; }
           </div>
           <div class="guide-step">
             <div class="guide-num">3</div>
-            <div class="guide-step-text">Нажми <b>«Здесь?»</b> напротив копии, в которой ты сейчас находишься — кнопка станет активной.</div>
+            <div class="guide-step-text">Нажми <b>«Вы здесь?»</b> напротив копии, в которой ты сейчас находишься — кнопка станет активной.</div>
           </div>
           <div class="guide-step">
             <div class="guide-num">4</div>
@@ -600,7 +598,7 @@ function renderCopyInputs() {
       <input type="number" class="copy-pct-input" value="${c.pct}" min="0" max="100" placeholder="0"
              oninput="copies[${i}].pct = Math.min(100, Math.max(0, parseInt(this.value)||0)); calc()">
       <span class="copy-pct-sign">%</span>
-      <button class="copy-mine-btn" onclick="setMine(${i})">${c.isMine ? 'Здесь ✓' : 'Здесь?'}</button>
+      <button class="copy-mine-btn" onclick="setMine(${i})">${c.isMine ? 'Я здесь' : 'Вы здесь?'}</button>
       <button class="copy-rm-btn${copies.length <= 1 ? ' hidden' : ''}" onclick="removeCopy(${i})">×</button>
     </div>
   `).join('');
