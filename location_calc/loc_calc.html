@@ -137,33 +137,44 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; }
 
 #my-race { width: 80px; font-size: 20px; }
 
-/* ── COPY ROWS ── */
-.copy-row {
+/* ── COPY TABLE ── */
+.ctab-header, .copy-row {
   display: grid;
-  grid-template-columns: 108px 72px 16px 52px 1fr 88px 28px;
-  align-items: center; gap: 8px;
-  padding: 10px 22px; border-bottom: 1px solid var(--sep);
+  grid-template-columns: 56px 1fr 100px 90px 28px;
+  align-items: center;
+  padding: 0 22px;
+}
+.ctab-header {
+  padding-top: 7px; padding-bottom: 7px;
+  border-bottom: 1px solid rgba(184,134,11,.2);
+  background: rgba(0,0,0,.2);
   position: relative; z-index: 2;
 }
-.copy-label { display: flex; align-items: center; gap: 7px; white-space: nowrap; }
-.copy-num-badge {
-  width: 24px; height: 24px; border-radius: 50%; flex-shrink: 0;
-  display: flex; align-items: center; justify-content: center;
-  font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 700;
-  background: rgba(184,134,11,.15); border: 1px solid rgba(184,134,11,.3);
-  color: var(--goldl);
+.ctab-th {
+  font-family: 'Inter', sans-serif; font-size: 9px; font-weight: 600;
+  letter-spacing: 1.5px; text-transform: uppercase; color: var(--text3);
+  text-align: center;
 }
-.copy-word { font-family: 'Crimson Pro', serif; font-size: 17px; color: var(--text); }
-.copy-pct-input { width: 72px !important; font-size: 17px !important; padding: 6px 8px !important; text-align: center !important; }
+
+.copy-row {
+  padding-top: 10px; padding-bottom: 10px;
+  border-bottom: 1px solid var(--sep);
+  position: relative; z-index: 2;
+}
+.copy-num {
+  font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 700;
+  color: var(--goldl); text-align: center;
+}
+.copy-pct-cell {
+  display: flex; align-items: center; justify-content: center; gap: 5px;
+}
+.copy-pct-input { width: 68px !important; font-size: 17px !important; padding: 6px 8px !important; text-align: center !important; }
 .copy-pct-sign { font-size: 15px; color: var(--text3); font-family: 'Inter', sans-serif; }
 .copy-count {
-  font-family: 'Inter', sans-serif; font-size: 18px; font-weight: 700;
-  color: var(--text3); text-align: right;
+  font-family: 'Inter', sans-serif; font-size: 20px; font-weight: 700;
+  color: var(--text3); text-align: center;
 }
 .copy-count.has-data { color: var(--text); }
-.copy-unit {
-  font-family: 'Crimson Pro', serif; font-size: 15px; color: var(--text2);
-}
 
 .copy-mine-btn {
   padding: 5px 8px; border-radius: 6px; cursor: pointer; white-space: nowrap;
@@ -177,7 +188,7 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; }
 .copy-mine-btn.active:hover { background: #6a9a48; }
 
 .copy-rm-btn {
-  width: 28px; height: 28px; border-radius: 6px; cursor: pointer; justify-self: end;
+  width: 26px; height: 26px; border-radius: 6px; cursor: pointer; justify-self: end;
   display: flex; align-items: center; justify-content: center;
   background: transparent; border: 1px solid transparent;
   color: var(--text3); font-size: 17px; line-height: 1; transition: all .15s;
@@ -274,11 +285,9 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; }
   .h-title { font-size: 17px; }
   .page { padding: 16px 14px 60px; }
   .my-race-row { padding: 14px 16px; }
-  .copy-row { grid-template-columns: 88px 58px 14px 44px 1fr 76px 24px; gap: 6px; padding: 9px 14px; }
-  .copy-word { font-size: 15px; }
+  .ctab-header, .copy-row { grid-template-columns: 44px 1fr 80px 76px 24px; padding-left: 14px; padding-right: 14px; }
+  .copy-count { font-size: 16px; }
   .copy-mine-btn { font-size: 8px; }
-  .copy-count { font-size: 15px; }
-  .copy-unit { font-size: 13px; }
   #my-race { width: 72px; font-size: 18px; }
   .summary { padding: 14px 16px; font-size: 15px; }
   .sum-val { font-size: 16px; }
@@ -313,6 +322,13 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; }
       <span class="mr-unit">игроков</span>
     </div>
 
+    <div class="ctab-header">
+      <span class="ctab-th">Копия</span>
+      <span class="ctab-th">% игроков</span>
+      <span class="ctab-th">Игроков</span>
+      <span></span>
+      <span></span>
+    </div>
     <div id="copies-body"></div>
 
     <button class="add-copy-btn" onclick="addCopy()">Добавить копию</button>
@@ -429,15 +445,13 @@ function renderCopyInputs() {
     const total = playersFromPct(c.pct);
     const hasData = c.pct > 0;
     return `<div class="copy-row">
-      <span class="copy-label">
-        <span class="copy-num-badge">${i + 1}</span>
-        <span class="copy-word">копия</span>
-      </span>
-      <input type="number" class="copy-pct-input" value="${c.pct || ''}" min="0" max="100" placeholder="0"
-             oninput="copies[${i}].pct = Math.min(100, Math.max(0, parseInt(this.value)||0)); calc()">
-      <span class="copy-pct-sign">%</span>
+      <span class="copy-num">${i + 1}</span>
+      <div class="copy-pct-cell">
+        <input type="number" class="copy-pct-input" value="${c.pct || ''}" min="0" max="100" placeholder="0"
+               oninput="copies[${i}].pct = Math.min(100, Math.max(0, parseInt(this.value)||0)); calc()">
+        <span class="copy-pct-sign">%</span>
+      </div>
       <span class="copy-count${hasData ? ' has-data' : ''}" id="cr-${i}">${hasData ? fmt(total) : '—'}</span>
-      <span class="copy-unit">${hasData ? 'игроков' : ''}</span>
       <button class="copy-mine-btn${c.isMine ? ' active' : ''}" onclick="setMine(${i})">Я здесь</button>
       <button class="copy-rm-btn${copies.length <= 1 ? ' hidden' : ''}" onclick="removeCopy(${i})">×</button>
     </div>`;
@@ -479,8 +493,6 @@ function calc() {
     const hd = c.pct > 0;
     el.textContent = hd ? fmt(total) : '—';
     el.className = 'copy-count' + (hd ? ' has-data' : '');
-    const unit = el.nextElementSibling;
-    if (unit) unit.textContent = hd ? 'игроков' : '';
   });
 
   const totalEl   = document.getElementById('sv-total');
