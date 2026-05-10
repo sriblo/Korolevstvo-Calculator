@@ -213,7 +213,7 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; }
   color: rgba(128,170,216,.4); transition: all .2s; text-align: center;
 }
 .copy-mine-btn:hover { border-color: rgba(72,112,168,.5); color: var(--bluel); background: rgba(72,112,168,.1); }
-.copy-row.is-mine .copy-mine-btn { background: rgba(72,112,168,.18); border-color: rgba(72,112,168,.55); color: var(--bluel); }
+.copy-mine-btn.active { background: rgba(72,112,168,.22); border-color: rgba(72,112,168,.6); color: var(--bluel); box-shadow: 0 0 10px rgba(72,112,168,.2); }
 
 .copy-rm-btn {
   width: 26px; height: 26px; border-radius: 6px; cursor: pointer; justify-self: end;
@@ -225,15 +225,15 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; }
 .copy-rm-btn.hidden { visibility: hidden; pointer-events: none; }
 
 .add-copy-btn {
-  width: 100%; padding: 10px 18px; background: none; border: none;
-  border-top: 1px solid var(--sep); cursor: pointer; text-align: left;
-  font-family: 'Inter', sans-serif; font-size: 10px; font-weight: 600;
-  letter-spacing: 2px; text-transform: uppercase; color: var(--text3);
-  display: flex; align-items: center; gap: 8px;
-  transition: color .15s, background .15s; position: relative; z-index: 2;
+  width: 100%; padding: 11px 18px; background: rgba(184,134,11,.06); border: none;
+  border-top: 1px solid rgba(184,134,11,.18); cursor: pointer; text-align: center;
+  font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 600;
+  letter-spacing: 1.5px; text-transform: uppercase; color: rgba(212,168,67,.65);
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  transition: color .15s, background .15s, border-color .15s; position: relative; z-index: 2;
 }
-.add-copy-btn::before { content: '+'; font-size: 15px; color: inherit; }
-.add-copy-btn:hover { color: var(--goldl); background: rgba(184,134,11,.03); }
+.add-copy-btn::before { content: '+'; font-size: 16px; color: inherit; }
+.add-copy-btn:hover { color: var(--goldl); background: rgba(184,134,11,.12); border-top-color: rgba(184,134,11,.35); }
 
 /* ── COLS ── */
 .lcol { display: flex; flex-direction: column; gap: 16px; }
@@ -513,7 +513,7 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; }
         <div class="guide-body">
           <div class="guide-step">
             <div class="guide-num">1</div>
-            <div class="guide-step-text">Зайди в локацию и посмотри на <b>список игроков</b>. Внизу будет иконка с цифрой — это количество игроков твоей расы в текущей локации, во всех копиях сразу. Введи его в поле «Игроков моей расы».</div>
+            <div class="guide-step-text">Зайди в локацию и посмотри на <b>список игроков</b>. Внизу будет иконка с цифрой — это количество игроков твоей расы в текущей локации, во всех копиях сразу. Введи его в поле <b>«Игроков моей расы»</b>.</div>
           </div>
           <div class="guide-step">
             <div class="guide-num">2</div>
@@ -521,15 +521,15 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; }
           </div>
           <div class="guide-step">
             <div class="guide-num">3</div>
-            <div class="guide-step-text">Нажми <b>«Вы здесь?»</b> напротив копии, в которой ты сейчас находишься — кнопка станет активной.</div>
+            <div class="guide-step-text">Нажми <b>«Я здесь»</b> напротив копии, в которой ты сейчас находишься — кнопка подсветится.</div>
           </div>
           <div class="guide-step">
             <div class="guide-num">4</div>
-            <div class="guide-step-text">Калькулятор покажет <b>сколько врагов</b> в локации и сколько игроков в каждой копии. Точное расположение врагов по копиям неизвестно — видна только суммарная картина.</div>
+            <div class="guide-step-text">Калькулятор покажет <b>сколько игроков вражеской расы</b> сейчас в локации и сколько игроков в каждой конкретной копии.</div>
           </div>
           <div class="guide-step">
             <div class="guide-num">5</div>
-            <div class="guide-step-text">Если врагов <b>нет</b> — можно спокойно фармить. Если есть — рекомендуется перейти в наименее населённую копию, чтобы снизить шанс столкновения.</div>
+            <div class="guide-step-text">С помощью этого калькулятора ты можешь более эффективно планировать свой фарм и сделать его более безопасным. Желаю хорошего дропа! :)</div>
           </div>
         </div>
       </div>
@@ -598,7 +598,7 @@ function renderCopyInputs() {
       <input type="number" class="copy-pct-input" value="${c.pct}" min="0" max="100" placeholder="0"
              oninput="copies[${i}].pct = Math.min(100, Math.max(0, parseInt(this.value)||0)); calc()">
       <span class="copy-pct-sign">%</span>
-      <button class="copy-mine-btn" onclick="setMine(${i})">${c.isMine ? 'Я здесь' : 'Вы здесь?'}</button>
+      <button class="copy-mine-btn${c.isMine ? ' active' : ''}" onclick="setMine(${i})">Я здесь</button>
       <button class="copy-rm-btn${copies.length <= 1 ? ' hidden' : ''}" onclick="removeCopy(${i})">×</button>
     </div>
   `).join('');
