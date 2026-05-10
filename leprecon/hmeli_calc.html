@@ -147,7 +147,7 @@ header::after {
   cursor: help; position: relative; flex-shrink: 0; line-height: 1;
   transition: background .15s, border-color .15s;
 }
-.tip:hover { background: rgba(184,134,11,.25); border-color: rgba(184,134,11,.5); }
+.tip:hover { background: rgba(184,134,11,.25); border-color: rgba(184,134,11,.5); z-index: 1000; }
 .tip::after {
   content: attr(data-tip); position: absolute; bottom: calc(100% + 8px); left: 50%;
   transform: translateX(-50%);
