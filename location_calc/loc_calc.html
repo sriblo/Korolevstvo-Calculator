@@ -139,7 +139,7 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; }
 /* ── COPY TABLE ── */
 .ctab-header, .copy-row {
   display: grid;
-  grid-template-columns: 110px 1fr 100px 96px 28px;
+  grid-template-columns: repeat(4, 1fr) 28px;
   align-items: center;
   gap: 8px;
   padding: 0 22px;
@@ -285,7 +285,7 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; }
   .h-title { font-size: 17px; }
   .page { padding: 16px 14px 60px; }
   .my-race-row { padding: 14px 16px; }
-  .ctab-header, .copy-row { grid-template-columns: 90px 1fr 90px 76px 24px; padding-left: 14px; padding-right: 14px; }
+  .ctab-header, .copy-row { grid-template-columns: repeat(4, 1fr) 24px; padding-left: 14px; padding-right: 14px; }
   .copy-count { font-size: 16px; }
   .copy-mine-btn { font-size: 8px; }
   #my-race { width: 72px; font-size: 18px; }
