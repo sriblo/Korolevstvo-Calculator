@@ -258,6 +258,14 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; }
 .guide-num { font-family: 'Inter', sans-serif; font-size: 10px; font-weight: 700; background: rgba(184,134,11,.15); border: 1px solid rgba(184,134,11,.3); color: var(--goldl); border-radius: 50%; width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
 .guide-step-text { color: var(--text2); font-family: 'Crimson Pro', serif; font-size: 15px; line-height: 1.55; }
 .guide-step-text b { color: var(--text); font-weight: 700; }
+.gbtn {
+  display: inline-block; font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 600;
+  padding: 2px 8px; border-radius: 5px; vertical-align: middle; white-space: nowrap;
+  background: rgba(184,134,11,.12); border: 1px solid rgba(184,134,11,.35); color: var(--goldl);
+}
+.gbtn-red {
+  background: rgba(139,58,42,.15); border-color: rgba(200,96,64,.4); color: var(--emberl);
+}
 
 .fml-body { padding: 16px 18px 20px; display: flex; flex-direction: column; gap: 14px; position: relative; z-index: 2; }
 .fml-const { display: flex; align-items: center; gap: 14px; padding: 14px 18px; background: rgba(0,0,0,.2); border-radius: 8px; border: 1px solid var(--sep); }
@@ -363,19 +371,23 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; }
       <div class="guide-body">
         <div class="guide-step">
           <div class="guide-num">1</div>
-          <div class="guide-step-text">Зайди в локацию и открой <b>список игроков</b>. Внизу будет иконка с цифрой — это суммарное количество игроков твоей расы во всех копиях. Введи это число в поле <b>«Игроков моей расы в локации»</b>.</div>
+          <div class="guide-step-text">Зайди в локацию и посмотри на <b>список игроков</b>. Внизу будет иконка с цифрой — это суммарное количество игроков твоей расы во всех копиях. Введи это число в поле <b>«Игроков моей расы в локации»</b>.</div>
         </div>
         <div class="guide-step">
           <div class="guide-num">2</div>
-          <div class="guide-step-text">Открой окно <b>«Копии»</b>. Для каждой копии введи процент заполненности из колонки «Игроков» в столбец <b>«% игроков»</b>. Если копий больше — нажми <b>«Добавить копию»</b>. Чтобы убрать лишнюю строку — нажми <b>×</b>.</div>
+          <div class="guide-step-text">Открой окно <b>«Копии»</b>. Для каждой копии введи процент заполненности из колонки «Игроков» в столбец <b>«% игроков»</b>.</div>
         </div>
         <div class="guide-step">
           <div class="guide-num">3</div>
-          <div class="guide-step-text">Нажми <b>«Я здесь»</b> напротив копии, в которой ты сейчас находишься — кнопка подсветится зелёным.</div>
+          <div class="guide-step-text">В каждой локации количество копий может отличаться. Ты можешь добавить нужное количество копий кнопкой <span class="gbtn">Добавить копию</span>. Чтобы убрать лишнюю копию — нажми <span class="gbtn gbtn-red">×</span>.</div>
         </div>
         <div class="guide-step">
           <div class="guide-num">4</div>
-          <div class="guide-step-text">Внизу калькулятор покажет общее число игроков в локации, сколько из них твоей расы и <b>сколько врагов</b>. Желаю хорошего дропа!</div>
+          <div class="guide-step-text">Теперь тебе нужно выбрать в какой копии находится твой персонаж. Нажми <b>«Я здесь»</b> напротив копии, в которой ты сейчас находишься — кнопка подсветится зелёным.</div>
+        </div>
+        <div class="guide-step">
+          <div class="guide-num">5</div>
+          <div class="guide-step-text">Внизу калькулятор покажет общее число игроков в локации, число игроков твоей расы, а также число игроков вражеской расы. Также калькулятор переведёт проценты в число игроков и ты сможешь увидеть сколько игроков находится в каждой конкретной копии. Ты можешь использовать эту информацию для того чтобы эффективно планировать свой фарм и сделать его более безопасным. Желаю хорошего дропа!</div>
         </div>
       </div>
     </div>
