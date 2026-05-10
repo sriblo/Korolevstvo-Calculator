@@ -213,7 +213,8 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; }
   color: rgba(128,170,216,.4); transition: all .2s; text-align: center;
 }
 .copy-mine-btn:hover { border-color: rgba(72,112,168,.5); color: var(--bluel); background: rgba(72,112,168,.1); }
-.copy-mine-btn.active { background: rgba(72,112,168,.22); border-color: rgba(72,112,168,.6); color: var(--bluel); box-shadow: 0 0 10px rgba(72,112,168,.2); }
+.copy-mine-btn.active { background: var(--blue); border-color: var(--bluel); color: #fff; font-weight: 700; box-shadow: 0 0 16px rgba(72,112,168,.55), 0 2px 6px rgba(0,0,0,.4); }
+.copy-mine-btn.active:hover { background: #5a86c0; }
 
 .copy-rm-btn {
   width: 26px; height: 26px; border-radius: 6px; cursor: pointer; justify-self: end;
@@ -256,32 +257,16 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; }
   border: 1px solid rgba(128,170,216,.07); pointer-events: none; z-index: 2;
 }
 
-.res-top { display: grid; grid-template-columns: 200px 1fr; position: relative; z-index: 3; }
-.res-main {
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  padding: 24px 16px; gap: 6px; border-right: 1px solid var(--sep);
-  background: linear-gradient(135deg, rgba(72,112,168,.06), rgba(0,0,0,.1));
-}
-.rlbl { font-family: 'Inter', sans-serif; font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--text2); margin-bottom: 2px; }
-
-@keyframes breathe-ember { 0%,100% { text-shadow: 0 0 20px rgba(139,58,42,.2); } 50% { text-shadow: 0 0 40px rgba(200,96,64,.5); } }
-@keyframes breathe-green { 0%,100% { text-shadow: 0 0 20px rgba(90,122,58,.2); } 50% { text-shadow: 0 0 40px rgba(138,184,96,.5); } }
-
-.rnum { font-family: 'UnifrakturMaguntia', cursive; font-size: 56px; font-weight: 400; line-height: 1; letter-spacing: .02em; }
-.rnum.safe   { color: var(--sagel);  animation: breathe-green 3s ease-in-out infinite; }
-.rnum.danger { color: var(--emberl); animation: breathe-ember 3s ease-in-out infinite; }
-.rnum.idle   { color: var(--text3); }
-.rtag { font-size: 12px; color: var(--text2); font-style: italic; font-family: 'Crimson Pro', serif; }
-
-.res-stats { display: grid; grid-template-columns: 1fr 1fr 1fr; position: relative; z-index: 3; }
-.st { padding: 13px 16px; border-bottom: 1px solid var(--sep); border-right: 1px solid var(--sep); transition: background .15s; }
-.st:hover { background: rgba(72,112,168,.02); }
-.st:last-child { border-right: none; }
-.slbl { font-family: 'Inter', sans-serif; font-size: 11px; color: var(--text3); margin-bottom: 4px; letter-spacing: .5px; }
-.sval { font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 600; color: var(--text); }
-.sval.g { color: var(--sagel); }
-.sval.r { color: var(--emberl); }
-.sval.b { color: var(--bluel); }
+/* ── RESULT STATS ── */
+.res-top { display: grid; grid-template-columns: repeat(4, 1fr); position: relative; z-index: 3; }
+.res-stat { padding: 20px 18px; border-right: 1px solid var(--sep); border-bottom: 1px solid var(--sep); transition: background .15s; }
+.res-stat:last-child { border-right: none; }
+.rs-lbl { font-family: 'Inter', sans-serif; font-size: 10px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text3); margin-bottom: 10px; }
+.rs-val { font-family: 'Inter', sans-serif; font-size: 30px; font-weight: 700; color: var(--text3); line-height: 1; }
+.rs-val.on { color: var(--text); }
+.rs-val.r  { color: var(--emberl); }
+.rs-val.g  { color: var(--sagel); }
+.rs-val.b  { color: var(--bluel); }
 
 /* ── COPIES TABLE ── */
 .ctable-head {
@@ -330,27 +315,22 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; }
 .ct-bar-fill.gray  { background: rgba(255,255,255,.08); }
 .ct-pct { font-family: 'Inter', sans-serif; font-size: 11px; color: var(--text3); white-space: nowrap; min-width: 26px; text-align: right; }
 
-/* ── VERDICT / STRAT ── */
-.verdict-block { padding: 16px 20px; border-top: 1px solid var(--sep); display: flex; flex-direction: column; gap: 7px; position: relative; z-index: 3; }
-.vrow { display: flex; justify-content: space-between; align-items: baseline; gap: 14px; }
-.vkey { font-size: 15px; color: var(--text2); flex-shrink: 0; font-family: 'Crimson Pro', serif; }
-.vval { font-size: 15px; font-weight: 700; color: var(--text); text-align: right; font-family: 'Inter', sans-serif; }
-.vval.g { color: var(--sagel); }
-.vval.r { color: var(--emberl); }
-.vval.b { color: var(--bluel); }
-.vsep { height: 1px; background: var(--sep); margin: 4px 0; position: relative; }
-.vsep::before { content: '◆'; position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); font-size: 7px; color: rgba(184,134,11,.35); background: var(--glass2); padding: 0 4px; }
-
-.strat-block { border-top: 2px solid rgba(72,112,168,.18); background: rgba(0,0,0,.2); padding: 16px 20px; position: relative; z-index: 3; }
-.strat-title { font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase; color: var(--bluel); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
-.strat-title::before { content: ''; display: block; width: 3px; height: 15px; background: linear-gradient(180deg, var(--bluel), rgba(72,112,168,.4)); border-radius: 2px; }
-.sline { font-size: 14px; color: var(--text2); line-height: 1.65; padding: 8px 0; border-bottom: 1px solid rgba(72,112,168,.07); font-family: 'Crimson Pro', serif; }
-.sline:last-child { border-bottom: none; padding-bottom: 0; }
-.sg { color: var(--sagel); font-weight: 700; }
-.sr { color: var(--emberl); font-weight: 700; }
-.sb { color: var(--bluel); font-weight: 700; }
-
 .idle-msg { padding: 22px 20px; font-size: 14px; color: var(--text3); font-style: italic; border-top: 1px solid var(--sep); font-family: 'Crimson Pro', serif; position: relative; z-index: 3; }
+
+/* ── FORMULAS ── */
+.fml-body { padding: 16px 18px 20px; display: flex; flex-direction: column; gap: 14px; position: relative; z-index: 2; }
+.fml-const { display: flex; align-items: center; gap: 14px; padding: 14px 18px; background: rgba(0,0,0,.2); border-radius: 8px; border: 1px solid var(--sep); }
+.fml-clbl { font-family: 'Crimson Pro', serif; font-size: 15px; color: var(--text2); flex: 1; }
+.fml-ceq { font-family: 'Inter', sans-serif; font-size: 18px; font-weight: 700; color: var(--goldl); white-space: nowrap; }
+.fml-steps { display: flex; flex-direction: column; border: 1px solid var(--sep); border-radius: 8px; overflow: hidden; }
+.fml-step { display: flex; gap: 14px; align-items: flex-start; padding: 16px 18px; border-bottom: 1px solid var(--sep); }
+.fml-step:last-child { border-bottom: none; }
+.fml-snum { width: 26px; height: 26px; border-radius: 50%; background: rgba(184,134,11,.15); border: 1px solid rgba(184,134,11,.3); color: var(--goldl); font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
+.fml-scontent { flex: 1; display: flex; flex-direction: column; gap: 7px; }
+.fml-stitle { font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 600; color: var(--text); letter-spacing: .5px; }
+.fml-formula { display: inline-block; font-family: 'Inter', sans-serif; font-size: 17px; font-weight: 700; color: var(--bluel); background: rgba(72,112,168,.1); border: 1px solid rgba(72,112,168,.25); border-radius: 6px; padding: 5px 14px; letter-spacing: .03em; }
+.fml-example { font-family: 'Crimson Pro', serif; font-size: 14px; color: var(--text3); line-height: 1.55; }
+.fml-example b { color: var(--goldl); font-weight: 700; }
 
 /* ── GUIDE ── */
 .guide-section { grid-column: 1 / -1; margin-top: 8px; }
@@ -401,8 +381,9 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; }
   header { padding: 0 14px; }
   .h-right-orn { display: none; }
   .h-title { font-size: 17px; }
-  .res-top { grid-template-columns: 1fr; }
-  .res-main { border-right: none; border-bottom: 1px solid var(--sep); }
+  .res-top { grid-template-columns: repeat(2, 1fr); }
+  .res-stat:nth-child(2) { border-right: none; }
+  .res-stat:nth-child(3), .res-stat:nth-child(4) { border-bottom: none; }
   .irow { grid-template-columns: 34px 1fr 20px 72px auto; gap: 8px; padding: 9px 14px; }
   input[type=number] { width: 72px; font-size: 16px; padding: 6px 8px; }
   .copy-row { grid-template-columns: 34px 54px 12px 80px 24px; gap: 7px; padding: 9px 14px; }
@@ -458,24 +439,21 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; }
     <div class="res-card">
 
       <div class="res-top">
-        <div class="res-main">
-          <div class="rlbl">Врагов в локации</div>
-          <div class="rnum idle" id="res-num">—</div>
-          <div class="rtag" id="res-tag">введи данные</div>
+        <div class="res-stat">
+          <div class="rs-lbl">Игроков всего</div>
+          <div class="rs-val" id="sv-total">—</div>
         </div>
-        <div class="res-stats">
-          <div class="st">
-            <div class="slbl">Всего в локации</div>
-            <div class="sval" id="sv-total">—</div>
-          </div>
-          <div class="st">
-            <div class="slbl">Моя раса</div>
-            <div class="sval g" id="sv-mine">—</div>
-          </div>
-          <div class="st">
-            <div class="slbl">Копий</div>
-            <div class="sval b" id="sv-copies">—</div>
-          </div>
+        <div class="res-stat">
+          <div class="rs-lbl">Из них врагов</div>
+          <div class="rs-val" id="sv-enemies">—</div>
+        </div>
+        <div class="res-stat">
+          <div class="rs-lbl">Моя раса</div>
+          <div class="rs-val" id="sv-mine">—</div>
+        </div>
+        <div class="res-stat">
+          <div class="rs-lbl">Копий</div>
+          <div class="rs-val b" id="sv-copies">—</div>
         </div>
       </div>
 
@@ -488,8 +466,7 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; }
         <div id="copies-rows"></div>
       </div>
 
-      <div id="verdict-block" class="idle-msg">Введи данные из окна «Копии» →</div>
-      <div id="strat-block" style="display:none"></div>
+      <div id="idle-msg" class="idle-msg">Введи данные из окна «Копии» →</div>
 
     </div>
 
@@ -540,34 +517,39 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; }
           <div class="codex-chapter-title">Как работает расчёт</div>
           <div class="codex-chapter-rule"></div>
         </div>
-        <table class="ftable">
-          <thead>
-            <tr><th>Что считаем</th><th>Формула</th><th>Пример</th></tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><span class="fname">Макс. игроков в копии</span><br><span style="font-size:12px;color:var(--text3)">Константа игры</span></td>
-              <td><span class="fcode">80 игроков</span></td>
-              <td class="fval">80</td>
-            </tr>
-            <tr>
-              <td><span class="fname">Игроков в копии</span><br><span style="font-size:12px;color:var(--text3)">По проценту из окна</span></td>
-              <td><span class="fcode">⌈ % × 80 ÷ 100 ⌉</span></td>
-              <td class="fval">16% → 13 игр.</td>
-            </tr>
-            <tr>
-              <td><span class="fname">Всего в локации</span><br><span style="font-size:12px;color:var(--text3)">Сумма всех копий</span></td>
-              <td><span class="fcode">Σ игроков в копиях</span></td>
-              <td class="fval">13+4+2+4 = 23</td>
-            </tr>
-            <tr>
-              <td><span class="fname">Врагов</span><br><span style="font-size:12px;color:var(--text3)">Чужая раса не видна</span></td>
-              <td><span class="fcode">Всего − Моя раса</span></td>
-              <td class="fval">23 − 12 = 11</td>
-            </tr>
-          </tbody>
-        </table>
-        <div class="formula-note">⌈ x ⌉ — округление вверх (потолок). Формула выведена эмпирически на основе нескольких снимков экрана из игры.</div>
+        <div class="fml-body">
+          <div class="fml-const">
+            <div class="fml-clbl">Максимальная вместимость одной копии — константа игры</div>
+            <div class="fml-ceq">= 80 игроков</div>
+          </div>
+          <div class="fml-steps">
+            <div class="fml-step">
+              <div class="fml-snum">1</div>
+              <div class="fml-scontent">
+                <div class="fml-stitle">Игроков в конкретной копии</div>
+                <div class="fml-formula">⌈ % × 80 ÷ 100 ⌉</div>
+                <div class="fml-example">Пример: в окне «Копии» стоит 16% → ⌈ 16 × 80 ÷ 100 ⌉ = ⌈ 12,8 ⌉ = <b>13 игроков</b></div>
+              </div>
+            </div>
+            <div class="fml-step">
+              <div class="fml-snum">2</div>
+              <div class="fml-scontent">
+                <div class="fml-stitle">Всего игроков в локации</div>
+                <div class="fml-formula">Σ игроков по всем копиям</div>
+                <div class="fml-example">Пример: 4 копии по 16%, 5%, 2%, 5% → 13 + 4 + 2 + 4 = <b>23 игрока</b></div>
+              </div>
+            </div>
+            <div class="fml-step">
+              <div class="fml-snum">3</div>
+              <div class="fml-scontent">
+                <div class="fml-stitle">Игроков вражеской расы</div>
+                <div class="fml-formula">Всего − Моя раса</div>
+                <div class="fml-example">Пример: всего 23, своих 12 → <b>11 врагов</b>. Своя раса видна в списке игроков, чужая — нет.</div>
+              </div>
+            </div>
+          </div>
+          <div class="formula-note">⌈ x ⌉ — округление вверх (потолок). Формула выведена эмпирически на основе нескольких снимков экрана из игры.</div>
+        </div>
       </div>
 
     </div>
@@ -635,108 +617,61 @@ function calc() {
 
   const totalAll = rows.reduce((s, r) => s + r.total, 0);
   const enemies  = Math.max(0, totalAll - myRace);
-  const mineRow  = rows.find(r => r.isMine);
-  const nonEmpty = rows.filter(r => r.total > 0);
-  const minTotal = nonEmpty.length ? Math.min(...nonEmpty.map(r => r.total)) : 0;
-  const maxTotal = nonEmpty.length ? Math.max(...nonEmpty.map(r => r.total)) : 1;
+  const minTotal = Math.min(...rows.map(r => r.total));
+  const maxTotal = rows.reduce((m, r) => Math.max(m, r.total), 0) || 1;
 
-  set('sv-total',  hasData ? fmt(totalAll) : '—');
-  set('sv-mine',   hasData ? fmt(myRace)   : '—');
-  set('sv-copies', rows.length);
+  // 4 stats
+  const totalEl   = document.getElementById('sv-total');
+  const enemiesEl = document.getElementById('sv-enemies');
+  const mineEl    = document.getElementById('sv-mine');
+  const copiesEl  = document.getElementById('sv-copies');
 
-  const numEl = document.getElementById('res-num');
-  const tagEl = document.getElementById('res-tag');
   if (!hasData) {
-    numEl.textContent = '—'; numEl.className = 'rnum idle';
-    tagEl.textContent = 'введи данные';
+    totalEl.textContent   = '—'; totalEl.className   = 'rs-val';
+    enemiesEl.textContent = '—'; enemiesEl.className = 'rs-val';
+    mineEl.textContent    = '—'; mineEl.className    = 'rs-val';
   } else {
-    numEl.textContent = fmt(enemies);
-    numEl.className = 'rnum ' + (enemies === 0 ? 'safe' : 'danger');
-    tagEl.textContent = enemies === 0 ? 'угрозы нет'
-      : enemies === 1 ? '1 враг в локации'
-      : `${fmt(enemies)} врага в локации`;
+    totalEl.textContent   = fmt(totalAll); totalEl.className   = 'rs-val on';
+    enemiesEl.textContent = fmt(enemies);  enemiesEl.className = 'rs-val ' + (enemies === 0 ? 'g' : 'r');
+    mineEl.textContent    = fmt(myRace);   mineEl.className    = 'rs-val g';
   }
+  copiesEl.textContent = rows.length; copiesEl.className = 'rs-val b';
 
-  const ctEl = document.getElementById('copies-table');
-  const crEl = document.getElementById('copies-rows');
-  if (!hasData) {
-    ctEl.style.display = 'none';
-  } else {
-    ctEl.style.display = 'block';
-    crEl.innerHTML = rows.map(r => {
-      const isSafest = r.total > 0 && r.total === minTotal;
-      const isEmpty  = r.total === 0;
-      const fillPct  = maxTotal > 0 ? Math.round(r.total / maxTotal * 100) : 0;
-      let barColor = r.total === maxTotal && !isSafest ? 'red' : isSafest ? 'green' : isEmpty ? 'gray' : 'blue';
-
-      const badges = [];
-      if (r.isMine)  badges.push(`<span class="cbadge cbadge-mine">Вы здесь</span>`);
-      if (isSafest)  badges.push(`<span class="cbadge cbadge-safest">Меньше всего</span>`);
-      if (isEmpty)   badges.push(`<span class="cbadge cbadge-empty">Пусто</span>`);
-
-      return `<div class="ct-row${r.isMine ? ' is-mine' : ''}${isSafest ? ' is-safest' : ''}">
-        <div class="ct-chip">${r.num}</div>
-        <div class="ct-info">
-          <div class="ct-count">${fmt(r.total)}<span>игр.</span></div>
-          ${badges.length ? `<div class="ct-badges">${badges.join('')}</div>` : ''}
-        </div>
-        <div class="ct-bar-col">
-          <div class="ct-bar"><div class="ct-bar-fill ${barColor}" style="width:${fillPct}%"></div></div>
-          <div class="ct-pct">${r.pct}%</div>
-        </div>
-      </div>`;
-    }).join('');
-  }
-
-  const vb = document.getElementById('verdict-block');
-  const sb = document.getElementById('strat-block');
+  const idleEl = document.getElementById('idle-msg');
+  const ctEl   = document.getElementById('copies-table');
 
   if (!hasData) {
-    vb.className = 'idle-msg';
-    vb.innerHTML = 'Введи данные из окна «Копии» →';
-    sb.style.display = 'none';
+    idleEl.style.display = 'block';
+    ctEl.style.display   = 'none';
     return;
   }
 
-  const vrows = [];
-  vrows.push(`<div class="vrow"><span class="vkey">Всего игроков в локации</span><span class="vval">${fmt(totalAll)}</span></div>`);
-  vrows.push(`<div class="vrow"><span class="vkey">Игроков моей расы</span><span class="vval g">${fmt(myRace)}</span></div>`);
-  vrows.push('<div class="vsep"></div>');
-  vrows.push(`<div class="vrow"><span class="vkey">Врагов в локации</span><span class="vval ${enemies > 0 ? 'r' : 'g'}">${fmt(enemies)}</span></div>`);
+  idleEl.style.display = 'none';
+  ctEl.style.display   = 'block';
 
-  if (mineRow && enemies > 0) {
-    const safestNotMine = rows.filter(r => r.total === minTotal && r.total > 0 && !r.isMine);
-    if (safestNotMine.length && mineRow.total > minTotal) {
-      vrows.push('<div class="vsep"></div>');
-      vrows.push(`<div class="vrow"><span class="vkey">Твоя копия ${mineRow.num}</span><span class="vval r">${fmt(mineRow.total)} игр.</span></div>`);
-      vrows.push(`<div class="vrow"><span class="vkey">Рекомендуется перейти</span><span class="vval g">Копия ${safestNotMine.map(r => r.num).join('/')} · ${fmt(minTotal)} игр.</span></div>`);
-    } else if (mineRow.total === minTotal) {
-      vrows.push('<div class="vsep"></div>');
-      vrows.push(`<div class="vrow"><span class="vkey">Твоя копия ${mineRow.num}</span><span class="vval g">Самая малолюдная ✓</span></div>`);
-    }
-  }
+  document.getElementById('copies-rows').innerHTML = rows.map(r => {
+    const isSafest = r.total === minTotal;
+    const isEmpty  = r.total === 0;
+    const fillPct  = Math.round(r.total / maxTotal * 100);
+    const barColor = isEmpty ? 'gray' : isSafest ? 'green' : r.total === maxTotal ? 'red' : 'blue';
 
-  vb.className = 'verdict-block';
-  vb.innerHTML = vrows.join('');
+    const badges = [];
+    if (r.isMine)  badges.push(`<span class="cbadge cbadge-mine">Вы здесь</span>`);
+    if (isSafest)  badges.push(`<span class="cbadge cbadge-safest">Меньше всего</span>`);
+    if (isEmpty)   badges.push(`<span class="cbadge cbadge-empty">Пусто</span>`);
 
-  const lines = [];
-  if (enemies === 0) {
-    lines.push(`<div class="sline">Врагов в локации нет — можно спокойно фармить.</div>`);
-    if (mineRow && mineRow.total > 0)
-      lines.push(`<div class="sline">В твоей копии <span class="sb">${fmt(mineRow.total)} игроков</span> — все своей расы.</div>`);
-  } else {
-    lines.push(`<div class="sline">В локации <span class="sr">${fmt(enemies)} ${enemies === 1 ? 'враг' : 'врага'}</span> — они невидимы и могут быть в любой копии.</div>`);
-    if (mineRow) {
-      const safestNotMine = rows.filter(r => r.total === minTotal && r.total > 0 && !r.isMine);
-      if (safestNotMine.length && mineRow.total > minTotal)
-        lines.push(`<div class="sline">Перейди в <span class="sg">Копию ${safestNotMine.map(r => r.num).join(' или ')}</span> — там <span class="sg">${fmt(minTotal)} игроков</span>, ниже шанс встретить врага.</div>`);
-      else
-        lines.push(`<div class="sline">Ты уже в <span class="sg">наименее населённой копии</span> (${fmt(mineRow.total)} игр.) — лучшего варианта нет.</div>`);
-    }
-  }
-
-  sb.style.display = 'block';
-  sb.innerHTML = `<div class="strat-block"><div class="strat-title">Что делать</div>${lines.join('')}</div>`;
+    return `<div class="ct-row${r.isMine ? ' is-mine' : ''}${isSafest ? ' is-safest' : ''}">
+      <div class="ct-chip">${r.num}</div>
+      <div class="ct-info">
+        <div class="ct-count">${fmt(r.total)}<span>игр.</span></div>
+        ${badges.length ? `<div class="ct-badges">${badges.join('')}</div>` : ''}
+      </div>
+      <div class="ct-bar-col">
+        <div class="ct-bar"><div class="ct-bar-fill ${barColor}" style="width:${fillPct}%"></div></div>
+        <div class="ct-pct">${r.pct}%</div>
+      </div>
+    </div>`;
+  }).join('');
 }
 
 function switchTab(id, btn) {
