@@ -182,11 +182,11 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; }
   position: relative; z-index: 2; transition: background .15s;
 }
 .copy-row:last-child { border-bottom: none; }
-.copy-row:hover { background: rgba(90,122,58,.03); }
-.copy-row.is-mine { background: rgba(90,122,58,.07); }
+.copy-row:hover { background: rgba(184,134,11,.02); }
+.copy-row.is-mine { background: rgba(184,134,11,.03); }
 .copy-row.is-mine::before {
   content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
-  background: linear-gradient(180deg, rgba(138,184,96,.8), rgba(138,184,96,.2));
+  background: linear-gradient(180deg, rgba(184,134,11,.4), rgba(184,134,11,.1));
   pointer-events: none;
 }
 
@@ -198,8 +198,7 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; }
   transition: all .2s;
 }
 .copy-row.is-mine .copy-num-chip {
-  background: rgba(90,122,58,.25); border-color: rgba(138,184,96,.6); color: var(--sagel);
-  box-shadow: 0 0 10px rgba(90,122,58,.2);
+  border-color: rgba(184,134,11,.35); color: var(--goldl);
 }
 
 .copy-pct-input { width: 60px !important; font-size: 16px !important; padding: 6px 8px !important; }
@@ -209,11 +208,11 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; }
   padding: 5px 8px; border-radius: 6px; cursor: pointer; white-space: nowrap;
   font-family: 'Inter', sans-serif; font-size: 9px; font-weight: 600;
   letter-spacing: .5px; text-transform: uppercase; width: 100%;
-  background: transparent; border: 1px solid rgba(90,122,58,.2);
-  color: rgba(138,184,96,.35); transition: all .2s; text-align: center;
+  background: transparent; border: 1px solid rgba(255,255,255,.1);
+  color: var(--text3); transition: all .2s; text-align: center;
 }
-.copy-mine-btn:hover { border-color: rgba(138,184,96,.5); color: var(--sagel); background: rgba(90,122,58,.1); }
-.copy-mine-btn.active { background: var(--sage); border-color: var(--sagel); color: #fff; font-weight: 700; box-shadow: 0 0 16px rgba(90,122,58,.5), 0 2px 6px rgba(0,0,0,.4); }
+.copy-mine-btn:hover { border-color: rgba(138,184,96,.4); color: var(--sagel); background: rgba(90,122,58,.08); }
+.copy-mine-btn.active { background: var(--sage); border-color: var(--sagel); color: #fff; font-weight: 700; box-shadow: 0 0 14px rgba(90,122,58,.45), 0 2px 6px rgba(0,0,0,.4); }
 .copy-mine-btn.active:hover { background: #6a9a48; }
 
 .copy-rm-btn {
