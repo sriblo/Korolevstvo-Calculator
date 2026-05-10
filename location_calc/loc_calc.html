@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Калькулятор загруженности копий — Калькуляторы Королевства</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=Crimson+Pro:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=Crimson+Pro:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@400;500;600;700&display=swap');
 
 :root {
   --amber:  #b8860b;
@@ -33,7 +33,7 @@ html { min-height: 100%; }
 
 body {
   min-height: 100vh; color: var(--text);
-  font-family: 'Crimson Pro', serif; font-size: 15px; line-height: 1.5;
+  font-family: 'Crimson Pro', serif; font-size: 16px; line-height: 1.5;
   background-color: var(--bg);
   background-image:
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E"),
@@ -59,7 +59,7 @@ header::after {
   background: linear-gradient(90deg, transparent 0%, rgba(72,112,168,.4) 20%, var(--bluel) 50%, rgba(72,112,168,.4) 80%, transparent 100%);
 }
 .h-inner {
-  max-width: 1100px; margin: 0 auto; padding: 14px 0;
+  max-width: 720px; margin: 0 auto; padding: 14px 0;
   display: flex; align-items: center; gap: 14px;
 }
 .h-back {
@@ -84,8 +84,8 @@ header::after {
 /* ── PAGE ── */
 .page {
   position: relative; z-index: 5;
-  max-width: 1100px; margin: 0 auto; padding: 22px 28px 80px;
-  display: grid; grid-template-columns: 360px 1fr; gap: 20px; align-items: start;
+  max-width: 720px; margin: 0 auto; padding: 24px 24px 80px;
+  display: flex; flex-direction: column; gap: 20px;
 }
 
 /* ── CARD ── */
@@ -103,65 +103,27 @@ header::after {
   content: ''; position: absolute; top: 0; left: 20px; right: 20px; height: 1px;
   background: linear-gradient(90deg, transparent, rgba(220,180,80,.2), transparent); pointer-events: none;
 }
-.card-title {
-  padding: 10px 18px; display: flex; align-items: center; gap: 8px;
-  background: linear-gradient(90deg, rgba(184,134,11,.12), rgba(184,134,11,.05));
-  border-bottom: 1px solid var(--sep);
-  font-family: 'Inter', sans-serif; font-size: 10px; font-weight: 600;
-  letter-spacing: 2.5px; text-transform: uppercase; color: rgba(212,168,67,.7);
+
+/* ── MY RACE ROW ── */
+.my-race-row {
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+  padding: 18px 22px; border-bottom: 1px solid var(--sep);
   position: relative; z-index: 2;
 }
-.card-title-ornament { width: 14px; height: 14px; position: relative; flex-shrink: 0; }
-.card-title-ornament::before, .card-title-ornament::after {
-  content: ''; position: absolute; background: rgba(212,168,67,.45);
+.mr-label {
+  font-family: 'Crimson Pro', serif; font-size: 17px; color: var(--text);
+  white-space: nowrap; flex-shrink: 0;
 }
-.card-title-ornament::before { width: 14px; height: 1px; top: 6px; left: 0; }
-.card-title-ornament::after  { width: 1px; height: 14px; left: 6px; top: 0; }
-
-/* ── TOOLTIP ── */
-.tip {
-  display: inline-flex; align-items: center; justify-content: center;
-  width: 16px; height: 16px; border-radius: 50%;
-  background: rgba(184,134,11,.15); border: 1px solid rgba(184,134,11,.3);
-  font-family: 'Inter', sans-serif; font-size: 9px; font-weight: 700;
-  color: var(--amber); font-style: normal; letter-spacing: 0; text-transform: none;
-  cursor: help; position: relative; flex-shrink: 0; line-height: 1;
-  transition: background .15s, border-color .15s;
+.mr-spacer { flex: 1; }
+.mr-unit {
+  font-family: 'Inter', sans-serif; font-size: 13px; color: var(--text2);
+  white-space: nowrap;
 }
-.tip:hover { background: rgba(184,134,11,.25); border-color: rgba(184,134,11,.5); }
-.tip::after {
-  content: attr(data-tip); position: fixed; bottom: auto; top: auto; left: auto;
-  margin-top: 8px;
-  background: rgba(8,5,2,.97); border: 1px solid rgba(184,134,11,.3); border-radius: 8px;
-  padding: 10px 14px; font-size: 12px; line-height: 1.6; color: var(--text);
-  white-space: pre-wrap; min-width: 210px; max-width: 270px;
-  pointer-events: none; opacity: 0; transition: opacity .15s; z-index: 9999;
-  box-shadow: 0 10px 30px rgba(0,0,0,.7); font-family: 'Crimson Pro', serif;
-  transform: none;
-}
-.tip:hover::after { opacity: 1; }
-
-/* ── INPUT ROW ── */
-.irow {
-  display: grid; grid-template-columns: 34px 1fr 20px 88px 60px;
-  align-items: center; gap: 10px;
-  padding: 11px 18px; border-bottom: 1px solid var(--sep);
-  position: relative; z-index: 2; transition: background .15s;
-}
-.irow:last-child { border-bottom: none; }
-.irow:hover { background: rgba(184,134,11,.025); }
-.ico-pill {
-  width: 34px; height: 34px; display: flex; align-items: center; justify-content: center;
-  background: rgba(0,0,0,.45); border: 1px solid var(--sep); border-radius: 8px;
-  font-size: 15px; box-shadow: 0 2px 6px rgba(0,0,0,.4) inset;
-}
-.ilbl { font-size: 14px; font-weight: 600; color: var(--text); line-height: 1.3; }
-.ilbl small { display: block; font-size: 11px; color: var(--text3); font-weight: 400; margin-top: 2px; font-style: italic; }
 
 input[type=number] {
-  width: 84px; background: var(--inp); border: 1px solid rgba(184,134,11,.28);
+  background: var(--inp); border: 1px solid rgba(184,134,11,.28);
   border-radius: 8px; color: var(--goldl); padding: 7px 10px;
-  font-size: 18px; font-family: 'Inter', sans-serif; font-weight: 600;
+  font-family: 'Inter', sans-serif; font-weight: 600;
   text-align: right; outline: none; -moz-appearance: textfield;
   transition: border-color .2s, box-shadow .2s;
   box-shadow: 0 2px 10px rgba(0,0,0,.5) inset;
@@ -172,167 +134,68 @@ input[type=number]:focus {
 }
 input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; }
-.unit { font-size: 12px; color: var(--text2); font-family: 'Inter', sans-serif; white-space: nowrap; }
+
+#my-race { width: 80px; font-size: 20px; }
 
 /* ── COPY ROWS ── */
 .copy-row {
-  display: grid; grid-template-columns: 34px 60px 14px 1fr 28px;
-  align-items: center; gap: 10px;
-  padding: 10px 18px; border-bottom: 1px solid var(--sep);
-  position: relative; z-index: 2; transition: background .15s;
+  display: grid;
+  grid-template-columns: 90px 64px 18px 24px 1fr 34px;
+  align-items: center; gap: 8px;
+  padding: 11px 22px; border-bottom: 1px solid var(--sep);
+  position: relative; z-index: 2;
 }
-.copy-row:last-child { border-bottom: none; }
-.copy-row:hover { background: rgba(184,134,11,.02); }
-.copy-row.is-mine { background: rgba(184,134,11,.03); }
-.copy-row.is-mine::before {
-  content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
-  background: linear-gradient(180deg, rgba(184,134,11,.4), rgba(184,134,11,.1));
-  pointer-events: none;
+.copy-label {
+  font-family: 'Crimson Pro', serif; font-size: 17px; color: var(--text2);
+  white-space: nowrap;
 }
-
-.copy-num-chip {
-  width: 34px; height: 34px; border-radius: 50%; flex-shrink: 0;
-  display: flex; align-items: center; justify-content: center;
-  font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 700;
-  background: rgba(0,0,0,.4); border: 1px solid rgba(255,255,255,.08); color: var(--text3);
-  transition: all .2s;
+.copy-pct-input { width: 64px !important; font-size: 17px !important; padding: 6px 8px !important; text-align: center !important; }
+.copy-pct-sign { font-size: 15px; color: var(--text3); font-family: 'Inter', sans-serif; }
+.copy-arrow { font-size: 16px; color: var(--text3); font-family: 'Inter', sans-serif; text-align: center; }
+.copy-result {
+  font-family: 'Inter', sans-serif; font-size: 16px; font-weight: 600;
+  color: var(--text3); white-space: nowrap; padding-left: 4px;
 }
-.copy-row.is-mine .copy-num-chip {
-  border-color: rgba(184,134,11,.35); color: var(--goldl);
-}
-
-.copy-pct-input { width: 60px !important; font-size: 16px !important; padding: 6px 8px !important; }
-.copy-pct-sign { font-size: 13px; color: var(--text3); font-family: 'Inter', sans-serif; }
-
-.copy-mine-btn {
-  padding: 5px 8px; border-radius: 6px; cursor: pointer; white-space: nowrap;
-  font-family: 'Inter', sans-serif; font-size: 9px; font-weight: 600;
-  letter-spacing: .5px; text-transform: uppercase; width: 100%;
-  background: transparent; border: 1px solid rgba(255,255,255,.1);
-  color: var(--text3); transition: all .2s; text-align: center;
-}
-.copy-mine-btn:hover { border-color: rgba(138,184,96,.4); color: var(--sagel); background: rgba(90,122,58,.08); }
-.copy-mine-btn.active { background: var(--sage); border-color: var(--sagel); color: #fff; font-weight: 700; box-shadow: 0 0 14px rgba(90,122,58,.45), 0 2px 6px rgba(0,0,0,.4); }
-.copy-mine-btn.active:hover { background: #6a9a48; }
+.copy-result.has-data { color: var(--text); }
 
 .copy-rm-btn {
-  width: 26px; height: 26px; border-radius: 6px; cursor: pointer; justify-self: end;
+  width: 28px; height: 28px; border-radius: 6px; cursor: pointer; justify-self: end;
   display: flex; align-items: center; justify-content: center;
   background: transparent; border: 1px solid transparent;
-  color: var(--text3); font-size: 15px; line-height: 1; transition: all .15s;
+  color: var(--text3); font-size: 17px; line-height: 1; transition: all .15s;
 }
 .copy-rm-btn:hover { background: rgba(139,58,42,.2); border-color: rgba(139,58,42,.4); color: var(--emberl); }
 .copy-rm-btn.hidden { visibility: hidden; pointer-events: none; }
 
+/* ── ADD BUTTON ── */
 .add-copy-btn {
-  width: 100%; padding: 11px 18px; background: rgba(184,134,11,.06); border: none;
-  border-top: 1px solid rgba(184,134,11,.18); cursor: pointer; text-align: center;
-  font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 600;
-  letter-spacing: 1.5px; text-transform: uppercase; color: rgba(212,168,67,.65);
-  display: flex; align-items: center; justify-content: center; gap: 8px;
+  width: 100%; padding: 13px 22px; background: rgba(184,134,11,.05); border: none;
+  border-top: 1px solid rgba(184,134,11,.15); cursor: pointer; text-align: center;
+  font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 600;
+  letter-spacing: 1.5px; text-transform: uppercase; color: rgba(212,168,67,.5);
+  display: flex; align-items: center; justify-content: center; gap: 7px;
   transition: color .15s, background .15s, border-color .15s; position: relative; z-index: 2;
 }
-.add-copy-btn::before { content: '+'; font-size: 16px; color: inherit; }
-.add-copy-btn:hover { color: var(--goldl); background: rgba(184,134,11,.12); border-top-color: rgba(184,134,11,.35); }
+.add-copy-btn::before { content: '+'; font-size: 18px; color: inherit; line-height: 1; }
+.add-copy-btn:hover { color: var(--goldl); background: rgba(184,134,11,.1); border-top-color: rgba(184,134,11,.3); }
 
-/* ── COLS ── */
-.lcol { display: flex; flex-direction: column; gap: 16px; }
-.rcol { display: flex; flex-direction: column; gap: 16px; }
-
-/* ── RESULT CARD ── */
-.res-card {
-  background: var(--glass2);
-  backdrop-filter: blur(32px); -webkit-backdrop-filter: blur(32px);
-  border: 1px solid rgba(72,112,168,.3); border-radius: 14px; overflow: hidden; position: relative;
-  box-shadow: 0 1px 0 rgba(128,170,216,.1) inset, 0 16px 56px rgba(0,0,0,.7), 0 0 60px rgba(72,112,168,.06);
+/* ── SUMMARY ── */
+.summary {
+  display: flex; align-items: center; flex-wrap: wrap; gap: 6px 14px;
+  padding: 16px 22px; border-top: 1px solid var(--sep);
+  position: relative; z-index: 2;
+  font-family: 'Crimson Pro', serif; font-size: 17px; color: var(--text2);
 }
-.res-card::before {
-  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
-  background: linear-gradient(90deg, transparent, rgba(72,112,168,.5) 25%, var(--bluel) 50%, rgba(72,112,168,.5) 75%, transparent);
-  pointer-events: none; z-index: 2;
+.sum-val {
+  font-family: 'Inter', sans-serif; font-size: 18px; font-weight: 700;
+  color: var(--text3);
 }
-.res-card::after {
-  content: ''; position: absolute; inset: 3px 2px 2px; border-radius: 12px;
-  border: 1px solid rgba(128,170,216,.07); pointer-events: none; z-index: 2;
-}
-
-/* ── RESULT STATS ── */
-.res-top { display: grid; grid-template-columns: repeat(4, 1fr); position: relative; z-index: 3; }
-.res-stat { padding: 20px 18px; border-right: 1px solid var(--sep); border-bottom: 1px solid var(--sep); transition: background .15s; }
-.res-stat:last-child { border-right: none; }
-.rs-lbl { font-family: 'Inter', sans-serif; font-size: 10px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text3); margin-bottom: 10px; }
-.rs-val { font-family: 'Inter', sans-serif; font-size: 30px; font-weight: 700; color: var(--text3); line-height: 1; }
-.rs-val.on { color: var(--text); }
-.rs-val.r  { color: var(--emberl); }
-.rs-val.g  { color: var(--sagel); }
-.rs-val.b  { color: var(--bluel); }
-
-/* ── COPIES TABLE ── */
-.ctable-head {
-  display: grid; grid-template-columns: 52px 1fr 100px;
-  padding: 8px 18px; gap: 10px;
-  background: rgba(0,0,0,.25); border-top: 1px solid var(--sep); border-bottom: 1px solid var(--sep);
-  position: relative; z-index: 3;
-}
-.ctable-head span { font-family: 'Inter', sans-serif; font-size: 9px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--text3); }
-
-.ct-row {
-  display: grid; grid-template-columns: 52px 1fr 100px;
-  align-items: center; padding: 12px 18px; gap: 10px;
-  border-bottom: 1px solid rgba(72,112,168,.06);
-  position: relative; z-index: 3; transition: background .15s;
-}
-.ct-row:last-child { border-bottom: none; }
-.ct-row.is-mine { background: rgba(72,112,168,.05); }
-.ct-row.is-mine::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: linear-gradient(180deg, rgba(128,170,216,.7), rgba(128,170,216,.15)); }
-.ct-row.is-safest { background: rgba(90,122,58,.04); }
-
-.ct-chip {
-  width: 34px; height: 34px; border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 700;
-  background: rgba(0,0,0,.35); border: 1px solid rgba(255,255,255,.07); color: var(--text3);
-}
-.ct-row.is-mine .ct-chip { background: rgba(72,112,168,.2); border-color: rgba(72,112,168,.5); color: var(--bluel); box-shadow: 0 0 8px rgba(72,112,168,.15); }
-.ct-row.is-safest:not(.is-mine) .ct-chip { border-color: rgba(90,122,58,.4); color: var(--sagel); }
-
-.ct-info { display: flex; flex-direction: column; gap: 4px; }
-.ct-count { font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 600; color: var(--text); display: flex; align-items: baseline; gap: 5px; }
-.ct-count span { font-size: 11px; color: var(--text3); font-weight: 400; }
-.ct-badges { display: flex; gap: 5px; flex-wrap: wrap; }
-.cbadge { display: inline-flex; align-items: center; font-family: 'Inter', sans-serif; font-size: 9px; font-weight: 600; letter-spacing: .5px; text-transform: uppercase; padding: 2px 7px; border-radius: 4px; }
-.cbadge-mine   { background: rgba(72,112,168,.15); border: 1px solid rgba(72,112,168,.35); color: var(--bluel); }
-.cbadge-safest { background: rgba(90,122,58,.12);  border: 1px solid rgba(90,122,58,.3);  color: var(--sagel); }
-.cbadge-empty  { background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.08); color: var(--text3); }
-
-.ct-bar-col { display: flex; align-items: center; gap: 8px; }
-.ct-bar { flex: 1; height: 5px; border-radius: 3px; background: rgba(255,255,255,.06); overflow: hidden; }
-.ct-bar-fill { height: 100%; border-radius: 3px; transition: width .35s ease; }
-.ct-bar-fill.blue  { background: linear-gradient(90deg, rgba(72,112,168,.5), var(--bluel)); }
-.ct-bar-fill.green { background: linear-gradient(90deg, rgba(90,122,58,.5), var(--sagel)); }
-.ct-bar-fill.red   { background: linear-gradient(90deg, rgba(139,58,42,.5), var(--emberl)); }
-.ct-bar-fill.gray  { background: rgba(255,255,255,.08); }
-.ct-pct { font-family: 'Inter', sans-serif; font-size: 11px; color: var(--text3); white-space: nowrap; min-width: 26px; text-align: right; }
-
-.idle-msg { padding: 22px 20px; font-size: 14px; color: var(--text3); font-style: italic; border-top: 1px solid var(--sep); font-family: 'Crimson Pro', serif; position: relative; z-index: 3; }
-
-/* ── FORMULAS ── */
-.fml-body { padding: 16px 18px 20px; display: flex; flex-direction: column; gap: 14px; position: relative; z-index: 2; }
-.fml-const { display: flex; align-items: center; gap: 14px; padding: 14px 18px; background: rgba(0,0,0,.2); border-radius: 8px; border: 1px solid var(--sep); }
-.fml-clbl { font-family: 'Crimson Pro', serif; font-size: 15px; color: var(--text2); flex: 1; }
-.fml-ceq { font-family: 'Inter', sans-serif; font-size: 18px; font-weight: 700; color: var(--goldl); white-space: nowrap; }
-.fml-steps { display: flex; flex-direction: column; border: 1px solid var(--sep); border-radius: 8px; overflow: hidden; }
-.fml-step { display: flex; gap: 14px; align-items: flex-start; padding: 16px 18px; border-bottom: 1px solid var(--sep); }
-.fml-step:last-child { border-bottom: none; }
-.fml-snum { width: 26px; height: 26px; border-radius: 50%; background: rgba(184,134,11,.15); border: 1px solid rgba(184,134,11,.3); color: var(--goldl); font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
-.fml-scontent { flex: 1; display: flex; flex-direction: column; gap: 7px; }
-.fml-stitle { font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 600; color: var(--text); letter-spacing: .5px; }
-.fml-formula { display: inline-block; font-family: 'Inter', sans-serif; font-size: 17px; font-weight: 700; color: var(--bluel); background: rgba(72,112,168,.1); border: 1px solid rgba(72,112,168,.25); border-radius: 6px; padding: 5px 14px; letter-spacing: .03em; }
-.fml-example { font-family: 'Crimson Pro', serif; font-size: 14px; color: var(--text3); line-height: 1.55; }
-.fml-example b { color: var(--goldl); font-weight: 700; }
+.sum-val.on { color: var(--text); }
+.sum-val.enemy-zero { color: var(--sagel); }
+.sum-val.enemy-pos  { color: var(--emberl); }
+.sum-dot { color: var(--text3); font-size: 20px; line-height: 1; }
 
 /* ── GUIDE ── */
-.guide-section { grid-column: 1 / -1; margin-top: 8px; }
 .guide-card {
   background: var(--glass);
   backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
@@ -356,37 +219,42 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; }
 
 .guide-body { padding: 16px 18px; display: flex; flex-direction: column; gap: 12px; position: relative; z-index: 2; }
 .guide-step { display: flex; gap: 12px; }
-.guide-num { font-family: 'Inter', sans-serif; font-size: 10px; font-weight: 700; background: rgba(184,134,11,.15); border: 1px solid rgba(184,134,11,.3); color: var(--goldl); border-radius: 50%; width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+.guide-num { font-family: 'Inter', sans-serif; font-size: 10px; font-weight: 700; background: rgba(184,134,11,.15); border: 1px solid rgba(184,134,11,.3); color: var(--goldl); border-radius: 50%; width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
 .guide-step-text { color: var(--text2); font-family: 'Crimson Pro', serif; font-size: 15px; line-height: 1.55; }
 .guide-step-text b { color: var(--text); font-weight: 700; }
 
-.ftable { width: 100%; border-collapse: collapse; font-size: 15px; }
-.ftable th { text-align: left; padding: 8px 14px; font-family: 'Inter', sans-serif; font-size: 10px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text3); border-bottom: 1px solid var(--sep); background: rgba(0,0,0,.1); }
-.ftable td { padding: 10px 14px; border-bottom: 1px solid rgba(184,134,11,.06); color: var(--text2); font-family: 'Crimson Pro', serif; vertical-align: top; }
-.ftable tr:last-child td { border-bottom: none; }
-.ftable tr:hover td { background: rgba(184,134,11,.02); }
-.ftable .fname { color: var(--text); font-weight: 600; }
-.ftable .fcode { font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 600; color: var(--bluel); background: rgba(72,112,168,.1); border: 1px solid rgba(72,112,168,.2); border-radius: 5px; padding: 2px 8px; display: inline-block; white-space: nowrap; }
-.ftable .fval { color: var(--goldl); font-weight: 700; font-family: 'Inter', sans-serif; font-size: 13px; }
+.fml-body { padding: 16px 18px 20px; display: flex; flex-direction: column; gap: 14px; position: relative; z-index: 2; }
+.fml-const { display: flex; align-items: center; gap: 14px; padding: 14px 18px; background: rgba(0,0,0,.2); border-radius: 8px; border: 1px solid var(--sep); }
+.fml-clbl { font-family: 'Crimson Pro', serif; font-size: 15px; color: var(--text2); flex: 1; }
+.fml-ceq { font-family: 'Inter', sans-serif; font-size: 18px; font-weight: 700; color: var(--goldl); white-space: nowrap; }
+.fml-steps { display: flex; flex-direction: column; border: 1px solid var(--sep); border-radius: 8px; overflow: hidden; }
+.fml-step { display: flex; gap: 14px; align-items: flex-start; padding: 16px 18px; border-bottom: 1px solid var(--sep); }
+.fml-step:last-child { border-bottom: none; }
+.fml-snum { width: 26px; height: 26px; border-radius: 50%; background: rgba(184,134,11,.15); border: 1px solid rgba(184,134,11,.3); color: var(--goldl); font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
+.fml-scontent { flex: 1; display: flex; flex-direction: column; gap: 7px; }
+.fml-stitle { font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 600; color: var(--text); letter-spacing: .5px; }
+.fml-formula { display: inline-block; font-family: 'Inter', sans-serif; font-size: 17px; font-weight: 700; color: var(--bluel); background: rgba(72,112,168,.1); border: 1px solid rgba(72,112,168,.25); border-radius: 6px; padding: 5px 14px; letter-spacing: .03em; }
+.fml-example { font-family: 'Crimson Pro', serif; font-size: 14px; color: var(--text3); line-height: 1.55; }
+.fml-example b { color: var(--goldl); font-weight: 700; }
 .formula-note { padding: 12px 18px; font-size: 13px; color: var(--text3); font-style: italic; border-top: 1px solid var(--sep); font-family: 'Crimson Pro', serif; position: relative; z-index: 2; }
 
 /* ── FOOTER ── */
-.page-footer { position: relative; z-index: 5; max-width: 1100px; margin: 0 auto; padding: 0 28px 60px; text-align: center; }
+.page-footer { position: relative; z-index: 5; max-width: 720px; margin: 0 auto; padding: 0 24px 60px; text-align: center; }
 .footer-text { font-family: 'Crimson Pro', serif; font-size: 16px; color: var(--text3); font-style: italic; letter-spacing: .03em; }
 
 /* ── RESPONSIVE ── */
-@media (max-width: 740px) {
-  .page { grid-template-columns: 1fr; padding: 16px 14px 60px; }
+@media (max-width: 600px) {
   header { padding: 0 14px; }
   .h-right-orn { display: none; }
   .h-title { font-size: 17px; }
-  .res-top { grid-template-columns: repeat(2, 1fr); }
-  .res-stat:nth-child(2) { border-right: none; }
-  .res-stat:nth-child(3), .res-stat:nth-child(4) { border-bottom: none; }
-  .irow { grid-template-columns: 34px 1fr 20px 72px auto; gap: 8px; padding: 9px 14px; }
-  input[type=number] { width: 72px; font-size: 16px; padding: 6px 8px; }
-  .copy-row { grid-template-columns: 34px 54px 12px 1fr 24px; gap: 7px; padding: 9px 14px; }
-  .copy-pct-input { width: 50px !important; }
+  .page { padding: 16px 14px 60px; }
+  .my-race-row { padding: 14px 16px; }
+  .copy-row { grid-template-columns: 76px 56px 16px 20px 1fr 30px; gap: 6px; padding: 10px 16px; }
+  .copy-label { font-size: 15px; }
+  .copy-result { font-size: 14px; }
+  #my-race { width: 72px; font-size: 18px; }
+  .summary { padding: 14px 16px; font-size: 15px; }
+  .sum-val { font-size: 16px; }
 }
 </style>
 </head>
@@ -410,147 +278,101 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; }
 
 <div class="page">
 
-  <!-- LEFT COLUMN -->
-  <div class="lcol">
-
-    <div class="card">
-      <div class="card-title"><div class="card-title-ornament"></div>Исходные данные</div>
-      <div class="irow">
-        <div class="ico-pill">👥</div>
-        <div class="ilbl">Игроков моей расы</div>
-        <span class="tip" data-tip="Открой список игроков в локации.&#10;Внизу есть иконка с цифрой — это&#10;суммарное число игроков твоей расы&#10;во всех копиях. Введи это число.">?</span>
-        <input type="number" id="my-race" value="0" min="0" oninput="calc()">
-        <span class="unit">игроков</span>
-      </div>
+  <div class="card">
+    <div class="my-race-row">
+      <span class="mr-label">Игроков моей расы в локации:</span>
+      <div class="mr-spacer"></div>
+      <input type="number" id="my-race" value="0" min="0" oninput="calc()">
+      <span class="mr-unit">игроков</span>
     </div>
 
-    <div class="card">
-      <div class="card-title"><div class="card-title-ornament"></div>Копии локации</div>
-      <div id="copies-body"></div>
-      <button class="add-copy-btn" onclick="addCopy()">Добавить копию</button>
-    </div>
+    <div id="copies-body"></div>
 
+    <button class="add-copy-btn" onclick="addCopy()">Добавить копию</button>
+
+    <div class="summary">
+      <span>Всего игроков:</span>
+      <span class="sum-val" id="sv-total">—</span>
+      <span class="sum-dot">·</span>
+      <span>Моей расы:</span>
+      <span class="sum-val" id="sv-mine">—</span>
+      <span class="sum-dot">·</span>
+      <span>Вражеской расы:</span>
+      <span class="sum-val" id="sv-enemies">—</span>
+    </div>
   </div>
 
-  <!-- RIGHT COLUMN -->
-  <div class="rcol">
-
-    <div class="res-card">
-
-      <div class="res-top">
-        <div class="res-stat">
-          <div class="rs-lbl">Игроков всего</div>
-          <div class="rs-val" id="sv-total">—</div>
-        </div>
-        <div class="res-stat">
-          <div class="rs-lbl">Из них врагов</div>
-          <div class="rs-val" id="sv-enemies">—</div>
-        </div>
-        <div class="res-stat">
-          <div class="rs-lbl">Моя раса</div>
-          <div class="rs-val" id="sv-mine">—</div>
-        </div>
-        <div class="res-stat">
-          <div class="rs-lbl">Копий</div>
-          <div class="rs-val b" id="sv-copies">—</div>
-        </div>
-      </div>
-
-      <div id="copies-table" style="display:none">
-        <div class="ctable-head">
-          <span>Копия</span>
-          <span>Игроков</span>
-          <span>% из окна</span>
-        </div>
-        <div id="copies-rows"></div>
-      </div>
-
-      <div id="idle-msg" class="idle-msg">Введи данные из окна «Копии» →</div>
-
+  <div class="guide-card">
+    <div class="tab-bar">
+      <button class="tab-btn active" onclick="switchTab('instr', this)">Инструкция</button>
+      <button class="tab-btn" onclick="switchTab('formulas', this)">Формулы</button>
     </div>
 
-  </div>
-
-  <!-- GUIDE -->
-  <div class="guide-section">
-    <div class="guide-card">
-
-      <div class="tab-bar">
-        <button class="tab-btn active" onclick="switchTab('instr', this)">Инструкция</button>
-        <button class="tab-btn" onclick="switchTab('formulas', this)">Формулы</button>
+    <div id="tab-instr" class="tab-pane active">
+      <div class="codex-chapter">
+        <div class="codex-chapter-icon">I</div>
+        <div class="codex-chapter-title">Как пользоваться</div>
+        <div class="codex-chapter-rule"></div>
       </div>
-
-      <div id="tab-instr" class="tab-pane active">
-        <div class="codex-chapter">
-          <div class="codex-chapter-icon">I</div>
-          <div class="codex-chapter-title">Как пользоваться</div>
-          <div class="codex-chapter-rule"></div>
+      <div class="guide-body">
+        <div class="guide-step">
+          <div class="guide-num">1</div>
+          <div class="guide-step-text">Зайди в локацию и посмотри на <b>список игроков</b>. Внизу будет иконка с цифрой — это количество игроков твоей расы в текущей локации, во всех копиях сразу. Введи его в поле <b>«Игроков моей расы»</b>.</div>
         </div>
-        <div class="guide-body">
-          <div class="guide-step">
-            <div class="guide-num">1</div>
-            <div class="guide-step-text">Зайди в локацию и посмотри на <b>список игроков</b>. Внизу будет иконка с цифрой — это количество игроков твоей расы в текущей локации, во всех копиях сразу. Введи его в поле <b>«Игроков моей расы»</b>.</div>
-          </div>
-          <div class="guide-step">
-            <div class="guide-num">2</div>
-            <div class="guide-step-text">Открой окно <b>«Копии»</b>. Для каждой копии впиши в калькулятор процент её заполненности — он указан в колонке «Игроков». Если копий больше, чем строк в калькуляторе, нажми <b>«Добавить копию»</b>.</div>
-          </div>
-          <div class="guide-step">
-            <div class="guide-num">3</div>
-            <div class="guide-step-text">Нажми <b>«Я здесь»</b> напротив копии, в которой ты сейчас находишься — кнопка подсветится.</div>
-          </div>
-          <div class="guide-step">
-            <div class="guide-num">4</div>
-            <div class="guide-step-text">Калькулятор покажет <b>сколько игроков вражеской расы</b> сейчас в локации и сколько игроков в каждой конкретной копии.</div>
-          </div>
-          <div class="guide-step">
-            <div class="guide-num">5</div>
-            <div class="guide-step-text">С помощью этого калькулятора ты можешь более эффективно планировать свой фарм и сделать его более безопасным. Желаю хорошего дропа! :)</div>
-          </div>
+        <div class="guide-step">
+          <div class="guide-num">2</div>
+          <div class="guide-step-text">Открой окно <b>«Копии»</b>. Для каждой копии впиши процент её заполненности — он указан в колонке «Игроков». Если копий больше, чем строк в калькуляторе, нажми <b>«Добавить копию»</b>.</div>
+        </div>
+        <div class="guide-step">
+          <div class="guide-num">3</div>
+          <div class="guide-step-text">Калькулятор покажет <b>сколько игроков вражеской расы</b> сейчас в локации и сколько игроков в каждой конкретной копии.</div>
+        </div>
+        <div class="guide-step">
+          <div class="guide-num">4</div>
+          <div class="guide-step-text">С помощью этого калькулятора ты можешь более эффективно планировать свой фарм и сделать его более безопасным. Желаю хорошего дропа! :)</div>
         </div>
       </div>
+    </div>
 
-      <div id="tab-formulas" class="tab-pane">
-        <div class="codex-chapter">
-          <div class="codex-chapter-icon">II</div>
-          <div class="codex-chapter-title">Как работает расчёт</div>
-          <div class="codex-chapter-rule"></div>
-        </div>
-        <div class="fml-body">
-          <div class="fml-const">
-            <div class="fml-clbl">Максимальная вместимость одной копии — константа игры</div>
-            <div class="fml-ceq">= 80 игроков</div>
-          </div>
-          <div class="fml-steps">
-            <div class="fml-step">
-              <div class="fml-snum">1</div>
-              <div class="fml-scontent">
-                <div class="fml-stitle">Игроков в конкретной копии</div>
-                <div class="fml-formula">⌈ % × 80 ÷ 100 ⌉</div>
-                <div class="fml-example">Пример: в окне «Копии» стоит 16% → ⌈ 16 × 80 ÷ 100 ⌉ = ⌈ 12,8 ⌉ = <b>13 игроков</b></div>
-              </div>
-            </div>
-            <div class="fml-step">
-              <div class="fml-snum">2</div>
-              <div class="fml-scontent">
-                <div class="fml-stitle">Всего игроков в локации</div>
-                <div class="fml-formula">Σ игроков по всем копиям</div>
-                <div class="fml-example">Пример: 4 копии по 16%, 5%, 2%, 5% → 13 + 4 + 2 + 4 = <b>23 игрока</b></div>
-              </div>
-            </div>
-            <div class="fml-step">
-              <div class="fml-snum">3</div>
-              <div class="fml-scontent">
-                <div class="fml-stitle">Игроков вражеской расы</div>
-                <div class="fml-formula">Всего − Моя раса</div>
-                <div class="fml-example">Пример: всего 23, своих 12 → <b>11 врагов</b>. Своя раса видна в списке игроков, чужая — нет.</div>
-              </div>
-            </div>
-          </div>
-          <div class="formula-note">⌈ x ⌉ — округление вверх (потолок). Формула выведена эмпирически на основе нескольких снимков экрана из игры.</div>
-        </div>
+    <div id="tab-formulas" class="tab-pane">
+      <div class="codex-chapter">
+        <div class="codex-chapter-icon">II</div>
+        <div class="codex-chapter-title">Как работает расчёт</div>
+        <div class="codex-chapter-rule"></div>
       </div>
-
+      <div class="fml-body">
+        <div class="fml-const">
+          <div class="fml-clbl">Максимальная вместимость одной копии — константа игры</div>
+          <div class="fml-ceq">= 80 игроков</div>
+        </div>
+        <div class="fml-steps">
+          <div class="fml-step">
+            <div class="fml-snum">1</div>
+            <div class="fml-scontent">
+              <div class="fml-stitle">Игроков в конкретной копии</div>
+              <div class="fml-formula">⌈ % × 80 ÷ 100 ⌉</div>
+              <div class="fml-example">Пример: в окне «Копии» стоит 16% → ⌈ 16 × 80 ÷ 100 ⌉ = ⌈ 12,8 ⌉ = <b>13 игроков</b></div>
+            </div>
+          </div>
+          <div class="fml-step">
+            <div class="fml-snum">2</div>
+            <div class="fml-scontent">
+              <div class="fml-stitle">Всего игроков в локации</div>
+              <div class="fml-formula">Σ игроков по всем копиям</div>
+              <div class="fml-example">Пример: 4 копии по 16%, 5%, 2%, 5% → 13 + 4 + 2 + 4 = <b>23 игрока</b></div>
+            </div>
+          </div>
+          <div class="fml-step">
+            <div class="fml-snum">3</div>
+            <div class="fml-scontent">
+              <div class="fml-stitle">Игроков вражеской расы</div>
+              <div class="fml-formula">Всего − Моя раса</div>
+              <div class="fml-example">Пример: всего 23, своих 12 → <b>11 врагов</b>. Своя раса видна в списке игроков, чужая — нет.</div>
+            </div>
+          </div>
+        </div>
+        <div class="formula-note">⌈ x ⌉ — округление вверх (потолок). Формула выведена эмпирически на основе нескольких снимков экрана из игры.</div>
+      </div>
     </div>
   </div>
 
@@ -562,7 +384,7 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; }
 
 <script>
 const MAX = 80;
-let copies = [{ pct: 0, isMine: true }];
+let copies = [{ pct: 0 }, { pct: 0 }];
 
 function playersFromPct(pct) {
   if (!pct || pct <= 0) return 0;
@@ -570,37 +392,31 @@ function playersFromPct(pct) {
 }
 
 function fmt(n) { return Math.round(n).toLocaleString('ru-RU'); }
-function set(id, v) { document.getElementById(id).textContent = v; }
 
 function renderCopyInputs() {
-  document.getElementById('copies-body').innerHTML = copies.map((c, i) => `
-    <div class="copy-row${c.isMine ? ' is-mine' : ''}">
-      <div class="copy-num-chip">${i + 1}</div>
-      <input type="number" class="copy-pct-input" value="${c.pct}" min="0" max="100" placeholder="0"
+  document.getElementById('copies-body').innerHTML = copies.map((c, i) => {
+    const total = playersFromPct(c.pct);
+    const hasData = c.pct > 0;
+    return `<div class="copy-row">
+      <span class="copy-label">${i + 1} копия</span>
+      <input type="number" class="copy-pct-input" value="${c.pct || ''}" min="0" max="100" placeholder="0"
              oninput="copies[${i}].pct = Math.min(100, Math.max(0, parseInt(this.value)||0)); calc()">
       <span class="copy-pct-sign">%</span>
-      <button class="copy-mine-btn${c.isMine ? ' active' : ''}" onclick="setMine(${i})">Я здесь</button>
+      <span class="copy-arrow">→</span>
+      <span class="copy-result${hasData ? ' has-data' : ''}" id="cr-${i}">${hasData ? fmt(total) + ' игроков' : '—'}</span>
       <button class="copy-rm-btn${copies.length <= 1 ? ' hidden' : ''}" onclick="removeCopy(${i})">×</button>
-    </div>
-  `).join('');
+    </div>`;
+  }).join('');
 }
 
 function addCopy() {
-  copies.push({ pct: 0, isMine: false });
+  copies.push({ pct: 0 });
   renderCopyInputs();
   calc();
 }
 
 function removeCopy(i) {
-  const wasMine = copies[i].isMine;
   copies.splice(i, 1);
-  if (wasMine) copies[0].isMine = true;
-  renderCopyInputs();
-  calc();
-}
-
-function setMine(i) {
-  copies.forEach((c, j) => c.isMine = j === i);
   renderCopyInputs();
   calc();
 }
@@ -609,68 +425,33 @@ function calc() {
   const myRace  = Math.max(0, parseInt(document.getElementById('my-race').value) || 0);
   const hasData = copies.some(c => c.pct > 0);
 
-  const rows = copies.map((c, i) => ({
-    num: i + 1, pct: c.pct, isMine: c.isMine,
-    total: playersFromPct(c.pct),
-  }));
-
-  const totalAll = rows.reduce((s, r) => s + r.total, 0);
+  const totalAll = copies.reduce((s, c) => s + playersFromPct(c.pct), 0);
   const enemies  = Math.max(0, totalAll - myRace);
-  const minTotal = Math.min(...rows.map(r => r.total));
-  const maxTotal = rows.reduce((m, r) => Math.max(m, r.total), 0) || 1;
 
-  // 4 stats
+  // Update inline copy results
+  copies.forEach((c, i) => {
+    const el = document.getElementById('cr-' + i);
+    if (!el) return;
+    const total = playersFromPct(c.pct);
+    const hd = c.pct > 0;
+    el.textContent = hd ? fmt(total) + ' игроков' : '—';
+    el.className = 'copy-result' + (hd ? ' has-data' : '');
+  });
+
   const totalEl   = document.getElementById('sv-total');
-  const enemiesEl = document.getElementById('sv-enemies');
   const mineEl    = document.getElementById('sv-mine');
-  const copiesEl  = document.getElementById('sv-copies');
+  const enemiesEl = document.getElementById('sv-enemies');
 
   if (!hasData) {
-    totalEl.textContent   = '—'; totalEl.className   = 'rs-val';
-    enemiesEl.textContent = '—'; enemiesEl.className = 'rs-val';
-    mineEl.textContent    = '—'; mineEl.className    = 'rs-val';
+    totalEl.textContent   = '—'; totalEl.className   = 'sum-val';
+    mineEl.textContent    = '—'; mineEl.className    = 'sum-val';
+    enemiesEl.textContent = '—'; enemiesEl.className = 'sum-val';
   } else {
-    totalEl.textContent   = fmt(totalAll); totalEl.className   = 'rs-val on';
-    enemiesEl.textContent = fmt(enemies);  enemiesEl.className = 'rs-val ' + (enemies === 0 ? 'g' : 'r');
-    mineEl.textContent    = fmt(myRace);   mineEl.className    = 'rs-val g';
+    totalEl.textContent   = fmt(totalAll); totalEl.className = 'sum-val on';
+    mineEl.textContent    = fmt(myRace);   mineEl.className  = 'sum-val on';
+    enemiesEl.textContent = fmt(enemies);
+    enemiesEl.className   = 'sum-val ' + (enemies === 0 ? 'enemy-zero' : 'enemy-pos');
   }
-  copiesEl.textContent = rows.length; copiesEl.className = 'rs-val b';
-
-  const idleEl = document.getElementById('idle-msg');
-  const ctEl   = document.getElementById('copies-table');
-
-  if (!hasData) {
-    idleEl.style.display = 'block';
-    ctEl.style.display   = 'none';
-    return;
-  }
-
-  idleEl.style.display = 'none';
-  ctEl.style.display   = 'block';
-
-  document.getElementById('copies-rows').innerHTML = rows.map(r => {
-    const isSafest = r.total === minTotal;
-    const isEmpty  = r.total === 0;
-    const fillPct  = Math.round(r.total / maxTotal * 100);
-    const barColor = isEmpty ? 'gray' : isSafest ? 'green' : 'blue';
-
-    const badges = [];
-    if (r.isMine)  badges.push(`<span class="cbadge cbadge-mine">Вы здесь</span>`);
-    if (isSafest)  badges.push(`<span class="cbadge cbadge-safest">Меньше всего</span>`);
-    if (isEmpty)   badges.push(`<span class="cbadge cbadge-empty">Пусто</span>`);
-
-    return `<div class="ct-row${r.isMine ? ' is-mine' : ''}${isSafest ? ' is-safest' : ''}">
-      <div class="ct-chip">${r.num}</div>
-      <div class="ct-info">
-        <div class="ct-count">${fmt(r.total)}<span>игр.</span></div>
-        ${badges.length ? `<div class="ct-badges">${badges.join('')}</div>` : ''}
-      </div>
-      <div class="ct-bar-col">
-        <div class="ct-bar"><div class="ct-bar-fill ${barColor}" style="width:${fillPct}%"></div></div>
-        <div class="ct-pct">${r.pct}%</div>
-      </div>
-    </div>`;
-  }).join('');
 }
 
 function switchTab(id, btn) {
