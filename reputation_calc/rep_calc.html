@@ -755,10 +755,11 @@ const REPUTATIONS = [
 ];
 
 // Бафы советов: [белый%, зелёный%, синий%] для каждой репутации
+// master — уникальный баф репутации (чекбокс, как Королевская печать)
 const BUFFS = {
   vedmak:          { council: [7, 14, 21], seal: 25 },
-  gladiator:       { council: [5, 10, 15] },
-  zavoevatel:      { council: [17, 34, 51] },
+  gladiator:       { council: [5, 10, 15], master: { pct: 20,  name: 'Мастер Арены', ico: 'buff/master_aren.png' } },
+  zavoevatel:      { council: [17, 34, 51], master: { pct: 100, name: 'Мастер Войны', ico: 'buff/master_voiny.png' } },
   vlast:           { council: [5, 6, 7] },
   arxeolog:        { council: [5, 10, 15] },
   hunter:          { council: [10, 20, 30] },
@@ -770,11 +771,10 @@ const BUFFS = {
 
 // Советы: 4 конкретных предмета, каждый может быть 0=нет/1=белый/2=зелёный/3=синий
 const COUNCILS = ['Попугая', 'Орка', 'Кабана', 'Индюка'];
-// Иконки советов: только у Попугая есть картинка, остальные пока без
-const COUNCIL_ICONS = ['buff/parrot_weapon.png', null, null, null];
+const COUNCIL_ICONS = ['buff/parrot_weapon.png', 'buff/sovet_orka.png', 'buff/sovet_kabana.png', 'buff/sovet_indyuka.png'];
 const SEAL_ICO = 'buff/kingdom_seal_1.png';
-// Состояние бафов: councils[0..3] = 0|1|2|3, seal = bool
-let buffState = { councils: [0, 0, 0, 0], seal: false };
+// Состояние бафов: councils[0..3] = 0|1|2|3, seal = bool, master = bool
+let buffState = { councils: [0, 0, 0, 0], seal: false, master: false };
 
 let activeRep = REPUTATIONS[0];
 
@@ -840,6 +840,7 @@ function getTotalBuff() {
   const pctByQ = [0, w, g, bl];
   let total = buffState.councils.reduce((sum, q) => sum + pctByQ[q], 0);
   if (b.seal && buffState.seal) total += b.seal;
+  if (b.master && buffState.master) total += b.master.pct;
   return total;
 }
 
@@ -907,6 +908,27 @@ function buildBuffs() {
     `;
   }
 
+  if (b.master) {
+    html += `
+      <div class="buff-row">
+        <div class="gico">
+          <img class="base" src="${b.master.ico}">
+          <img class="fr" src="../frames/border_none.png">
+        </div>
+        <div>
+          <div style="font-family:'Inter',sans-serif;font-size:12px;font-weight:600;color:var(--text)">${b.master.name}</div>
+          <div style="margin-top:3px"><span class="buff-quality bq-white">+${b.master.pct}%</span></div>
+        </div>
+        <div class="buff-ctrl">
+          <label style="display:flex;align-items:center;gap:6px;cursor:pointer">
+            <input type="checkbox" id="buff-master" ${buffState.master ? 'checked' : ''} onchange="toggleMaster()" style="accent-color:#c090e0;width:16px;height:16px">
+            <span style="font-family:'Inter',sans-serif;font-size:11px;color:var(--text2)">есть</span>
+          </label>
+        </div>
+      </div>
+    `;
+  }
+
   const total = getTotalBuff();
   html += `
     <div class="buff-total">
@@ -930,10 +952,16 @@ function toggleSeal() {
   calc();
 }
 
+function toggleMaster() {
+  buffState.master = document.getElementById('buff-master').checked;
+  buildBuffs();
+  calc();
+}
+
 /* ── SELECT REP ── */
 function selectRep(id) {
   activeRep = REPUTATIONS.find(r => r.id === id);
-  buffState = { councils: [0, 0, 0, 0], seal: false };
+  buffState = { councils: [0, 0, 0, 0], seal: false, master: false };
   buildRepGrid();
   buildRankSelects();
   buildBuffs();
