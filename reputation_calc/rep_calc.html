@@ -756,15 +756,16 @@ const REPUTATIONS = [
 
 // Бафы советов: [белый%, зелёный%, синий%] для каждой репутации
 // master — уникальный баф репутации (чекбокс, как Королевская печать)
+// svitok — Свиток Фаворита: [зелёный%, синий%], null = данных нет
 const BUFFS = {
-  vedmak:          { council: [7, 14, 21], seal: 25 },
-  gladiator:       { council: [5, 10, 15], master: { pct: 20,  name: 'Мастер Арены', ico: 'buff/master_aren.png' } },
-  zavoevatel:      { council: [17, 34, 51], master: { mult: 2,  name: 'Мастер Войны', ico: 'buff/master_voiny.png' } },
+  vedmak:          { council: [7, 14, 21], seal: 25,                                                          svitok: [null, null] },
+  gladiator:       { council: [5, 10, 15], master: { pct: 20, name: 'Мастер Арены', ico: 'buff/master_aren.png' }, svitok: [null, null] },
+  zavoevatel:      { council: [17, 34, 51], master: { mult: 2, name: 'Мастер Войны', ico: 'buff/master_voiny.png' }, svitok: [null, null] },
   vlast:           { council: [5, 6, 7] },
-  arxeolog:        { council: [5, 10, 15] },
+  arxeolog:        { council: [5, 10, 15],                                                                     svitok: [5,    null] },
   hunter:          { council: [10, 20, 30] },
   dresser:         { council: [13, 26, 39] },
-  guard:           { council: [17, 34, 51] },
+  guard:           { council: [17, 34, 51],                                                                    svitok: [null, 20]   },
   orden:           { council: [0, 0, 0] }, // нет данных
   exorcist:        { council: [100, 100, 100] },
 };
@@ -773,8 +774,8 @@ const BUFFS = {
 const COUNCILS = ['Попугая', 'Орка', 'Кабана', 'Индюка'];
 const COUNCIL_ICONS = ['buff/parrot_weapon.png', 'buff/sovet_orka.png', 'buff/sovet_kabana.png', 'buff/sovet_indyuka.png'];
 const SEAL_ICO = 'buff/kingdom_seal_1.png';
-// Состояние бафов: councils[0..3] = 0|1|2|3, seal = bool, master = bool
-let buffState = { councils: [0, 0, 0, 0], seal: false, master: false };
+// Состояние бафов: councils[0..3] = 0|1|2|3, seal = bool, master = bool, svitok = 0|1|2
+let buffState = { councils: [0, 0, 0, 0], seal: false, master: false, svitok: 0 };
 
 let activeRep = REPUTATIONS[0];
 
@@ -841,6 +842,10 @@ function getTotalBuff() {
   let total = buffState.councils.reduce((sum, q) => sum + pctByQ[q], 0);
   if (b.seal && buffState.seal) total += b.seal;
   if (b.master && b.master.pct && buffState.master) total += b.master.pct;
+  if (b.svitok && buffState.svitok > 0) {
+    const pct = b.svitok[buffState.svitok - 1]; // 1=зелёный→[0], 2=синий→[1]
+    if (pct !== null) total += pct;
+  }
   return total;
 }
 
@@ -936,6 +941,34 @@ function buildBuffs() {
     `;
   }
 
+  if (b.svitok) {
+    const [sg, sb] = b.svitok;
+    const q = buffState.svitok;
+    const frByQ = ['', '../frames/border_low.png', '../frames/border_medium.png'];
+    const activePct = q > 0 ? b.svitok[q - 1] : null;
+    const opts = [
+      `<option value="0"${q===0?' selected':''}>Нет</option>`,
+      `<option value="1"${q===1?' selected':''}${sg===null?' disabled':''}>Зелёный${sg!==null?' (+'+sg+'%)':' (неизвестно)'}</option>`,
+      `<option value="2"${q===2?' selected':''}${sb===null?' disabled':''}>Синий${sb!==null?' (+'+sb+'%)':' (неизвестно)'}</option>`,
+    ].join('');
+    html += `
+      <div class="buff-row">
+        <div class="gico">
+          <img class="base" src="buff/svitok_favorita.png">
+          ${q > 0 ? `<img class="fr" src="${frByQ[q]}">` : ''}
+        </div>
+        <div>
+          <div style="font-family:'Inter',sans-serif;font-size:12px;font-weight:600;color:var(--text)">Свиток Фаворита</div>
+        </div>
+        <div class="buff-ctrl">
+          <div class="buff-pct">${activePct !== null && q > 0 ? '+'+activePct+'%' : ''}</div>
+          <select style="grid-column:unset;padding:5px 8px;font-size:11px;width:auto"
+                  onchange="setSvitok(this.value)">${opts}</select>
+        </div>
+      </div>
+    `;
+  }
+
   const total = getTotalBuff();
   const mult  = getMasterMult();
   const totalLabel = mult > 1
@@ -969,10 +1002,16 @@ function toggleMaster() {
   calc();
 }
 
+function setSvitok(val) {
+  buffState.svitok = parseInt(val);
+  buildBuffs();
+  calc();
+}
+
 /* ── SELECT REP ── */
 function selectRep(id) {
   activeRep = REPUTATIONS.find(r => r.id === id);
-  buffState = { councils: [0, 0, 0, 0], seal: false, master: false };
+  buffState = { councils: [0, 0, 0, 0], seal: false, master: false, svitok: 0 };
   buildRepGrid();
   buildRankSelects();
   buildBuffs();
