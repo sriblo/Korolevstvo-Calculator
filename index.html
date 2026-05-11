@@ -587,7 +587,7 @@ header::after {
 
 <header>
   <div class="h-inner">
-    <div class="h-sigil">⚜</div>
+    <div class="h-sigil"><img src="kor_logo.svg" alt="" style="height:42px;width:auto;filter:drop-shadow(0 0 14px rgba(184,134,11,.55));display:block;"></div>
     <div class="h-titles">
       <div class="h-title">Калькуляторы Королевства</div>
       <div class="h-sub">Сайт создан игроками для игроков · kor.ru</div>
@@ -603,11 +603,7 @@ header::after {
   <div class="hero-ornament-top">
     <div class="orn-line"></div>
     <div class="orn-center">
-      <div class="orn-diamond"></div>
-      <div style="width:6px;height:1px;background:rgba(184,134,11,.4)"></div>
-      <div class="orn-cross"></div>
-      <div style="width:6px;height:1px;background:rgba(184,134,11,.4)"></div>
-      <div class="orn-diamond"></div>
+      <img src="kor_logo.svg" style="height:18px;width:auto;opacity:.45;display:block;">
     </div>
     <div class="orn-line r"></div>
   </div>
@@ -629,13 +625,7 @@ header::after {
   <div class="orn-divider">
     <div class="orn-div-line"></div>
     <div class="orn-div-center">
-      <div class="orn-div-dot"></div>
-      <div style="width:8px;height:1px;background:rgba(184,134,11,.3)"></div>
-      <div class="orn-div-diamond"></div>
-      <div class="orn-div-cross"></div>
-      <div class="orn-div-diamond"></div>
-      <div style="width:8px;height:1px;background:rgba(184,134,11,.3)"></div>
-      <div class="orn-div-dot"></div>
+      <img src="kor_logo.svg" style="height:17px;width:auto;opacity:.45;display:block;">
     </div>
     <div class="orn-div-line"></div>
   </div>
@@ -646,6 +636,19 @@ header::after {
   </div>
 
   <div class="grid">
+    <a class="calc-card" href="location_calc/loc_calc.html">
+      <div class="card-inner">
+        <div class="card-ico-wrap"><div class="card-ico">🗺️</div></div>
+        <div class="card-info-wrap">
+          <div class="card-name">Калькулятор загруженности копий</div>
+          <div class="card-dates">Постоянный инструмент</div>
+        </div>
+        <div class="card-desc-wrap"><div class="card-desc">Узнай, сколько игроков вражеской расы сейчас находится в локации и в каждой конкретной копии.</div></div>
+        <div class="card-footer-wrap">
+          <span class="btn-enter">Открыть калькулятор <span class="btn-enter-arrow">→</span></span>
+        </div>
+      </div>
+    </a>
     <a class="calc-card" href="reputation_calc/rep_calc.html">
       <div class="card-inner">
         <div class="card-ico-wrap"><div class="card-ico">⚔️</div></div>
@@ -678,7 +681,7 @@ header::after {
 <div class="page-footer">
   <div class="footer-ornament">
     <div class="orn-line" style="max-width:120px"></div>
-    <div class="orn-diamond" style="width:5px;height:5px;background:rgba(184,134,11,.35);box-shadow:none"></div>
+    <img src="kor_logo.svg" style="height:17px;width:auto;opacity:.4;display:block;">
     <div class="orn-line r" style="max-width:120px"></div>
   </div>
   <div class="footer-text">Сделано с любовью к Королевству · не является официальным ресурсом</div>
@@ -748,7 +751,8 @@ const EVENTS = [
     name: 'Зов глубин',
     months: [5],
     ico: '🌊',
-    desc: 'Майский ивент — калькулятор в разработке.',
+    desc: 'Кристаниум, предметы ивента и репутация — сколько фармить и сколько донатить для желаемых апгрейдов.',
+    url: 'zov_glubin/glubin_calc.html',
   },
 ];
 
