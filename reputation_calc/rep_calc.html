@@ -759,7 +759,7 @@ const REPUTATIONS = [
 const BUFFS = {
   vedmak:          { council: [7, 14, 21], seal: 25 },
   gladiator:       { council: [5, 10, 15], master: { pct: 20,  name: 'Мастер Арены', ico: 'buff/master_aren.png' } },
-  zavoevatel:      { council: [17, 34, 51], master: { pct: 100, name: 'Мастер Войны', ico: 'buff/master_voiny.png' } },
+  zavoevatel:      { council: [17, 34, 51], master: { mult: 2,  name: 'Мастер Войны', ico: 'buff/master_voiny.png' } },
   vlast:           { council: [5, 6, 7] },
   arxeolog:        { council: [5, 10, 15] },
   hunter:          { council: [10, 20, 30] },
@@ -840,8 +840,14 @@ function getTotalBuff() {
   const pctByQ = [0, w, g, bl];
   let total = buffState.councils.reduce((sum, q) => sum + pctByQ[q], 0);
   if (b.seal && buffState.seal) total += b.seal;
-  if (b.master && buffState.master) total += b.master.pct;
+  if (b.master && b.master.pct && buffState.master) total += b.master.pct;
   return total;
+}
+
+function getMasterMult() {
+  const b = BUFFS[activeRep.id];
+  if (b && b.master && b.master.mult && buffState.master) return b.master.mult;
+  return 1;
 }
 
 function buildBuffs() {
@@ -909,6 +915,7 @@ function buildBuffs() {
   }
 
   if (b.master) {
+    const masterLabel = b.master.mult ? `×${b.master.mult}` : `+${b.master.pct}%`;
     html += `
       <div class="buff-row">
         <div class="gico">
@@ -917,7 +924,7 @@ function buildBuffs() {
         </div>
         <div>
           <div style="font-family:'Inter',sans-serif;font-size:12px;font-weight:600;color:var(--text)">${b.master.name}</div>
-          <div style="margin-top:3px"><span class="buff-quality bq-white">+${b.master.pct}%</span></div>
+          <div style="margin-top:3px"><span class="buff-quality bq-white">${masterLabel}</span></div>
         </div>
         <div class="buff-ctrl">
           <label style="display:flex;align-items:center;gap:6px;cursor:pointer">
@@ -930,10 +937,14 @@ function buildBuffs() {
   }
 
   const total = getTotalBuff();
+  const mult  = getMasterMult();
+  const totalLabel = mult > 1
+    ? (total > 0 ? `+${total}% × ${mult}` : `×${mult}`)
+    : `+${total}%`;
   html += `
     <div class="buff-total">
       <span>Суммарный баф</span>
-      <span class="buff-total-val">+${total}%</span>
+      <span class="buff-total-val">${totalLabel}</span>
     </div>
   `;
 
@@ -992,8 +1003,9 @@ function calc() {
     need += (i === curIdx) ? Math.max(0, stepReq - curPts) : stepReq;
   }
 
-  const buffPct  = getTotalBuff();
-  const ppdFinal = Math.round(ppd * (1 + buffPct / 100));
+  const buffPct    = getTotalBuff();
+  const masterMult = getMasterMult();
+  const ppdFinal   = Math.round(ppd * (1 + buffPct / 100) * masterMult);
   const days   = need > 0 ? Math.ceil(need / ppdFinal) : 0;
   const nextReq = ranks[curIdx + 1] ? ranks[curIdx + 1].pts : 1;
   const pct    = Math.min(100, Math.round(curPts / nextReq * 100));
