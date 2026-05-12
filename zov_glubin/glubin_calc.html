@@ -860,16 +860,38 @@ const DUST_R   = 0.2;
 const ZAST_R   = 3;
 const ZAST_PTS = 5000;
 
-// TODO: заполнить когда будут данные по предметам ивента
-const CUM      = {};  // накопительные цены в кристаниумах: { id: [0, ур1, ур2, ур3] }
-const CUM_R    = {};  // накопительные цены в рубинах:       { id: [0, ур1, ур2, ур3] }
-const REQ_RANK = {};  // минимальный ранг для каждого уровня: { id: [0,1,2,3] }
+// Накопительные цены в жемчужинах (от нуля)
+const CUM = {
+  bones:  [0, 1600, 3600, 6000],
+  token:  [0, 1600, 3600, 6000],
+  cerato: [0,    0],
+};
+// Накопительные цены в рубинах (от нуля)
+const CUM_R = {
+  bones:  [0, 16, 36, 60],
+  token:  [0, 16, 36, 60],
+  cerato: [0, 12],
+};
+// Минимальный ранг для каждого уровня
+const REQ_RANK = {
+  bones:  [0, 1, 2, 3],
+  token:  [0, 1, 2, 3],
+  cerato: [0, 3],
+};
 
 const ITEMS = [
-  // Пример:
-  // { id:'xxx', name:'Название', note:'вечный', img:'xxx.png',
-  //   levels:['Нет','Ур.1','Ур.2','Ур.3'],
-  //   frames:[null,'border_high','border_exclusive','border_special'] },
+  { id: 'bones',  name: 'Скрипящие кости',        note: 'вечные',
+    img: 'creaking_bones.png',
+    levels: ['Нет', 'Фиолетовые', 'Красные', 'Оранжевые'],
+    frames: [null, 'border_high', 'border_exclusive', 'border_special'] },
+  { id: 'token',  name: 'Жетон капитана',          note: 'теряет качество через год',
+    img: 'numbered_token.png',
+    levels: ['Нет', 'Синий', 'Фиолетовый', 'Красный'],
+    frames: [null, 'border_medium', 'border_high', 'border_exclusive'] },
+  { id: 'cerato', name: 'Цератос',                 note: 'питомец, только за рубины',
+    img: null,
+    levels: ['Нет', 'Цератос'],
+    frames: [null, 'border_exclusive'], noHave: true },
 ];
 
 function gico(cfg, lv) {
