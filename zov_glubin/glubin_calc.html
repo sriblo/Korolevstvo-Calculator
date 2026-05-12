@@ -862,35 +862,49 @@ const ZAST_PTS = 5000;
 
 // Накопительные цены в жемчужинах (от нуля)
 const CUM = {
-  bones:  [0, 1600, 3600, 6000],
-  token:  [0, 1600, 3600, 6000],
-  cerato: [0,    0],
+  bones:   [0, 1600, 3600, 6000],
+  token:   [0, 1600, 3600, 6000],
+  cerato:  [0,    0],
+  stone:   [0,    1],
+  costume: [0,  900],
 };
 // Накопительные цены в рубинах (от нуля)
 const CUM_R = {
-  bones:  [0, 16, 36, 60],
-  token:  [0, 16, 36, 60],
-  cerato: [0, 12],
+  bones:   [0, 16, 36, 60],
+  token:   [0, 16, 36, 60],
+  cerato:  [0, 12],
+  stone:   [0,  0],
+  costume: [0,  9],
 };
 // Минимальный ранг для каждого уровня
 const REQ_RANK = {
-  bones:  [0, 1, 2, 3],
-  token:  [0, 1, 2, 3],
-  cerato: [0, 3],
+  bones:   [0, 1, 2, 3],
+  token:   [0, 1, 2, 3],
+  cerato:  [0, 3],
+  stone:   [0, 3],
+  costume: [0, 3],
 };
 
 const ITEMS = [
-  { id: 'bones',  name: 'Скрипящие кости',        note: 'вечные',
+  { id: 'bones',   name: 'Скрипящие кости',        note: 'вечные',
     img: 'creaking_bones.png',
     levels: ['Нет', 'Фиолетовые', 'Красные', 'Оранжевые'],
     frames: [null, 'border_high', 'border_exclusive', 'border_special'] },
-  { id: 'token',  name: 'Жетон капитана',          note: 'теряет качество через год',
+  { id: 'token',   name: 'Жетон капитана',          note: 'теряет качество через год',
     img: 'numbered_token.png',
     levels: ['Нет', 'Синий', 'Фиолетовый', 'Красный'],
     frames: [null, 'border_medium', 'border_high', 'border_exclusive'] },
-  { id: 'cerato', name: 'Цератос',                 note: 'питомец, только за рубины',
+  { id: 'cerato',  name: 'Цератос',                 note: 'питомец, только за рубины',
     img: null,
     levels: ['Нет', 'Цератос'],
+    frames: [null, 'border_exclusive'], noHave: true },
+  { id: 'stone',   name: 'Камень путешествий',      note: '',
+    img: '../other%20items/artefact_stone_fire.png',
+    levels: ['Нет', 'Красный (1 жемч.)'],
+    frames: [null, 'border_exclusive'], noHave: true },
+  { id: 'costume', name: 'Костюм',                  note: 'Механический рабочий · до следующего года',
+    img: '../leprecon/mask.png',
+    levels: ['Нет', 'Механический рабочий'],
     frames: [null, 'border_exclusive'], noHave: true },
 ];
 
