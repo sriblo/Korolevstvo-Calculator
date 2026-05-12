@@ -1006,7 +1006,10 @@ function calc() {
         const steps = [];
         for (let i = h; i < w; i++) steps.push(CUM[cfg.id][i+1]-CUM[cfg.id][i]);
         const bd = steps.length > 1 ? ` (${steps.map(fmt).join(' + ')})` : '';
-        hintEl.textContent = `Итого: ${fmt(cost)} жемчужин${bd}`;
+        const rubCost = CUM_R[cfg.id][w] - CUM_R[cfg.id][h];
+        hintEl.textContent = cost > 0
+          ? `Итого: ${fmt(cost)} жемчужин${bd}`
+          : `Только за рубины: ${fmtR(rubCost)} руб.`;
       } else { hintEl.textContent = ''; }
     }
   });
