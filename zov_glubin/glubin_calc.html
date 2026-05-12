@@ -591,7 +591,7 @@ select.on { border-color: rgba(20,140,180,.5); background: rgba(20,140,180,.06);
     <div class="h-ico">🌊</div>
     <div>
       <div class="h-title">Зов Глубин <span style="font-family:'Inter',sans-serif;font-size:11px;font-weight:600;letter-spacing:.5px;color:var(--text3);vertical-align:middle;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);padding:2px 7px;border-radius:4px;margin-left:6px">БЕТА</span></div>
-      <div class="h-sub">12–26 мая 2026 · Калькулятор кристаниумов и рубинов</div>
+      <div class="h-sub">12–26 мая 2026 · Калькулятор жемчужин и рубинов</div>
     </div>
     <div class="h-right-orn">
       <div class="h-orn-line"></div>
@@ -625,20 +625,20 @@ select.on { border-color: rgba(20,140,180,.5); background: rgba(20,140,180,.06);
       <div class="irow">
         <div class="ico-pill em">💠</div>
         <div class="ilbl">Кристаниумов сейчас</div>
-        <span class="tip" data-tip="Сколько кристаниумов сейчас&#10;в твоём кошельке в игре.&#10;&#10;Именно столько — не считая то что&#10;ещё заработаешь за оставшиеся дни.">?</span>
+        <span class="tip" data-tip="Сколько жемчужин сейчас&#10;в твоём кошельке в игре.&#10;&#10;Именно столько — не считая то что&#10;ещё заработаешь за оставшиеся дни.">?</span>
         <div class="nf">
           <input type="number" id="have-t" value="0" min="0" oninput="calc()">
-          <span class="unit">кристаниумов</span>
+          <span class="unit">жемчужин</span>
         </div>
       </div>
 
       <div class="irow">
         <div class="ico-pill em">⏳</div>
-        <div class="ilbl">Упущенные кристаниумы</div>
-        <span class="tip" data-tip="Если знаешь что пропустишь часть дней&#10;или квестов — впиши количество кристаниумов&#10;которые не заработаешь.&#10;Например: 1 пропущенный день = 800 кристаниумов.">?</span>
+        <div class="ilbl">Упущенные жемчужины</div>
+        <span class="tip" data-tip="Если знаешь что пропустишь часть дней&#10;или квестов — впиши количество жемчужин&#10;которые не заработаешь.&#10;Например: 1 пропущенный день = 800 жемчужин.">?</span>
         <div class="nf">
           <input type="number" id="miss" value="0" min="0" oninput="calc()">
-          <span class="unit">кристаниумов</span>
+          <span class="unit">жемчужин</span>
         </div>
       </div>
 
@@ -726,11 +726,11 @@ select.on { border-color: rgba(20,140,180,.5); background: rgba(20,140,180,.06);
         </div>
         <div class="res-stats">
           <div class="st">
-            <div class="slbl">Заработаю кристаниумов</div>
+            <div class="slbl">Заработаю жемчужин</div>
             <div class="sval g"><span id="sv-earn">—</span></div>
           </div>
           <div class="st">
-            <div class="slbl">Итого кристаниумов</div>
+            <div class="slbl">Итого жемчужин</div>
             <div class="sval o"><span id="sv-total">—</span></div>
           </div>
           <div class="st">
@@ -780,7 +780,7 @@ select.on { border-color: rgba(20,140,180,.5); background: rgba(20,140,180,.06);
           </div>
           <div class="guide-step">
             <div class="guide-num">2</div>
-            <div class="guide-step-text">Укажи <b>сколько кристаниумов у тебя есть сейчас</b>.</div>
+            <div class="guide-step-text">Укажи <b>сколько жемчужин у тебя есть сейчас</b>.</div>
           </div>
           <div class="guide-step">
             <div class="guide-num">3</div>
@@ -792,7 +792,7 @@ select.on { border-color: rgba(20,140,180,.5); background: rgba(20,140,180,.06);
           </div>
           <div class="guide-step">
             <div class="guide-num">5</div>
-            <div class="guide-step-text">Калькулятор покажет <b>минимальный расход рубинов</b> с оптимальным использованием кристаниумов — сначала кристаниумы, рубины только на остаток.</div>
+            <div class="guide-step-text">Калькулятор покажет <b>минимальный расход рубинов</b> с оптимальным использованием жемчужин — сначала жемчужины, рубины только на остаток.</div>
           </div>
         </div>
       </div>
@@ -809,8 +809,14 @@ select.on { border-color: rgba(20,140,180,.5); background: rgba(20,140,180,.06);
             <tr><th>Квест</th><th>Задание</th><th>Награда</th></tr>
           </thead>
           <tbody>
-            <tr><td colspan="3" style="padding:18px 12px;color:var(--text3);font-style:italic;font-size:13px">Данные квестов будут добавлены позже</td></tr>
-            <tr class="qtotal-row"><td colspan="2" style="color:var(--text3);font-size:12px;padding:9px 12px;font-style:italic">Итого ежедневно</td><td class="qtotal">800 кристаниумов/день</td></tr>
+            <tr><td>Подарок для смельчаков</td><td>Разовый квест</td><td>401 жемчужина</td></tr>
+            <tr><td>Знакомство с ренегатами</td><td>Ежедневный</td><td>80 жемчужин</td></tr>
+            <tr><td>Саботаж в проливе</td><td>Ежедневный</td><td>160 жемчужин</td></tr>
+            <tr><td>Окраины шахты</td><td>Ежедневный</td><td>80 жемчужин</td></tr>
+            <tr><td>Середина пролива</td><td>Ежедневный</td><td>100 жемчужин</td></tr>
+            <tr><td>Ужас глубин</td><td>Ежедневный</td><td>220 жемчужин</td></tr>
+            <tr><td>Подводные трофеи</td><td>Ежедневный</td><td>160 жемчужин</td></tr>
+            <tr class="qtotal-row"><td colspan="2" style="color:var(--text3);font-size:12px;padding:9px 12px;font-style:italic">Итого ежедневно</td><td class="qtotal">800 жемчужин/день</td></tr>
           </tbody>
         </table>
       </div>
@@ -843,8 +849,7 @@ const MAX_DAYS = 15;
 
 // Репутация: пороги накопительно от нуля
 const REP         = [0, 18000, 45000, 100000];
-// TODO: заменить ??? на реальные названия рангов
-const RANK_NAMES  = ['Глубинный воитель', '???', '???', '???'];
+const RANK_NAMES  = ['Ныряльщик', 'Пилот аквароида', 'Подводник', 'Гроза глубин'];
 const RANK_BADGES = ['rb0','rb1','rb2','rb3'];
 
 // Кристаниумная пыль:          20 кр. = 200 очков (или 0.2 руб. = 200 очков)
@@ -965,7 +970,7 @@ function calc() {
         const steps = [];
         for (let i = h; i < w; i++) steps.push(CUM[cfg.id][i+1]-CUM[cfg.id][i]);
         const bd = steps.length > 1 ? ` (${steps.map(fmt).join(' + ')})` : '';
-        hintEl.textContent = `Итого: ${fmt(cost)} кристаниумов${bd}`;
+        hintEl.textContent = `Итого: ${fmt(cost)} жемчужин${bd}`;
       } else { hintEl.textContent = ''; }
     }
   });
@@ -984,7 +989,7 @@ function calc() {
   const targetRep  = REP[maxRank];
   const repNeeded  = Math.max(0, targetRep - haveRep);
 
-  // Бесплатная репутация: кристаниумы → пыль
+  // Бесплатная репутация: жемчужины → пыль
   const freeDust   = Math.floor(forRep / DUST_T);
   const freeRep    = Math.min(freeDust * DUST_PTS, repNeeded);
   const tUsedRep   = Math.ceil(freeRep / DUST_PTS) * DUST_T;
@@ -1042,7 +1047,7 @@ function calc() {
   if (itemCost > 0) {
     rows.push(`<div class="vrow">
       <span class="vkey">Кристаниумов на предметы</span>
-      <span class="vval ${rubDef>0?'r':''}">${fmt(itemCost)} кристаниумов ${rubDef>0?`<span style="font-weight:400;font-size:11px">(не хватает ${fmt(rubStepTCost)} кристаниумов)</span>`:''}</span>
+      <span class="vval ${rubDef>0?'r':''}">${fmt(itemCost)} жемчужин ${rubDef>0?`<span style="font-weight:400;font-size:11px">(не хватает ${fmt(rubStepTCost)} жемчужин)</span>`:''}</span>
     </div>`);
   }
 
@@ -1054,7 +1059,7 @@ function calc() {
     if (adjFreeRep > 0) {
       rows.push(`<div class="vrow">
         <span class="vkey">Бесплатно кристаниумами (пыль)</span>
-        <span class="vval g">${fmt(adjFreeRep)} очков (${fmt(adjTUsed)} кристаниумов)</span>
+        <span class="vval g">${fmt(adjFreeRep)} очков (${fmt(adjTUsed)} жемчужин)</span>
       </div>`);
     }
     if (rc.r > 0) {
@@ -1073,8 +1078,8 @@ function calc() {
   if (rubDef > 0) {
     rows.push('<div class="vsep"></div>');
     rows.push(`<div class="vrow">
-      <span class="vkey">Не хватает кристаниумов на предметы</span>
-      <span class="vval r">не хватает ${fmt(rubStepTCost)} кристаниумов → ${fmtR(rubDef)} рубинов</span>
+      <span class="vkey">Не хватает жемчужин на предметы</span>
+      <span class="vval r">не хватает ${fmt(rubStepTCost)} жемчужин → ${fmtR(rubDef)} рубинов</span>
     </div>`);
   }
 
@@ -1092,25 +1097,25 @@ function calc() {
   if (totalRub === 0) {
     lines.push(`<div class="sline">
       ${icoOk}
-      <div class="sline-body">Донат не нужен — кристаниумов хватает на все предметы и репутацию.</div>
+      <div class="sline-body">Донат не нужен — жемчужин хватает на все предметы и репутацию.</div>
     </div>`);
     if (leftover > 0) {
       lines.push(`<div class="sline">
         ${icoLeft}
-        <div class="sline-body">Останется <span class="sg">${fmt(leftover)} свободных кристаниумов</span>.</div>
+        <div class="sline-body">Останется <span class="sg">${fmt(leftover)} свободных жемчужин</span>.</div>
       </div>`);
     }
   } else {
     if (rubDef > 0) {
       lines.push(`<div class="sline">
         ${icoRuby}
-        <div class="sline-body">Докупи недостающие предметы напрямую за рубины: не хватает <span class="sr">${fmt(rubStepTCost)} кристаниумов</span> → <span class="sr">${fmtR(rubDef)} рубинов</span>.</div>
+        <div class="sline-body">Докупи недостающие предметы напрямую за рубины: не хватает <span class="sr">${fmt(rubStepTCost)} жемчужин</span> → <span class="sr">${fmtR(rubDef)} рубинов</span>.</div>
       </div>`);
     }
     if (adjFreeRep > 0 && adjTUsed > 0) {
       lines.push(`<div class="sline">
         ${icoDust}
-        <div class="sline-body">Потрать <span class="sn">${fmt(adjTUsed)} кристаниумов</span> на <b>Кристаниумную пыль</b> — получишь <span class="sg">+${fmt(adjFreeRep)} очков</span> репутации бесплатно.</div>
+        <div class="sline-body">Потрать <span class="sn">${fmt(adjTUsed)} жемчужин</span> на <b>Кристаниумную пыль</b> — получишь <span class="sg">+${fmt(adjFreeRep)} очков</span> репутации бесплатно.</div>
       </div>`);
     }
     if (rc.nPrem > 0) {
@@ -1128,7 +1133,7 @@ function calc() {
     if (leftover > 0) {
       lines.push(`<div class="sline">
         ${icoLeft}
-        <div class="sline-body">Останется <span class="sg">${fmt(leftover)} свободных кристаниумов</span>.</div>
+        <div class="sline-body">Останется <span class="sg">${fmt(leftover)} свободных жемчужин</span>.</div>
       </div>`);
     }
   }
