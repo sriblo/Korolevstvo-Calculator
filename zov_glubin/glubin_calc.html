@@ -624,7 +624,7 @@ select.on { border-color: rgba(20,140,180,.5); background: rgba(20,140,180,.06);
 
       <div class="irow">
         <div class="ico-pill em">💠</div>
-        <div class="ilbl">Кристаниумов сейчас</div>
+        <div class="ilbl">Жемчужин сейчас</div>
         <span class="tip" data-tip="Сколько жемчужин сейчас&#10;в твоём кошельке в игре.&#10;&#10;Именно столько — не считая то что&#10;ещё заработаешь за оставшиеся дни.">?</span>
         <div class="nf">
           <input type="number" id="have-t" value="0" min="0" oninput="calc()">
@@ -1046,7 +1046,7 @@ function calc() {
 
   if (itemCost > 0) {
     rows.push(`<div class="vrow">
-      <span class="vkey">Кристаниумов на предметы</span>
+      <span class="vkey">Жемчужин на предметы</span>
       <span class="vval ${rubDef>0?'r':''}">${fmt(itemCost)} жемчужин ${rubDef>0?`<span style="font-weight:400;font-size:11px">(не хватает ${fmt(rubStepTCost)} жемчужин)</span>`:''}</span>
     </div>`);
   }
@@ -1058,7 +1058,7 @@ function calc() {
     </div>`);
     if (adjFreeRep > 0) {
       rows.push(`<div class="vrow">
-        <span class="vkey">Бесплатно кристаниумами (пыль)</span>
+        <span class="vkey">Бесплатно жемчужинами (пыль)</span>
         <span class="vval g">${fmt(adjFreeRep)} очков (${fmt(adjTUsed)} жемчужин)</span>
       </div>`);
     }
