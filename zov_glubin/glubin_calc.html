@@ -1187,10 +1187,75 @@ function calc() {
 
 function renderItemsGuide() {
   const el = document.getElementById('items-guide');
-  if (!ITEMS.length) {
-    el.innerHTML = `<div style="padding:24px 18px;text-align:center;font-size:14px;color:var(--text3);font-style:italic;font-family:'Crimson Pro',serif">Предметы ивента будут добавлены позже</div>`;
-    return;
+
+  function ingrIco(img, frame, name) {
+    return { ico: gico({ img, frames:[null, frame] }, 1), name };
   }
+
+  function costLabel(t, r) {
+    if (t > 0) return `${fmt(t)} жемчужин`;
+    return `${fmtR(r)} рубинов`;
+  }
+
+  const GUIDE_ITEMS = [
+    { name:'Скрипящие кости', note:'вечные', cfg: ITEMS.find(c=>c.id==='bones'),
+      steps:[
+        { lv:1, label:'Фиолетовые', cost:1600, costR:0,  rank:1, ingr:null },
+        { lv:2, label:'Красные',    cost:2000, costR:0,  rank:2, ingr:ingrIco('black_heart.png','border_exclusive','Сердце Костяного Галеона') },
+        { lv:3, label:'Оранжевые',  cost:2400, costR:0,  rank:3, ingr:ingrIco('black_heart.png','border_special',  'Сердце Костяного Галеона') },
+      ]},
+    { name:'Жетон капитана', note:'теряет качество через год', cfg: ITEMS.find(c=>c.id==='token'),
+      steps:[
+        { lv:1, label:'Синий',       cost:1600, costR:0,  rank:1, ingr:null },
+        { lv:2, label:'Фиолетовый',  cost:2000, costR:0,  rank:2, ingr:ingrIco('numbered_token.png','border_high',     'Удостоверение (фиол.)') },
+        { lv:3, label:'Красный',     cost:2400, costR:0,  rank:3, ingr:ingrIco('numbered_token.png','border_special',   'Удостоверение (оранж.)') },
+      ]},
+    { name:'Камень путешествий', note:'', cfg: ITEMS.find(c=>c.id==='stone'),
+      steps:[
+        { lv:1, label:'Красный (1 жемч.)', cost:1, costR:0, rank:3, ingr:null },
+      ]},
+    { name:'Костюм', note:'до следующего года', cfg: ITEMS.find(c=>c.id==='costume'),
+      steps:[
+        { lv:1, label:'Механический рабочий', cost:900, costR:9, rank:3, ingr:null },
+      ]},
+    { name:'Цератос', note:'питомец, только за рубины', cfg: ITEMS.find(c=>c.id==='cerato'),
+      steps:[
+        { lv:1, label:'Цератос', cost:0, costR:12, rank:3, ingr:null },
+      ]},
+  ];
+
+  const html = GUIDE_ITEMS.map(({name, note, cfg, steps}) => {
+    if (!cfg) return '';
+    const parts = [];
+    steps.forEach((s, i) => {
+      if (i > 0) parts.push(`<div class="iup-arrow-sep">›</div>`);
+      if (s.ingr) {
+        parts.push(`<div class="iup-ingr-step">
+          <div class="iup-ingr-step-ico">${s.ingr.ico}</div>
+          <div class="iup-ingr-name">${s.ingr.name}</div>
+        </div>`);
+        parts.push(`<div class="iup-arrow-sep">›</div>`);
+      }
+      const rankHtml = s.rank != null
+        ? `<span class="iup-step-rank rank-badge ${RANK_BADGES[s.rank]}" style="font-size:9px">Ранг ${s.rank}</span>` : '';
+      parts.push(`<div class="iup-step">
+        <div class="iup-step-ico">${gico(cfg, s.lv)}</div>
+        <div class="iup-step-name">${s.label}</div>
+        <div class="iup-step-cost">${costLabel(s.cost, s.costR)}</div>
+        ${rankHtml}
+      </div>`);
+    });
+
+    return `<div class="iup-row">
+      <div class="iup-row-header">
+        <span class="iup-name">${name}</span>
+        ${note ? `<span class="iup-note">${note}</span>` : ''}
+      </div>
+      <div class="iup-chain">${parts.join('')}</div>
+    </div>`;
+  }).join('');
+
+  el.innerHTML = html;
 }
 
 function switchTab(id, btn) {
