@@ -1019,7 +1019,7 @@ function calc() {
   let remT = total;
   let rubDef = 0, rubStepTCost = 0;
   for (const step of allSteps) {
-    if (remT >= step.t) { remT -= step.t; }
+    if (step.t > 0 && remT >= step.t) { remT -= step.t; }
     else { rubDef += step.r; rubStepTCost += step.t; }
   }
   const afterItems = remT;
