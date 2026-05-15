@@ -396,6 +396,12 @@ const CLASS_ITEM_NAMES = {
 };
 const QUALITY_LEVEL = { white:10, green:11, blue:12, purple:13, purple_plus:13, red:14, orange:15 };
 
+function getClassSetPath(cls, quality) {
+  if (cls === 'warrior') return `stats_calculator/classes/warrior/warrior/warrior_sets/${quality}_set/elf`;
+  if (cls === 'paladin') return `stats_calculator/classes/paladin/palladin_sets/${quality}_set/elf`;
+  return `stats_calculator/classes/${cls}/${cls}_sets/${quality}_set/elf`;
+}
+
 function getItemImg(cls, slotId, quality) {
   const slotMap = CLASS_SLOTS[cls];
   if (!slotMap) return null;
@@ -403,7 +409,8 @@ function getItemImg(cls, slotId, quality) {
   if (!slotFile) return null;
   const lvl = QUALITY_LEVEL[quality];
   if (!lvl) return null;
-  return `stats_calculator/classes/${cls}/${cls}_sets/${quality}_set/elf/${cls}_${slotFile}_${lvl}_elf.png`;
+  const dir = getClassSetPath(cls, quality);
+  return `${dir}/${cls}_${slotFile}_${lvl}_elf.png`;
 }
 
 
