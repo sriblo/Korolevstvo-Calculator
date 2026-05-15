@@ -608,9 +608,10 @@ function icoHtml(slotId, eq, cls) {
   const imgSrc   = getItemImg(cls, slotId, eq.quality);
   const frameSrc = QUALITY_FRAME[eq.quality];
   const qColor   = QUALITIES.find(q => q.id === eq.quality)?.color;
-  return `${imgSrc   ? `<img src="${imgSrc}" alt="" style="width:32px;height:32px;object-fit:none" onerror="this.style.display='none'">` : ''}
-          ${frameSrc ? `<img class="frame-img" src="${frameSrc}" alt="" style="position:absolute;inset:0;width:32px;height:32px;pointer-events:none" onerror="this.style.display='none'">` : ''}
-          ${!imgSrc && qColor ? `<div style="width:10px;height:10px;border-radius:50%;background:${qColor}"></div>` : ''}`;
+  // Frame goes BEHIND item icon (background), icon goes on top at full 32x32
+  return `${frameSrc ? `<img class="frame-img" src="${frameSrc}" alt="" style="position:absolute;inset:0;width:32px;height:32px;pointer-events:none;z-index:0" onerror="this.style.display='none'">` : ''}
+          ${imgSrc   ? `<img src="${imgSrc}" alt="" style="position:absolute;inset:0;width:32px;height:32px;object-fit:none;z-index:1" onerror="this.style.display='none'">` : ''}
+          ${!imgSrc && qColor ? `<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:1"><div style="width:10px;height:10px;border-radius:50%;background:${qColor}"></div></div>` : ''}`;
 }
 
 // ── RENDER ────────────────────────────────────────────────────────────────────
