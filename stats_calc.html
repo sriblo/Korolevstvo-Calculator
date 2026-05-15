@@ -179,7 +179,6 @@ a{color:inherit;text-decoration:none}
 }
 .picker-panel.open{display:block}
 @keyframes fadeIn{from{opacity:0;transform:translateY(-3px)}to{opacity:1;transform:none}}
-.picker-title{font-size:10px;color:var(--txt3);text-transform:uppercase;letter-spacing:.12em;font-weight:600;margin-bottom:8px}
 .picker-btns{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px}
 .picker-btn{
   padding:5px 11px;border-radius:6px;cursor:pointer;font-size:11px;font-weight:600;
@@ -323,7 +322,6 @@ a{color:inherit;text-decoration:none}
 
         <!-- Пикер -->
         <div class="picker-panel" id="pickerPanel-c1">
-          <div class="picker-title" id="pickerTitle-c1">Выберите качество</div>
           <div class="picker-btns"  id="pickerBtns-c1"></div>
           <button class="picker-unequip" onclick="unequipActiveSlot('c1')">— Снять</button>
         </div>
@@ -536,15 +534,47 @@ function getStatsForSlot(cls, slotId, quality) {
   return STATS[cls]?.[quality]?.[slotId] || null;
 }
 
-function icoHtml(eq) {
-  if (!eq) return `<svg class="ico-empty" width="16" height="16" viewBox="0 0 16 16" fill="none">
-    <rect x="1.5" y="1.5" width="13" height="13" rx="2.5" stroke="currentColor" stroke-width="1.3" stroke-dasharray="3 2"/>
-  </svg>`;
+// Placeholder SVGs for empty slots
+const PH = {
+  sword:    `<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4 16L14 6M11 3l3 3M6 14l-2 2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="14" cy="6" r="2" stroke="currentColor" stroke-width="1.2"/></svg>`,
+  shield:   `<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 2L3 5.5v5c0 3.5 3 6 7 7 4-1 7-3.5 7-7v-5L10 2z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>`,
+  helmet:   `<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M5 11c0-2.8 2.2-6 5-6s5 3.2 5 6M3 11h14M6 15h8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>`,
+  chest:    `<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4 7h12v9a2 2 0 01-2 2H6a2 2 0 01-2-2V7z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M8 7V5a2 2 0 014 0v2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>`,
+  shoulders:`<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M2 12c0-3 1.5-5 4-5s4 2 4 5M10 12c0-3 1.5-5 4-5s4 2 4 5M2 12h16" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>`,
+  pants:    `<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4 4h12v4l-2 10H9l-1-6-1 6H5L3 8V4z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>`,
+  belt:     `<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="2" y="8" width="16" height="4" rx="2" stroke="currentColor" stroke-width="1.4"/><rect x="8" y="9.2" width="4" height="1.6" rx="0.5" stroke="currentColor" stroke-width="1.2"/></svg>`,
+  boots:    `<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M7 3v9l-3 3h9l1-3V3H7z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>`,
+  gloves:   `<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M6 14V9.5a1 1 0 012 0V8a1 1 0 012 0V7a1 1 0 012 0v2.5a1 1 0 002 0V9a1 1 0 012 0V14c0 1.7-1.3 3-3 3H9a3 3 0 01-3-3z" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+  ring:     `<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="6" stroke="currentColor" stroke-width="1.4"/><circle cx="10" cy="10" r="3" stroke="currentColor" stroke-width="1.1"/></svg>`,
+  amulet:   `<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 2l2.5 5.5H18l-4.5 3.5 1.5 5.5L10 14l-5 2.5 1.5-5.5L2 7.5h5.5L10 2z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg>`,
+  gem:      `<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 2L17 8L10 18L3 8L10 2z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M3 8h14M10 2L6 8l4 10M10 2l4 6-4 10" stroke="currentColor" stroke-width="1" opacity=".5"/></svg>`,
+  flask:    `<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M8 3h4M7.5 3v6L4 15a1 1 0 001 1h10a1 1 0 001-1l-3.5-6V3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+  bag:      `<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="3" y="8" width="14" height="10" rx="2" stroke="currentColor" stroke-width="1.4"/><path d="M7 8V6a3 3 0 016 0v2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>`,
+  trophy:   `<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M7 17h6M10 14v3M6 3h8l-1 7a3 3 0 01-6 0L6 3z" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M6 5H3l1 5M14 5h3l-1 5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>`,
+  badge:    `<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 2l1.5 5H17l-4.5 3 1.5 5L10 12.5 6 15l1.5-5L3 7h5.5L10 2z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg>`,
+  key:      `<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="8" cy="8" r="4" stroke="currentColor" stroke-width="1.4"/><path d="M11 11l5 5M14 13l-2 2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>`,
+  bracelet: `<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="6" stroke="currentColor" stroke-width="2.5"/></svg>`,
+};
+
+const SLOT_PH = {
+  weapon:'sword', offhand:'shield', helm:'helmet', chest:'chest',
+  shoulders:'shoulders', pants:'pants', belt:'belt', boots:'boots', gloves:'gloves',
+  trophy:'trophy', badge:'badge', ring1:'ring', ring2:'ring',
+  talisman:'amulet', bracelet:'bracelet', amulet:'amulet',
+  stone_greed:'gem', stone_blood:'gem', stone_travel:'gem', stone_contest:'gem',
+  stone_friend:'gem', stone_witch:'gem', stone_labor:'gem', stone_lost:'gem', stone_luck:'gem',
+  flask:'flask', battle_bag:'bag', trinket:'key',
+};
+
+function icoHtml(slotId, eq) {
+  if (!eq) {
+    const ph = PH[SLOT_PH[slotId]] || PH.bag;
+    return `<span style="opacity:.22;color:var(--txt2);display:flex;align-items:center;justify-content:center">${ph}</span>`;
+  }
   const frameSrc = QUALITY_FRAME[eq.quality];
   const qColor   = QUALITIES.find(q => q.id === eq.quality)?.color;
-  // item image: null until image library populated
   return `${frameSrc ? `<img class="frame-img" src="${frameSrc}" alt="" onerror="this.style.display='none'">` : ''}
-          ${qColor && !eq.img ? `<div style="width:10px;height:10px;border-radius:50%;background:${qColor}"></div>` : ''}`;
+          ${qColor ? `<div style="width:10px;height:10px;border-radius:50%;background:${qColor}"></div>` : ''}`;
 }
 
 // ── RENDER ────────────────────────────────────────────────────────────────────
@@ -573,7 +603,7 @@ function renderSlotCol(cid, slots, containerId) {
       onclick="openPicker('${cid}','${slot.id}')"
       onmouseenter="showTt(event,'${cid}',${JSON.stringify(slot).replace(/"/g,'&quot;')})"
       onmousemove="moveTt(event)"
-      onmouseleave="hideTt()">${icoHtml(eq)}</div>`;
+      onmouseleave="hideTt()">${icoHtml(slot.id, eq)}</div>`;
   }).join('');
 }
 
@@ -587,18 +617,15 @@ function renderSlotRow(cid, rowSlots, containerId) {
       onclick="openPicker('${cid}','${slot.id}')"
       onmouseenter="showTt(event,'${cid}',${JSON.stringify(slot).replace(/"/g,'&quot;')})"
       onmousemove="moveTt(event)"
-      onmouseleave="hideTt()">${icoHtml(eq)}</div>`;
+      onmouseleave="hideTt()">${icoHtml(slot.id, eq)}</div>`;
   }).join('');
 }
 
 function renderPicker(cid) {
   const s = state[cid];
   const panel = document.getElementById(`pickerPanel-${cid}`);
-  const title = document.getElementById(`pickerTitle-${cid}`);
   const btns  = document.getElementById(`pickerBtns-${cid}`);
   if (!s.activeSlot) { panel.classList.remove('open'); return; }
-  const slot = ALL_SLOTS.find(sl => sl.id === s.activeSlot);
-  title.textContent = slot?.name || s.activeSlot;
   btns.innerHTML = QUALITIES.map(q => {
     const hasStats = !!getStatsForSlot(s.cls, s.activeSlot, q.id);
     const isEq = s.equipped[s.activeSlot]?.quality === q.id;
