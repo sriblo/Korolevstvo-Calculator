@@ -410,16 +410,24 @@ function renderRunes(c) {
 
 
 const CLASS_BUFFS = [
-  { name:'Зоркий глаз',     cls:'Лучник',    quality:'green', img:'stats_calculator/buffs/class_buff/skill_alert_eye.png' },
-  { name:'Ураган',          cls:'Маг',       quality:'green', img:'stats_calculator/buffs/class_buff/skill_hurricane.png' },
-  { name:'Благословение',   cls:'Монах',     quality:'green', img:'stats_calculator/buffs/class_buff/skill_regeneration.png' },
-  { name:'Святое слово',    cls:'Паладин',   quality:'green', img:'stats_calculator/buffs/class_buff/skill_sacred_word.png' },
-  { name:'Пылающий щит',   cls:'Воин',      quality:'green', img:'stats_calculator/buffs/class_buff/skill_elemental_shield.png' },
-  { name:'Дар теней',      cls:'Головорез', quality:'green', img:'stats_calculator/buffs/class_buff/skill_shadow_gift.png' },
+  { name:'Зоркий глаз',   cls:'Лучник',    quality:'green', effect:'+15% наносимый урон',      img:'stats_calculator/buffs/class_buff/skill_alert_eye.png' },
+  { name:'Ураган',        cls:'Маг',       quality:'green', effect:'+15% наносимый урон',      img:'stats_calculator/buffs/class_buff/skill_hurricane.png' },
+  { name:'Благословение', cls:'Монах',     quality:'green', effect:'+8% запас здоровья',       img:'stats_calculator/buffs/class_buff/skill_regeneration.png' },
+  { name:'Святое слово',  cls:'Паладин',   quality:'green', effect:'+8% запас здоровья',       img:'stats_calculator/buffs/class_buff/skill_sacred_word.png' },
+  { name:'Пылающий щит', cls:'Воин',      quality:'green', effect:'-8% получаемый урон',      img:'stats_calculator/buffs/class_buff/skill_elemental_shield.png' },
+  { name:'Дар теней',    cls:'Головорез', quality:'green', effect:'-8% получаемый урон',      img:'stats_calculator/buffs/class_buff/skill_shadow_gift.png' },
 ];
+
+const WITCH_FLAME = {
+  name:'Ведьмин огонь', quality:'green',
+  effects:['+30% наносимый урон', '-16% получаемый урон', '+16% запас здоровья'],
+  note:'Заменяет все классовые бафы — нельзя использовать вместе с ними',
+  img:'stats_calculator/buffs/class_buff/acid_flame.png'
+};
 
 function renderBuffsClass(c) {
   const qlabels = Object.fromEntries(QUALITIES.map(q => [q.id, q.label]));
+
   const rows = CLASS_BUFFS.map(b => `
     <div class="rune-row">
       <div class="rune-ico"><img src="${b.img}" alt="" onerror="this.style.display='none'"></div>
@@ -428,14 +436,30 @@ function renderBuffsClass(c) {
         <div class="rune-meta">
           <span class="rune-slot">${b.cls}</span>
           <span class="q-badge ${b.quality}">${qlabels[b.quality]||b.quality}</span>
+          <span style="color:var(--txt2)">${b.effect}</span>
         </div>
       </div>
     </div>`).join('');
 
+  const wf = WITCH_FLAME;
+  const wfEffects = wf.effects.map(e => `<span style="color:var(--txt2)">${e}</span>`).join('');
+
   c.innerHTML = `
     <div class="c-title">Классовые бафы</div>
     <div class="c-sub">Баф от союзника на всю группу</div>
-    <div class="rune-list">${rows}</div>`;
+    <div class="rune-list">${rows}</div>
+
+    <div style="margin-top:28px;margin-bottom:12px;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--txt3)">Замена всех классовых бафов</div>
+    <div class="rune-row" style="border:1px solid rgba(212,168,67,.15);background:rgba(212,168,67,.04);border-radius:8px">
+      <div class="rune-ico"><img src="${wf.img}" alt="" onerror="this.style.display='none'"></div>
+      <div class="rune-info">
+        <div class="rune-name">${wf.name}</div>
+        <div class="rune-meta" style="flex-direction:column;align-items:flex-start;gap:4px">
+          <div style="display:flex;gap:10px;flex-wrap:wrap">${wfEffects}</div>
+          <div style="color:var(--txt3);font-style:italic">${wf.note}</div>
+        </div>
+      </div>
+    </div>`;
 }
 
 function renderSoon(c, title) {
