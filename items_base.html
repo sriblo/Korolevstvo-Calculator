@@ -203,7 +203,26 @@ a{color:inherit;text-decoration:none}
 .eq-card .rune-ico{width:32px;height:32px}
 .eq-card .ico-img{object-fit:none;width:32px;height:32px}
 .eq-slot-name{font-size:11px;color:var(--txt3);text-align:center;line-height:1.3}
-.eq-no-img{width:72px;height:72px;background:var(--bg4);border-radius:4px;border:1px dashed var(--line2);display:flex;align-items:center;justify-content:center;color:var(--txt3);font-size:18px;opacity:.4}
+.eq-no-img{width:32px;height:32px;background:var(--bg4);border-radius:4px;border:1px dashed var(--line2);display:flex;align-items:center;justify-content:center;color:var(--txt3);font-size:10px;opacity:.4}
+.eq-card.on{border-color:var(--gold);background:rgba(212,168,67,.06)}
+.eq-card:hover{cursor:pointer}
+
+/* item detail panel */
+.eq-detail{
+  margin-top:16px;display:none;
+  background:var(--bg2);border:1px solid var(--line2);border-radius:10px;
+  padding:20px 24px;
+}
+.eq-detail-name{font-family:var(--serif);font-size:18px;font-weight:500;margin-bottom:16px;color:var(--txt)}
+.eq-stat-list{display:flex;flex-direction:column;gap:0}
+.eq-stat-row{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:7px 0;border-bottom:1px solid var(--line);
+}
+.eq-stat-row:last-child{border-bottom:none}
+.eq-stat-key{font-size:13px;color:var(--txt2)}
+.eq-stat-val{font-size:13px;color:var(--txt);font-feature-settings:'tnum';white-space:nowrap;margin-left:16px}
+.eq-no-data{color:var(--txt3);font-style:italic;font-family:var(--serif);font-size:15px}
 
 /* ── MOBILE ── */
 @media(max-width:700px){
@@ -358,6 +377,30 @@ function getItemImg(cls, slotId, quality) {
 }
 
 
+const STAT_LABELS = [
+  { key:'atk',      label:'Атака' },
+  { key:'def',      label:'Защита' },
+  { key:'hp',       label:'Запас здоровья' },
+  { key:'mana',     label:'Запас маны' },
+  { key:'heal_eff', label:'Эффективность лечения',        pct:true },
+  { key:'hp_regen', label:'Восстановление жизни вне боя' },
+  { key:'crit_dmg', label:'Сила крит. урона',             pct:true },
+  { key:'wind_res', label:'Сопротивление магии ветра',    pct:true },
+  { key:'elem_def', label:'Защита стихий' },
+  { key:'atk_eff',  label:'Эффективность атаки',          pct:true },
+];
+
+const STATS = {
+  warrior: {
+    red: {
+      weapon: { atk:12.72, def:37.85, hp:694,  mana:80,  heal_eff:5, hp_regen:50, crit_dmg:5, wind_res:0.80, elem_def:35, atk_eff:2 },
+      pants:  { atk:14.53, def:15.03, hp:713,  mana:120, heal_eff:5, hp_regen:50, crit_dmg:5, wind_res:0.80, elem_def:53, atk_eff:2 },
+      belt:   { atk:15.56, def:8.56,  hp:725,  mana:150, heal_eff:5, hp_regen:50, crit_dmg:5, wind_res:0.80, elem_def:72, atk_eff:2 },
+      boots:  { atk:20.04, def:5.65,  hp:750,  mana:170, heal_eff:5, hp_regen:50, crit_dmg:5, wind_res:0.80, elem_def:92, atk_eff:2 },
+    },
+  },
+};
+
 const QUALITY_FRAME = {
   white:       'frames/border_none.png',
   green:       'frames/border_low.png',
@@ -428,14 +471,15 @@ function renderClass(c, cls) {
       : `<div class="eq-no-img">?</div>`;
     const baseName = CLASS_ITEM_NAMES[cls]?.[slot.id] || slot.name;
     const itemName = qData?.setName ? `${baseName} ${qData.setName}` : baseName;
-    return `<div class="eq-card">${ico}<div class="eq-slot-name">${itemName}</div></div>`;
+    return `<div class="eq-card" onclick="showItemDetail('${cls}','${slot.id}','${activeQ}','${itemName}',this)">${ico}<div class="eq-slot-name">${itemName}</div></div>`;
   }).join('');
 
   c.innerHTML = `
     <div class="c-title">${CLASS_NAMES[cls]}</div>
     <div class="c-sub">Основная экипировка</div>
     <div class="q-tabs">${tabs}</div>
-    <div class="eq-grid">${cards}</div>`;
+    <div class="eq-grid">${cards}</div>
+    <div class="eq-detail" id="eq-detail"></div>`;
 }
 
 function switchQ(q) {
@@ -522,6 +566,31 @@ function renderSoon(c, title) {
     <div class="c-title">${title}</div>
     <div class="c-sub" style="margin-bottom:24px">Скоро</div>
     <div class="soon-block">Данные добавляются</div>`;
+}
+
+function showItemDetail(cls, slotId, quality, itemName, cardEl) {
+  document.querySelectorAll('.eq-card').forEach(c => c.classList.remove('on'));
+  cardEl.classList.add('on');
+
+  const det = document.getElementById('eq-detail');
+  const stats = STATS[cls]?.[quality]?.[slotId];
+
+  if (!stats) {
+    det.innerHTML = `<div class="eq-detail-name">${itemName}</div><div class="eq-no-data">Данные ещё не добавлены</div>`;
+    det.style.display = 'block';
+    return;
+  }
+
+  const rows = STAT_LABELS
+    .filter(s => stats[s.key] != null)
+    .map(s => {
+      const v = stats[s.key];
+      const disp = s.pct ? `+${v}%` : `+${v}`;
+      return `<div class="eq-stat-row"><span class="eq-stat-key">${s.label}</span><span class="eq-stat-val">${disp}</span></div>`;
+    }).join('');
+
+  det.innerHTML = `<div class="eq-detail-name">${itemName}</div><div class="eq-stat-list">${rows}</div>`;
+  det.style.display = 'block';
 }
 
 function sv(val, suffix='') {
