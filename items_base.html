@@ -227,7 +227,7 @@ a{color:inherit;text-decoration:none}
   transition:border-color .15s,background .15s;
 }
 .buff-card:hover{border-color:var(--line2);background:var(--bg3)}
-.buff-card.special{border-color:rgba(212,168,67,.2);background:rgba(212,168,67,.04);grid-column:1/-1}
+.buff-card.special{border-color:rgba(212,168,67,.2);background:rgba(212,168,67,.04)}
 .buff-ico{width:32px;height:32px;flex-shrink:0;border-radius:3px;overflow:hidden}
 .buff-ico img{width:32px;height:32px;display:block}
 .buff-name{font-family:var(--serif);font-size:14px;font-weight:500;color:var(--txt);line-height:1.2}
@@ -609,13 +609,9 @@ function renderBuffsClass(c) {
 
   const wf = WITCH_FLAME;
   const wfCard = `
-    <div class="buff-card special">
+    <div class="buff-card special" onmouseenter="ttShowWF(event)" onmousemove="ttMove(event)" onmouseleave="ttHide()">
       <div class="buff-ico"><img src="${wf.img}" onerror="this.style.opacity=0"></div>
       <div class="buff-name">${wf.name}</div>
-      <div class="buff-cls" style="font-style:italic;color:var(--txt3)">${wf.note}</div>
-      <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:2px">
-        ${wf.effects.map(e => `<span class="buff-effect">${e}</span>`).join('')}
-      </div>
     </div>`;
 
   c.innerHTML = `
@@ -659,6 +655,15 @@ function ttShow(cls, slotId, quality, itemName, e) {
         return `<div class="tt-row"><span class="tt-key">${s.label}</span><span class="tt-val">+${v}${s.pct?'%':''}</span></div>`;
       }).join('');
   }
+  _tt.innerHTML = html;
+  _tt.classList.add('vis');
+  ttMove(e);
+}
+function ttShowWF(e) {
+  const wf = WITCH_FLAME;
+  let html = `<div class="tt-name">${wf.name}</div>`;
+  html += wf.effects.map(ef => `<div class="tt-row"><span class="tt-key" style="color:var(--txt2)">${ef}</span></div>`).join('');
+  html += `<div class="tt-row" style="margin-top:4px"><span class="tt-key" style="font-style:italic;color:var(--txt3)">${wf.note}</span></div>`;
   _tt.innerHTML = html;
   _tt.classList.add('vis');
   ttMove(e);
