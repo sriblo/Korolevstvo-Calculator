@@ -458,6 +458,9 @@ const ARTIFACTS = [
   { name:'Камень Потерянных Земель', quality:'green',  img:'stats_calculator/artefacts/artefact_stone_air.png', stats:{ atk:2, mana:100, def_eff:2, atk_eff:3 } },
   { name:'Камень Потерянных Земель', quality:'blue',   img:'stats_calculator/artefacts/artefact_stone_air.png', stats:{ atk:3, mana:150, def_eff:3, atk_eff:4, crit_chance:1 } },
   { name:'Камень Потерянных Земель', quality:'purple', img:'stats_calculator/artefacts/artefact_stone_air.png', stats:{ atk:4, mana:200, def_eff:4, atk_eff:5, crit_chance:2 } },
+  { name:'Камень Труда', quality:'green',  img:'stats_calculator/artefacts/artefact_stone_water.png', stats:{ atk:1, heal_eff:1, hp:50,  atk_eff:1 } },
+  { name:'Камень Труда', quality:'blue',   img:'stats_calculator/artefacts/artefact_stone_water.png', stats:{ atk:2, heal_eff:2, hp:150, def:1, atk_eff:2 } },
+  { name:'Камень Труда', quality:'purple', img:'stats_calculator/artefacts/artefact_stone_water.png', stats:{ atk:4, heal_eff:3, hp:300, def:2, atk_eff:3, crit_chance:2 } },
   { name:'Камень Дружбы',     quality:'orange', img:'stats_calculator/artefacts/artefact_stone_dark.png',  stats:{ atk:13, hp:700, def:7, speed:4 } },
   { name:'Камень Дружбы',     quality:'red',    img:'stats_calculator/artefacts/artefact_stone_dark.png',  stats:{ atk:10, hp:500, def:7, speed:3 } },
   { name:'Камень Дружбы',     quality:'purple', img:'stats_calculator/artefacts/artefact_stone_dark.png',  stats:{ atk:7,  hp:300, def:5, speed:3 } },
@@ -659,7 +662,7 @@ function renderArtifacts(c) {
     </div>`;
   }
 
-  const groups = ['Камень Дружбы', 'Камень Потерянных Земель', 'Камень Крови'];
+  const groups = ['Камень Дружбы', 'Камень Потерянных Земель', 'Камень Труда', 'Камень Крови'];
   const unique  = sortByQuality(ARTIFACTS.filter(a => !groups.includes(a.name)));
   const idxOf   = a => ARTIFACTS.indexOf(a);
 
