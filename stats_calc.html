@@ -49,7 +49,7 @@ a{color:inherit;text-decoration:none}
 .h-back:hover{color:var(--gold-l)}
 .h-back::before{content:'←'}
 
-/* ── PAGE LAYOUT ── */
+/* ── PAGE ── */
 .page{padding:28px 32px 80px;max-width:1320px;margin:0 auto}
 .page-head{margin-bottom:20px}
 .page-title{font-family:var(--serif);font-size:26px;font-weight:500;letter-spacing:-.015em;margin-bottom:2px}
@@ -65,97 +65,119 @@ a{color:inherit;text-decoration:none}
 /* ── CHARACTER BLOCK ── */
 .char-block{
   background:var(--bg2);border:1px solid var(--line);border-radius:14px;
-  overflow:hidden;
-  display:flex;flex-direction:column;gap:0;
+  overflow:visible;
+  display:flex;flex-direction:column;
 }
 .char-block-head{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:14px 18px 12px;
+  display:flex;align-items:center;
+  padding:12px 18px 10px;
   border-bottom:1px solid var(--line);
 }
 .char-block-label{
-  font-family:var(--serif);font-size:15px;font-weight:500;color:var(--txt2);letter-spacing:-.005em;
+  font-family:var(--serif);font-size:14px;font-weight:500;color:var(--txt3);letter-spacing:-.005em;
 }
-.char-block-inner{padding:16px 18px;display:flex;flex-direction:column;gap:16px}
-
-/* ── PLACEHOLDER (char 2) ── */
-.char-block-placeholder{
-  display:flex;align-items:center;justify-content:center;
-  min-height:420px;
-  font-family:var(--serif);font-style:italic;font-size:15px;color:var(--txt3);
+.char-block-inner{
+  padding:16px 18px;
+  display:flex;flex-direction:column;
+  gap:14px;
 }
 
-/* ── CLASS TABS ── */
-.cls-tabs{display:flex;gap:2px;flex-wrap:wrap}
-.cls-tab{
-  display:flex;align-items:center;gap:6px;
-  padding:6px 11px;border-radius:7px;cursor:pointer;
-  font-size:12px;color:var(--txt2);font-weight:500;
-  transition:background .12s,color .12s;
-  border:1px solid transparent;
+/* ── CONTROLS ROW ── */
+.char-controls{
+  display:flex;align-items:center;gap:8px;
 }
-.cls-tab:hover{background:var(--bg3);color:var(--txt)}
-.cls-tab.on{background:var(--bg3);color:var(--gold-l);border-color:var(--line2)}
-.cls-tab-ico{width:16px;height:16px;border-radius:2px;flex-shrink:0;object-fit:cover}
-
-/* ── PAPERDOLL ── */
-.paperdoll-wrap{
-  display:grid;
-  grid-template-columns:1fr auto 1fr;
-  gap:0 10px;
-  align-items:start;
+.nickname-input{
+  flex:1;
+  padding:7px 11px;
+  background:var(--bg3);border:1px solid var(--line);border-radius:7px;
+  font-size:13px;font-family:var(--sans);color:var(--txt);outline:none;
+  transition:border-color .15s;
 }
-.slot-col{display:flex;flex-direction:column;gap:6px}
-.slot-col.right{align-items:flex-start}
-.slot-col.left{align-items:flex-end}
+.nickname-input::placeholder{color:var(--txt3)}
+.nickname-input:focus{border-color:var(--line2)}
 
-.slot-btn{
+/* Class dropdown */
+.cls-drop{position:relative;flex-shrink:0}
+.cls-dd-trigger{
   display:flex;align-items:center;gap:7px;
-  padding:6px 8px;border-radius:8px;
-  background:var(--bg3);border:1px solid var(--line);
-  cursor:pointer;transition:border-color .15s,background .15s;
-  width:100%;position:relative;
+  padding:6px 10px;
+  background:var(--bg3);border:1px solid var(--line2);border-radius:7px;
+  cursor:pointer;font-size:13px;color:var(--txt2);font-weight:500;
+  transition:background .12s,color .12s;user-select:none;white-space:nowrap;
 }
-.slot-btn:hover{border-color:var(--line2);background:var(--bg4)}
-.slot-btn.active{border-color:var(--gold);background:var(--bg4)}
-.slot-btn.equipped{border-color:var(--line2)}
+.cls-dd-trigger:hover{background:var(--bg4);color:var(--txt)}
+.cls-drop.open .cls-dd-trigger{color:var(--gold-l);border-color:rgba(var(--gold-tint),.3)}
+.cls-dd-ico{width:16px;height:16px;border-radius:2px;flex-shrink:0;object-fit:cover}
+.cls-dd-arrow{width:10px;height:10px;opacity:.6;transition:transform .15s;flex-shrink:0}
+.cls-drop.open .cls-dd-arrow{transform:rotate(180deg)}
+.cls-dd-menu{
+  display:none;position:absolute;top:calc(100% + 6px);right:0;
+  background:var(--bg3);border:1px solid var(--line2);border-radius:9px;
+  padding:5px;min-width:160px;z-index:200;
+  box-shadow:0 12px 32px rgba(0,0,0,.6);
+}
+.cls-drop.open .cls-dd-menu{display:block}
+.cls-dd-item{
+  display:flex;align-items:center;gap:8px;
+  padding:7px 10px;border-radius:6px;
+  font-size:13px;color:var(--txt2);font-weight:500;cursor:pointer;
+  transition:background .1s,color .1s;
+}
+.cls-dd-item:hover{background:var(--bg4);color:var(--txt)}
+.cls-dd-item.on{color:var(--gold-l)}
+.cls-dd-item img{width:16px;height:16px;border-radius:2px;object-fit:cover}
 
-.slot-col.left .slot-btn{flex-direction:row-reverse}
-.slot-col.left .slot-label{text-align:right}
+/* ── CHARACTER FIGURE ── */
+.char-figure-wrap{
+  display:flex;justify-content:center;align-items:center;
+  min-height:240px;
+  background:var(--bg3);border:1px solid var(--line);border-radius:10px;
+  position:relative;overflow:hidden;
+}
+.char-figure{
+  max-height:260px;max-width:100%;object-fit:contain;
+  display:block;
+}
+.char-figure-empty{
+  font-family:var(--serif);font-style:italic;font-size:13px;color:var(--txt3);
+}
+
+/* ── SLOT ROWS ── */
+.slot-row{
+  display:grid;
+  grid-template-columns:repeat(7,1fr);
+  gap:5px;
+}
+
+.slot-cell{
+  display:flex;flex-direction:column;align-items:center;gap:4px;
+  cursor:pointer;
+}
 
 .slot-ico-wrap{
-  width:32px;height:32px;border-radius:5px;
-  background:var(--bg4);border:1px solid var(--line);
-  flex-shrink:0;position:relative;overflow:hidden;
+  width:40px;height:40px;
+  background:var(--bg3);border:1px solid var(--line);border-radius:7px;
   display:flex;align-items:center;justify-content:center;
+  position:relative;overflow:hidden;
+  transition:border-color .15s,background .15s;
+  flex-shrink:0;
 }
+.slot-cell:hover .slot-ico-wrap{border-color:var(--line2);background:var(--bg4)}
+.slot-cell.active .slot-ico-wrap{border-color:var(--gold)}
+.slot-cell.equipped .slot-ico-wrap{border-color:var(--line2)}
+
 .slot-ico-wrap img.item-img{width:32px;height:32px;object-fit:none}
-.slot-ico-wrap img.frame-img{position:absolute;inset:0;width:32px;height:32px;pointer-events:none}
+.slot-ico-wrap img.frame-img{position:absolute;inset:4px;width:32px;height:32px;pointer-events:none}
+.slot-ico-empty{opacity:.18}
 
-.slot-label{flex:1;min-width:0}
-.slot-name-txt{font-size:11px;color:var(--txt3);line-height:1.2}
-.slot-item-txt{font-size:12px;color:var(--txt);line-height:1.3;overflow-wrap:break-word;word-break:break-word}
-
-/* ── CHARACTER CENTER ── */
-.char-center{
-  display:flex;flex-direction:column;align-items:center;gap:8px;
-  padding-top:2px;
+.slot-cell-name{
+  font-size:9px;color:var(--txt3);text-align:center;
+  line-height:1.25;
+  overflow-wrap:break-word;word-break:break-word;
+  max-width:100%;
 }
-.char-img-wrap{
-  width:72px;height:72px;
-  background:var(--bg3);border:1px solid var(--line2);
-  border-radius:10px;
-  display:flex;align-items:center;justify-content:center;
-  overflow:hidden;
-}
-.char-img-wrap img{width:100%;height:100%;object-fit:contain}
-.char-name{font-family:var(--serif);font-size:12px;color:var(--gold-l);font-weight:500;text-align:center}
-.char-reset{
-  font-size:10px;color:var(--txt3);cursor:pointer;
-  padding:3px 8px;border-radius:4px;border:1px solid var(--line);
-  transition:color .15s,border-color .15s;white-space:nowrap;
-}
-.char-reset:hover{color:var(--txt2);border-color:var(--line2)}
+.slot-cell.equipped .slot-cell-name{color:var(--txt2)}
+.slot-cell.active .slot-cell-name{color:var(--gold-l)}
 
 /* ── QUALITY PICKER ── */
 .picker-panel{
@@ -174,7 +196,7 @@ a{color:inherit;text-decoration:none}
   transition:border-color .12s,background .12s;
 }
 .picker-btn:hover{border-color:var(--line2)}
-.picker-btn.no-data{opacity:.3;cursor:default}
+.picker-btn.no-data{opacity:.3;cursor:default;pointer-events:none}
 .picker-btn.equipped-q{outline:2px solid currentColor;outline-offset:1px}
 .picker-unequip{
   padding:4px 10px;border-radius:5px;cursor:pointer;font-size:10px;font-family:var(--sans);
@@ -184,7 +206,6 @@ a{color:inherit;text-decoration:none}
 .picker-unequip:hover{color:var(--txt2);border-color:rgba(212,168,67,.3)}
 
 /* ── BUFFS ── */
-.buffs-section{}
 .buffs-title{font-size:10px;color:var(--txt3);text-transform:uppercase;letter-spacing:.12em;font-weight:600;margin-bottom:8px}
 .buffs-list{display:flex;flex-wrap:wrap;gap:5px}
 .buff-toggle{
@@ -226,6 +247,13 @@ a{color:inherit;text-decoration:none}
 .stat-empty{color:var(--txt3);font-size:12px;font-style:italic;padding:18px 14px;text-align:center}
 .stat-buff-tag{font-size:10px;color:var(--gold);margin-left:4px;font-family:var(--sans)}
 
+/* ── PLACEHOLDER (char 2) ── */
+.char-block-placeholder{
+  display:flex;align-items:center;justify-content:center;
+  min-height:420px;
+  font-family:var(--serif);font-style:italic;font-size:15px;color:var(--txt3);
+}
+
 /* ── MOBILE ── */
 @media(max-width:960px){
   .calc-layout{grid-template-columns:1fr}
@@ -266,36 +294,57 @@ a{color:inherit;text-decoration:none}
         <span class="char-block-label">Персонаж 1</span>
       </div>
       <div class="char-block-inner">
-        <div class="cls-tabs" id="clsTabs-c1"></div>
 
-        <div class="paperdoll-wrap">
-          <div class="slot-col left"  id="colLeft-c1"></div>
-          <div class="char-center">
-            <div class="char-img-wrap"><img id="charImg-c1" src="" alt=""></div>
-            <div class="char-name" id="charName-c1"></div>
-            <div class="char-reset" onclick="resetAll('c1')">Снять всё</div>
+        <!-- Никнейм + класс -->
+        <div class="char-controls">
+          <input class="nickname-input" type="text" id="nickname-c1" placeholder="Никнейм">
+          <div class="cls-drop" id="clsDrop-c1">
+            <div class="cls-dd-trigger" onclick="toggleClsDrop('c1')">
+              <img class="cls-dd-ico" id="clsDdIco-c1" src="" alt="" onerror="this.style.display='none'">
+              <span id="clsDdLabel-c1">Паладин</span>
+              <svg class="cls-dd-arrow" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div class="cls-dd-menu" id="clsDdMenu-c1"></div>
           </div>
-          <div class="slot-col right" id="colRight-c1"></div>
         </div>
 
+        <!-- Картинка персонажа -->
+        <div class="char-figure-wrap" id="charFigureWrap-c1">
+          <img class="char-figure" id="charFigure-c1" src="" alt=""
+            onerror="this.style.display='none';document.getElementById('charFigureEmpty-c1').style.display='block'">
+          <div class="char-figure-empty" id="charFigureEmpty-c1">персонаж</div>
+        </div>
+
+        <!-- Строка 2 (верхняя) -->
+        <div class="slot-row" id="slotRowTop-c1"></div>
+
+        <!-- Строка 1 (нижняя) -->
+        <div class="slot-row" id="slotRowBot-c1"></div>
+
+        <!-- Пикер качества -->
         <div class="picker-panel" id="pickerPanel-c1">
           <div class="picker-title" id="pickerTitle-c1">Выберите качество</div>
           <div class="picker-btns"  id="pickerBtns-c1"></div>
           <button class="picker-unequip" onclick="unequipActiveSlot('c1')">— Снять</button>
         </div>
 
-        <div class="buffs-section">
+        <!-- Баффы -->
+        <div>
           <div class="buffs-title">Баффы группы</div>
           <div class="buffs-list" id="buffsList-c1"></div>
         </div>
 
+        <!-- Статы -->
         <div class="stats-panel">
           <div class="stats-header">
             <div class="stats-title">Характеристики</div>
-            <div class="stats-hint" id="statsHint-c1">наденьте экипировку</div>
+            <div class="stats-hint" id="statsHint-c1">выберите предметы</div>
           </div>
           <div class="stats-body" id="statsBody-c1"></div>
         </div>
+
       </div>
     </div>
 
@@ -323,17 +372,29 @@ const QUALITIES = [
   { id:'orange',      label:'Эпический',         color:'#f0a040' },
 ];
 
-const SLOTS = [
-  { id:'weapon',    name:'Оружие',        col:'left'  },
-  { id:'chest',     name:'Нагрудник',     col:'left'  },
-  { id:'shoulders', name:'Наплечники',    col:'left'  },
-  { id:'helm',      name:'Шлем',          col:'left'  },
-  { id:'offhand',   name:'Второе оружие', col:'right' },
-  { id:'pants',     name:'Штаны',         col:'right' },
-  { id:'belt',      name:'Пояс',          col:'right' },
-  { id:'boots',     name:'Сапоги',        col:'right' },
-  { id:'gloves',    name:'Перчатки',      col:'right' },
+// Строка 2 (верхняя — ближе к персонажу)
+const ROW_TOP = [
+  { id:'stone_greed',  name:'Камень Алчности',    short:'Алчности' },
+  { id:'flask',        name:'Фляжка',             short:'Фляжка' },
+  { id:'weapon',       name:'Оружие',             short:'Оружие' },
+  { id:'battle_bag',   name:'Боевая сумка',       short:'Б. сумка' },
+  { id:'offhand',      name:'Второе оружие',      short:'2е оружие' },
+  { id:'trinket',      name:'Брелок',             short:'Брелок' },
+  { id:'stone_blood',  name:'Камень Крови',       short:'Крови' },
 ];
+
+// Строка 1 (нижняя)
+const ROW_BOT = [
+  { id:'stone_travel',  name:'Камень Путешествий',       short:'Путешествий' },
+  { id:'stone_contest', name:'Камень Состязаний',        short:'Состязаний' },
+  { id:'stone_friend',  name:'Камень Дружбы',            short:'Дружбы' },
+  { id:'stone_witch',   name:'Камень Ведьмака',          short:'Ведьмака' },
+  { id:'stone_labor',   name:'Камень Труда',             short:'Труда' },
+  { id:'stone_lost',    name:'Камень Потерянных Земель', short:'Пот. Земель' },
+  { id:'stone_luck',    name:'Камень Удачи',             short:'Удачи' },
+];
+
+const ALL_SLOTS = [...ROW_TOP, ...ROW_BOT];
 
 const CLASS_NAMES = {
   warrior:'Воин', rogue:'Головорез', monk:'Монах',
@@ -345,39 +406,11 @@ const CLASS_ICON_FILE = {
   paladin:'paladin.png', mage:'mage.png',   archer:'shooter.png',
 };
 
-const CLASS_ITEM_NAMES = {
-  warrior: { weapon:'Меч',    offhand:'Щит',    helm:'Шлем', chest:'Нагрудник', shoulders:'Наплечники', pants:'Штаны', gloves:'Перчатки', belt:'Пояс', boots:'Сапоги' },
-  rogue:   { weapon:'Кинжал', offhand:'Кинжал', helm:'Шлем', chest:'Нагрудник', shoulders:'Наплечники', pants:'Штаны', gloves:'Перчатки', belt:'Пояс', boots:'Сапоги' },
-  monk:    { weapon:'Посох',  offhand:'Орб',    helm:'Шлем', chest:'Нагрудник', shoulders:'Наплечники', pants:'Штаны', gloves:'Перчатки', belt:'Пояс', boots:'Сапоги' },
-  paladin: { weapon:'Молот',  offhand:'Щит',    helm:'Шлем', chest:'Нагрудник', shoulders:'Наплечники', pants:'Штаны', gloves:'Перчатки', belt:'Пояс', boots:'Сапоги' },
-  mage:    { weapon:'Посох',  offhand:'Орб',    helm:'Шлем', chest:'Нагрудник', shoulders:'Наплечники', pants:'Штаны', gloves:'Перчатки', belt:'Пояс', boots:'Сапоги' },
-  archer:  { weapon:'Лук',    offhand:'Колчан', helm:'Шлем', chest:'Нагрудник', shoulders:'Наплечники', pants:'Штаны', gloves:'Перчатки', belt:'Пояс', boots:'Сапоги' },
-};
-
-const CLASS_SET_NAMES = {
-  warrior: { white:'Решимости', green:'Отваги',  blue:'Разрушителя', purple:'Непримиримости', purple_plus:'Непримиримости', red:'Доблести',  orange:'' },
-  paladin: { white:'Праведника', green:'Веры',   blue:'Благочестия', purple:'Истины',          purple_plus:'Истины',         red:'Избранного', orange:'' },
-  rogue:{}, monk:{}, mage:{}, archer:{},
-};
-
-const УСИЛ = {
-  'Меч':'Усиленный','Щит':'Усиленный','Шлем':'Усиленный','Нагрудник':'Усиленный',
-  'Пояс':'Усиленный','Молот':'Усиленный','Посох':'Усиленный','Орб':'Усиленный',
-  'Кинжал':'Усиленный','Лук':'Усиленный','Колчан':'Усиленный',
-  'Наплечники':'Усиленные','Штаны':'Усиленные','Перчатки':'Усиленные','Сапоги':'Усиленные',
-};
-
 const QUALITY_FRAME = {
-  white:'frames/border_none.png', green:'frames/border_low.png',
-  blue:'frames/border_medium.png', purple:'frames/border_high.png',
+  white:'frames/border_none.png',       green:'frames/border_low.png',
+  blue:'frames/border_medium.png',      purple:'frames/border_high.png',
   purple_plus:'frames/border_high.png', red:'frames/border_exclusive.png',
   orange:'frames/border_special.png',
-};
-
-const QUALITY_LEVEL = { white:10, green:11, blue:12, purple:13, purple_plus:13, red:14, orange:15 };
-
-const CLASS_SLOTS_IMG = {
-  warrior: { weapon:'sword', offhand:'shield', helm:'helm', chest:'chest', shoulders:'shoulders', pants:'pants', gloves:'gloves', belt:'belt', boots:'boots' },
 };
 
 const STAT_LABELS = [
@@ -407,31 +440,22 @@ const CLASS_BUFFS = [
   { name:'Дар теней',     cls:'rogue',   effect:'dmg_taken_red', value:8 },
 ];
 
+// Статы предметов — будет расширяться
 const STATS = {
   warrior: {
     red: {
-      weapon:    { atk:12.72, def:37.85, hp:694,  mana:80,  heal_eff:5, hp_regen:50, crit_dmg:5, wind_res:0.80, elem_def:35,  atk_eff:2 },
-      pants:     { atk:14.53, def:15.03, hp:713,  mana:120, heal_eff:5, hp_regen:50, crit_dmg:5, wind_res:0.80, elem_def:53,  atk_eff:2 },
-      belt:      { atk:15.56, def:8.56,  hp:725,  mana:150, heal_eff:5, hp_regen:50, crit_dmg:5, wind_res:0.80, elem_def:72,  atk_eff:2 },
-      boots:     { atk:20.04, def:5.65,  hp:750,  mana:170, heal_eff:5, hp_regen:50, crit_dmg:5, wind_res:0.80, elem_def:92,  atk_eff:2 },
+      weapon:  { atk:12.72, def:37.85, hp:694,  mana:80,  heal_eff:5, hp_regen:50, crit_dmg:5, wind_res:0.80, elem_def:35, atk_eff:2 },
     },
   },
   paladin: {
     green: {
-      weapon:  { atk:5.70,  def:28.47, hp:450, mana:15, fire_res:0.50 },
-      pants:   { atk:6.75,  def:14.23, hp:465, mana:24, fire_res:0.50 },
-      belt:    { atk:7.20,  def:8.59,  hp:485, mana:30, fire_res:0.50 },
-      boots:   { atk:9.70,  def:5.61,  hp:510, mana:36, fire_res:0.50 },
-      gloves:  { atk:10.75, def:3.94,  hp:530, mana:42, fire_res:0.50 },
+      weapon:  { atk:5.70, def:28.47, hp:450, mana:15, fire_res:0.50 },
     },
     red: {
-      weapon:  { atk:10.18, def:37.83, hp:949,  mana:80,  heal_eff:5, hp_regen:50, crit_dmg:5, fire_res:0.80, elem_def:35,  atk_eff:2 },
-      pants:   { atk:11.64, def:17.84, hp:954,  mana:120, heal_eff:5, hp_regen:50, crit_dmg:5, fire_res:0.80, elem_def:53,  atk_eff:2 },
-      belt:    { atk:12.41, def:10.32, hp:985,  mana:150, heal_eff:5, hp_regen:50, crit_dmg:5, fire_res:0.80, elem_def:72,  atk_eff:2 },
-      boots:   { atk:16.57, def:6.63,  hp:1023, mana:170, heal_eff:5, hp_regen:50, crit_dmg:5, fire_res:0.80, elem_def:92,  atk_eff:2 },
+      weapon:  { atk:10.18, def:37.83, hp:949, mana:80, heal_eff:5, hp_regen:50, crit_dmg:5, fire_res:0.80, elem_def:35, atk_eff:2 },
     },
     purple_plus: {
-      gloves:  { atk:16.30, def:4.78, hp:855, mana:170, heal_eff:5, fire_res:0.80, elem_def:124 },
+      offhand: { atk:16.30, def:4.78, hp:855, mana:170, heal_eff:5, fire_res:0.80, elem_def:124 },
     },
   },
 };
@@ -445,86 +469,67 @@ const state = {
 
 // ── HELPERS ───────────────────────────────────────────────────────────────────
 
-function getItemImg(cls, slotId, quality) {
-  const slotMap = CLASS_SLOTS_IMG[cls];
-  if (!slotMap) return null;
-  const slotFile = slotMap[slotId];
-  if (!slotFile) return null;
-  const lvl = QUALITY_LEVEL[quality];
-  if (!lvl) return null;
-  return `stats_calculator/classes/${cls}/${cls}_sets/${quality}_set/elf/${cls}_${slotFile}_${lvl}_elf.png`;
-}
-
-function getItemName(cls, slotId, quality) {
-  const baseName = (CLASS_ITEM_NAMES[cls] || {})[slotId] || SLOTS.find(s => s.id === slotId)?.name || slotId;
-  const setName  = (CLASS_SET_NAMES[cls] || {})[quality] || '';
-  if (quality === 'purple_plus') {
-    const усил = УСИЛ[baseName] || 'Усиленный';
-    return `${усил} ${baseName}${setName ? ' ' + setName : ''}`;
-  }
-  return setName ? `${baseName} ${setName}` : baseName;
-}
-
 function getStatsForSlot(cls, slotId, quality) {
   return STATS[cls]?.[quality]?.[slotId] || null;
 }
 
+function getItemImg(cls, slotId, quality) {
+  // Expand as image library grows
+  return null;
+}
+
 // ── RENDER ────────────────────────────────────────────────────────────────────
 
-function renderClassTabs(cid) {
+function renderClsDropdown(cid) {
   const s = state[cid];
-  document.getElementById(`clsTabs-${cid}`).innerHTML =
-    Object.keys(CLASS_NAMES).map(cls => {
-      const on = cls === s.cls ? ' on' : '';
-      return `<div class="cls-tab${on}" onclick="selectClass('${cid}','${cls}')">
-        <img class="cls-tab-ico" src="stats_calculator/classes/${CLASS_ICON_FILE[cls]}" alt="" onerror="this.style.display='none'">
-        ${CLASS_NAMES[cls]}
-      </div>`;
-    }).join('');
+  const menu = document.getElementById(`clsDdMenu-${cid}`);
+  const label = document.getElementById(`clsDdLabel-${cid}`);
+  const ico   = document.getElementById(`clsDdIco-${cid}`);
+
+  label.textContent = CLASS_NAMES[s.cls];
+  ico.src = `stats_calculator/classes/${CLASS_ICON_FILE[s.cls]}`;
+
+  menu.innerHTML = Object.keys(CLASS_NAMES).map(cls => {
+    const on = cls === s.cls ? ' on' : '';
+    return `<div class="cls-dd-item${on}" onclick="selectClass('${cid}','${cls}')">
+      <img src="stats_calculator/classes/${CLASS_ICON_FILE[cls]}" alt="" onerror="this.style.display='none'">
+      ${CLASS_NAMES[cls]}
+    </div>`;
+  }).join('');
 }
 
-function renderCharCenter(cid) {
+function renderSlotRow(cid, rowSlots, containerId) {
   const s = state[cid];
-  document.getElementById(`charImg-${cid}`).src = `stats_calculator/classes/${CLASS_ICON_FILE[s.cls]}`;
-  document.getElementById(`charName-${cid}`).textContent = CLASS_NAMES[s.cls];
-}
+  const el = document.getElementById(containerId);
 
-function renderSlots(cid) {
-  const s = state[cid];
-  const left  = document.getElementById(`colLeft-${cid}`);
-  const right = document.getElementById(`colRight-${cid}`);
-  left.innerHTML = '';
-  right.innerHTML = '';
+  el.innerHTML = rowSlots.map(slot => {
+    const eq      = s.equipped[slot.id];
+    const isActive = s.activeSlot === slot.id;
+    const cls     = [
+      'slot-cell',
+      isActive  ? 'active'   : '',
+      eq        ? 'equipped' : '',
+    ].filter(Boolean).join(' ');
 
-  SLOTS.forEach(slot => {
-    const eq = s.equipped[slot.id];
-    const on  = s.activeSlot === slot.id ? ' active' : '';
-    const eqCls = eq ? ' equipped' : '';
-    const qColor = eq ? QUALITIES.find(q => q.id === eq.quality)?.color || '#888' : 'transparent';
     const imgSrc   = eq ? getItemImg(s.cls, slot.id, eq.quality) : null;
     const frameSrc = eq ? QUALITY_FRAME[eq.quality] : null;
-    const itemName = eq ? getItemName(s.cls, slot.id, eq.quality) : '';
+    const qColor   = eq ? QUALITIES.find(q => q.id === eq.quality)?.color : null;
 
-    const icoHtml = eq
+    const icoInner = eq
       ? `${imgSrc   ? `<img class="item-img"  src="${imgSrc}"   alt="" onerror="this.style.display='none'">` : ''}
-         ${frameSrc ? `<img class="frame-img" src="${frameSrc}" alt="" onerror="this.style.display='none'">` : ''}`
-      : `<svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="opacity:.2"><rect x="1.5" y="1.5" width="13" height="13" rx="2" stroke="currentColor" stroke-width="1.5" stroke-dasharray="3 2"/></svg>`;
+         ${frameSrc ? `<img class="frame-img" src="${frameSrc}" alt="" onerror="this.style.display='none'">` : ''}
+         ${!imgSrc && qColor ? `<div style="width:10px;height:10px;border-radius:50%;background:${qColor}"></div>` : ''}`
+      : `<svg class="slot-ico-empty" width="20" height="20" viewBox="0 0 20 20" fill="none">
+           <rect x="2" y="2" width="16" height="16" rx="3" stroke="currentColor" stroke-width="1.5" stroke-dasharray="3 2"/>
+         </svg>`;
 
-    const labelHtml = eq
-      ? `<div class="slot-label">
-           <div class="slot-name-txt">${slot.name}</div>
-           <div class="slot-item-txt" style="color:${qColor}">${itemName}</div>
-         </div>`
-      : `<div class="slot-label"><div class="slot-name-txt">${slot.name}</div></div>`;
+    const nameStyle = isActive ? 'color:var(--gold-l)' : (eq && qColor ? `color:${qColor}` : '');
 
-    const html = `<div class="slot-btn${on}${eqCls}" onclick="openPicker('${cid}','${slot.id}')">
-      <div class="slot-ico-wrap">${icoHtml}</div>
-      ${labelHtml}
+    return `<div class="${cls}" onclick="openPicker('${cid}','${slot.id}')">
+      <div class="slot-ico-wrap">${icoInner}</div>
+      <div class="slot-cell-name" style="${nameStyle}">${slot.short}</div>
     </div>`;
-
-    if (slot.col === 'left') left.insertAdjacentHTML('beforeend', html);
-    else                      right.insertAdjacentHTML('beforeend', html);
-  });
+  }).join('');
 }
 
 function renderPicker(cid) {
@@ -535,16 +540,17 @@ function renderPicker(cid) {
 
   if (!s.activeSlot) { panel.classList.remove('open'); return; }
 
-  const slot = SLOTS.find(sl => sl.id === s.activeSlot);
+  const slot = ALL_SLOTS.find(sl => sl.id === s.activeSlot);
   title.textContent = slot?.name || s.activeSlot;
 
   btns.innerHTML = QUALITIES.map(q => {
-    const hasStats  = !!getStatsForSlot(s.cls, s.activeSlot, q.id);
-    const isEq      = s.equipped[s.activeSlot]?.quality === q.id;
-    const noDataCls = hasStats ? '' : ' no-data';
-    const eqCls     = isEq    ? ' equipped-q' : '';
-    return `<button class="picker-btn${noDataCls}${eqCls}" style="color:${q.color}"
-      onclick="equipSlot('${cid}','${s.activeSlot}','${q.id}')"${hasStats ? '' : ' disabled'}>${q.label}</button>`;
+    const hasStats = !!getStatsForSlot(s.cls, s.activeSlot, q.id);
+    const isEq     = s.equipped[s.activeSlot]?.quality === q.id;
+    return `<button
+      class="picker-btn${hasStats ? '' : ' no-data'}${isEq ? ' equipped-q' : ''}"
+      style="color:${q.color}"
+      onclick="equipSlot('${cid}','${s.activeSlot}','${q.id}')"
+      ${hasStats ? '' : 'disabled'}>${q.label}</button>`;
   }).join('');
 
   panel.classList.add('open');
@@ -558,7 +564,7 @@ function renderBuffs(cid) {
       return `<div class="buff-toggle${on}" onclick="toggleBuff('${cid}',${i})">
         <div class="buff-check">${s.buffs.has(i) ? '✓' : ''}</div>
         ${b.name}
-        <span class="buff-cls-badge">(${CLASS_NAMES[b.cls] || b.cls})</span>
+        <span class="buff-cls-badge">(${CLASS_NAMES[b.cls]})</span>
       </div>`;
     }).join('');
 }
@@ -577,15 +583,14 @@ function renderStats(cid) {
   });
 
   if (!hasAny) {
-    hint.textContent = 'наденьте экипировку';
-    body.innerHTML = `<div class="stat-empty">Оденьте предметы, чтобы увидеть характеристики</div>`;
+    hint.textContent = 'выберите предметы';
+    body.innerHTML = `<div class="stat-empty">Выберите предметы, чтобы увидеть характеристики</div>`;
     return;
   }
 
   const cnt = Object.keys(s.equipped).length;
   hint.textContent = `${cnt} ${cnt === 1 ? 'предмет' : cnt < 5 ? 'предмета' : 'предметов'}`;
 
-  // Buff bonuses
   const buffEffects = {};
   s.buffs.forEach(i => {
     const b = CLASS_BUFFS[i];
@@ -604,15 +609,11 @@ function renderStats(cid) {
     const bonus = buffEffects[meta.key] || 0;
     const total = base + bonus;
     if (total === 0) return;
-
     const valStr = meta.pct
       ? `+${total.toFixed(2).replace(/\.00$/, '')}%`
       : (Number.isInteger(total) ? String(total) : total.toFixed(2));
-
     const buffTag = bonus > 0
-      ? `<span class="stat-buff-tag">+${meta.pct ? bonus.toFixed(1)+'%' : Math.round(bonus)} бафф</span>`
-      : '';
-
+      ? `<span class="stat-buff-tag">+${meta.pct ? bonus.toFixed(1)+'%' : Math.round(bonus)} бафф</span>` : '';
     html += `<div class="stat-row">
       <span class="stat-key">${meta.label}</span>
       <span class="stat-val">${valStr}${buffTag}</span>
@@ -631,9 +632,9 @@ function renderStats(cid) {
 }
 
 function render(cid) {
-  renderClassTabs(cid);
-  renderCharCenter(cid);
-  renderSlots(cid);
+  renderClsDropdown(cid);
+  renderSlotRow(cid, ROW_TOP, `slotRowTop-${cid}`);
+  renderSlotRow(cid, ROW_BOT, `slotRowBot-${cid}`);
   renderPicker(cid);
   renderBuffs(cid);
   renderStats(cid);
@@ -641,18 +642,24 @@ function render(cid) {
 
 // ── ACTIONS ───────────────────────────────────────────────────────────────────
 
+function toggleClsDrop(cid) {
+  document.getElementById(`clsDrop-${cid}`).classList.toggle('open');
+}
+
 function selectClass(cid, cls) {
   const s = state[cid];
   s.cls = cls;
   s.activeSlot = null;
   Object.keys(s.equipped).forEach(k => delete s.equipped[k]);
+  document.getElementById(`clsDrop-${cid}`).classList.remove('open');
   render(cid);
 }
 
 function openPicker(cid, slotId) {
   const s = state[cid];
   s.activeSlot = (s.activeSlot === slotId) ? null : slotId;
-  renderSlots(cid);
+  renderSlotRow(cid, ROW_TOP, `slotRowTop-${cid}`);
+  renderSlotRow(cid, ROW_BOT, `slotRowBot-${cid}`);
   renderPicker(cid);
 }
 
@@ -661,7 +668,8 @@ function equipSlot(cid, slotId, quality) {
   const stats = getStatsForSlot(s.cls, slotId, quality);
   s.equipped[slotId] = { quality, stats };
   s.activeSlot = null;
-  renderSlots(cid);
+  renderSlotRow(cid, ROW_TOP, `slotRowTop-${cid}`);
+  renderSlotRow(cid, ROW_BOT, `slotRowBot-${cid}`);
   renderPicker(cid);
   renderStats(cid);
 }
@@ -671,16 +679,8 @@ function unequipActiveSlot(cid) {
   if (!s.activeSlot) return;
   delete s.equipped[s.activeSlot];
   s.activeSlot = null;
-  renderSlots(cid);
-  renderPicker(cid);
-  renderStats(cid);
-}
-
-function resetAll(cid) {
-  const s = state[cid];
-  Object.keys(s.equipped).forEach(k => delete s.equipped[k]);
-  s.activeSlot = null;
-  renderSlots(cid);
+  renderSlotRow(cid, ROW_TOP, `slotRowTop-${cid}`);
+  renderSlotRow(cid, ROW_BOT, `slotRowBot-${cid}`);
   renderPicker(cid);
   renderStats(cid);
 }
@@ -691,6 +691,14 @@ function toggleBuff(cid, i) {
   renderBuffs(cid);
   renderStats(cid);
 }
+
+// Close dropdowns on outside click
+document.addEventListener('click', e => {
+  ['c1','c2'].forEach(cid => {
+    const drop = document.getElementById(`clsDrop-${cid}`);
+    if (drop && !drop.contains(e.target)) drop.classList.remove('open');
+  });
+});
 
 // ── INIT ──────────────────────────────────────────────────────────────────────
 render('c1');
