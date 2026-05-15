@@ -190,6 +190,19 @@ a{color:inherit;text-decoration:none}
 /* sidebar divider + sub-items */
 .sb-divider{height:1px;background:var(--line);margin:6px 12px}
 .sb-sub{padding-left:28px !important;font-size:12px;letter-spacing:0}
+.sb-group-header.on{color:var(--gold-l) !important}
+
+/* class tabs in content */
+.cls-tabs{display:flex;gap:2px;flex-wrap:wrap;margin-bottom:20px}
+.cls-tab{
+  display:flex;align-items:center;gap:7px;
+  padding:7px 13px;border-radius:7px;cursor:pointer;
+  font-size:13px;color:var(--txt2);font-weight:500;
+  transition:background .12s,color .12s;
+}
+.cls-tab:hover{background:var(--bg3);color:var(--txt)}
+.cls-tab.on{background:var(--bg3);color:var(--gold-l)}
+.cls-tab-ico{width:16px;height:16px;border-radius:2px;flex-shrink:0}
 
 /* equipment card grid */
 .eq-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:10px;margin-top:4px}
@@ -254,29 +267,10 @@ a{color:inherit;text-decoration:none}
   <nav class="sidebar">
 
     <div class="sb-group">
-      <div class="sb-group-header open" onclick="toggleGroup(this)">
+      <div class="sb-group-header open" data-view="equipment" onclick="showEquip(this)">
         Экипировка <span class="sb-chevron">▶</span>
       </div>
       <div class="sb-items open">
-        <div class="sb-item" data-view="warrior" onclick="show(this)">
-          <div class="sb-ico"><img src="stats_calculator/classes/warrior.png" style="width:100%;height:100%;object-fit:cover;border-radius:2px"></div>Воин
-        </div>
-        <div class="sb-item" data-view="rogue" onclick="show(this)">
-          <div class="sb-ico"><img src="stats_calculator/classes/rogue.png" style="width:100%;height:100%;object-fit:cover;border-radius:2px"></div>Головорез
-        </div>
-        <div class="sb-item" data-view="monk" onclick="show(this)">
-          <div class="sb-ico"><img src="stats_calculator/classes/cleric.png" style="width:100%;height:100%;object-fit:cover;border-radius:2px"></div>Монах
-        </div>
-        <div class="sb-item" data-view="paladin" onclick="show(this)">
-          <div class="sb-ico"><img src="stats_calculator/classes/paladin.png" style="width:100%;height:100%;object-fit:cover;border-radius:2px"></div>Паладин
-        </div>
-        <div class="sb-item" data-view="mage" onclick="show(this)">
-          <div class="sb-ico"><img src="stats_calculator/classes/mage.png" style="width:100%;height:100%;object-fit:cover;border-radius:2px"></div>Маг
-        </div>
-        <div class="sb-item" data-view="archer" onclick="show(this)">
-          <div class="sb-ico"><img src="stats_calculator/classes/shooter.png" style="width:100%;height:100%;object-fit:cover;border-radius:2px"></div>Лучник
-        </div>
-        <div class="sb-divider"></div>
         <div class="sb-item sb-sub" data-view="jewelry" onclick="show(this)">Бижутерия</div>
         <div class="sb-item sb-sub" data-view="artifacts" onclick="show(this)">Артефакты</div>
         <div class="sb-item sb-sub" data-view="runes" onclick="show(this)">Руны</div>
@@ -452,23 +446,42 @@ const RUNES = [
   { name:'Руна Усиленного Здоровья Хорлата',    slot:'Шлем',          quality:'blue',   img:'stats_calculator/rune/rune_helm_health_5.png' },
 ];
 
-let activeQ = 'purple';
+let activeQ   = 'purple';
+let activeCls = 'warrior';
+
+const CLASS_ICON_FILE = {
+  warrior:'warrior.png', rogue:'rogue.png', monk:'cleric.png',
+  paladin:'paladin.png', mage:'mage.png',   archer:'shooter.png',
+};
+
+function clearActive() {
+  document.querySelectorAll('.sb-item').forEach(e => e.classList.remove('on'));
+  document.querySelectorAll('.sb-group-header').forEach(e => e.classList.remove('on'));
+}
 
 function toggleGroup(header) {
   header.classList.toggle('open');
   header.nextElementSibling.classList.toggle('open');
 }
 
+function showEquip(header) {
+  clearActive();
+  header.classList.add('on');
+  // keep accordion open
+  header.nextElementSibling.classList.add('open');
+  header.classList.add('open');
+  renderEquipment(document.getElementById('content'));
+}
+
 function show(el) {
-  document.querySelectorAll('.sb-item').forEach(e => e.classList.remove('on'));
+  clearActive();
   el.classList.add('on');
   render(el.dataset.view);
 }
 
 function render(view) {
   const c = document.getElementById('content');
-  const classes = ['warrior','rogue','monk','paladin','mage','archer'];
-  if (classes.includes(view))     renderClass(c, view);
+  if (view === 'equipment')     renderEquipment(c);
   else if (view === 'runes')      renderRunes(c);
   else if (view === 'jewelry')    renderSoon(c, 'Бижутерия');
   else if (view === 'artifacts')  renderSoon(c, 'Артефакты');
@@ -477,37 +490,47 @@ function render(view) {
   else if (view === 'pets_deco')   renderSoon(c, 'Декоративные питомцы');
 }
 
-function renderClass(c, cls) {
-  const tabs = QUALITIES.map(q =>
+function renderEquipment(c) {
+  const clsTabs = Object.entries(CLASS_NAMES).map(([id, name]) =>
+    `<div class="cls-tab${activeCls===id?' on':''}" onclick="switchCls('${id}')">` +
+    `<img class="cls-tab-ico" src="stats_calculator/classes/${CLASS_ICON_FILE[id]}" onerror="this.style.display='none'">${name}</div>`
+  ).join('');
+
+  const qTabs = QUALITIES.map(q =>
     `<div class="q-tab${activeQ===q.id?' on':''}" data-q="${q.id}" onclick="switchQ('${q.id}')">${q.label}</div>`
   ).join('');
 
-  const setName = CLASS_SET_NAMES[cls]?.[activeQ] || '';
-
+  const setName = CLASS_SET_NAMES[activeCls]?.[activeQ] || '';
   const cards = SLOTS.map(slot => {
-    const img = getItemImg(cls, slot.id, activeQ);
-    const ico = img
-      ? icoHtml(img, activeQ)
-      : `<div class="eq-no-img">?</div>`;
-    const baseName = CLASS_ITEM_NAMES[cls]?.[slot.id] || slot.name;
+    const img = getItemImg(activeCls, slot.id, activeQ);
+    const ico = img ? icoHtml(img, activeQ) : `<div class="eq-no-img">?</div>`;
+    const baseName = CLASS_ITEM_NAMES[activeCls]?.[slot.id] || slot.name;
     const itemName = setName ? `${baseName} ${setName}` : baseName;
-    const hasData = !!(STATS[cls]?.[activeQ]?.[slot.id]);
-    return `<div class="eq-card${hasData?'':' no-data'}" onmouseenter="ttShow('${cls}','${slot.id}','${activeQ}','${itemName}',event)" onmousemove="ttMove(event)" onmouseleave="ttHide()">${ico}<div class="eq-slot-name">${itemName}</div></div>`;
+    const hasData = !!(STATS[activeCls]?.[activeQ]?.[slot.id]);
+    return `<div class="eq-card${hasData?'':' no-data'}" onmouseenter="ttShow('${activeCls}','${slot.id}','${activeQ}','${itemName}',event)" onmousemove="ttMove(event)" onmouseleave="ttHide()">${ico}<div class="eq-slot-name">${itemName}</div></div>`;
   }).join('');
 
   c.innerHTML = `
-    <div class="c-title">${CLASS_NAMES[cls]}</div>
-    <div class="c-sub">Основная экипировка</div>
-    <div class="q-tabs">${tabs}</div>
+    <div class="c-title">Экипировка</div>
+    <div class="cls-tabs">${clsTabs}</div>
+    <div class="q-tabs">${qTabs}</div>
     <div class="eq-grid">${cards}</div>`;
+}
+
+function switchCls(cls) {
+  activeCls = cls;
+  renderEquipment(document.getElementById('content'));
 }
 
 function switchQ(q) {
   activeQ = q;
-  document.querySelectorAll('.q-tab').forEach(t => t.classList.toggle('on', t.dataset.q === q));
-  // перерисовываем только строки
-  const view = document.querySelector('.sb-item.on')?.dataset.view;
-  if (view) render(view);
+  const activeHeader = document.querySelector('.sb-group-header.on');
+  if (activeHeader?.dataset.view === 'equipment') {
+    renderEquipment(document.getElementById('content'));
+  } else {
+    const view = document.querySelector('.sb-item.on')?.dataset.view;
+    if (view) render(view);
+  }
 }
 
 function renderRunes(c) {
