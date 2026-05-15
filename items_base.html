@@ -338,14 +338,23 @@ const CLASS_NAMES = {
 };
 
 const QUALITIES = [
-  { id:'white',       label:'Белое',      setName:'Решимости' },
-  { id:'green',       label:'Зелёное',    setName:'Отваги' },
-  { id:'blue',        label:'Синее',      setName:'Разрушителя' },
-  { id:'purple',      label:'Фиолетовое', setName:'Непримиримости' },
-  { id:'purple_plus', label:'Фиол.+',     setName:'Непримиримости (усил.)' },
-  { id:'red',         label:'Красное',    setName:'Доблести' },
-  { id:'orange',      label:'Оранжевое',  setName:'' },
+  { id:'white',       label:'Белое' },
+  { id:'green',       label:'Зелёное' },
+  { id:'blue',        label:'Синее' },
+  { id:'purple',      label:'Фиолетовое' },
+  { id:'purple_plus', label:'Фиол.+' },
+  { id:'red',         label:'Красное' },
+  { id:'orange',      label:'Оранжевое' },
 ];
+
+const CLASS_SET_NAMES = {
+  warrior: { white:'Решимости',  green:'Отваги',  blue:'Разрушителя',  purple:'Непримиримости', purple_plus:'Непримиримости (усил.)', red:'Доблести',   orange:'' },
+  paladin: { white:'Праведника', green:'Веры',    blue:'Благочестия',  purple:'Истины',          purple_plus:'Истины (усил.)',          red:'Избранного', orange:'' },
+  rogue:   {},
+  monk:    {},
+  mage:    {},
+  archer:  {},
+};
 
 /* slot file name per class (only warrior has images so far) */
 const CLASS_SLOTS = {
@@ -357,7 +366,7 @@ const CLASS_ITEM_NAMES = {
   warrior: { weapon:'Меч', offhand:'Щит', helm:'Шлем', chest:'Нагрудник', shoulders:'Наплечники', pants:'Штаны', gloves:'Перчатки', belt:'Пояс', boots:'Сапоги' },
   rogue:   { weapon:'Кинжал', offhand:'Кинжал', helm:'Шлем', chest:'Нагрудник', shoulders:'Наплечники', pants:'Штаны', gloves:'Перчатки', belt:'Пояс', boots:'Сапоги' },
   monk:    { weapon:'Посох', offhand:'Орб', helm:'Шлем', chest:'Нагрудник', shoulders:'Наплечники', pants:'Штаны', gloves:'Перчатки', belt:'Пояс', boots:'Сапоги' },
-  paladin: { weapon:'Булава', offhand:'Щит', helm:'Шлем', chest:'Нагрудник', shoulders:'Наплечники', pants:'Штаны', gloves:'Перчатки', belt:'Пояс', boots:'Сапоги' },
+  paladin: { weapon:'Молот', offhand:'Щит', helm:'Шлем', chest:'Нагрудник', shoulders:'Наплечники', pants:'Штаны', gloves:'Перчатки', belt:'Пояс', boots:'Сапоги' },
   mage:    { weapon:'Посох', offhand:'Орб', helm:'Шлем', chest:'Нагрудник', shoulders:'Наплечники', pants:'Штаны', gloves:'Перчатки', belt:'Пояс', boots:'Сапоги' },
   archer:  { weapon:'Лук', offhand:'Колчан', helm:'Шлем', chest:'Нагрудник', shoulders:'Наплечники', pants:'Штаны', gloves:'Перчатки', belt:'Пояс', boots:'Сапоги' },
 };
@@ -459,7 +468,7 @@ function renderClass(c, cls) {
     `<div class="q-tab${activeQ===q.id?' on':''}" data-q="${q.id}" onclick="switchQ('${q.id}')">${q.label}</div>`
   ).join('');
 
-  const qData = QUALITIES.find(q => q.id === activeQ);
+  const setName = CLASS_SET_NAMES[cls]?.[activeQ] || '';
 
   const cards = SLOTS.map(slot => {
     const img = getItemImg(cls, slot.id, activeQ);
@@ -467,7 +476,7 @@ function renderClass(c, cls) {
       ? icoHtml(img, activeQ)
       : `<div class="eq-no-img">?</div>`;
     const baseName = CLASS_ITEM_NAMES[cls]?.[slot.id] || slot.name;
-    const itemName = qData?.setName ? `${baseName} ${qData.setName}` : baseName;
+    const itemName = setName ? `${baseName} ${setName}` : baseName;
     return `<div class="eq-card" onmouseenter="ttShow('${cls}','${slot.id}','${activeQ}','${itemName}',event)" onmousemove="ttMove(event)" onmouseleave="ttHide()">${ico}<div class="eq-slot-name">${itemName}</div></div>`;
   }).join('');
 
