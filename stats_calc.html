@@ -428,7 +428,7 @@ function showTt(e, cid, slot) {
   const eq  = s.equipped[slot.id];
   const q   = eq ? QUALITIES.find(q => q.id === eq.quality) : null;
 
-  let html = `<div class="tt-name">${slot.name}</div>`;
+  let html = `<div class="tt-name">${eq ? eq.name : slot.name}</div>`;
   if (eq && q) {
     html += `<div class="tt-quality" style="color:${q.color}">${q.label}</div>`;
     if (eq.stats) {
@@ -520,11 +520,12 @@ function icoHtml(slotId, eq, cls) {
   }
   const imgSrc   = eq.img || getItemImg(cls, slotId, eq.quality);
   const frameSrc = QUALITY_FRAME[eq.quality];
-  const qColor   = QUALITIES.find(q => q.id === eq.quality)?.color;
-  // Frame goes BEHIND item icon (background), icon goes on top at full 32x32
-  return `${frameSrc ? `<img class="frame-img" src="${frameSrc}" alt="" style="position:absolute;inset:0;width:32px;height:32px;pointer-events:none;z-index:0" onerror="this.style.display='none'">` : ''}
-          ${imgSrc   ? `<img src="${imgSrc}" alt="" style="position:absolute;inset:0;width:32px;height:32px;object-fit:none;z-index:1" onerror="this.style.display='none'">` : ''}
-          ${!imgSrc && qColor ? `<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:1"><div style="width:10px;height:10px;border-radius:50%;background:${qColor}"></div></div>` : ''}`;
+  const qColor   = QUALITIES.find(q => q.id === eq.quality)?.color || '#888';
+  // Icon behind (z-index:1), frame on top with transparent center (z-index:2)
+  return `${imgSrc   ? `<img src="${imgSrc}" alt="" style="position:absolute;inset:0;width:32px;height:32px;object-fit:none;z-index:1" onerror="this.style.display='none'">` : ''}
+          ${!imgSrc  ? `<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:1"><div style="width:10px;height:10px;border-radius:50%;background:${qColor}"></div></div>` : ''}
+          ${frameSrc ? `<img class="frame-img" src="${frameSrc}" alt="" style="position:absolute;inset:0;width:32px;height:32px;pointer-events:none;z-index:2" onerror="this.style.display='none'">` : ''}
+          <div style="position:absolute;bottom:0;left:0;right:0;height:2px;background:${qColor};z-index:3;opacity:.7"></div>`;
 }
 
 // ── RENDER ────────────────────────────────────────────────────────────────────
@@ -576,7 +577,8 @@ let _pickerCache = {};
 function getPickerItems(cls, slotId) {
   if (SLOT_ITEMS[slotId]) return SLOT_ITEMS[slotId];
   // Armor/weapon: one item per quality that has image or stats
-  const slotName = [...COL_LEFT, ...COL_RIGHT, ...ROW_TOP, ...ROW_BOT].find(s => s.id === slotId)?.name || slotId;
+  const slotName = CLASS_ITEM_NAMES[cls]?.[slotId] ||
+    [...COL_LEFT, ...COL_RIGHT, ...ROW_TOP, ...ROW_BOT].find(s => s.id === slotId)?.name || slotId;
   const setNames = CLASS_SET_NAMES[cls] || {};
   return QUALITIES
     .filter(q => getItemImg(cls, slotId, q.id) || getStatsForSlot(cls, slotId, q.id))
@@ -600,14 +602,16 @@ function renderPicker(cid) {
 
   btns.innerHTML = items.map((item, idx) => {
     const frameSrc = QUALITY_FRAME[item.quality] || '';
+    const qColor   = QUALITIES.find(q => q.id === item.quality)?.color || '#888';
     const isOn = eqItem && eqItem.name === item.name && eqItem.quality === item.quality;
     return `<div class="picker-item${isOn ? ' on' : ''}"
       onclick="equipItem('${cid}','${s.activeSlot}',${idx})"
       onmouseenter="showPickerTt(event,'${cid}',${idx})"
       onmousemove="moveTt(event)"
       onmouseleave="hideTt()">
-      ${frameSrc ? `<img src="${frameSrc}" style="position:absolute;inset:0;width:32px;height:32px;pointer-events:none;z-index:0" onerror="this.style.display='none'">` : ''}
       ${item.img ? `<img src="${item.img}" style="position:absolute;inset:0;width:32px;height:32px;object-fit:none;z-index:1" onerror="this.style.display='none'">` : ''}
+      ${frameSrc ? `<img src="${frameSrc}" style="position:absolute;inset:0;width:32px;height:32px;pointer-events:none;z-index:2" onerror="this.style.display='none'">` : ''}
+      <div style="position:absolute;bottom:0;left:0;right:0;height:2px;background:${qColor};z-index:3;opacity:.8"></div>
     </div>`;
   }).join('');
 
