@@ -246,6 +246,31 @@ a{color:inherit;text-decoration:none}
     <div class="sb-solo" data-view="artifacts" onclick="show(this)">Артефакты</div>
     <div class="sb-solo" data-view="runes" onclick="show(this)">Руны</div>
 
+    <div class="sb-group">
+      <div class="sb-group-header" onclick="toggleGroup(this)">
+        Бафы <span class="sb-chevron">▶</span>
+      </div>
+      <div class="sb-items">
+        <div class="sb-item" data-view="buffs_class" onclick="show(this)">
+          <div class="sb-ico"></div>Классовые бафы
+        </div>
+      </div>
+    </div>
+
+    <div class="sb-group">
+      <div class="sb-group-header" onclick="toggleGroup(this)">
+        Питомцы <span class="sb-chevron">▶</span>
+      </div>
+      <div class="sb-items">
+        <div class="sb-item" data-view="pets_fair" onclick="show(this)">
+          <div class="sb-ico"></div>Ярмарочные питомцы
+        </div>
+        <div class="sb-item" data-view="pets_deco" onclick="show(this)">
+          <div class="sb-ico"></div>Декоративные питомцы
+        </div>
+      </div>
+    </div>
+
   </nav>
 
   <!-- ── CONTENT ── -->
@@ -325,6 +350,9 @@ function render(view) {
   else if (view === 'runes')      renderRunes(c);
   else if (view === 'jewelry')    renderSoon(c, 'Бижутерия');
   else if (view === 'artifacts')  renderSoon(c, 'Артефакты');
+  else if (view === 'buffs_class') renderSoon(c, 'Классовые бафы');
+  else if (view === 'pets_fair')   renderSoon(c, 'Ярмарочные питомцы');
+  else if (view === 'pets_deco')   renderSoon(c, 'Декоративные питомцы');
 }
 
 function renderClass(c, cls) {
