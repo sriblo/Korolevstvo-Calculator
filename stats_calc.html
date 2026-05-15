@@ -588,15 +588,25 @@ function getItemImg(cls, slotId, quality) {
 const SLOT_PH = {
   trophy:'trophy', badge:'badge', ring1:'ring', ring2:'ring',
   talisman:'amulet', bracelet:'bracelet', amulet:'amulet',
-  stone_greed:'gem', stone_blood:'gem', stone_travel:'gem', stone_contest:'gem',
-  stone_friend:'gem', stone_witch:'gem', stone_labor:'gem', stone_lost:'gem', stone_luck:'gem',
   flask:'flask', battle_bag:'bag', trinket:'key',
+};
+
+const ARTEFACT_PH = {
+  stone_greed:   'stats_calculator/artefacts/artefact_stone_rubin.png',
+  stone_blood:   'stats_calculator/artefacts/artefact_stone_blood.png',
+  stone_travel:  'stats_calculator/artefacts/artefact_stone_fire.png',
+  stone_contest: 'stats_calculator/artefacts/artefact_stone_light.png',
+  stone_friend:  'stats_calculator/artefacts/artefact_stone_dark.png',
+  stone_witch:   'stats_calculator/artefacts/artefact_stone_earth.png',
+  stone_labor:   'stats_calculator/artefacts/artefact_stone_water.png',
+  stone_lost:    'stats_calculator/artefacts/artefact_stone_air.png',
+  stone_luck:    'stats_calculator/artefacts/artefact_stone_gold.png',
 };
 
 function icoHtml(slotId, eq, cls) {
   if (!eq) {
     // Use class-specific white set as grayscale placeholder for armor/weapon slots
-    const phSrc = getItemImg(cls, slotId, 'white');
+    const phSrc = getItemImg(cls, slotId, 'white') || ARTEFACT_PH[slotId];
     if (phSrc) {
       return `<img src="${phSrc}" alt=""
         style="width:32px;height:32px;object-fit:none;filter:grayscale(1);opacity:.28"
