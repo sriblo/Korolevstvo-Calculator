@@ -228,8 +228,10 @@ a{color:inherit;text-decoration:none}
 }
 .buff-card:hover{border-color:var(--line2);background:var(--bg3)}
 .buff-card.special{border-color:rgba(212,168,67,.2);background:rgba(212,168,67,.04)}
-.buff-ico{width:32px;height:32px;flex-shrink:0;border-radius:3px;overflow:hidden}
-.buff-ico img{width:32px;height:32px;display:block}
+.buff-ico{width:32px;height:32px;flex-shrink:0}
+.buff-ico img{display:block;width:32px;height:32px;image-rendering:pixelated}
+.buff-card .rune-ico{width:32px;height:32px}
+.buff-card .ico-img{width:32px;height:32px;object-fit:none}
 .buff-name{font-family:var(--serif);font-size:14px;font-weight:500;color:var(--txt);line-height:1.2}
 .buff-cls{font-size:11px;color:var(--txt3)}
 .buff-effect{font-size:12px;color:var(--txt2)}
@@ -599,12 +601,11 @@ const WITCH_FLAME = {
 };
 
 function renderBuffsClass(c) {
-  const cards = CLASS_BUFFS.map(b => `
-    <div class="buff-card">
+  const cards = CLASS_BUFFS.map((b, i) => `
+    <div class="buff-card" onmouseenter="ttShowBuff(${i},event)" onmousemove="ttMove(event)" onmouseleave="ttHide()">
       <div class="buff-ico"><img src="${b.img}" onerror="this.style.opacity=0"></div>
       <div class="buff-name">${b.name}</div>
       <div class="buff-cls">${b.cls}</div>
-      <div class="buff-effect">${b.effect}</div>
     </div>`).join('');
 
   const wf = WITCH_FLAME;
@@ -656,6 +657,13 @@ function ttShow(cls, slotId, quality, itemName, e) {
       }).join('');
   }
   _tt.innerHTML = html;
+  _tt.classList.add('vis');
+  ttMove(e);
+}
+function ttShowBuff(idx, e) {
+  const b = CLASS_BUFFS[idx];
+  _tt.innerHTML = `<div class="tt-name">${b.name}</div>
+    <div class="tt-row"><span class="tt-key">${b.cls}</span><span class="tt-val">${b.effect}</span></div>`;
   _tt.classList.add('vis');
   ttMove(e);
 }
