@@ -283,6 +283,34 @@
   .tone-btn[data-t="amber"] .swatch{background:linear-gradient(135deg,#f5d878,#a07d2b)}
   .tone-btn[data-t="brass"] .swatch{background:linear-gradient(135deg,#e8d670,#8c7d28)}
   .tone-btn[data-t="sand"]  .swatch{background:linear-gradient(135deg,#e0c89c,#8a7858)}
+
+  /* ──────────────────────────── Mobile ──────────────────────────── */
+  @media(max-width:900px){
+    .grid{grid-template-columns:repeat(2,1fr)}
+    .tools{grid-template-columns:repeat(2,1fr)}
+    .guides{grid-template-columns:1fr}
+    .cal{grid-template-columns:repeat(6,1fr)}
+    .mo:nth-child(n+7){border-top:1px solid var(--line)}
+  }
+  @media(max-width:600px){
+    .top{padding:12px 16px;gap:10px}
+    .nav{display:none}
+    .search{display:none}
+    .hero{padding:40px 16px 32px}
+    .h1{font-size:42px}
+    .lede{font-size:16px}
+    .cal-section{padding:0 16px}
+    .cal{grid-template-columns:repeat(4,1fr)}
+    .mo:nth-child(n+5){border-top:1px solid var(--line)}
+    .mo:nth-child(n+7){border-top:none}
+    .sec{padding:0 16px}
+    .sec-h{padding:32px 0 16px;flex-wrap:wrap}
+    .grid{grid-template-columns:1fr}
+    .tools{grid-template-columns:1fr}
+    .guides{grid-template-columns:1fr}
+    .ftr{padding:24px 16px 40px;flex-direction:column;align-items:flex-start;gap:12px}
+    .tone{bottom:12px;right:12px}
+  }
 </style>
 </head>
 <body>
@@ -310,11 +338,6 @@
   <h1 class="h1">База знаний<br><em>Королевства</em></h1>
   <p class="lede">Калькуляторы ивентов, репутаций, загруженности локаций, гайды по локациям и ярмарочным питомцам. Создано игроками для игроков.</p>
 
-  <div class="hero-meta">
-    <div class="hm-i"><b>14</b> калькуляторов</div>
-    <div class="hm-i"><b>2</b> готовы</div>
-    <div class="hm-now">Сейчас в игре: <em>🌊 Зов глубин</em> · <span id="days-left">12</span> дней</div>
-  </div>
 </section>
 
 <div class="cal-section">
@@ -339,7 +362,7 @@
     <div>
       <div class="sec-t">Ивентовые <em>калькуляторы</em></div>
     </div>
-    <div class="sec-c">11 ивентов · 2 готовы</div>
+    <div class="sec-c"></div>
   </div>
 
   <div class="grid">
