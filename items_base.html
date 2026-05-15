@@ -419,6 +419,7 @@ const STAT_LABELS = [
   { key:'elem_def', label:'Защита стихий' },
   { key:'def_eff',  label:'Эффективность защиты',          pct:true },
   { key:'atk_eff',  label:'Эффективность атаки',          pct:true },
+  { key:'crit_chance',label:'Шанс крит. удара',            pct:true },
   { key:'speed',    label:'Скорость в бою',                pct:true },
 ];
 
@@ -449,6 +450,9 @@ const ARTIFACTS = [
   { name:'Камень Путешествий', quality:'red',    img:'stats_calculator/artefacts/artefact_stone_fire.png',  stats:{ def_eff:2, atk_eff:4 } },
   { name:'Камень Состязаний',  quality:'red',    img:'stats_calculator/artefacts/artefact_stone_light.png', stats:{ atk:2, mana:100, atk_eff:2 } },
   { name:'Камень Удачи',       quality:'red',    img:'stats_calculator/artefacts/artefact_stone_gold.png',  stats:{ atk:2, mana:100, heal_eff:1, def_eff:2, hp:100, atk_eff:2, speed:1 } },
+  { name:'Камень Потерянных Земель', quality:'green',  img:'stats_calculator/artefacts/artefact_stone_air.png', stats:{ atk:2, mana:100, def_eff:2, atk_eff:3 } },
+  { name:'Камень Потерянных Земель', quality:'blue',   img:'stats_calculator/artefacts/artefact_stone_air.png', stats:{ atk:3, mana:150, def_eff:3, atk_eff:4, crit_chance:1 } },
+  { name:'Камень Потерянных Земель', quality:'purple', img:'stats_calculator/artefacts/artefact_stone_air.png', stats:{ atk:4, mana:200, def_eff:4, atk_eff:5, crit_chance:2 } },
   { name:'Камень Дружбы',     quality:'orange', img:'stats_calculator/artefacts/artefact_stone_dark.png',  stats:{ atk:13, hp:700, def:7, speed:4 } },
   { name:'Камень Дружбы',     quality:'red',    img:'stats_calculator/artefacts/artefact_stone_dark.png',  stats:{ atk:10, hp:500, def:7, speed:3 } },
   { name:'Камень Дружбы',     quality:'purple', img:'stats_calculator/artefacts/artefact_stone_dark.png',  stats:{ atk:7,  hp:300, def:5, speed:3 } },
@@ -645,18 +649,21 @@ function renderArtifacts(c) {
     </div>`;
   }
 
-  const unique   = ARTIFACTS.filter(a => a.name !== 'Камень Дружбы');
-  const druzhba  = ARTIFACTS.filter(a => a.name === 'Камень Дружбы');
-  const idxOf    = a => ARTIFACTS.indexOf(a);
+  const groups = ['Камень Дружбы', 'Камень Потерянных Земель'];
+  const unique  = ARTIFACTS.filter(a => !groups.includes(a.name));
+  const idxOf   = a => ARTIFACTS.indexOf(a);
 
-  const uniqueCards  = unique.map(a  => artCard(a, idxOf(a))).join('');
-  const druzhbaCards = druzhba.map(a => artCard(a, idxOf(a))).join('');
+  let html = `<div class="c-title">Артефакты</div><div class="buff-grid">${unique.map(a => artCard(a, idxOf(a))).join('')}</div>`;
 
-  c.innerHTML = `
-    <div class="c-title">Артефакты</div>
-    <div class="buff-grid">${uniqueCards}</div>
-    <div class="art-section-divider">Камень Дружбы</div>
-    <div class="buff-grid">${druzhbaCards}</div>`;
+  for (const name of groups) {
+    const group = ARTIFACTS.filter(a => a.name === name);
+    if (group.length) {
+      html += `<div class="art-section-divider">${name}</div>
+               <div class="buff-grid">${group.map(a => artCard(a, idxOf(a))).join('')}</div>`;
+    }
+  }
+
+  c.innerHTML = html;
 }
 
 function renderSoon(c, title) {
