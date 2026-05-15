@@ -438,7 +438,7 @@ const STATS = {
 const ARTIFACTS = [
   { name:'Камень Ведьмака',    quality:'red',    img:'stats_calculator/artefacts/artefact_stone_earth.png', stats:{ heal_eff:2, hp:150, def:2 } },
   { name:'Камень Путешествий', quality:'red',    img:'stats_calculator/artefacts/artefact_stone_fire.png',  stats:{ def_eff:2, atk_eff:4 } },
-  { name:'Камень Состязаний',  quality:'purple', img:'stats_calculator/artefacts/artefact_stone_light.png', stats:{ atk:2, mana:100, atk_eff:2 } },
+  { name:'Камень Состязаний',  quality:'red',    img:'stats_calculator/artefacts/artefact_stone_light.png', stats:{ atk:2, mana:100, atk_eff:2 } },
   { name:'Камень Удачи',       quality:'red',    img:'stats_calculator/artefacts/artefact_stone_gold.png',  stats:{ atk:2, mana:100, heal_eff:1, def_eff:2, hp:100, atk_eff:2, speed:1 } },
 ];
 
@@ -603,7 +603,7 @@ const WITCH_FLAME = {
 function renderBuffsClass(c) {
   const cards = CLASS_BUFFS.map((b, i) => `
     <div class="buff-card" onmouseenter="ttShowBuff(${i},event)" onmousemove="ttMove(event)" onmouseleave="ttHide()">
-      <div class="buff-ico"><img src="${b.img}" onerror="this.style.opacity=0"></div>
+      ${icoHtml(b.img, b.quality)}
       <div class="buff-text">
         <div class="buff-name">${b.name}</div>
         <div class="buff-cls">${b.cls}</div>
@@ -613,7 +613,7 @@ function renderBuffsClass(c) {
   const wf = WITCH_FLAME;
   const wfCard = `
     <div class="buff-card special" onmouseenter="ttShowWF(event)" onmousemove="ttMove(event)" onmouseleave="ttHide()">
-      <div class="buff-ico"><img src="${wf.img}" onerror="this.style.opacity=0"></div>
+      ${icoHtml(wf.img, wf.quality)}
       <div class="buff-text"><div class="buff-name">${wf.name}</div></div>
     </div>`;
 
