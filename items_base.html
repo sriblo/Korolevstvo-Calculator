@@ -267,10 +267,11 @@ a{color:inherit;text-decoration:none}
   <nav class="sidebar">
 
     <div class="sb-group">
-      <div class="sb-group-header open" data-view="equipment" onclick="showEquip(this)">
+      <div class="sb-group-header open" onclick="toggleGroup(this)">
         Экипировка <span class="sb-chevron">▶</span>
       </div>
       <div class="sb-items open">
+        <div class="sb-item sb-sub" data-view="equipment" onclick="show(this)">Основная экипировка</div>
         <div class="sb-item sb-sub" data-view="jewelry" onclick="show(this)">Бижутерия</div>
         <div class="sb-item sb-sub" data-view="artifacts" onclick="show(this)">Артефакты</div>
         <div class="sb-item sb-sub" data-view="runes" onclick="show(this)">Руны</div>
@@ -456,21 +457,11 @@ const CLASS_ICON_FILE = {
 
 function clearActive() {
   document.querySelectorAll('.sb-item').forEach(e => e.classList.remove('on'));
-  document.querySelectorAll('.sb-group-header').forEach(e => e.classList.remove('on'));
 }
 
 function toggleGroup(header) {
   header.classList.toggle('open');
   header.nextElementSibling.classList.toggle('open');
-}
-
-function showEquip(header) {
-  clearActive();
-  header.classList.add('on');
-  // keep accordion open
-  header.nextElementSibling.classList.add('open');
-  header.classList.add('open');
-  renderEquipment(document.getElementById('content'));
 }
 
 function show(el) {
@@ -511,7 +502,7 @@ function renderEquipment(c) {
   }).join('');
 
   c.innerHTML = `
-    <div class="c-title">Экипировка</div>
+    <div class="c-title">Основная экипировка</div>
     <div class="cls-tabs">${clsTabs}</div>
     <div class="q-tabs">${qTabs}</div>
     <div class="eq-grid">${cards}</div>`;
@@ -524,13 +515,8 @@ function switchCls(cls) {
 
 function switchQ(q) {
   activeQ = q;
-  const activeHeader = document.querySelector('.sb-group-header.on');
-  if (activeHeader?.dataset.view === 'equipment') {
-    renderEquipment(document.getElementById('content'));
-  } else {
-    const view = document.querySelector('.sb-item.on')?.dataset.view;
-    if (view) render(view);
-  }
+  const view = document.querySelector('.sb-item.on')?.dataset.view;
+  if (view) render(view);
 }
 
 function renderRunes(c) {
