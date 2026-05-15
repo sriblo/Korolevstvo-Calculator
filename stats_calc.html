@@ -182,13 +182,13 @@ a{color:inherit;text-decoration:none}
 .picker-panel.open{display:block}
 @keyframes fadeIn{from{opacity:0;transform:translateY(-3px)}to{opacity:1;transform:none}}
 .picker-btns{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px}
-.picker-btn{
-  padding:5px 11px;border-radius:6px;cursor:pointer;font-size:11px;font-weight:600;
-  background:var(--bg4);border:1px solid var(--line);transition:border-color .12s;
+.picker-item{
+  position:relative;width:34px;height:34px;flex-shrink:0;
+  border:1px solid var(--line);border-radius:4px;cursor:pointer;overflow:hidden;
+  transition:border-color .12s;
 }
-.picker-btn:hover{border-color:var(--line2)}
-.picker-btn.no-data{opacity:.3;cursor:default;pointer-events:none}
-.picker-btn.equipped-q{outline:2px solid currentColor;outline-offset:1px}
+.picker-item:hover{border-color:var(--line2);background:var(--bg4)}
+.picker-item.on{border-color:var(--gold)}
 .picker-unequip{
   padding:4px 10px;border-radius:5px;cursor:pointer;font-size:10px;font-family:var(--sans);
   background:transparent;border:1px dashed var(--line2);color:var(--txt3);
@@ -442,6 +442,49 @@ const STAT_LABELS = [
   { key:'speed',       label:'Скорость',           pct:true },
 ];
 
+const SET_NAMES = {
+  warrior: { white:'Решимости', green:'Отваги', blue:'Разрушителя', purple:'Непримиримости', purple_plus:'Непримиримости', red:'Доблести', orange:'' },
+  paladin: { white:'Решимости', green:'Отваги', blue:'Разрушителя', purple:'Непримиримости', purple_plus:'Непримиримости', red:'Доблести', orange:'' },
+};
+
+const SLOT_ITEMS = {
+  stone_greed:   [{ name:'Артефакт Алчности',              quality:'red',    img:'stats_calculator/artefacts/artefact_stone_rubin.png',  stats:{ atk:3, mana:100, heal_eff:2, def_eff:3, hp:300, def:1, atk_eff:3, speed:1 } }],
+  stone_blood:   [
+    { name:'Камень Крови', quality:'green',  img:'stats_calculator/artefacts/artefact_stone_blood.png', stats:{ atk:1, mana:100, heal_eff:1, hp:100 } },
+    { name:'Камень Крови', quality:'blue',   img:'stats_calculator/artefacts/artefact_stone_blood.png', stats:{ atk:3, mana:200, heal_eff:2, hp:200, crit_chance:1 } },
+  ],
+  stone_travel:  [{ name:'Камень Путешествий',             quality:'red',    img:'stats_calculator/artefacts/artefact_stone_fire.png',   stats:{ def_eff:2, atk_eff:4 } }],
+  stone_contest: [{ name:'Камень Состязаний',              quality:'red',    img:'stats_calculator/artefacts/artefact_stone_light.png',  stats:{ atk:2, mana:100, atk_eff:2 } }],
+  stone_friend:  [
+    { name:'Камень Дружбы', quality:'white',  img:'stats_calculator/artefacts/artefact_stone_dark.png', stats:{ atk:1,  hp:50,       speed:1 } },
+    { name:'Камень Дружбы', quality:'green',  img:'stats_calculator/artefacts/artefact_stone_dark.png', stats:{ atk:3,  hp:100, def:1, speed:2 } },
+    { name:'Камень Дружбы', quality:'blue',   img:'stats_calculator/artefacts/artefact_stone_dark.png', stats:{ atk:5,  hp:200, def:3, speed:3 } },
+    { name:'Камень Дружбы', quality:'purple', img:'stats_calculator/artefacts/artefact_stone_dark.png', stats:{ atk:7,  hp:300, def:5, speed:3 } },
+    { name:'Камень Дружбы', quality:'red',    img:'stats_calculator/artefacts/artefact_stone_dark.png', stats:{ atk:10, hp:500, def:7, speed:3 } },
+    { name:'Камень Дружбы', quality:'orange', img:'stats_calculator/artefacts/artefact_stone_dark.png', stats:{ atk:13, hp:700, def:7, speed:4 } },
+  ],
+  stone_witch:   [
+    { name:'Камень Ведьмака',           quality:'red',    img:'stats_calculator/artefacts/artefact_stone_earth.png',  stats:{ heal_eff:2, hp:150, def:2 } },
+    { name:'Магическая карта Ведьмака', quality:'orange', img:'stats_calculator/artefacts/green_demonic_card.png',    stats:{ hp:500, def:4, mana:200, def_eff:8, heal_eff:8 } },
+  ],
+  stone_labor:   [
+    { name:'Камень Труда', quality:'green',  img:'stats_calculator/artefacts/artefact_stone_water.png', stats:{ atk:1, heal_eff:1, hp:50,  atk_eff:1 } },
+    { name:'Камень Труда', quality:'blue',   img:'stats_calculator/artefacts/artefact_stone_water.png', stats:{ atk:2, heal_eff:2, hp:150, def:1, atk_eff:2 } },
+    { name:'Камень Труда', quality:'purple', img:'stats_calculator/artefacts/artefact_stone_water.png', stats:{ atk:4, heal_eff:3, hp:300, def:2, atk_eff:3, crit_chance:2 } },
+    { name:'Магическая карта Труда',    quality:'orange', img:'stats_calculator/artefacts/red_demonic_card.png',      stats:{ atk:10, hp:600, def:4, mana:200, atk_eff:8, crit_chance:4, heal_eff:6 } },
+  ],
+  stone_lost:    [
+    { name:'Камень Потерянных Земель',                    quality:'green',  img:'stats_calculator/artefacts/artefact_stone_air.png',  stats:{ atk:2, mana:100, def_eff:2, atk_eff:3 } },
+    { name:'Камень Потерянных Земель',                    quality:'blue',   img:'stats_calculator/artefacts/artefact_stone_air.png',  stats:{ atk:3, mana:150, def_eff:3, atk_eff:4, crit_chance:1 } },
+    { name:'Камень Потерянных Земель',                    quality:'purple', img:'stats_calculator/artefacts/artefact_stone_air.png',  stats:{ atk:4, mana:200, def_eff:4, atk_eff:5, crit_chance:2 } },
+    { name:'Магическая карта Потерянных земель',          quality:'orange', img:'stats_calculator/artefacts/blue_demonic_card.png',   stats:{ atk:10, mana:200, def_eff:6, atk_eff:8, crit_chance:4 } },
+  ],
+  stone_luck:    [
+    { name:'Камень Удачи',              quality:'red',    img:'stats_calculator/artefacts/artefact_stone_gold.png',  stats:{ atk:2, mana:100, heal_eff:1, def_eff:2, hp:100, atk_eff:2, speed:1 } },
+    { name:'Магическая карта Удачи',   quality:'orange', img:'stats_calculator/artefacts/yellow_demonic_card.png', stats:{ atk:6, hp:400, def:3, mana:200, def_eff:4, atk_eff:5, heal_eff:5, speed:3 } },
+  ],
+};
+
 const CLASS_BUFFS = [
   { name:'Зоркий глаз',   cls:'archer',  effect:'atk_eff',       value:15 },
   { name:'Ураган',        cls:'mage',    effect:'atk_eff',       value:15 },
@@ -615,7 +658,7 @@ function icoHtml(slotId, eq, cls) {
     const ph = PH[SLOT_PH[slotId]] || PH.bag;
     return `<span style="opacity:.22;color:var(--txt2);display:flex;align-items:center;justify-content:center">${ph}</span>`;
   }
-  const imgSrc   = getItemImg(cls, slotId, eq.quality);
+  const imgSrc   = eq.img || getItemImg(cls, slotId, eq.quality);
   const frameSrc = QUALITY_FRAME[eq.quality];
   const qColor   = QUALITIES.find(q => q.id === eq.quality)?.color;
   // Frame goes BEHIND item icon (background), icon goes on top at full 32x32
@@ -668,19 +711,73 @@ function renderSlotRow(cid, rowSlots, containerId) {
   }).join('');
 }
 
+let _pickerCache = {};
+
+function getPickerItems(cls, slotId) {
+  if (SLOT_ITEMS[slotId]) return SLOT_ITEMS[slotId];
+  // Armor/weapon: one item per quality that has image or stats
+  const slotName = [...COL_LEFT, ...COL_RIGHT, ...ROW_TOP, ...ROW_BOT].find(s => s.id === slotId)?.name || slotId;
+  const setNames = SET_NAMES[cls] || {};
+  return QUALITIES
+    .filter(q => getItemImg(cls, slotId, q.id) || getStatsForSlot(cls, slotId, q.id))
+    .map(q => ({
+      name:  [slotName, setNames[q.id]].filter(Boolean).join(' '),
+      quality: q.id,
+      img:   getItemImg(cls, slotId, q.id),
+      stats: getStatsForSlot(cls, slotId, q.id),
+    }));
+}
+
 function renderPicker(cid) {
   const s = state[cid];
   const panel = document.getElementById(`pickerPanel-${cid}`);
   const btns  = document.getElementById(`pickerBtns-${cid}`);
   if (!s.activeSlot) { panel.classList.remove('open'); return; }
-  btns.innerHTML = QUALITIES.map(q => {
-    const hasStats = !!getStatsForSlot(s.cls, s.activeSlot, q.id);
-    const isEq = s.equipped[s.activeSlot]?.quality === q.id;
-    return `<button class="picker-btn${hasStats ? '' : ' no-data'}${isEq ? ' equipped-q' : ''}"
-      style="color:${q.color}" onclick="equipSlot('${cid}','${s.activeSlot}','${q.id}')"
-      ${hasStats ? '' : 'disabled'}>${q.label}</button>`;
+
+  const items = getPickerItems(s.cls, s.activeSlot);
+  _pickerCache[cid] = items;
+  const eqItem = s.equipped[s.activeSlot];
+
+  btns.innerHTML = items.map((item, idx) => {
+    const frameSrc = QUALITY_FRAME[item.quality] || '';
+    const isOn = eqItem && eqItem.name === item.name && eqItem.quality === item.quality;
+    return `<div class="picker-item${isOn ? ' on' : ''}"
+      onclick="equipItem('${cid}','${s.activeSlot}',${idx})"
+      onmouseenter="showPickerTt(event,'${cid}',${idx})"
+      onmousemove="moveTt(event)"
+      onmouseleave="hideTt()">
+      ${frameSrc ? `<img src="${frameSrc}" style="position:absolute;inset:0;width:32px;height:32px;pointer-events:none;z-index:0" onerror="this.style.display='none'">` : ''}
+      ${item.img ? `<img src="${item.img}" style="position:absolute;inset:0;width:32px;height:32px;object-fit:none;z-index:1" onerror="this.style.display='none'">` : ''}
+    </div>`;
   }).join('');
+
   panel.classList.add('open');
+}
+
+function showPickerTt(e, cid, idx) {
+  const item = (_pickerCache[cid] || [])[idx];
+  if (!item) return;
+  const q = QUALITIES.find(q => q.id === item.quality);
+  let html = `<div class="tt-name">${item.name}</div>`;
+  if (q) html += `<div class="tt-quality" style="color:${q.color}">${q.label}</div>`;
+  if (item.stats) {
+    Object.entries(item.stats).forEach(([k, v]) => {
+      const meta = STAT_LABELS.find(m => m.key === k);
+      if (meta) html += `<div class="tt-stat"><span class="tt-sk">${meta.label}</span><span class="tt-sv">+${meta.pct ? v+'%' : v}</span></div>`;
+    });
+  }
+  ttEl.innerHTML = html;
+  ttEl.style.display = 'block';
+  moveTt(e);
+}
+
+function equipItem(cid, slotId, idx) {
+  const s = state[cid];
+  const item = (_pickerCache[cid] || [])[idx];
+  if (!item) return;
+  s.equipped[slotId] = { name: item.name, quality: item.quality, img: item.img, stats: item.stats };
+  s.activeSlot = null;
+  renderAll(cid);
 }
 
 function renderBuffs(cid) {
