@@ -74,7 +74,8 @@
   .search:focus{border-color:var(--line2);color:var(--txt)}
 
   /* ──────────────────────────── Hero (permanent) ──────────────────────────── */
-  .hero{max-width:1180px;margin:0 auto;padding:80px 40px 56px;position:relative;overflow:hidden}
+  .hero{max-width:1180px;margin:0 auto;padding:80px 40px 56px;position:relative}
+  .hero-wrap{overflow:hidden}
   .hero::after{
     content:'';position:absolute;
     top:-40px;right:-80px;width:560px;height:680px;
@@ -334,11 +335,11 @@
   </div>
 </header>
 
-<section class="hero">
+<div class="hero-wrap"><section class="hero">
   <h1 class="h1">База знаний<br><em>Королевства</em></h1>
   <p class="lede">Калькуляторы ивентов, репутаций, загруженности локаций, гайды по локациям и ярмарочным питомцам. Создано игроками для игроков.</p>
 
-</section>
+</section></div>
 
 <div class="cal-section">
   <div class="cal">
