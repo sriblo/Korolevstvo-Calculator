@@ -172,6 +172,13 @@ a{color:inherit;text-decoration:none}
 .rune-row:hover{background:var(--bg2);border-color:var(--line)}
 .rune-ico{width:34px;height:34px;border-radius:5px;background:var(--bg4);border:1px solid var(--line2);flex-shrink:0;overflow:hidden;display:flex;align-items:center;justify-content:center}
 .rune-ico img{width:100%;height:100%;object-fit:cover}
+.rune-ico.white      {border-color:#aaaaaa;box-shadow:0 0 6px rgba(170,170,170,.3)}
+.rune-ico.green      {border-color:#6aaa40;box-shadow:0 0 6px rgba(106,170,64,.4)}
+.rune-ico.blue       {border-color:#4888cc;box-shadow:0 0 6px rgba(72,136,204,.4)}
+.rune-ico.purple     {border-color:#9060cc;box-shadow:0 0 6px rgba(144,96,204,.4)}
+.rune-ico.purple_plus{border-color:#c070e0;box-shadow:0 0 6px rgba(192,112,224,.5)}
+.rune-ico.red        {border-color:#cc3030;box-shadow:0 0 6px rgba(204,48,48,.4)}
+.rune-ico.orange     {border-color:#cc7020;box-shadow:0 0 7px rgba(204,112,32,.5)}
 .rune-info{flex:1;min-width:0}
 .rune-name{font-family:var(--serif);font-size:15px;font-weight:500;margin-bottom:3px}
 .rune-meta{font-size:11px;color:var(--txt3);display:flex;gap:10px;align-items:center;flex-wrap:wrap}
@@ -392,12 +399,11 @@ function renderRunes(c) {
   const qlabels = Object.fromEntries(QUALITIES.map(q => [q.id, q.label]));
   const rows = RUNES.map(r => `
     <div class="rune-row">
-      <div class="rune-ico"><img src="${r.img}" alt="" onerror="this.style.display='none'"></div>
+      <div class="rune-ico ${r.quality}"><img src="${r.img}" alt="" onerror="this.style.display='none'"></div>
       <div class="rune-info">
         <div class="rune-name">${r.name}</div>
         <div class="rune-meta">
           <span class="rune-slot">${r.slot}</span>
-          <span class="q-badge ${r.quality}">${qlabels[r.quality]||r.quality}</span>
         </div>
       </div>
     </div>`).join('');
@@ -430,12 +436,11 @@ function renderBuffsClass(c) {
 
   const rows = CLASS_BUFFS.map(b => `
     <div class="rune-row">
-      <div class="rune-ico"><img src="${b.img}" alt="" onerror="this.style.display='none'"></div>
+      <div class="rune-ico ${b.quality}"><img src="${b.img}" alt="" onerror="this.style.display='none'"></div>
       <div class="rune-info">
         <div class="rune-name">${b.name}</div>
         <div class="rune-meta">
           <span class="rune-slot">${b.cls}</span>
-          <span class="q-badge ${b.quality}">${qlabels[b.quality]||b.quality}</span>
           <span style="color:var(--txt2)">${b.effect}</span>
         </div>
       </div>
@@ -451,7 +456,7 @@ function renderBuffsClass(c) {
 
     <div style="margin-top:28px;margin-bottom:12px;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--txt3)">Замена всех классовых бафов</div>
     <div class="rune-row" style="border:1px solid rgba(212,168,67,.15);background:rgba(212,168,67,.04);border-radius:8px">
-      <div class="rune-ico"><img src="${wf.img}" alt="" onerror="this.style.display='none'"></div>
+      <div class="rune-ico ${wf.quality}"><img src="${wf.img}" alt="" onerror="this.style.display='none'"></div>
       <div class="rune-info">
         <div class="rune-name">${wf.name}</div>
         <div class="rune-meta" style="flex-direction:column;align-items:flex-start;gap:4px">
