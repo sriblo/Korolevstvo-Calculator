@@ -392,6 +392,8 @@ const STAT_LABELS = [
   { key:'hp_regen', label:'Восстановление жизни вне боя' },
   { key:'crit_dmg', label:'Сила крит. урона',             pct:true },
   { key:'wind_res', label:'Сопротивление магии ветра',    pct:true },
+  { key:'fire_res', label:'Сопротивление магии огня',    pct:true },
+  { key:'light_res',label:'Сопротивление магии света',  pct:true },
   { key:'elem_def', label:'Защита стихий' },
   { key:'atk_eff',  label:'Эффективность атаки',          pct:true },
 ];
@@ -399,10 +401,21 @@ const STAT_LABELS = [
 const STATS = {
   warrior: {
     red: {
-      weapon: { atk:12.72, def:37.85, hp:694,  mana:80,  heal_eff:5, hp_regen:50, crit_dmg:5, wind_res:0.80, elem_def:35, atk_eff:2 },
-      pants:  { atk:14.53, def:15.03, hp:713,  mana:120, heal_eff:5, hp_regen:50, crit_dmg:5, wind_res:0.80, elem_def:53, atk_eff:2 },
-      belt:   { atk:15.56, def:8.56,  hp:725,  mana:150, heal_eff:5, hp_regen:50, crit_dmg:5, wind_res:0.80, elem_def:72, atk_eff:2 },
-      boots:  { atk:20.04, def:5.65,  hp:750,  mana:170, heal_eff:5, hp_regen:50, crit_dmg:5, wind_res:0.80, elem_def:92, atk_eff:2 },
+      weapon: { atk:12.72, def:37.85, hp:694,  mana:80,  heal_eff:5, hp_regen:50, crit_dmg:5, wind_res:0.80, elem_def:35,  atk_eff:2 },
+      pants:  { atk:14.53, def:15.03, hp:713,  mana:120, heal_eff:5, hp_regen:50, crit_dmg:5, wind_res:0.80, elem_def:53,  atk_eff:2 },
+      belt:   { atk:15.56, def:8.56,  hp:725,  mana:150, heal_eff:5, hp_regen:50, crit_dmg:5, wind_res:0.80, elem_def:72,  atk_eff:2 },
+      boots:  { atk:20.04, def:5.65,  hp:750,  mana:170, heal_eff:5, hp_regen:50, crit_dmg:5, wind_res:0.80, elem_def:92,  atk_eff:2 },
+    },
+  },
+  paladin: {
+    red: {
+      weapon: { atk:10.18, def:37.83, hp:949,  mana:80,  heal_eff:5, hp_regen:50, crit_dmg:5, fire_res:0.80, elem_def:35,  atk_eff:2 },
+      pants:  { atk:11.64, def:17.84, hp:954,  mana:120, heal_eff:5, hp_regen:50, crit_dmg:5, fire_res:0.80, elem_def:53,  atk_eff:2 },
+      belt:   { atk:12.41, def:10.32, hp:985,  mana:150, heal_eff:5, hp_regen:50, crit_dmg:5, fire_res:0.80, elem_def:72,  atk_eff:2 },
+      boots:  { atk:16.57, def:6.63,  hp:1023, mana:170, heal_eff:5, hp_regen:50, crit_dmg:5, fire_res:0.80, elem_def:92,  atk_eff:2 },
+    },
+    purple_plus: {
+      gloves: { atk:16.30, def:4.78,  hp:855,  mana:170, heal_eff:5,                           fire_res:0.80, elem_def:124 },
     },
   },
 };
