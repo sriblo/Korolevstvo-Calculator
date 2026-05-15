@@ -592,24 +592,12 @@ const SLOT_PH = {
   flask:'flask', battle_bag:'bag', trinket:'key',
 };
 
-// Warrior white set as grayscale placeholders for armor/weapon slots
-const BASE = 'stats_calculator/classes/warrior/warrior/warrior_sets/white_set/elf/warrior_';
-const WARRIOR_PH = {
-  weapon:    BASE+'sword_10_elf.png',
-  offhand:   BASE+'shield_10_elf.png',
-  helm:      BASE+'helm_10_elf.png',
-  chest:     BASE+'chest_10_elf.png',
-  shoulders: BASE+'shoulders_10_elf.png',
-  pants:     BASE+'pants_10_elf.png',
-  gloves:    BASE+'gloves_10_elf.png',
-  belt:      BASE+'belt_10_elf.png',
-  boots:     BASE+'boots_10_elf.png',
-};
-
 function icoHtml(slotId, eq, cls) {
   if (!eq) {
-    if (WARRIOR_PH[slotId]) {
-      return `<img src="${WARRIOR_PH[slotId]}" alt=""
+    // Use class-specific white set as grayscale placeholder for armor/weapon slots
+    const phSrc = getItemImg(cls, slotId, 'white');
+    if (phSrc) {
+      return `<img src="${phSrc}" alt=""
         style="width:32px;height:32px;object-fit:none;filter:grayscale(1);opacity:.28"
         onerror="this.style.display='none'">`;
     }
