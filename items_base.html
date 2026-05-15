@@ -335,6 +335,16 @@ const QUALITIES = [
 const CLASS_SLOTS = {
   warrior: { weapon:'sword', offhand:'shield', helm:'helm', chest:'chest', shoulders:'shoulders', pants:'pants', gloves:'gloves', belt:'belt', boots:'boots' },
 };
+
+/* proper item name per class+slot for display */
+const CLASS_ITEM_NAMES = {
+  warrior: { weapon:'Меч', offhand:'Щит', helm:'Шлем', chest:'Нагрудник', shoulders:'Наплечники', pants:'Штаны', gloves:'Перчатки', belt:'Пояс', boots:'Сапоги' },
+  rogue:   { weapon:'Кинжал', offhand:'Кинжал', helm:'Шлем', chest:'Нагрудник', shoulders:'Наплечники', pants:'Штаны', gloves:'Перчатки', belt:'Пояс', boots:'Сапоги' },
+  monk:    { weapon:'Посох', offhand:'Орб', helm:'Шлем', chest:'Нагрудник', shoulders:'Наплечники', pants:'Штаны', gloves:'Перчатки', belt:'Пояс', boots:'Сапоги' },
+  paladin: { weapon:'Булава', offhand:'Щит', helm:'Шлем', chest:'Нагрудник', shoulders:'Наплечники', pants:'Штаны', gloves:'Перчатки', belt:'Пояс', boots:'Сапоги' },
+  mage:    { weapon:'Посох', offhand:'Орб', helm:'Шлем', chest:'Нагрудник', shoulders:'Наплечники', pants:'Штаны', gloves:'Перчатки', belt:'Пояс', boots:'Сапоги' },
+  archer:  { weapon:'Лук', offhand:'Колчан', helm:'Шлем', chest:'Нагрудник', shoulders:'Наплечники', pants:'Штаны', gloves:'Перчатки', belt:'Пояс', boots:'Сапоги' },
+};
 const QUALITY_LEVEL = { white:10, green:11, blue:12, purple:13, purple_plus:13, red:14, orange:15 };
 
 function getItemImg(cls, slotId, quality) {
@@ -410,19 +420,20 @@ function renderClass(c, cls) {
   ).join('');
 
   const qData = QUALITIES.find(q => q.id === activeQ);
-  const setLabel = qData?.setName ? `Комплект ${qData.setName}` : 'Экипировка';
 
   const cards = SLOTS.map(slot => {
     const img = getItemImg(cls, slot.id, activeQ);
     const ico = img
       ? icoHtml(img, activeQ)
       : `<div class="eq-no-img">?</div>`;
-    return `<div class="eq-card">${ico}<div class="eq-slot-name">${slot.name}</div></div>`;
+    const baseName = CLASS_ITEM_NAMES[cls]?.[slot.id] || slot.name;
+    const itemName = qData?.setName ? `${baseName} ${qData.setName}` : baseName;
+    return `<div class="eq-card">${ico}<div class="eq-slot-name">${itemName}</div></div>`;
   }).join('');
 
   c.innerHTML = `
     <div class="c-title">${CLASS_NAMES[cls]}</div>
-    <div class="c-sub">${setLabel}</div>
+    <div class="c-sub">Основная экипировка</div>
     <div class="q-tabs">${tabs}</div>
     <div class="eq-grid">${cards}</div>`;
 }
