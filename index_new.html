@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Korolevstvo — База знаний</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    /* gold tone — default: amber */
+    --gold:      #d4a843;
+    --gold-l:    #f5d878;
+    --gold-d:    #a07d2b;
+    --gold-tint: 212,168,67;
+
+    /* base colors */
+    --bg:#0b0907;
+    --bg2:#120e09;
+    --bg3:#1a160f;
+    --line:rgba(var(--gold-tint),.09);
+    --line2:rgba(var(--gold-tint),.18);
+    --txt:#ece4cf;
+    --txt2:#a99775;
+    --txt3:#6c5d44;
+    --green:#8ab860;
+
+    --serif:'Fraunces',Georgia,serif;
+    --sans:'Inter',system-ui,sans-serif;
+  }
+  /* tone variants */
+  [data-tone="brass"]{ --gold:#c9b552; --gold-l:#e8d670; --gold-d:#8c7d28; --gold-tint:201,181,82; --txt:#ece6cc; --txt2:#a89c70; }
+  [data-tone="sand"]{  --gold:#c2a878; --gold-l:#e0c89c; --gold-d:#8a7858; --gold-tint:194,168,120; --txt:#ece2c8; --txt2:#a89578; }
+
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg);color:var(--txt);font-family:var(--sans);font-size:14px;-webkit-font-smoothing:antialiased}
+  body{
+    min-height:100vh;
+    background:
+      radial-gradient(ellipse 80% 50% at 20% -10%, rgba(var(--gold-tint),.14), transparent 60%),
+      radial-gradient(ellipse 50% 40% at 100% 5%, rgba(80,30,15,.18), transparent 60%),
+      var(--bg);
+  }
+  a{color:inherit;text-decoration:none}
+
+  /* ──────────────────────────── Top bar ──────────────────────────── */
+  .top{
+    padding:18px 40px;border-bottom:1px solid var(--line);
+    background:rgba(11,9,7,.78);backdrop-filter:blur(20px);
+    position:sticky;top:0;z-index:50;
+    display:flex;align-items:center;gap:18px;
+  }
+  .logo{display:flex;align-items:center;gap:12px}
+  .logo img{width:30px;height:30px;filter:drop-shadow(0 0 10px rgba(var(--gold-tint),.4))}
+  .logo-n{font-family:var(--serif);font-size:17px;font-weight:600;letter-spacing:-.01em;line-height:1}
+  .logo-s{font-size:11px;color:var(--txt3);margin-top:2px;letter-spacing:.02em}
+  .nav{margin-left:28px;display:flex;gap:4px}
+  .nav a{
+    padding:7px 12px;border-radius:6px;font-size:13px;color:var(--txt2);font-weight:500;
+    transition:background .12s,color .12s;
+  }
+  .nav a:hover{color:var(--txt);background:var(--bg2)}
+  .nav a.on{color:var(--gold-l);background:var(--bg3)}
+  .nav a .count{font-size:10px;color:var(--txt3);margin-left:6px;font-feature-settings:'tnum'}
+  .nav a.on .count{color:var(--gold-d)}
+  .top-r{margin-left:auto;display:flex;align-items:center;gap:12px}
+  .search{
+    background:var(--bg2);border:1px solid var(--line);border-radius:6px;padding:7px 12px 7px 32px;
+    font-size:12px;color:var(--txt2);width:220px;font-family:inherit;outline:none;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12' fill='none' stroke='%237a6a50' stroke-width='1.5'%3E%3Ccircle cx='5' cy='5' r='3.5'/%3E%3Cpath d='M8 8l3 3'/%3E%3C/svg%3E");
+    background-repeat:no-repeat;background-position:12px center;
+  }
+  .search:focus{border-color:var(--line2);color:var(--txt)}
+
+  /* ──────────────────────────── Hero (permanent) ──────────────────────────── */
+  .hero{max-width:1180px;margin:0 auto;padding:80px 40px 56px;position:relative;overflow:hidden}
+  .hero::after{
+    content:'';position:absolute;
+    top:-40px;right:-80px;width:560px;height:680px;
+    background:url('kor_logo.svg') no-repeat center/contain;
+    opacity:.06;pointer-events:none;z-index:0;
+    filter:drop-shadow(0 0 60px rgba(var(--gold-tint),.5));
+    transform:rotate(-8deg);
+  }
+  .hero > *{position:relative;z-index:1}
+  .eyebrow{
+    font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);font-weight:600;
+    display:inline-flex;align-items:center;gap:10px;margin-bottom:24px;
+  }
+  .eyebrow::before{content:'';width:24px;height:1px;background:var(--gold)}
+  .h1{
+    font-family:var(--serif);font-size:64px;line-height:1.02;font-weight:400;letter-spacing:-.025em;
+    margin-bottom:22px;max-width:880px;
+  }
+  .h1 em{font-style:italic;color:var(--gold-l);font-weight:300}
+  .lede{
+    font-family:var(--serif);font-size:19px;line-height:1.55;color:var(--txt2);
+    max-width:600px;font-weight:400;
+  }
+  .lede a{color:var(--gold-l);font-weight:500}
+
+  .hero-meta{
+    margin-top:36px;display:flex;gap:36px;flex-wrap:wrap;
+    font-size:12px;color:var(--txt3);letter-spacing:.04em;
+  }
+  .hm-i{display:flex;align-items:center;gap:8px}
+  .hm-i b{font-family:var(--serif);font-size:22px;font-weight:500;color:var(--txt);letter-spacing:-.01em;font-feature-settings:'tnum';margin-right:2px}
+  .hm-now{display:inline-flex;align-items:center;gap:8px;color:var(--green);font-weight:600;font-size:12px;letter-spacing:.06em}
+  .hm-now::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 10px var(--green);animation:p 2s ease-in-out infinite}
+  @keyframes p{50%{opacity:.4}}
+  .hm-now em{color:var(--txt);font-style:normal;font-weight:500;letter-spacing:0}
+
+  /* ──────────────────────────── Calendar strip ──────────────────────────── */
+  .cal-section{max-width:1180px;margin:0 auto;padding:0 40px}
+  .cal{
+    display:grid;grid-template-columns:repeat(12,1fr);
+    background:var(--bg2);border:1px solid var(--line);border-radius:8px;overflow:hidden;
+    margin-bottom:48px;
+  }
+  .mo{
+    padding:16px 6px;text-align:center;border-right:1px solid var(--line);
+    cursor:pointer;transition:background .15s;position:relative;
+    display:flex;flex-direction:column;align-items:center;gap:6px;
+    text-decoration:none;color:inherit;
+  }
+  .mo:last-child{border-right:none}
+  .mo:hover{background:var(--bg3)}
+  .mo-ico{font-size:22px;line-height:1;opacity:.5;filter:grayscale(.8);transition:opacity .15s,filter .15s}
+  .mo.has .mo-ico{opacity:1;filter:none}
+  .mo-n{font-family:var(--serif);font-style:italic;font-size:13px;color:var(--txt3);font-weight:500}
+  .mo.has .mo-n{color:var(--gold-l)}
+  .mo.now{background:linear-gradient(180deg,rgba(138,184,96,.12),transparent 80%)}
+  .mo.now::after{content:'';position:absolute;top:0;left:8px;right:8px;height:2px;background:var(--green)}
+  .mo.now .mo-n{color:var(--green)}
+
+  /* ──────────────────────────── Section header ──────────────────────────── */
+  .sec{max-width:1180px;margin:0 auto;padding:0 40px}
+  .sec-h{display:flex;align-items:baseline;justify-content:space-between;padding:48px 0 24px;border-top:1px solid var(--line);gap:24px}
+  .sec-h:first-child{border-top:none;padding-top:8px}
+  .sec-t{font-family:var(--serif);font-size:26px;font-weight:500;letter-spacing:-.015em}
+  .sec-t em{font-style:italic;color:var(--gold-l);font-weight:300}
+  .sec-d{font-family:var(--serif);font-style:italic;font-size:14px;color:var(--txt3);max-width:300px;line-height:1.5}
+  .sec-c{font-size:11px;color:var(--txt3);letter-spacing:.16em;text-transform:uppercase;font-weight:600;font-feature-settings:'tnum';flex-shrink:0}
+
+  /* ──────────────────────────── Event tile cards ──────────────────────────── */
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  .card{
+    background:var(--bg2);border:1px solid var(--line);border-radius:10px;overflow:hidden;
+    cursor:pointer;transition:border-color .2s,transform .15s;
+    display:flex;flex-direction:column;text-decoration:none;color:inherit;
+  }
+  .card:hover{border-color:var(--line2);transform:translateY(-2px)}
+  .poster{
+    height:170px;position:relative;overflow:hidden;
+    background:#13110d center/cover no-repeat;
+  }
+  /* Thematic posters per event */
+  .card[data-ev="hop"]      .poster{background-image:url('all_images/event_titles/hmeli.jpg')}
+  .card[data-ev="exp1"]     .poster{background-image:url('all_images/event_titles/expedition.jpg')}
+  .card[data-ev="ny"]       .poster{background-image:url('all_images/event_titles/colder.jpg')}
+  .card[data-ev="pumpkin"]  .poster{background-image:url('all_images/event_titles/halloween.jpg')}
+  .card[data-ev="dragon"]   .poster{background-image:url('all_images/event_titles/dragons.jpg')}
+  .card[data-ev="goblin"]   .poster{background-image:url('all_images/event_titles/goblin.jpg')}
+  .card[data-ev="pirate"]   .poster{background-image:url('all_images/event_titles/pirate_day.jpg')}
+  .card[data-ev="glubin"]   .poster{background-image:url('all_images/event_titles/zov_glubin.png')}
+  .card[data-ev="birthday"] .poster{background-image:url('all_images/event_titles/birthday.jpg')}
+  .poster::before{
+    content:'';position:absolute;inset:0;
+    background:linear-gradient(180deg, rgba(0,0,0,0) 30%, rgba(11,9,7,.85) 100%);
+  }
+  .poster::after{
+    content:'';position:absolute;inset:0;
+    background:linear-gradient(180deg, rgba(11,9,7,.15), rgba(11,9,7,0) 30%);
+    transition:background .2s;
+  }
+  .card:hover .poster::after{background:linear-gradient(180deg, rgba(11,9,7,0), rgba(11,9,7,0))}
+  .poster .pill{
+    position:absolute;top:12px;left:12px;z-index:2;
+    font-size:9px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;
+    padding:4px 9px;border-radius:11px;background:rgba(0,0,0,.6);color:#e5dbb8;
+    backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.08);
+  }
+  .card.ready .pill{background:rgba(138,184,96,.32);color:#cef0a0;border-color:rgba(138,184,96,.4)}
+  .card.active .pill{background:rgba(138,184,96,.45);color:#e0ffc0;border-color:rgba(138,184,96,.6);box-shadow:0 0 14px rgba(138,184,96,.25)}
+  .card.soon .pill{color:#c9b890}
+
+  .card-b{padding:16px 18px 18px;display:flex;flex-direction:column;gap:6px;flex:1}
+  .card-name{font-family:var(--serif);font-size:18px;font-weight:500;letter-spacing:-.01em;line-height:1.2}
+  .card-meta{font-size:11px;color:var(--txt3);letter-spacing:.06em}
+  .card-desc{font-family:var(--serif);font-size:13px;color:var(--txt2);line-height:1.5;margin-top:4px}
+  .card-foot{
+    margin-top:auto;padding-top:14px;
+    display:flex;align-items:center;justify-content:space-between;
+    font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold-d);font-weight:600;
+  }
+  .card.ready .card-foot{color:var(--gold-l)}
+  .card-foot .arr{transition:transform .15s}
+  .card.ready:hover .card-foot .arr{transform:translateX(3px)}
+  .card.active .card-foot{color:var(--gold-l)}
+  .card.active:hover .card-foot .arr{transform:translateX(3px)}
+  .card.soon{opacity:.78}
+  .card.soon .poster{filter:grayscale(.45) brightness(.7)}
+
+  /* ──────────────────────────── Tools (clean V1 cards) ──────────────────────────── */
+  .tools{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  .tool{
+    border:1px solid var(--line);border-radius:8px;padding:24px;
+    background:var(--bg2);transition:border-color .18s,background .18s;
+    display:flex;flex-direction:column;gap:12px;cursor:pointer;text-decoration:none;color:inherit;
+    position:relative;overflow:hidden;isolation:isolate;
+  }
+  .tool::after{
+    content:'';position:absolute;inset:0;z-index:-1;
+    background-size:cover;background-position:right center;
+    opacity:.18;transition:opacity .25s;
+    -webkit-mask-image:linear-gradient(90deg, transparent 10%, #000 70%);
+            mask-image:linear-gradient(90deg, transparent 10%, #000 70%);
+  }
+  .tool:hover::after{opacity:.32}
+  .tool[data-t="rep"]::after{background-image:url('all_images/reputations.jpg')}
+  .tool:hover{border-color:var(--line2);background:var(--bg3)}
+  .tool-h{display:flex;align-items:center;gap:14px}
+  .tool-ico{font-size:24px}
+  .tool-name{font-family:var(--serif);font-size:18px;font-weight:500;letter-spacing:-.01em}
+  .tool-d{font-family:var(--serif);font-size:14px;line-height:1.55;color:var(--txt2)}
+  .tool-l{margin-top:auto;padding-top:6px;font-size:11px;color:var(--gold-l);font-weight:600;letter-spacing:.1em;text-transform:uppercase}
+  .tool-l::after{content:' →'}
+  .tool.soon{opacity:.55}
+  .tool.soon .tool-l{color:var(--txt3)}
+  .tool.soon .tool-l::after{content:''}
+
+  /* ──────────────────────────── Guides teaser ──────────────────────────── */
+  .guides{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+  .guide-card{
+    border:1px solid var(--line);border-radius:8px;
+    background:var(--bg2);padding:22px 24px;
+    display:flex;align-items:flex-start;gap:18px;cursor:pointer;text-decoration:none;color:inherit;
+    transition:border-color .18s,background .18s;
+  }
+  .guide-card:hover{border-color:var(--line2);background:var(--bg3)}
+  .guide-card .num{
+    font-family:var(--serif);font-style:italic;font-size:13px;color:var(--gold-d);
+    padding-right:18px;border-right:1px solid var(--line);
+    align-self:stretch;display:flex;align-items:center;font-feature-settings:'tnum';
+    letter-spacing:.04em;
+  }
+  .guide-card .body{flex:1}
+  .guide-card .ttl{font-family:var(--serif);font-size:17px;font-weight:500;letter-spacing:-.005em;margin-bottom:4px}
+  .guide-card .dsc{font-family:var(--serif);font-size:13px;color:var(--txt2);line-height:1.5;margin-bottom:10px}
+  .guide-card .tag{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--txt3);font-weight:600}
+  .guide-card.soon .tag{color:var(--gold-d)}
+
+  /* ──────────────────────────── Footer ──────────────────────────── */
+  .ftr{
+    max-width:1180px;margin:80px auto 0;padding:32px 40px 60px;
+    border-top:1px solid var(--line);
+    display:flex;justify-content:space-between;align-items:center;gap:24px;flex-wrap:wrap;
+    font-size:12px;color:var(--txt3);
+  }
+  .ftr-l{font-family:var(--serif);font-style:italic}
+  .ftr-r{display:flex;gap:18px}
+  .ftr-r a{color:var(--txt3);transition:color .12s}
+  .ftr-r a:hover{color:var(--gold-l)}
+
+  /* ──────────────────────────── Tone picker (floating) ──────────────────────────── */
+  .tone{
+    position:fixed;bottom:18px;right:18px;z-index:80;
+    background:rgba(11,9,7,.92);backdrop-filter:blur(20px);
+    border:1px solid var(--line2);border-radius:10px;padding:8px;
+    display:flex;align-items:center;gap:4px;
+    box-shadow:0 12px 40px rgba(0,0,0,.6);
+  }
+  .tone-l{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--txt3);font-weight:700;padding:0 6px 0 4px}
+  .tone-btn{
+    width:28px;height:28px;border:1px solid var(--line);border-radius:6px;cursor:pointer;
+    background:none;padding:0;transition:border-color .12s,transform .12s;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .tone-btn:hover{transform:translateY(-1px)}
+  .tone-btn.on{border-color:var(--gold);box-shadow:0 0 0 2px rgba(var(--gold-tint),.2)}
+  .tone-btn .swatch{width:14px;height:14px;border-radius:50%;display:block}
+  .tone-btn[data-t="amber"] .swatch{background:linear-gradient(135deg,#f5d878,#a07d2b)}
+  .tone-btn[data-t="brass"] .swatch{background:linear-gradient(135deg,#e8d670,#8c7d28)}
+  .tone-btn[data-t="sand"]  .swatch{background:linear-gradient(135deg,#e0c89c,#8a7858)}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <a class="logo" href="index.html">
+    <img src="kor_logo.svg" alt="">
+    <div>
+      <div class="logo-n">Korolevstvo</div>
+      <div class="logo-s">База знаний игроков · kor.ru</div>
+    </div>
+  </a>
+  <nav class="nav">
+    <a class="on">Калькуляторы<span class="count">14</span></a>
+    <a>Гайды<span class="count">скоро</span></a>
+    <a>Бестиарий<span class="count">скоро</span></a>
+    <a>Сообщество</a>
+  </nav>
+  <div class="top-r">
+    <input class="search" placeholder="Поиск по базе…">
+  </div>
+</header>
+
+<section class="hero">
+  <h1 class="h1">База знаний<br><em>Королевства</em></h1>
+  <p class="lede">Калькуляторы ивентов, репутаций, загруженности локаций, гайды по локациям и ярмарочным питомцам. Создано игроками для игроков.</p>
+
+  <div class="hero-meta">
+    <div class="hm-i"><b>14</b> калькуляторов</div>
+    <div class="hm-i"><b>2</b> готовы</div>
+    <div class="hm-now">Сейчас в игре: <em>🌊 Зов глубин</em> · <span id="days-left">12</span> дней</div>
+  </div>
+</section>
+
+<div class="cal-section">
+  <div class="cal">
+    <a class="mo"><div class="mo-ico">❄️</div><div class="mo-n">январь</div></a>
+    <a class="mo"><div class="mo-ico">🎒</div><div class="mo-n">февраль</div></a>
+    <a class="mo"><div class="mo-ico">🌸</div><div class="mo-n">март</div></a>
+    <a class="mo has" href="leprecon/hmeli_calc.html"><div class="mo-ico">🍺</div><div class="mo-n">апрель</div></a>
+    <a class="mo has now" href="zov_glubin/glubin_calc.html"><div class="mo-ico">🌊</div><div class="mo-n">май</div></a>
+    <a class="mo"><div class="mo-ico">⚓</div><div class="mo-n">июнь</div></a>
+    <a class="mo"><div class="mo-ico">🧊</div><div class="mo-n">июль</div></a>
+    <a class="mo"><div class="mo-ico">👺</div><div class="mo-n">август</div></a>
+    <a class="mo"><div class="mo-ico">🐉</div><div class="mo-n">сентябрь</div></a>
+    <a class="mo"><div class="mo-ico">🎃</div><div class="mo-n">октябрь</div></a>
+    <a class="mo has"><div class="mo-ico">🎂</div><div class="mo-n">ноябрь</div></a>
+    <a class="mo"><div class="mo-ico">❄️</div><div class="mo-n">декабрь</div></a>
+  </div>
+</div>
+
+<section class="sec">
+  <div class="sec-h">
+    <div>
+      <div class="sec-t">Ивентовые <em>калькуляторы</em></div>
+    </div>
+    <div class="sec-c">11 ивентов · 2 готовы</div>
+  </div>
+
+  <div class="grid">
+    <a class="card active" data-ev="glubin" href="zov_glubin/glubin_calc.html">
+      <div class="poster"><span class="pill">Сейчас</span></div>
+      <div class="card-b">
+        <div class="card-name">Зов глубин</div>
+        <div class="card-meta">МАЙ · осталось <span id="days-left2">12</span> дней</div>
+        <div class="card-desc">Жемчужины, предметы ивента и репутация — сколько фармить и сколько донатить для апгрейдов.</div>
+        <div class="card-foot"><span>Открыть калькулятор</span><span class="arr">→</span></div>
+      </div>
+    </a>
+    <a class="card ready" data-ev="hop" href="leprecon/hmeli_calc.html">
+      <div class="poster"></div>
+      <div class="card-b">
+        <div class="card-name">Месяц цветущего хмеля</div>
+        <div class="card-meta">АПРЕЛЬ · 4 предмета</div>
+        <div class="card-desc">Лепрекон, Медовый хмель, Фляжка Патрика и Талисман клевера.</div>
+        <div class="card-foot"><span>Открыть</span><span class="arr">→</span></div>
+      </div>
+    </a>
+    <div class="card soon" data-ev="flower">
+      <div class="poster"><span class="pill">Скоро</span></div>
+      <div class="card-b">
+        <div class="card-name">Пробуждение цветов</div>
+        <div class="card-meta">МАРТ · весенний ивент</div>
+        <div class="card-desc">Калькулятор в разработке.</div>
+        <div class="card-foot"><span>в разработке</span></div>
+      </div>
+    </div>
+    <div class="card soon" data-ev="exp1">
+      <div class="poster"><span class="pill">Скоро</span></div>
+      <div class="card-b">
+        <div class="card-name">Сбор припасов</div>
+        <div class="card-meta">ФЕВРАЛЬ · экспедиция</div>
+        <div class="card-desc">Калькулятор в разработке.</div>
+        <div class="card-foot"><span>в разработке</span></div>
+      </div>
+    </div>
+    <div class="card soon" data-ev="ny">
+      <div class="poster"><span class="pill">Скоро</span></div>
+      <div class="card-b">
+        <div class="card-name">Новый год. Колдер</div>
+        <div class="card-meta">ДЕК — ЯНВ</div>
+        <div class="card-desc">Зимний ивент.</div>
+        <div class="card-foot"><span>в разработке</span></div>
+      </div>
+    </div>
+    <div class="card soon" data-ev="pumpkin">
+      <div class="poster"><span class="pill">Скоро</span></div>
+      <div class="card-b">
+        <div class="card-name">Тыквенный фестиваль</div>
+        <div class="card-meta">ОКТЯБРЬ</div>
+        <div class="card-desc">Осенний ивент.</div>
+        <div class="card-foot"><span>в разработке</span></div>
+      </div>
+    </div>
+    <div class="card soon" data-ev="dragon">
+      <div class="poster"><span class="pill">Скоро</span></div>
+      <div class="card-b">
+        <div class="card-name">Небесные драконы</div>
+        <div class="card-meta">СЕНТЯБРЬ</div>
+        <div class="card-desc">Сентябрьский ивент.</div>
+        <div class="card-foot"><span>в разработке</span></div>
+      </div>
+    </div>
+    <div class="card soon" data-ev="goblin">
+      <div class="poster"><span class="pill">Скоро</span></div>
+      <div class="card-b">
+        <div class="card-name">Гоблинский рай</div>
+        <div class="card-meta">АВГУСТ</div>
+        <div class="card-desc">Августовский ивент.</div>
+        <div class="card-foot"><span>в разработке</span></div>
+      </div>
+    </div>
+    <div class="card soon" data-ev="ice">
+      <div class="poster"><span class="pill">Скоро</span></div>
+      <div class="card-b">
+        <div class="card-name">Ледяные острова</div>
+        <div class="card-meta">ИЮЛЬ · экспедиция</div>
+        <div class="card-desc">Июльская экспедиция.</div>
+        <div class="card-foot"><span>в разработке</span></div>
+      </div>
+    </div>
+    <div class="card soon" data-ev="birthday">
+      <div class="poster"><span class="pill">Скоро</span></div>
+      <div class="card-b">
+        <div class="card-name">День Рождения Королевства</div>
+        <div class="card-meta">НОЯБРЬ · ежегодный</div>
+        <div class="card-desc">Праздник в честь дня рождения игры.</div>
+        <div class="card-foot"><span>в разработке</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec-h">
+    <div>
+      <div class="sec-t">Постоянные <em>инструменты</em></div>
+      <div class="sec-d" style="margin-top:8px">Работают круглый год, не привязаны к ивентам.</div>
+    </div>
+    <div class="sec-c">3 инструмента</div>
+  </div>
+  <div class="tools">
+    <a class="tool" data-t="loc" href="location_calc/loc_calc.html">
+      <div class="tool-h"><div class="tool-ico">🗺️</div><div class="tool-name">Загруженность копий</div></div>
+      <div class="tool-d">Сколько игроков вражеской расы сейчас находится в локации и в каждой конкретной копии.</div>
+      <div class="tool-l">Открыть</div>
+    </a>
+    <a class="tool" data-t="rep" href="reputation_calc/rep_calc.html">
+      <div class="tool-h"><div class="tool-ico">⚔️</div><div class="tool-name">Прокачка репутаций</div></div>
+      <div class="tool-d">Сколько дней до нужного ранга — выбери репутацию, текущий ранг и темп.</div>
+      <div class="tool-l">Открыть</div>
+    </a>
+    <div class="tool soon" data-t="pets">
+      <div class="tool-h"><div class="tool-ico">🐾</div><div class="tool-name">Ярмарочные питомцы</div></div>
+      <div class="tool-d">Каталог и сравнение — характеристики, способности и советы по выбору.</div>
+      <div class="tool-l">скоро</div>
+    </div>
+  </div>
+
+  <div class="sec-h">
+    <div>
+      <div class="sec-t">Гайды по <em>локациям</em></div>
+      <div class="sec-d" style="margin-top:8px">Тактики, маршруты, советы по прохождению.</div>
+    </div>
+    <div class="sec-c">скоро</div>
+  </div>
+  <div class="guides">
+    <div class="guide-card soon">
+      <div class="num">§ I</div>
+      <div class="body">
+        <div class="ttl">Гайд: Месяц цветущего хмеля</div>
+        <div class="dsc">Где фармить лепреконов, как быстрее всего закрыть ежедневные квесты, что брать в первую очередь.</div>
+        <div class="tag">В разработке</div>
+      </div>
+    </div>
+    <div class="guide-card soon">
+      <div class="num">§ II</div>
+      <div class="body">
+        <div class="ttl">Гайд: Зов глубин</div>
+        <div class="dsc">Маршрут по подводной локации, тактики против боссов, оптимизация фарма жемчужин.</div>
+        <div class="tag">В разработке</div>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<footer class="ftr">
+  <div class="ftr-l">Сделано с любовью к Королевству · не является официальным ресурсом</div>
+  <div class="ftr-r">
+    <a>GitHub</div>
+    <a>Telegram</a>
+    <a>Дискорд</a>
+  </div>
+</footer>
+
+<!-- Tone picker -->
+<div class="tone">
+  <span class="tone-l">Оттенок</span>
+  <button class="tone-btn on" data-t="amber" title="Тёплое янтарное"><span class="swatch"></span></button>
+  <button class="tone-btn"    data-t="brass" title="Холодное латунное"><span class="swatch"></span></button>
+  <button class="tone-btn"    data-t="sand"  title="Бледный песочный"><span class="swatch"></span></button>
+</div>
+
+<script>
+  // Days left until end of current event (May 26, 2026)
+  (function() {
+    const end = new Date('2026-05-26T23:59:59');
+    const now = new Date();
+    const diff = Math.ceil((end - now) / 86400000);
+    const d = Math.max(0, diff);
+    document.getElementById('days-left').textContent  = d;
+    document.getElementById('days-left2').textContent = d;
+  })();
+
+  // Persist tone choice
+  const savedTone = localStorage.getItem('kor-tone') || 'amber';
+  applyTone(savedTone);
+  document.querySelectorAll('.tone-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const t = btn.dataset.t;
+      applyTone(t);
+      localStorage.setItem('kor-tone', t);
+    });
+  });
+  function applyTone(t) {
+    document.documentElement.dataset.tone = t === 'amber' ? '' : t;
+    document.querySelectorAll('.tone-btn').forEach(b => b.classList.toggle('on', b.dataset.t === t));
+  }
+</script>
+
+</body>
+</html>
