@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Калькулятор характеристик — Королевство</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --gold:   #d4a843;
+  --gold-l: #f5d878;
+  --gold-d: #a07d2b;
+  --bg:     #0b0907;
+  --bg2:    #120e09;
+  --bg3:    #1a160f;
+  --bg4:    #211810;
+  --line:   rgba(212,168,67,.09);
+  --line2:  rgba(212,168,67,.18);
+  --txt:    #ece4cf;
+  --txt2:   #a99775;
+  --txt3:   #6c5d44;
+  --serif:  'Fraunces', Georgia, serif;
+  --sans:   'Inter', system-ui, sans-serif;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%;background:var(--bg);color:var(--txt);font-family:var(--sans);font-size:14px;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+
+/* ── HEADER ── */
+.top{
+  height:56px;padding:0 24px;
+  border-bottom:1px solid var(--line);
+  background:rgba(11,9,7,.9);backdrop-filter:blur(20px);
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  display:flex;align-items:center;gap:18px;
+}
+.logo{display:flex;align-items:center;gap:10px}
+.logo img{width:26px;height:26px;filter:drop-shadow(0 0 8px rgba(212,168,67,.4))}
+.logo-n{font-family:var(--serif);font-size:16px;font-weight:600;letter-spacing:-.01em}
+.nav{margin-left:20px;display:flex;gap:2px}
+.nav a{padding:6px 11px;border-radius:6px;font-size:13px;color:var(--txt2);font-weight:500;transition:background .12s,color .12s;cursor:pointer}
+.nav a:hover{color:var(--txt);background:var(--bg2)}
+.nav a.on{color:var(--gold-l);background:var(--bg3)}
+.h-back{margin-left:auto;font-size:12px;color:var(--txt3);display:flex;align-items:center;gap:5px;transition:color .15s}
+.h-back:hover{color:var(--gold-l)}
+.h-back::before{content:'←'}
+
+/* ── MAIN ── */
+.main{
+  margin-top:56px;
+  padding:32px 36px 80px;
+  max-width:900px;
+  margin-left:auto;
+  margin-right:auto;
+}
+
+.page-title{font-family:var(--serif);font-size:28px;font-weight:500;letter-spacing:-.015em;margin-bottom:4px}
+.page-sub{font-size:11px;color:var(--txt3);margin-bottom:24px;letter-spacing:.1em;text-transform:uppercase}
+
+/* ── CLASS TABS ── */
+.cls-tabs{display:flex;gap:2px;flex-wrap:wrap;margin-bottom:28px}
+.cls-tab{
+  display:flex;align-items:center;gap:7px;
+  padding:7px 14px;border-radius:7px;cursor:pointer;
+  font-size:13px;color:var(--txt2);font-weight:500;
+  transition:background .12s,color .12s;
+  border:1px solid transparent;
+}
+.cls-tab:hover{background:var(--bg3);color:var(--txt)}
+.cls-tab.on{background:var(--bg3);color:var(--gold-l);border-color:var(--line2)}
+.cls-tab-ico{width:18px;height:18px;border-radius:2px;flex-shrink:0;object-fit:cover}
+
+/* ── PAPERDOLL ── */
+.paperdoll-wrap{
+  display:grid;
+  grid-template-columns:1fr auto 1fr;
+  gap:0 16px;
+  align-items:start;
+  margin-bottom:20px;
+}
+
+.slot-col{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+.slot-col.right{align-items:flex-start}
+.slot-col.left{align-items:flex-end}
+
+.slot-btn{
+  display:flex;align-items:center;gap:8px;
+  padding:7px 10px;border-radius:8px;
+  background:var(--bg2);border:1px solid var(--line);
+  cursor:pointer;transition:border-color .15s,background .15s;
+  min-width:150px;position:relative;
+}
+.slot-btn:hover{border-color:var(--line2);background:var(--bg3)}
+.slot-btn.active{border-color:var(--gold);background:var(--bg3)}
+.slot-btn.equipped{border-color:var(--line2)}
+
+.slot-col.left .slot-btn{flex-direction:row-reverse}
+.slot-col.left .slot-label{text-align:right}
+
+.slot-ico-wrap{
+  width:36px;height:36px;border-radius:5px;
+  background:var(--bg4);border:1px solid var(--line);
+  flex-shrink:0;position:relative;overflow:hidden;
+  display:flex;align-items:center;justify-content:center;
+}
+.slot-ico-wrap img.item-img{width:100%;height:100%;object-fit:cover;border-radius:4px}
+.slot-ico-wrap img.frame-img{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.slot-empty-ico{
+  width:20px;height:20px;opacity:.18;
+}
+
+.slot-label{flex:1;min-width:0}
+.slot-name-txt{font-size:12px;color:var(--txt2);line-height:1.2}
+.slot-item-txt{font-family:var(--serif);font-size:13px;color:var(--txt);line-height:1.3;overflow-wrap:break-word}
+.slot-q-dot{
+  width:6px;height:6px;border-radius:50%;flex-shrink:0;
+  display:none;
+}
+.slot-btn.equipped .slot-q-dot{display:block}
+
+/* ── CHARACTER CENTER ── */
+.char-center{
+  display:flex;flex-direction:column;align-items:center;gap:10px;
+  padding-top:4px;
+}
+.char-img-wrap{
+  width:100px;height:100px;
+  background:var(--bg3);border:1px solid var(--line2);
+  border-radius:12px;
+  display:flex;align-items:center;justify-content:center;
+  overflow:hidden;
+}
+.char-img-wrap img{width:100%;height:100%;object-fit:contain}
+.char-name{font-family:var(--serif);font-size:14px;color:var(--gold-l);font-weight:500}
+.char-reset{
+  font-size:11px;color:var(--txt3);cursor:pointer;
+  padding:4px 10px;border-radius:5px;border:1px solid var(--line);
+  transition:color .15s,border-color .15s;
+}
+.char-reset:hover{color:var(--txt2);border-color:var(--line2)}
+
+/* ── QUALITY PICKER ── */
+.picker-panel{
+  display:none;
+  background:var(--bg2);border:1px solid var(--line2);border-radius:10px;
+  padding:14px 16px;margin-bottom:20px;
+  animation:fadeIn .15s ease;
+}
+.picker-panel.open{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+
+.picker-title{font-size:11px;color:var(--txt3);text-transform:uppercase;letter-spacing:.12em;font-weight:600;margin-bottom:10px}
+.picker-btns{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.picker-btn{
+  padding:6px 13px;border-radius:6px;cursor:pointer;font-size:12px;font-weight:600;
+  background:var(--bg3);border:1px solid var(--line);
+  transition:border-color .12s,background .12s,color .12s;
+  letter-spacing:.02em;
+}
+.picker-btn:hover{border-color:var(--line2)}
+.picker-unequip{
+  padding:5px 12px;border-radius:6px;cursor:pointer;font-size:11px;
+  background:transparent;border:1px dashed var(--line2);color:var(--txt3);
+  transition:color .12s,border-color .12s;
+}
+.picker-unequip:hover{color:var(--txt2);border-color:rgba(212,168,67,.3)}
+
+/* ── BUFFS ── */
+.buffs-section{
+  margin-bottom:24px;
+  padding:14px 16px;
+  background:var(--bg2);border:1px solid var(--line);border-radius:10px;
+}
+.buffs-title{font-size:11px;color:var(--txt3);text-transform:uppercase;letter-spacing:.12em;font-weight:600;margin-bottom:10px}
+.buffs-list{display:flex;flex-wrap:wrap;gap:6px}
+.buff-toggle{
+  display:flex;align-items:center;gap:7px;
+  padding:6px 12px;border-radius:7px;cursor:pointer;
+  background:var(--bg3);border:1px solid var(--line);
+  font-size:12px;color:var(--txt2);font-weight:500;
+  transition:border-color .12s,color .12s,background .12s;
+  user-select:none;
+}
+.buff-toggle:hover{border-color:var(--line2);color:var(--txt)}
+.buff-toggle.on{border-color:rgba(212,168,67,.35);color:var(--gold-l);background:rgba(212,168,67,.06)}
+.buff-check{
+  width:14px;height:14px;border-radius:3px;
+  border:1px solid var(--line2);background:var(--bg4);flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;font-size:9px;
+}
+.buff-toggle.on .buff-check{background:rgba(212,168,67,.15);border-color:var(--gold);color:var(--gold-l)}
+.buff-cls-badge{
+  font-size:10px;color:var(--txt3);font-weight:400;
+}
+
+/* ── STATS PANEL ── */
+.stats-panel{
+  background:var(--bg2);border:1px solid var(--line);border-radius:10px;
+  overflow:hidden;
+}
+.stats-header{
+  padding:13px 18px;border-bottom:1px solid var(--line);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.stats-title{font-family:var(--serif);font-size:16px;font-weight:500;color:var(--txt)}
+.stats-hint{font-size:11px;color:var(--txt3);font-style:italic}
+.stats-body{padding:0}
+.stat-row{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:9px 18px;
+  border-bottom:1px solid rgba(212,168,67,.04);
+  transition:background .1s;
+}
+.stat-row:last-child{border-bottom:none}
+.stat-row:hover{background:rgba(212,168,67,.02)}
+.stat-row.zero{opacity:.35}
+.stat-key{font-size:13px;color:var(--txt2)}
+.stat-val{font-family:var(--serif);font-size:14px;color:var(--txt);font-feature-settings:'tnum';font-weight:500}
+.stat-val.nonzero{color:var(--gold-l)}
+.stat-empty{color:var(--txt3);font-size:12px;font-style:italic;padding:20px 18px;text-align:center}
+.stat-buff-tag{font-size:10px;color:var(--gold);margin-left:4px;font-family:var(--sans)}
+
+/* ── EMPTY STATE ── */
+.no-data-note{
+  font-size:12px;color:var(--txt3);font-style:italic;
+  padding:6px 0 0;
+}
+
+/* ── MOBILE ── */
+@media(max-width:700px){
+  .top{padding:0 14px}
+  .nav{display:none}
+  .main{padding:20px 14px 60px}
+  .paperdoll-wrap{
+    grid-template-columns:1fr 1fr;
+    grid-template-rows:auto auto;
+  }
+  .char-center{grid-column:1/-1;order:-1;flex-direction:row;justify-content:center;margin-bottom:8px}
+  .slot-col.left{align-items:flex-start}
+  .slot-col.left .slot-btn{flex-direction:row}
+  .slot-col.left .slot-label{text-align:left}
+  .slot-btn{min-width:0;width:100%}
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <a class="logo" href="index_new.html">
+    <img src="kor_logo.svg" alt="">
+    <div class="logo-n">Korolevstvo</div>
+  </a>
+  <nav class="nav">
+    <a href="index_new.html">Калькуляторы</a>
+    <a href="items_base.html">База предметов</a>
+    <a class="on" href="calc.html">Статы</a>
+  </nav>
+  <a class="h-back" href="index_new.html">На главную</a>
+</header>
+
+<main class="main">
+  <div class="page-title">Калькулятор характеристик</div>
+  <div class="page-sub">Выберите класс, подберите экипировку, включите баффы</div>
+
+  <!-- CLASS TABS -->
+  <div class="cls-tabs" id="clsTabs"></div>
+
+  <!-- PAPERDOLL -->
+  <div class="paperdoll-wrap" id="paperdoll">
+    <div class="slot-col left" id="colLeft"></div>
+    <div class="char-center">
+      <div class="char-img-wrap">
+        <img id="charImg" src="" alt="">
+      </div>
+      <div class="char-name" id="charName"></div>
+      <div class="char-reset" onclick="resetAll()">Снять всё</div>
+    </div>
+    <div class="slot-col right" id="colRight"></div>
+  </div>
+
+  <!-- QUALITY PICKER -->
+  <div class="picker-panel" id="pickerPanel">
+    <div class="picker-title" id="pickerTitle">Выберите качество</div>
+    <div class="picker-btns" id="pickerBtns"></div>
+    <button class="picker-unequip" onclick="unequipSlot(activeSlot)">— Снять</button>
+  </div>
+
+  <!-- BUFFS -->
+  <div class="buffs-section">
+    <div class="buffs-title">Баффы группы</div>
+    <div class="buffs-list" id="buffsList"></div>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats-panel">
+    <div class="stats-header">
+      <div class="stats-title">Итоговые характеристики</div>
+      <div class="stats-hint" id="statsHint">наденьте экипировку</div>
+    </div>
+    <div class="stats-body" id="statsBody"></div>
+  </div>
+</main>
+
+<script>
+// ── DATA ──────────────────────────────────────────────────────────────────────
+
+const QUALITIES = [
+  { id:'white',       label:'Обычный',           color:'#bbb' },
+  { id:'green',       label:'Редкий',             color:'#8acc60' },
+  { id:'blue',        label:'Элитный',            color:'#78aae0' },
+  { id:'purple',      label:'Героический',        color:'#b888ee' },
+  { id:'purple_plus', label:'Усил. героический',  color:'#d898f8' },
+  { id:'red',         label:'Легендарный',        color:'#ee5050' },
+  { id:'orange',      label:'Эпический',          color:'#f0a040' },
+];
+
+const SLOTS = [
+  { id:'weapon',    name:'Оружие',         col:'left' },
+  { id:'chest',     name:'Нагрудник',      col:'left' },
+  { id:'shoulders', name:'Наплечники',     col:'left' },
+  { id:'helm',      name:'Шлем',           col:'left' },
+  { id:'offhand',   name:'Второе оружие',  col:'right' },
+  { id:'pants',     name:'Штаны',          col:'right' },
+  { id:'belt',      name:'Пояс',           col:'right' },
+  { id:'boots',     name:'Сапоги',         col:'right' },
+  { id:'gloves',    name:'Перчатки',       col:'right' },
+];
+
+const CLASS_NAMES = {
+  warrior:'Воин', rogue:'Головорез', monk:'Монах',
+  paladin:'Паладин', mage:'Маг', archer:'Лучник'
+};
+
+const CLASS_ICON_FILE = {
+  warrior:'warrior.png', rogue:'rogue.png', monk:'cleric.png',
+  paladin:'paladin.png', mage:'mage.png', archer:'shooter.png'
+};
+
+const CLASS_ITEM_NAMES = {
+  warrior: { weapon:'Меч', offhand:'Щит', helm:'Шлем', chest:'Нагрудник', shoulders:'Наплечники', pants:'Штаны', gloves:'Перчатки', belt:'Пояс', boots:'Сапоги' },
+  rogue:   { weapon:'Кинжал', offhand:'Кинжал', helm:'Шлем', chest:'Нагрудник', shoulders:'Наплечники', pants:'Штаны', gloves:'Перчатки', belt:'Пояс', boots:'Сапоги' },
+  monk:    { weapon:'Посох', offhand:'Орб', helm:'Шлем', chest:'Нагрудник', shoulders:'Наплечники', pants:'Штаны', gloves:'Перчатки', belt:'Пояс', boots:'Сапоги' },
+  paladin: { weapon:'Молот', offhand:'Щит', helm:'Шлем', chest:'Нагрудник', shoulders:'Наплечники', pants:'Штаны', gloves:'Перчатки', belt:'Пояс', boots:'Сапоги' },
+  mage:    { weapon:'Посох', offhand:'Орб', helm:'Шлем', chest:'Нагрудник', shoulders:'Наплечники', pants:'Штаны', gloves:'Перчатки', belt:'Пояс', boots:'Сапоги' },
+  archer:  { weapon:'Лук', offhand:'Колчан', helm:'Шлем', chest:'Нагрудник', shoulders:'Наплечники', pants:'Штаны', gloves:'Перчатки', belt:'Пояс', boots:'Сапоги' },
+};
+
+const CLASS_SET_NAMES = {
+  warrior: { white:'Решимости', green:'Отваги', blue:'Разрушителя', purple:'Непримиримости', purple_plus:'Непримиримости', red:'Доблести', orange:'' },
+  paladin: { white:'Праведника', green:'Веры', blue:'Благочестия', purple:'Истины', purple_plus:'Истины', red:'Избранного', orange:'' },
+  rogue:{}, monk:{}, mage:{}, archer:{},
+};
+
+const УСИЛ = {
+  'Меч':'Усиленный','Щит':'Усиленный','Шлем':'Усиленный','Нагрудник':'Усиленный',
+  'Пояс':'Усиленный','Молот':'Усиленный','Посох':'Усиленный','Орб':'Усиленный',
+  'Кинжал':'Усиленный','Лук':'Усиленный','Колчан':'Усиленный',
+  'Наплечники':'Усиленные','Штаны':'Усиленные','Перчатки':'Усиленные','Сапоги':'Усиленные',
+};
+
+const QUALITY_FRAME = {
+  white:       'frames/border_none.png',
+  green:       'frames/border_low.png',
+  blue:        'frames/border_medium.png',
+  purple:      'frames/border_high.png',
+  purple_plus: 'frames/border_high.png',
+  red:         'frames/border_exclusive.png',
+  orange:      'frames/border_special.png',
+};
+
+const QUALITY_LEVEL = { white:10, green:11, blue:12, purple:13, purple_plus:13, red:14, orange:15 };
+
+// Only warrior has images so far
+const CLASS_SLOTS_IMG = {
+  warrior: { weapon:'sword', offhand:'shield', helm:'helm', chest:'chest', shoulders:'shoulders', pants:'pants', gloves:'gloves', belt:'belt', boots:'boots' },
+};
+
+const STAT_LABELS = [
+  { key:'atk',        label:'Атака' },
+  { key:'def',        label:'Защита' },
+  { key:'hp',         label:'Запас здоровья' },
+  { key:'mana',       label:'Запас маны' },
+  { key:'heal_eff',   label:'Эффективность лечения',       pct:true },
+  { key:'hp_regen',   label:'Восст. жизни вне боя' },
+  { key:'crit_dmg',   label:'Сила крит. урона',            pct:true },
+  { key:'crit_chance',label:'Шанс крит. удара',            pct:true },
+  { key:'wind_res',   label:'Сопр. магии ветра',           pct:true },
+  { key:'fire_res',   label:'Сопр. магии огня',            pct:true },
+  { key:'light_res',  label:'Сопр. магии света',           pct:true },
+  { key:'elem_def',   label:'Защита стихий' },
+  { key:'def_eff',    label:'Эффективность защиты',        pct:true },
+  { key:'atk_eff',    label:'Эффективность атаки',         pct:true },
+  { key:'speed',      label:'Скорость в бою',              pct:true },
+];
+
+const CLASS_BUFFS = [
+  { name:'Зоркий глаз',   cls:'archer',  effect:'atk_eff',       value:15 },
+  { name:'Ураган',        cls:'mage',    effect:'atk_eff',       value:15 },
+  { name:'Благословение', cls:'monk',    effect:'hp',            value:8,  pct:true },
+  { name:'Святое слово',  cls:'paladin', effect:'hp',            value:8,  pct:true },
+  { name:'Пылающий щит',  cls:'warrior', effect:'dmg_taken_red', value:8 },
+  { name:'Дар теней',     cls:'rogue',   effect:'dmg_taken_red', value:8 },
+];
+
+const STATS = {
+  warrior: {
+    red: {
+      weapon:    { atk:12.72, def:37.85, hp:694,  mana:80,  heal_eff:5, hp_regen:50, crit_dmg:5, wind_res:0.80, elem_def:35,  atk_eff:2 },
+      pants:     { atk:14.53, def:15.03, hp:713,  mana:120, heal_eff:5, hp_regen:50, crit_dmg:5, wind_res:0.80, elem_def:53,  atk_eff:2 },
+      belt:      { atk:15.56, def:8.56,  hp:725,  mana:150, heal_eff:5, hp_regen:50, crit_dmg:5, wind_res:0.80, elem_def:72,  atk_eff:2 },
+      boots:     { atk:20.04, def:5.65,  hp:750,  mana:170, heal_eff:5, hp_regen:50, crit_dmg:5, wind_res:0.80, elem_def:92,  atk_eff:2 },
+    },
+  },
+  paladin: {
+    green: {
+      weapon:  { atk:5.70,  def:28.47, hp:450, mana:15, fire_res:0.50 },
+      pants:   { atk:6.75,  def:14.23, hp:465, mana:24, fire_res:0.50 },
+      belt:    { atk:7.20,  def:8.59,  hp:485, mana:30, fire_res:0.50 },
+      boots:   { atk:9.70,  def:5.61,  hp:510, mana:36, fire_res:0.50 },
+      gloves:  { atk:10.75, def:3.94,  hp:530, mana:42, fire_res:0.50 },
+    },
+    red: {
+      weapon:  { atk:10.18, def:37.83, hp:949,  mana:80,  heal_eff:5, hp_regen:50, crit_dmg:5, fire_res:0.80, elem_def:35,  atk_eff:2 },
+      pants:   { atk:11.64, def:17.84, hp:954,  mana:120, heal_eff:5, hp_regen:50, crit_dmg:5, fire_res:0.80, elem_def:53,  atk_eff:2 },
+      belt:    { atk:12.41, def:10.32, hp:985,  mana:150, heal_eff:5, hp_regen:50, crit_dmg:5, fire_res:0.80, elem_def:72,  atk_eff:2 },
+      boots:   { atk:16.57, def:6.63,  hp:1023, mana:170, heal_eff:5, hp_regen:50, crit_dmg:5, fire_res:0.80, elem_def:92,  atk_eff:2 },
+    },
+    purple_plus: {
+      gloves:  { atk:16.30, def:4.78, hp:855, mana:170, heal_eff:5, fire_res:0.80, elem_def:124 },
+    },
+  },
+};
+
+// ── STATE ─────────────────────────────────────────────────────────────────────
+
+let activeCls = 'paladin';
+let activeSlot = null;
+const equipped = {};         // { slotId: { quality, stats } }
+const activeBuffs = new Set();
+
+// ── HELPERS ───────────────────────────────────────────────────────────────────
+
+function getItemImg(cls, slotId, quality) {
+  const slotMap = CLASS_SLOTS_IMG[cls];
+  if (!slotMap) return null;
+  const slotFile = slotMap[slotId];
+  if (!slotFile) return null;
+  const lvl = QUALITY_LEVEL[quality];
+  if (!lvl) return null;
+  return `stats_calculator/classes/${cls}/${cls}_sets/${quality}_set/elf/${cls}_${slotFile}_${lvl}_elf.png`;
+}
+
+function getItemName(cls, slotId, quality) {
+  const itemNames = CLASS_ITEM_NAMES[cls] || {};
+  const baseName = itemNames[slotId] || SLOTS.find(s => s.id === slotId)?.name || slotId;
+  const setNames = CLASS_SET_NAMES[cls] || {};
+  const setName  = setNames[quality] || '';
+
+  if (quality === 'purple_plus') {
+    const усил = УСИЛ[baseName] || 'Усиленный';
+    return `${усил} ${baseName}${setName ? ' ' + setName : ''}`;
+  }
+  return setName ? `${baseName} ${setName}` : baseName;
+}
+
+function getStatsForSlot(cls, slotId, quality) {
+  return STATS[cls]?.[quality]?.[slotId] || null;
+}
+
+function formatVal(key, val, buffsApplied) {
+  const meta = STAT_LABELS.find(s => s.key === key);
+  if (!meta) return String(val);
+  if (meta.pct) return `+${Number(val).toFixed(2).replace(/\.00$/, '')}%`;
+  return Number(val) % 1 === 0 ? String(val) : Number(val).toFixed(2);
+}
+
+// ── RENDER ────────────────────────────────────────────────────────────────────
+
+function renderClassTabs() {
+  const el = document.getElementById('clsTabs');
+  el.innerHTML = Object.keys(CLASS_NAMES).map(cls => {
+    const on = cls === activeCls ? ' on' : '';
+    const iconSrc = `stats_calculator/classes/${CLASS_ICON_FILE[cls]}`;
+    return `<div class="cls-tab${on}" onclick="selectClass('${cls}')">
+      <img class="cls-tab-ico" src="${iconSrc}" alt="" onerror="this.style.display='none'">
+      ${CLASS_NAMES[cls]}
+    </div>`;
+  }).join('');
+}
+
+function renderCharCenter() {
+  const iconSrc = `stats_calculator/classes/${CLASS_ICON_FILE[activeCls]}`;
+  document.getElementById('charImg').src = iconSrc;
+  document.getElementById('charName').textContent = CLASS_NAMES[activeCls];
+}
+
+function renderSlots() {
+  const left  = document.getElementById('colLeft');
+  const right = document.getElementById('colRight');
+  left.innerHTML = '';
+  right.innerHTML = '';
+
+  SLOTS.forEach(slot => {
+    const eq = equipped[slot.id];
+    const hasData = !!getStatsForSlot(activeCls, slot.id, eq?.quality);
+    const on = activeSlot === slot.id ? ' active' : '';
+    const eqCls = eq ? ' equipped' : '';
+    const qColor = eq ? QUALITIES.find(q => q.id === eq.quality)?.color || '#888' : 'transparent';
+    const itemName = eq ? getItemName(activeCls, slot.id, eq.quality) : '';
+    const imgSrc   = eq ? getItemImg(activeCls, slot.id, eq.quality) : null;
+    const frameSrc = eq ? QUALITY_FRAME[eq.quality] : null;
+
+    const icoHtml = eq ? `
+      ${imgSrc ? `<img class="item-img" src="${imgSrc}" alt="" onerror="this.style.display='none'">` : ''}
+      ${frameSrc ? `<img class="frame-img" src="${frameSrc}" alt="" onerror="this.style.display='none'">` : ''}
+    ` : `<svg class="slot-empty-ico" viewBox="0 0 20 20" fill="currentColor" style="color:var(--txt3)"><rect x="3" y="3" width="14" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="3 2"/></svg>`;
+
+    const labelHtml = eq
+      ? `<div class="slot-label">
+           <div class="slot-name-txt">${slot.name}</div>
+           <div class="slot-item-txt" style="color:${qColor}">${itemName}</div>
+         </div>`
+      : `<div class="slot-label"><div class="slot-name-txt">${slot.name}</div></div>`;
+
+    const html = `<div class="slot-btn${on}${eqCls}" id="slot-${slot.id}" onclick="openPicker('${slot.id}')">
+      <div class="slot-ico-wrap">${icoHtml}</div>
+      ${labelHtml}
+      <div class="slot-q-dot" style="background:${qColor}"></div>
+    </div>`;
+
+    if (slot.col === 'left') left.insertAdjacentHTML('beforeend', html);
+    else right.insertAdjacentHTML('beforeend', html);
+  });
+}
+
+function renderPicker() {
+  const panel = document.getElementById('pickerPanel');
+  const title = document.getElementById('pickerTitle');
+  const btns  = document.getElementById('pickerBtns');
+
+  if (!activeSlot) { panel.classList.remove('open'); return; }
+
+  const slot = SLOTS.find(s => s.id === activeSlot);
+  title.textContent = `Качество — ${slot?.name || activeSlot}`;
+
+  btns.innerHTML = QUALITIES.map(q => {
+    const hasStats = !!getStatsForSlot(activeCls, activeSlot, q.id);
+    const isEquipped = equipped[activeSlot]?.quality === q.id;
+    const opacity = hasStats ? '' : 'opacity:.35;';
+    const ring = isEquipped ? `box-shadow:0 0 0 2px ${q.color}55;` : '';
+    return `<button class="picker-btn" style="color:${q.color};${opacity}${ring}"
+      onclick="equipSlot('${activeSlot}','${q.id}')">${q.label}</button>`;
+  }).join('');
+
+  panel.classList.add('open');
+}
+
+function renderBuffs() {
+  const el = document.getElementById('buffsList');
+  el.innerHTML = CLASS_BUFFS.map((b, i) => {
+    const on = activeBuffs.has(i) ? ' on' : '';
+    const clsName = CLASS_NAMES[b.cls] || b.cls;
+    return `<div class="buff-toggle${on}" onclick="toggleBuff(${i})">
+      <div class="buff-check">${activeBuffs.has(i) ? '✓' : ''}</div>
+      ${b.name}
+      <span class="buff-cls-badge">(${clsName})</span>
+    </div>`;
+  }).join('');
+}
+
+function renderStats() {
+  const body  = document.getElementById('statsBody');
+  const hint  = document.getElementById('statsHint');
+
+  // Sum base stats
+  const totals = {};
+  let hasAny = false;
+  Object.values(equipped).forEach(eq => {
+    if (!eq?.stats) return;
+    hasAny = true;
+    Object.entries(eq.stats).forEach(([k, v]) => {
+      totals[k] = (totals[k] || 0) + v;
+    });
+  });
+
+  // Apply buffs
+  const buffEffects = {};
+  activeBuffs.forEach(i => {
+    const b = CLASS_BUFFS[i];
+    if (!b) return;
+    if (b.effect === 'dmg_taken_red') return; // display-only, no stat key
+    if (b.pct && totals[b.effect]) {
+      // percentage of base value
+      const bonus = totals[b.effect] * b.value / 100;
+      buffEffects[b.effect] = (buffEffects[b.effect] || 0) + bonus;
+    } else {
+      buffEffects[b.effect] = (buffEffects[b.effect] || 0) + b.value;
+    }
+  });
+
+  // Extra dmg_taken_red display
+  const dmgRedBuff = CLASS_BUFFS.filter((b, i) => b.effect === 'dmg_taken_red' && activeBuffs.has(i));
+  const dmgRedTotal = dmgRedBuff.reduce((s, b) => s + b.value, 0);
+
+  if (!hasAny) {
+    hint.textContent = 'наденьте экипировку';
+    body.innerHTML = `<div class="stat-empty">Оденьте предметы, чтобы увидеть характеристики</div>`;
+    return;
+  }
+
+  const equippedCount = Object.keys(equipped).length;
+  hint.textContent = `${equippedCount} ${equippedCount === 1 ? 'предмет' : equippedCount < 5 ? 'предмета' : 'предметов'}`;
+
+  let html = '';
+  STAT_LABELS.forEach(meta => {
+    const base   = totals[meta.key] || 0;
+    const bonus  = buffEffects[meta.key] || 0;
+    const total  = base + bonus;
+    if (total === 0) return;
+
+    let valStr;
+    if (meta.pct) {
+      valStr = `+${total.toFixed(2).replace(/\.00$/, '')}%`;
+    } else {
+      valStr = Number.isInteger(total) ? String(total) : total.toFixed(2);
+    }
+
+    const buffTag = bonus > 0 ? `<span class="stat-buff-tag">+${meta.pct ? bonus.toFixed(1)+'%' : Math.round(bonus)} (бафф)</span>` : '';
+
+    html += `<div class="stat-row">
+      <span class="stat-key">${meta.label}</span>
+      <span class="stat-val nonzero">${valStr}${buffTag}</span>
+    </div>`;
+  });
+
+  // dmg_taken_red special row
+  if (dmgRedTotal > 0) {
+    html += `<div class="stat-row">
+      <span class="stat-key">Снижение урона (бафф)</span>
+      <span class="stat-val nonzero">−${dmgRedTotal}% <span class="stat-buff-tag">(бафф)</span></span>
+    </div>`;
+  }
+
+  if (!html) {
+    html = `<div class="stat-empty">Нет данных для выбранных слотов</div>`;
+  }
+
+  body.innerHTML = html;
+}
+
+function render() {
+  renderClassTabs();
+  renderCharCenter();
+  renderSlots();
+  renderPicker();
+  renderBuffs();
+  renderStats();
+}
+
+// ── ACTIONS ───────────────────────────────────────────────────────────────────
+
+function selectClass(cls) {
+  activeCls = cls;
+  activeSlot = null;
+  // Clear equipped when changing class (different stat tables)
+  Object.keys(equipped).forEach(k => delete equipped[k]);
+  render();
+}
+
+function openPicker(slotId) {
+  if (activeSlot === slotId) {
+    activeSlot = null;
+  } else {
+    activeSlot = slotId;
+  }
+  renderSlots();
+  renderPicker();
+}
+
+function equipSlot(slotId, quality) {
+  const stats = getStatsForSlot(activeCls, slotId, quality);
+  equipped[slotId] = { quality, stats };
+  activeSlot = null;
+  renderSlots();
+  renderPicker();
+  renderStats();
+}
+
+function unequipSlot(slotId) {
+  if (!slotId) return;
+  delete equipped[slotId];
+  activeSlot = null;
+  renderSlots();
+  renderPicker();
+  renderStats();
+}
+
+function resetAll() {
+  Object.keys(equipped).forEach(k => delete equipped[k]);
+  activeSlot = null;
+  renderSlots();
+  renderPicker();
+  renderStats();
+}
+
+function toggleBuff(i) {
+  if (activeBuffs.has(i)) activeBuffs.delete(i);
+  else activeBuffs.add(i);
+  renderBuffs();
+  renderStats();
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+render();
+</script>
+</body>
+</html>
