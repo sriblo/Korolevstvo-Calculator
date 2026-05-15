@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>База предметов — Королевство</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --gold:    #d4a843;
+  --gold-l:  #f5d878;
+  --gold-d:  #a07d2b;
+  --bg:      #0b0907;
+  --bg2:     #120e09;
+  --bg3:     #1a160f;
+  --line:    rgba(212,168,67,.09);
+  --line2:   rgba(212,168,67,.18);
+  --txt:     #ece4cf;
+  --txt2:    #a99775;
+  --txt3:    #6c5d44;
+  --serif:   'Fraunces', Georgia, serif;
+  --sans:    'Inter', system-ui, sans-serif;
+
+  /* school colors */
+  --fire:    #c84a20;
+  --fire-l:  #f07040;
+  --fire-bg: rgba(200,74,32,.12);
+  --wind:    #2a7a5a;
+  --wind-l:  #50c090;
+  --wind-bg: rgba(42,122,90,.12);
+  --light:   #7a5ab0;
+  --light-l: #b090e0;
+  --light-bg:rgba(122,90,176,.12);
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--bg);color:var(--txt);font-family:var(--sans);font-size:14px;-webkit-font-smoothing:antialiased}
+body{min-height:100vh;background:radial-gradient(ellipse 80% 50% at 20% -10%,rgba(212,168,67,.1),transparent 60%),var(--bg);}
+a{color:inherit;text-decoration:none}
+
+/* ── HEADER ── */
+.top{padding:18px 40px;border-bottom:1px solid var(--line);background:rgba(11,9,7,.78);backdrop-filter:blur(20px);position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:18px;}
+.logo{display:flex;align-items:center;gap:12px}
+.logo img{width:30px;height:30px;filter:drop-shadow(0 0 10px rgba(212,168,67,.4))}
+.logo-n{font-family:var(--serif);font-size:17px;font-weight:600;letter-spacing:-.01em;line-height:1}
+.logo-s{font-size:11px;color:var(--txt3);margin-top:2px;letter-spacing:.02em}
+.nav{margin-left:28px;display:flex;gap:4px}
+.nav a{padding:7px 12px;border-radius:6px;font-size:13px;color:var(--txt2);font-weight:500;transition:background .12s,color .12s;}
+.nav a:hover{color:var(--txt);background:var(--bg2)}
+.nav a.on{color:var(--gold-l);background:var(--bg3)}
+.h-back{margin-left:auto;font-size:12px;color:var(--txt3);display:flex;align-items:center;gap:6px;transition:color .15s;}
+.h-back:hover{color:var(--gold-l)}
+.h-back::before{content:'←'}
+
+/* ── HERO ── */
+.hero{max-width:1100px;margin:0 auto;padding:56px 40px 40px;position:relative}
+.hero::after{content:'';position:absolute;top:-20px;right:-60px;width:420px;height:520px;background:url('kor_logo.svg') no-repeat center/contain;opacity:.05;pointer-events:none;z-index:0;transform:rotate(-8deg);-webkit-mask-image:linear-gradient(to top,transparent 0%,rgba(0,0,0,.15) 30%,rgba(0,0,0,.5) 55%,black 80%);mask-image:linear-gradient(to top,transparent 0%,rgba(0,0,0,.15) 30%,rgba(0,0,0,.5) 55%,black 80%);}
+.hero>*{position:relative;z-index:1}
+.h1{font-family:var(--serif);font-size:52px;line-height:1.05;font-weight:400;letter-spacing:-.025em;margin-bottom:14px}
+.h1 em{font-style:italic;color:var(--gold-l);font-weight:300}
+.lede{font-family:var(--serif);font-size:17px;line-height:1.55;color:var(--txt2);max-width:520px}
+
+/* ── PAGE ── */
+.page{max-width:1100px;margin:0 auto;padding:0 40px 80px}
+
+/* ── SECTION ── */
+.sec-h{display:flex;align-items:baseline;justify-content:space-between;padding:40px 0 20px;border-top:1px solid var(--line);gap:24px}
+.sec-h:first-child{border-top:none;padding-top:0}
+.sec-t{font-family:var(--serif);font-size:22px;font-weight:500;letter-spacing:-.01em}
+.sec-sub{font-family:var(--serif);font-size:13px;color:var(--txt3);font-style:italic}
+
+/* ── SCHOOL GROUP ── */
+.school-group{margin-bottom:32px}
+.school-label{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.school-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.school-name{font-size:11px;letter-spacing:.18em;text-transform:uppercase;font-weight:600;color:var(--txt3)}
+
+/* ── CLASS CARDS ── */
+.class-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.class-card{
+  border:1px solid var(--line);border-radius:10px;padding:20px 22px;
+  background:var(--bg2);cursor:pointer;transition:border-color .18s,background .18s,transform .15s;
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+  position:relative;overflow:hidden;
+}
+.class-card::before{content:'';position:absolute;inset:0;opacity:0;transition:opacity .2s}
+.class-card:hover{border-color:var(--line2);background:var(--bg3);transform:translateY(-1px)}
+.class-card.active{border-color:var(--line2)}
+
+.class-card[data-school="fire"]::before{background:var(--fire-bg)}
+.class-card[data-school="wind"]::before{background:var(--wind-bg)}
+.class-card[data-school="light"]::before{background:var(--light-bg)}
+.class-card:hover::before,.class-card.active::before{opacity:1}
+
+.class-card[data-school="fire"]:hover,.class-card[data-school="fire"].active{border-color:rgba(200,74,32,.35)}
+.class-card[data-school="wind"]:hover,.class-card[data-school="wind"].active{border-color:rgba(42,122,90,.35)}
+.class-card[data-school="light"]:hover,.class-card[data-school="light"].active{border-color:rgba(122,90,176,.35)}
+
+.cc-left{position:relative;z-index:1}
+.cc-name{font-family:var(--serif);font-size:20px;font-weight:500;letter-spacing:-.01em;margin-bottom:4px}
+.class-card[data-school="fire"]  .cc-name{color:var(--fire-l)}
+.class-card[data-school="wind"]  .cc-name{color:var(--wind-l)}
+.class-card[data-school="light"] .cc-name{color:var(--light-l)}
+.cc-sub{font-size:12px;color:var(--txt3);letter-spacing:.04em}
+.cc-arr{font-size:18px;color:var(--txt3);transition:transform .15s,color .15s;position:relative;z-index:1}
+.class-card:hover .cc-arr{transform:translateX(4px);color:var(--txt2)}
+
+/* ── ITEM TABLE PANEL ── */
+.item-panel{
+  display:none;
+  margin-top:10px;
+  border:1px solid var(--line);border-radius:10px;
+  background:var(--bg2);overflow:hidden;
+}
+.item-panel.open{display:block}
+
+.panel-header{
+  padding:16px 22px;border-bottom:1px solid var(--line);
+  display:flex;align-items:center;gap:12px;
+}
+.panel-title{font-family:var(--serif);font-size:17px;font-weight:500}
+.panel-close{margin-left:auto;font-size:18px;color:var(--txt3);cursor:pointer;transition:color .15s;line-height:1;padding:4px}
+.panel-close:hover{color:var(--txt)}
+
+/* quality tabs */
+.q-tabs{display:flex;gap:0;border-bottom:1px solid var(--line);padding:0 22px}
+.q-tab{
+  padding:10px 14px;font-size:12px;font-weight:600;letter-spacing:.06em;
+  cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;
+  transition:color .15s,border-color .15s;color:var(--txt3);
+}
+.q-tab:hover{color:var(--txt2)}
+.q-tab.on{border-bottom-color:var(--gold);color:var(--gold-l)}
+.q-tab[data-q="white"].on  {border-bottom-color:#ccc;color:#ccc}
+.q-tab[data-q="green"].on  {border-bottom-color:#6aaa40;color:#8acc60}
+.q-tab[data-q="blue"].on   {border-bottom-color:#4888cc;color:#78aae0}
+.q-tab[data-q="purple"].on {border-bottom-color:#9060cc;color:#b888ee}
+.q-tab[data-q="red"].on    {border-bottom-color:#cc3030;color:#ee5050}
+.q-tab[data-q="orange"].on {border-bottom-color:#cc7020;color:#f0a040}
+
+/* item rows */
+.item-table{width:100%;border-collapse:collapse}
+.item-table th{
+  padding:10px 16px;text-align:left;
+  font-size:10px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--txt3);font-weight:600;border-bottom:1px solid var(--line);
+  font-family:var(--sans);
+}
+.item-table td{
+  padding:11px 16px;border-bottom:1px solid rgba(212,168,67,.05);
+  font-family:var(--serif);font-size:14px;
+}
+.item-table tr:last-child td{border-bottom:none}
+.item-table tr:hover td{background:rgba(212,168,67,.03)}
+.slot-name{color:var(--txt2);font-weight:500}
+.stat-val{color:var(--txt);font-feature-settings:'tnum';text-align:right}
+.stat-empty{color:var(--txt3);text-align:right}
+.stat-badge{
+  display:inline-block;padding:1px 7px;border-radius:4px;
+  font-size:11px;font-weight:600;font-family:var(--sans);
+}
+
+/* ── RESPONSIVE ── */
+@media(max-width:700px){
+  .top{padding:12px 16px}
+  .nav{display:none}
+  .hero{padding:36px 16px 28px}
+  .h1{font-size:36px}
+  .page{padding:0 16px 60px}
+  .class-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <a class="logo" href="index_new.html">
+    <img src="kor_logo.svg" alt="">
+    <div>
+      <div class="logo-n">Korolevstvo</div>
+      <div class="logo-s">База знаний игроков · kor.ru</div>
+    </div>
+  </a>
+  <nav class="nav">
+    <a href="index_new.html">Калькуляторы</a>
+    <a class="on">База предметов</a>
+    <a>Гайды</a>
+  </nav>
+  <a class="h-back" href="index_new.html">На главную</a>
+</header>
+
+<div class="hero">
+  <h1 class="h1">База <em>предметов</em></h1>
+  <p class="lede">Статы экипировки по классам и качеству, артефакты, руны и бафы.</p>
+</div>
+
+<div class="page">
+
+  <!-- ── ЭКИПИРОВКА ── -->
+  <div class="sec-h">
+    <div>
+      <div class="sec-t">Экипировка</div>
+      <div class="sec-sub" style="margin-top:6px">Выбери класс чтобы посмотреть статы предметов</div>
+    </div>
+  </div>
+
+  <!-- Школа Огня -->
+  <div class="school-group">
+    <div class="school-label">
+      <div class="school-dot" style="background:var(--fire-l)"></div>
+      <div class="school-name" style="color:var(--fire-l)">Школа Огня</div>
+    </div>
+    <div class="class-grid">
+      <div class="class-card" data-school="fire" data-class="warrior" onclick="toggleClass(this)">
+        <div class="cc-left">
+          <div class="cc-name">Воин</div>
+          <div class="cc-sub">Школа Огня · ближний бой</div>
+        </div>
+        <div class="cc-arr">→</div>
+      </div>
+      <div class="class-card" data-school="fire" data-class="rogue" onclick="toggleClass(this)">
+        <div class="cc-left">
+          <div class="cc-name">Головорез</div>
+          <div class="cc-sub">Школа Огня · ближний бой</div>
+        </div>
+        <div class="cc-arr">→</div>
+      </div>
+    </div>
+    <div class="item-panel" id="panel-warrior">
+      <div class="panel-header">
+        <div class="panel-title">Воин — экипировка</div>
+        <div class="panel-close" onclick="closePanel('warrior')">✕</div>
+      </div>
+      <div class="q-tabs" id="qtabs-warrior">
+        <div class="q-tab" data-q="white"  onclick="setQ('warrior','white')">Белое</div>
+        <div class="q-tab" data-q="green"  onclick="setQ('warrior','green')">Зелёное</div>
+        <div class="q-tab" data-q="blue"   onclick="setQ('warrior','blue')">Синее</div>
+        <div class="q-tab on" data-q="purple" onclick="setQ('warrior','purple')">Фиолетовое</div>
+        <div class="q-tab" data-q="red"    onclick="setQ('warrior','red')">Красное</div>
+        <div class="q-tab" data-q="orange" onclick="setQ('warrior','orange')">Оранжевое</div>
+      </div>
+      <table class="item-table" id="table-warrior"></table>
+    </div>
+    <div class="item-panel" id="panel-rogue">
+      <div class="panel-header">
+        <div class="panel-title">Головорез — экипировка</div>
+        <div class="panel-close" onclick="closePanel('rogue')">✕</div>
+      </div>
+      <div class="q-tabs" id="qtabs-rogue">
+        <div class="q-tab" data-q="white"  onclick="setQ('rogue','white')">Белое</div>
+        <div class="q-tab" data-q="green"  onclick="setQ('rogue','green')">Зелёное</div>
+        <div class="q-tab" data-q="blue"   onclick="setQ('rogue','blue')">Синее</div>
+        <div class="q-tab on" data-q="purple" onclick="setQ('rogue','purple')">Фиолетовое</div>
+        <div class="q-tab" data-q="red"    onclick="setQ('rogue','red')">Красное</div>
+        <div class="q-tab" data-q="orange" onclick="setQ('rogue','orange')">Оранжевое</div>
+      </div>
+      <table class="item-table" id="table-rogue"></table>
+    </div>
+  </div>
+
+  <!-- Школа Ветра -->
+  <div class="school-group">
+    <div class="school-label">
+      <div class="school-dot" style="background:var(--wind-l)"></div>
+      <div class="school-name" style="color:var(--wind-l)">Школа Ветра</div>
+    </div>
+    <div class="class-grid">
+      <div class="class-card" data-school="wind" data-class="mage" onclick="toggleClass(this)">
+        <div class="cc-left">
+          <div class="cc-name">Маг</div>
+          <div class="cc-sub">Школа Ветра · дальний бой</div>
+        </div>
+        <div class="cc-arr">→</div>
+      </div>
+      <div class="class-card" data-school="wind" data-class="archer" onclick="toggleClass(this)">
+        <div class="cc-left">
+          <div class="cc-name">Лучник</div>
+          <div class="cc-sub">Школа Ветра · дальний бой</div>
+        </div>
+        <div class="cc-arr">→</div>
+      </div>
+    </div>
+    <div class="item-panel" id="panel-mage">
+      <div class="panel-header">
+        <div class="panel-title">Маг — экипировка</div>
+        <div class="panel-close" onclick="closePanel('mage')">✕</div>
+      </div>
+      <div class="q-tabs" id="qtabs-mage">
+        <div class="q-tab" data-q="white"  onclick="setQ('mage','white')">Белое</div>
+        <div class="q-tab" data-q="green"  onclick="setQ('mage','green')">Зелёное</div>
+        <div class="q-tab" data-q="blue"   onclick="setQ('mage','blue')">Синее</div>
+        <div class="q-tab on" data-q="purple" onclick="setQ('mage','purple')">Фиолетовое</div>
+        <div class="q-tab" data-q="red"    onclick="setQ('mage','red')">Красное</div>
+        <div class="q-tab" data-q="orange" onclick="setQ('mage','orange')">Оранжевое</div>
+      </div>
+      <table class="item-table" id="table-mage"></table>
+    </div>
+    <div class="item-panel" id="panel-archer">
+      <div class="panel-header">
+        <div class="panel-title">Лучник — экипировка</div>
+        <div class="panel-close" onclick="closePanel('archer')">✕</div>
+      </div>
+      <div class="q-tabs" id="qtabs-archer">
+        <div class="q-tab" data-q="white"  onclick="setQ('archer','white')">Белое</div>
+        <div class="q-tab" data-q="green"  onclick="setQ('archer','green')">Зелёное</div>
+        <div class="q-tab" data-q="blue"   onclick="setQ('archer','blue')">Синее</div>
+        <div class="q-tab on" data-q="purple" onclick="setQ('archer','purple')">Фиолетовое</div>
+        <div class="q-tab" data-q="red"    onclick="setQ('archer','red')">Красное</div>
+        <div class="q-tab" data-q="orange" onclick="setQ('archer','orange')">Оранжевое</div>
+      </div>
+      <table class="item-table" id="table-archer"></table>
+    </div>
+  </div>
+
+  <!-- Школа Света -->
+  <div class="school-group">
+    <div class="school-label">
+      <div class="school-dot" style="background:var(--light-l)"></div>
+      <div class="school-name" style="color:var(--light-l)">Школа Света</div>
+    </div>
+    <div class="class-grid">
+      <div class="class-card" data-school="light" data-class="paladin" onclick="toggleClass(this)">
+        <div class="cc-left">
+          <div class="cc-name">Паладин</div>
+          <div class="cc-sub">Школа Света · ближний бой</div>
+        </div>
+        <div class="cc-arr">→</div>
+      </div>
+      <div class="class-card" data-school="light" data-class="monk" onclick="toggleClass(this)">
+        <div class="cc-left">
+          <div class="cc-name">Монах</div>
+          <div class="cc-sub">Школа Света · ближний бой</div>
+        </div>
+        <div class="cc-arr">→</div>
+      </div>
+    </div>
+    <div class="item-panel" id="panel-paladin">
+      <div class="panel-header">
+        <div class="panel-title">Паладин — экипировка</div>
+        <div class="panel-close" onclick="closePanel('paladin')">✕</div>
+      </div>
+      <div class="q-tabs" id="qtabs-paladin">
+        <div class="q-tab" data-q="white"  onclick="setQ('paladin','white')">Белое</div>
+        <div class="q-tab" data-q="green"  onclick="setQ('paladin','green')">Зелёное</div>
+        <div class="q-tab" data-q="blue"   onclick="setQ('paladin','blue')">Синее</div>
+        <div class="q-tab on" data-q="purple" onclick="setQ('paladin','purple')">Фиолетовое</div>
+        <div class="q-tab" data-q="red"    onclick="setQ('paladin','red')">Красное</div>
+        <div class="q-tab" data-q="orange" onclick="setQ('paladin','orange')">Оранжевое</div>
+      </div>
+      <table class="item-table" id="table-paladin"></table>
+    </div>
+    <div class="item-panel" id="panel-monk">
+      <div class="panel-header">
+        <div class="panel-title">Монах — экипировка</div>
+        <div class="panel-close" onclick="closePanel('monk')">✕</div>
+      </div>
+      <div class="q-tabs" id="qtabs-monk">
+        <div class="q-tab" data-q="white"  onclick="setQ('monk','white')">Белое</div>
+        <div class="q-tab" data-q="green"  onclick="setQ('monk','green')">Зелёное</div>
+        <div class="q-tab" data-q="blue"   onclick="setQ('monk','blue')">Синее</div>
+        <div class="q-tab on" data-q="purple" onclick="setQ('monk','purple')">Фиолетовое</div>
+        <div class="q-tab" data-q="red"    onclick="setQ('monk','red')">Красное</div>
+        <div class="q-tab" data-q="orange" onclick="setQ('monk','orange')">Оранжевое</div>
+      </div>
+      <table class="item-table" id="table-monk"></table>
+    </div>
+  </div>
+
+  <!-- Заглушки для будущих разделов -->
+  <div class="sec-h">
+    <div>
+      <div class="sec-t" style="color:var(--txt3)">Артефакты</div>
+      <div class="sec-sub" style="margin-top:6px">Скоро</div>
+    </div>
+  </div>
+  <div class="sec-h">
+    <div>
+      <div class="sec-t" style="color:var(--txt3)">Руны</div>
+      <div class="sec-sub" style="margin-top:6px">Скоро</div>
+    </div>
+  </div>
+  <div class="sec-h">
+    <div>
+      <div class="sec-t" style="color:var(--txt3)">Бафы</div>
+      <div class="sec-sub" style="margin-top:6px">Скоро</div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ── DATA ──────────────────────────────────────────────────────────────────
+// Формат: ITEMS[class][slot][quality] = { atk, def, hp, crit_chance, crit_dmg, ... }
+// Данные будут добавляться по мере заполнения базы
+
+const SLOTS = [
+  { id: 'weapon',    name: 'Оружие' },
+  { id: 'helm',      name: 'Шлем' },
+  { id: 'chest',     name: 'Нагрудник' },
+  { id: 'shoulders', name: 'Наплечники' },
+  { id: 'pants',     name: 'Штаны' },
+  { id: 'gloves',    name: 'Перчатки' },
+  { id: 'belt',      name: 'Пояс' },
+  { id: 'boots',     name: 'Сапоги' },
+  { id: 'offhand',   name: 'Второе оружие' },
+  { id: 'amulet',    name: 'Амулет' },
+  { id: 'talisman',  name: 'Талисман' },
+  { id: 'bracelet',  name: 'Браслет' },
+  { id: 'ring1',     name: 'Кольцо 1' },
+  { id: 'ring2',     name: 'Кольцо 2' },
+  { id: 'token',     name: 'Жетон' },
+  { id: 'charm',     name: 'Брелок' },
+  { id: 'flask',     name: 'Фляжка' },
+  { id: 'bag',       name: 'Боевая сумка' },
+  { id: 'trophy',    name: 'Трофей' },
+];
+
+const QUALITIES = ['white','green','blue','purple','red','orange'];
+
+// База данных — пока пустая, будет заполняться
+const ITEMS = {
+  warrior: {},
+  rogue:   {},
+  mage:    {},
+  archer:  {},
+  paladin: {},
+  monk:    {},
+};
+
+// Текущее качество для каждого класса
+const currentQ = { warrior:'purple', rogue:'purple', mage:'purple', archer:'purple', paladin:'purple', monk:'purple' };
+
+// ── RENDER TABLE ──────────────────────────────────────────────────────────
+function renderTable(cls) {
+  const q   = currentQ[cls];
+  const tbl = document.getElementById('table-' + cls);
+  const data = ITEMS[cls];
+
+  let html = `<thead><tr>
+    <th>Слот</th>
+    <th style="text-align:right">Атака</th>
+    <th style="text-align:right">Защита</th>
+    <th style="text-align:right">Здоровье</th>
+    <th style="text-align:right">Крит %</th>
+    <th style="text-align:right">Крит сила</th>
+  </tr></thead><tbody>`;
+
+  for (const slot of SLOTS) {
+    const item = data[slot.id]?.[q];
+    html += `<tr>
+      <td class="slot-name">${slot.name}</td>
+      ${statCell(item?.atk)}
+      ${statCell(item?.def)}
+      ${statCell(item?.hp)}
+      ${statCell(item?.crit_chance, '%')}
+      ${statCell(item?.crit_dmg)}
+    </tr>`;
+  }
+
+  html += '</tbody>';
+  tbl.innerHTML = html;
+}
+
+function statCell(val, suffix='') {
+  if (val == null) return `<td class="stat-empty">—</td>`;
+  return `<td class="stat-val">${val}${suffix}</td>`;
+}
+
+// ── CONTROLS ─────────────────────────────────────────────────────────────
+function toggleClass(card) {
+  const cls   = card.dataset.class;
+  const panel = document.getElementById('panel-' + cls);
+  const isOpen = panel.classList.contains('open');
+
+  // закрываем все панели
+  document.querySelectorAll('.item-panel').forEach(p => p.classList.remove('open'));
+  document.querySelectorAll('.class-card').forEach(c => c.classList.remove('active'));
+
+  if (!isOpen) {
+    panel.classList.add('open');
+    card.classList.add('active');
+    renderTable(cls);
+    setTimeout(() => panel.scrollIntoView({ behavior:'smooth', block:'nearest' }), 50);
+  }
+}
+
+function closePanel(cls) {
+  document.getElementById('panel-' + cls).classList.remove('open');
+  document.querySelectorAll(`.class-card[data-class="${cls}"]`).forEach(c => c.classList.remove('active'));
+}
+
+function setQ(cls, q) {
+  currentQ[cls] = q;
+  document.querySelectorAll(`#qtabs-${cls} .q-tab`).forEach(t => t.classList.toggle('on', t.dataset.q === q));
+  renderTable(cls);
+}
+</script>
+</body>
+</html>
