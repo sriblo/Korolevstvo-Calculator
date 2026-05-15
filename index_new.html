@@ -221,7 +221,10 @@
             mask-image:linear-gradient(90deg, transparent 10%, #000 70%);
   }
   .tool:hover::after{opacity:.32}
+  .tool[data-t="loc"]::after{background-image:url('all_images/honour.jpg')}
   .tool[data-t="rep"]::after{background-image:url('all_images/reputations.jpg')}
+  .tool[data-t="pets"]::after{background-image:url('all_images/fair_new.jpg')}
+  .tool[data-t="sets"]::after{background-image:url('all_images/sets.jpg')}
   .tool:hover{border-color:var(--line2);background:var(--bg3)}
   .tool-h{display:flex;align-items:center;gap:14px}
   .tool-ico{font-size:24px}
@@ -447,24 +450,27 @@
 
   <div class="sec-h">
     <div>
-      <div class="sec-t">Постоянные <em>инструменты</em></div>
-      <div class="sec-d" style="margin-top:8px">Работают круглый год, не привязаны к ивентам.</div>
+      <div class="sec-t">Другие инструменты</div>
     </div>
-    <div class="sec-c">3 инструмента</div>
   </div>
   <div class="tools">
     <a class="tool" data-t="loc" href="location_calc/loc_calc.html">
-      <div class="tool-h"><div class="tool-ico">🗺️</div><div class="tool-name">Загруженность копий</div></div>
+      <div class="tool-h"><div class="tool-name">Калькулятор загруженности копий</div></div>
       <div class="tool-d">Сколько игроков вражеской расы сейчас находится в локации и в каждой конкретной копии.</div>
       <div class="tool-l">Открыть</div>
     </a>
     <a class="tool" data-t="rep" href="reputation_calc/rep_calc.html">
-      <div class="tool-h"><div class="tool-ico">⚔️</div><div class="tool-name">Прокачка репутаций</div></div>
+      <div class="tool-h"><div class="tool-name">Калькулятор прокачки репутаций</div></div>
       <div class="tool-d">Сколько дней до нужного ранга — выбери репутацию, текущий ранг и темп.</div>
       <div class="tool-l">Открыть</div>
     </a>
+    <div class="tool soon" data-t="sets">
+      <div class="tool-h"><div class="tool-name">Калькулятор характеристик</div></div>
+      <div class="tool-d">Сравнение снаряжения и расчёт характеристик персонажа.</div>
+      <div class="tool-l">скоро</div>
+    </div>
     <div class="tool soon" data-t="pets">
-      <div class="tool-h"><div class="tool-ico">🐾</div><div class="tool-name">Ярмарочные питомцы</div></div>
+      <div class="tool-h"><div class="tool-name">Ярмарочные питомцы</div></div>
       <div class="tool-d">Каталог и сравнение — характеристики, способности и советы по выбору.</div>
       <div class="tool-l">скоро</div>
     </div>
@@ -507,14 +513,6 @@
   </div>
 </footer>
 
-<!-- Tone picker -->
-<div class="tone">
-  <span class="tone-l">Оттенок</span>
-  <button class="tone-btn on" data-t="amber" title="Тёплое янтарное"><span class="swatch"></span></button>
-  <button class="tone-btn"    data-t="brass" title="Холодное латунное"><span class="swatch"></span></button>
-  <button class="tone-btn"    data-t="sand"  title="Бледный песочный"><span class="swatch"></span></button>
-</div>
-
 <script>
   // Days left until end of current event (May 26, 2026)
   (function() {
@@ -526,20 +524,6 @@
     document.getElementById('days-left2').textContent = d;
   })();
 
-  // Persist tone choice
-  const savedTone = localStorage.getItem('kor-tone') || 'amber';
-  applyTone(savedTone);
-  document.querySelectorAll('.tone-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const t = btn.dataset.t;
-      applyTone(t);
-      localStorage.setItem('kor-tone', t);
-    });
-  });
-  function applyTone(t) {
-    document.documentElement.dataset.tone = t === 'amber' ? '' : t;
-    document.querySelectorAll('.tone-btn').forEach(b => b.classList.toggle('on', b.dataset.t === t));
-  }
 </script>
 
 </body>
