@@ -242,6 +242,8 @@ a{color:inherit;text-decoration:none}
 .art-section-divider::before,.art-section-divider::after{
   content:'';flex:1;height:1px;background:var(--line);
 }
+/* all item names wrap, never truncate */
+.buff-name,.rune-name,.eq-slot-name,.c-title{overflow-wrap:break-word;word-break:normal;white-space:normal}
 .buff-name{font-family:var(--serif);font-size:14px;font-weight:500;color:var(--txt);line-height:1.3}
 .buff-cls{font-size:11px;color:var(--txt3);margin-top:2px}
 .eq-card:hover{cursor:default;border-color:var(--line2);background:var(--bg3)}
