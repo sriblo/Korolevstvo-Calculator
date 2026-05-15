@@ -646,6 +646,11 @@ function renderBuffsClass(c) {
     <div class="buff-grid">${cards}${wfCard}</div>`;
 }
 
+const QUALITY_ORDER = ['white','green','blue','purple','purple_plus','red','orange'];
+function sortByQuality(arr) {
+  return [...arr].sort((a,b) => QUALITY_ORDER.indexOf(a.quality) - QUALITY_ORDER.indexOf(b.quality));
+}
+
 function renderArtifacts(c) {
   function artCard(art, i) {
     return `<div class="buff-card" onmouseenter="ttShowArt(${i},event)" onmousemove="ttMove(event)" onmouseleave="ttHide()">
@@ -655,13 +660,13 @@ function renderArtifacts(c) {
   }
 
   const groups = ['Камень Дружбы', 'Камень Потерянных Земель', 'Камень Крови'];
-  const unique  = ARTIFACTS.filter(a => !groups.includes(a.name));
+  const unique  = sortByQuality(ARTIFACTS.filter(a => !groups.includes(a.name)));
   const idxOf   = a => ARTIFACTS.indexOf(a);
 
   let html = `<div class="c-title">Артефакты</div><div class="buff-grid">${unique.map(a => artCard(a, idxOf(a))).join('')}</div>`;
 
   for (const name of groups) {
-    const group = ARTIFACTS.filter(a => a.name === name);
+    const group = sortByQuality(ARTIFACTS.filter(a => a.name === name));
     if (group.length) {
       html += `<div class="art-section-divider">${name}</div>
                <div class="buff-grid">${group.map(a => artCard(a, idxOf(a))).join('')}</div>`;
