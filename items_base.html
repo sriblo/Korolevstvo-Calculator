@@ -170,15 +170,10 @@ a{color:inherit;text-decoration:none}
   transition:background .12s,border-color .12s;
 }
 .rune-row:hover{background:var(--bg2);border-color:var(--line)}
-.rune-ico{width:34px;height:34px;border-radius:5px;background:var(--bg4);border:1px solid var(--line2);flex-shrink:0;overflow:hidden;display:flex;align-items:center;justify-content:center}
-.rune-ico img{width:100%;height:100%;object-fit:cover}
-.rune-ico.white      {border-color:#aaaaaa;box-shadow:0 0 6px rgba(170,170,170,.3)}
-.rune-ico.green      {border-color:#6aaa40;box-shadow:0 0 6px rgba(106,170,64,.4)}
-.rune-ico.blue       {border-color:#4888cc;box-shadow:0 0 6px rgba(72,136,204,.4)}
-.rune-ico.purple     {border-color:#9060cc;box-shadow:0 0 6px rgba(144,96,204,.4)}
-.rune-ico.purple_plus{border-color:#c070e0;box-shadow:0 0 6px rgba(192,112,224,.5)}
-.rune-ico.red        {border-color:#cc3030;box-shadow:0 0 6px rgba(204,48,48,.4)}
-.rune-ico.orange     {border-color:#cc7020;box-shadow:0 0 7px rgba(204,112,32,.5)}
+.rune-ico{width:34px;height:34px;border-radius:3px;background:var(--bg4);flex-shrink:0;overflow:hidden;position:relative;display:flex;align-items:center;justify-content:center}
+
+.ico-img{width:100%;height:100%;object-fit:cover;border-radius:3px}
+.ico-frame{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
 .rune-info{flex:1;min-width:0}
 .rune-name{font-family:var(--serif);font-size:15px;font-weight:500;margin-bottom:3px}
 .rune-meta{font-size:11px;color:var(--txt3);display:flex;gap:10px;align-items:center;flex-wrap:wrap}
@@ -322,6 +317,23 @@ const ITEMS = {
   warrior:{}, rogue:{}, monk:{}, paladin:{}, mage:{}, archer:{}
 };
 
+
+const QUALITY_FRAME = {
+  white:       'frames/border_none.png',
+  green:       'frames/border_low.png',
+  blue:        'frames/border_medium.png',
+  purple:      'frames/border_high.png',
+  purple_plus: 'frames/border_high.png',
+  red:         'frames/border_exclusive.png',
+  orange:      'frames/border_special.png',
+};
+function icoHtml(img, quality) {
+  const frame = QUALITY_FRAME[quality] || '';
+  return `<div class="rune-ico">` +
+    `<img class="ico-img" src="${img}" alt="" onerror="this.style.opacity=0">` +
+    (frame ? `<img class="ico-frame" src="${frame}" alt="">` : '') +
+    `</div>`;
+}
 const RUNES = [
   { name:'Титанитовая Великая Руна Фальдира',   slot:'Оружие',        quality:'red',    img:'stats_calculator/rune/rune_weapon.png' },
   { name:'Руна Пяти Камней',                    slot:'Второе оружие', quality:'red',    img:'stats_calculator/rune/rune_attack_weapon2_1.png' },
@@ -399,7 +411,7 @@ function renderRunes(c) {
   const qlabels = Object.fromEntries(QUALITIES.map(q => [q.id, q.label]));
   const rows = RUNES.map(r => `
     <div class="rune-row">
-      <div class="rune-ico ${r.quality}"><img src="${r.img}" alt="" onerror="this.style.display='none'"></div>
+      ${icoHtml(r.img, r.quality)}
       <div class="rune-info">
         <div class="rune-name">${r.name}</div>
         <div class="rune-meta">
@@ -436,7 +448,7 @@ function renderBuffsClass(c) {
 
   const rows = CLASS_BUFFS.map(b => `
     <div class="rune-row">
-      <div class="rune-ico ${b.quality}"><img src="${b.img}" alt="" onerror="this.style.display='none'"></div>
+      ${icoHtml(b.img, b.quality)}
       <div class="rune-info">
         <div class="rune-name">${b.name}</div>
         <div class="rune-meta">
@@ -455,7 +467,7 @@ function renderBuffsClass(c) {
 
     <div style="margin-top:28px"></div>
     <div class="rune-row" style="border:1px solid rgba(212,168,67,.15);background:rgba(212,168,67,.04);border-radius:8px">
-      <div class="rune-ico ${wf.quality}"><img src="${wf.img}" alt="" onerror="this.style.display='none'"></div>
+      ${icoHtml(wf.img, wf.quality)}
       <div class="rune-info">
         <div class="rune-name">${wf.name}</div>
         <div class="rune-meta" style="flex-direction:column;align-items:flex-start;gap:4px">
