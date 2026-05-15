@@ -333,18 +333,18 @@ const CLASS_NAMES = {
 };
 
 const QUALITIES = [
-  { id:'white',       label:'Белое' },
-  { id:'green',       label:'Зелёное' },
-  { id:'blue',        label:'Синее' },
-  { id:'purple',      label:'Фиолетовое' },
-  { id:'purple_plus', label:'Фиол.+' },
-  { id:'red',         label:'Красное' },
-  { id:'orange',      label:'Оранжевое' },
+  { id:'white',       label:'Обычный' },
+  { id:'green',       label:'Редкий' },
+  { id:'blue',        label:'Элитный' },
+  { id:'purple',      label:'Героический' },
+  { id:'purple_plus', label:'Усил. героический' },
+  { id:'red',         label:'Легендарный' },
+  { id:'orange',      label:'Эпический' },
 ];
 
 const CLASS_SET_NAMES = {
-  warrior: { white:'Решимости',  green:'Отваги',  blue:'Разрушителя',  purple:'Непримиримости', purple_plus:'Непримиримости (усил.)', red:'Доблести',   orange:'' },
-  paladin: { white:'Праведника', green:'Веры',    blue:'Благочестия',  purple:'Истины',          purple_plus:'Истины (усил.)',          red:'Избранного', orange:'' },
+  warrior: { white:'Решимости',  green:'Отваги',  blue:'Разрушителя',  purple:'Непримиримости', purple_plus:'Непримиримости', red:'Доблести',   orange:'' },
+  paladin: { white:'Праведника', green:'Веры',    blue:'Благочестия',  purple:'Истины',          purple_plus:'Истины',          red:'Избранного', orange:'' },
   rogue:   {},
   monk:    {},
   mage:    {},
@@ -449,6 +449,16 @@ const RUNES = [
 let activeQ   = 'purple';
 let activeCls = 'warrior';
 
+/* префикс "Усиленный/Усиленные" по названию предмета */
+const УСИЛ = {
+  'Меч':'Усиленный',     'Щит':'Усиленный',     'Шлем':'Усиленный',
+  'Нагрудник':'Усиленный','Пояс':'Усиленный',    'Молот':'Усиленный',
+  'Посох':'Усиленный',   'Орб':'Усиленный',      'Кинжал':'Усиленный',
+  'Лук':'Усиленный',     'Колчан':'Усиленный',
+  'Наплечники':'Усиленные','Штаны':'Усиленные',  'Перчатки':'Усиленные',
+  'Сапоги':'Усиленные',
+};
+
 const CLASS_ICON_FILE = {
   warrior:'warrior.png', rogue:'rogue.png', monk:'cleric.png',
   paladin:'paladin.png', mage:'mage.png',   archer:'shooter.png',
@@ -504,7 +514,8 @@ function renderEquipment(c) {
       ico = `<div class="eq-no-img"></div>`;
     }
     const baseName = CLASS_ITEM_NAMES[activeCls]?.[slot.id] || slot.name;
-    const itemName = setName ? `${baseName} ${setName}` : baseName;
+    const prefix = activeQ === 'purple_plus' ? (УСИЛ[baseName] || 'Усиленный') + ' ' : '';
+    const itemName = setName ? `${prefix}${baseName} ${setName}` : `${prefix}${baseName}`;
     return `<div class="eq-card" onmouseenter="ttShow('${activeCls}','${slot.id}','${activeQ}','${itemName}',event)" onmousemove="ttMove(event)" onmouseleave="ttHide()">${ico}<div class="eq-slot-name">${itemName}</div></div>`;
   }).join('');
 
