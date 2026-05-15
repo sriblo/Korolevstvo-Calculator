@@ -563,8 +563,15 @@ const QUALITY_LEVEL = {
 
 const CLASS_SLOTS_IMG = {
   warrior: { weapon:'sword', offhand:'shield', helm:'helm', chest:'chest', shoulders:'shoulders', pants:'pants', gloves:'gloves', belt:'belt', boots:'boots' },
-  paladin: { weapon:'hammer', offhand:'shield', helm:'helm', chest:'chest', shoulders:'shoulders', pants:'pants', gloves:'gloves', belt:'belt', boots:'boots' },
+  paladin: { weapon:'hammer', offhand:'relic', helm:'helm', chest:'chest', shoulders:'shoulders', pants:'pants', gloves:'gloves', belt:'belt', boots:'boots' },
 };
+
+// Paths differ per class due to folder naming inconsistencies
+function getClassSetPath(cls, quality) {
+  if (cls === 'warrior') return `stats_calculator/classes/warrior/warrior/warrior_sets/${quality}_set/elf`;
+  if (cls === 'paladin') return `stats_calculator/classes/paladin/palladin_sets/${quality}_set/elf`;
+  return `stats_calculator/classes/${cls}/${cls}_sets/${quality}_set/elf`;
+}
 
 function getItemImg(cls, slotId, quality) {
   const slotMap = CLASS_SLOTS_IMG[cls];
@@ -573,7 +580,8 @@ function getItemImg(cls, slotId, quality) {
   if (!slotFile) return null;
   const lvl = QUALITY_LEVEL[quality];
   if (!lvl) return null;
-  return `stats_calculator/classes/${cls}/${cls}_sets/${quality}_set/elf/${cls}_${slotFile}_${lvl}_elf.png`;
+  const dir = getClassSetPath(cls, quality);
+  return `${dir}/${cls}_${slotFile}_${lvl}_elf.png`;
 }
 
 const SLOT_PH = {
@@ -585,7 +593,7 @@ const SLOT_PH = {
 };
 
 // Warrior white set as grayscale placeholders for armor/weapon slots
-const BASE = 'stats_calculator/classes/warrior/warrior_sets/white_set/elf/warrior_';
+const BASE = 'stats_calculator/classes/warrior/warrior/warrior_sets/white_set/elf/warrior_';
 const WARRIOR_PH = {
   weapon:    BASE+'sword_10_elf.png',
   offhand:   BASE+'shield_10_elf.png',
