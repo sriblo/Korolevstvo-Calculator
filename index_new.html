@@ -139,8 +139,8 @@
   .sec{max-width:1180px;margin:0 auto;padding:0 40px}
   .sec-h{display:flex;align-items:baseline;justify-content:space-between;padding:48px 0 24px;border-top:1px solid var(--line);gap:24px}
   .sec-h:first-child{border-top:none;padding-top:8px}
-  .sec-t{font-family:var(--serif);font-size:26px;font-weight:500;letter-spacing:-.015em}
-  .sec-t em{font-style:italic;color:var(--gold-l);font-weight:300}
+  .sec-t{font-family:var(--serif);font-size:26px;font-weight:500;letter-spacing:-.015em;color:var(--txt)}
+  .sec-t em{font-style:normal;color:inherit;font-weight:inherit}
   .sec-d{font-family:var(--serif);font-style:italic;font-size:14px;color:var(--txt3);max-width:300px;line-height:1.5}
   .sec-c{font-size:11px;color:var(--txt3);letter-spacing:.16em;text-transform:uppercase;font-weight:600;font-feature-settings:'tnum';flex-shrink:0}
 
@@ -157,14 +157,16 @@
     background:#13110d center/cover no-repeat;
   }
   /* Thematic posters per event */
+  .card[data-ev="glubin"]   .poster{background-image:url('all_images/event_titles/zov_glubin.png')}
   .card[data-ev="hop"]      .poster{background-image:url('all_images/event_titles/hmeli.jpg')}
+  .card[data-ev="flower"]   .poster{background-image:url('all_images/event_titles/valentine.jpg')}
   .card[data-ev="exp1"]     .poster{background-image:url('all_images/event_titles/expedition.jpg')}
   .card[data-ev="ny"]       .poster{background-image:url('all_images/event_titles/colder.jpg')}
   .card[data-ev="pumpkin"]  .poster{background-image:url('all_images/event_titles/halloween.jpg')}
   .card[data-ev="dragon"]   .poster{background-image:url('all_images/event_titles/dragons.jpg')}
   .card[data-ev="goblin"]   .poster{background-image:url('all_images/event_titles/goblin.jpg')}
+  .card[data-ev="ice"]      .poster{background-image:url('all_images/event_titles/expedition.jpg')}
   .card[data-ev="pirate"]   .poster{background-image:url('all_images/event_titles/pirate_day.jpg')}
-  .card[data-ev="glubin"]   .poster{background-image:url('all_images/event_titles/zov_glubin.png')}
   .card[data-ev="birthday"] .poster{background-image:url('all_images/event_titles/birthday.jpg')}
   .poster::before{
     content:'';position:absolute;inset:0;
@@ -368,7 +370,7 @@
 
   <div class="grid">
     <a class="card active" data-ev="glubin" href="zov_glubin/glubin_calc.html">
-      <div class="poster"><span class="pill">Сейчас</span></div>
+      <div class="poster"><span class="pill">Проходит сейчас</span></div>
       <div class="card-b">
         <div class="card-name">Зов глубин</div>
         <div class="card-meta">МАЙ · осталось <span id="days-left2">12</span> дней</div>
@@ -388,7 +390,7 @@
     <div class="card soon" data-ev="flower">
       <div class="poster"><span class="pill">Скоро</span></div>
       <div class="card-b">
-        <div class="card-name">Пробуждение цветов</div>
+        <div class="card-name">Месяц пробуждения цветов</div>
         <div class="card-meta">МАРТ · весенний ивент</div>
         <div class="card-desc">Калькулятор в разработке.</div>
         <div class="card-foot"><span>в разработке</span></div>
@@ -397,7 +399,7 @@
     <div class="card soon" data-ev="exp1">
       <div class="poster"><span class="pill">Скоро</span></div>
       <div class="card-b">
-        <div class="card-name">Сбор припасов</div>
+        <div class="card-name">Экспедиция: Сбор припасов</div>
         <div class="card-meta">ФЕВРАЛЬ · экспедиция</div>
         <div class="card-desc">Калькулятор в разработке.</div>
         <div class="card-foot"><span>в разработке</span></div>
@@ -424,7 +426,7 @@
     <div class="card soon" data-ev="dragon">
       <div class="poster"><span class="pill">Скоро</span></div>
       <div class="card-b">
-        <div class="card-name">Небесные драконы</div>
+        <div class="card-name">Небесные Драконы</div>
         <div class="card-meta">СЕНТЯБРЬ</div>
         <div class="card-desc">Сентябрьский ивент.</div>
         <div class="card-foot"><span>в разработке</span></div>
@@ -433,7 +435,7 @@
     <div class="card soon" data-ev="goblin">
       <div class="poster"><span class="pill">Скоро</span></div>
       <div class="card-b">
-        <div class="card-name">Гоблинский рай</div>
+        <div class="card-name">Гоблинский Рай</div>
         <div class="card-meta">АВГУСТ</div>
         <div class="card-desc">Августовский ивент.</div>
         <div class="card-foot"><span>в разработке</span></div>
@@ -442,9 +444,18 @@
     <div class="card soon" data-ev="ice">
       <div class="poster"><span class="pill">Скоро</span></div>
       <div class="card-b">
-        <div class="card-name">Ледяные острова</div>
+        <div class="card-name">Экспедиция: Ледяные острова</div>
         <div class="card-meta">ИЮЛЬ · экспедиция</div>
-        <div class="card-desc">Июльская экспедиция.</div>
+        <div class="card-desc">Калькулятор в разработке.</div>
+        <div class="card-foot"><span>в разработке</span></div>
+      </div>
+    </div>
+    <div class="card soon" data-ev="pirate">
+      <div class="poster"><span class="pill">Скоро</span></div>
+      <div class="card-b">
+        <div class="card-name">День Пирата</div>
+        <div class="card-meta">ИЮНЬ</div>
+        <div class="card-desc">Калькулятор в разработке.</div>
         <div class="card-foot"><span>в разработке</span></div>
       </div>
     </div>
