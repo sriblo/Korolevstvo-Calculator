@@ -219,22 +219,22 @@ a{color:inherit;text-decoration:none}
 .eq-no-img{width:32px;height:32px;background:var(--bg4);border-radius:4px;border:1px dashed var(--line2);display:flex;align-items:center;justify-content:center;color:var(--txt3);font-size:10px;opacity:.4}
 
 /* buff cards */
-.buff-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px}
+.buff-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px}
 .buff-card{
-  display:flex;flex-direction:column;align-items:center;gap:6px;
-  padding:16px 12px 14px;text-align:center;
+  display:flex;flex-direction:row;align-items:center;gap:12px;
+  padding:12px 14px;
   background:var(--bg2);border:1px solid var(--line);border-radius:10px;
-  transition:border-color .15s,background .15s;
+  transition:border-color .15s,background .15s;cursor:default;
 }
 .buff-card:hover{border-color:var(--line2);background:var(--bg3)}
 .buff-card.special{border-color:rgba(212,168,67,.2);background:rgba(212,168,67,.04)}
 .buff-ico{width:32px;height:32px;flex-shrink:0}
-.buff-ico img{display:block;width:32px;height:32px;image-rendering:pixelated}
-.buff-card .rune-ico{width:32px;height:32px}
+.buff-ico img{display:block;width:32px;height:32px}
+.buff-card .rune-ico{width:32px;height:32px;flex-shrink:0}
 .buff-card .ico-img{width:32px;height:32px;object-fit:none}
-.buff-name{font-family:var(--serif);font-size:14px;font-weight:500;color:var(--txt);line-height:1.2}
-.buff-cls{font-size:11px;color:var(--txt3)}
-.buff-effect{font-size:12px;color:var(--txt2)}
+.buff-text{flex:1;min-width:0}
+.buff-name{font-family:var(--serif);font-size:14px;font-weight:500;color:var(--txt);line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.buff-cls{font-size:11px;color:var(--txt3);margin-top:2px}
 .eq-card:hover{cursor:default;border-color:var(--line2);background:var(--bg3)}
 
 /* item tooltip */
@@ -604,15 +604,17 @@ function renderBuffsClass(c) {
   const cards = CLASS_BUFFS.map((b, i) => `
     <div class="buff-card" onmouseenter="ttShowBuff(${i},event)" onmousemove="ttMove(event)" onmouseleave="ttHide()">
       <div class="buff-ico"><img src="${b.img}" onerror="this.style.opacity=0"></div>
-      <div class="buff-name">${b.name}</div>
-      <div class="buff-cls">${b.cls}</div>
+      <div class="buff-text">
+        <div class="buff-name">${b.name}</div>
+        <div class="buff-cls">${b.cls}</div>
+      </div>
     </div>`).join('');
 
   const wf = WITCH_FLAME;
   const wfCard = `
     <div class="buff-card special" onmouseenter="ttShowWF(event)" onmousemove="ttMove(event)" onmouseleave="ttHide()">
       <div class="buff-ico"><img src="${wf.img}" onerror="this.style.opacity=0"></div>
-      <div class="buff-name">${wf.name}</div>
+      <div class="buff-text"><div class="buff-name">${wf.name}</div></div>
     </div>`;
 
   c.innerHTML = `
