@@ -406,7 +406,9 @@ const STAT_LABELS = [
   { key:'fire_res', label:'Сопротивление магии огня',    pct:true },
   { key:'light_res',label:'Сопротивление магии света',  pct:true },
   { key:'elem_def', label:'Защита стихий' },
+  { key:'def_eff',  label:'Эффективность защиты',          pct:true },
   { key:'atk_eff',  label:'Эффективность атаки',          pct:true },
+  { key:'speed',    label:'Скорость в бою',                pct:true },
 ];
 
 const STATS = {
@@ -430,6 +432,13 @@ const STATS = {
     },
   },
 };
+
+const ARTIFACTS = [
+  { name:'Камень Ведьмака',    quality:'red',    img:'stats_calculator/artefacts/artefact_stone_earth.png', stats:{ heal_eff:2, hp:150, def:2 } },
+  { name:'Камень Путешествий', quality:'red',    img:'stats_calculator/artefacts/artefact_stone_fire.png',  stats:{ def_eff:2, atk_eff:4 } },
+  { name:'Камень Состязаний',  quality:'purple', img:'stats_calculator/artefacts/artefact_stone_light.png', stats:{ atk:2, mana:100, atk_eff:2 } },
+  { name:'Камень Удачи',       quality:'red',    img:'stats_calculator/artefacts/artefact_stone_gold.png',  stats:{ atk:2, mana:100, heal_eff:1, def_eff:2, hp:100, atk_eff:2, speed:1 } },
+];
 
 const QUALITY_FRAME = {
   white:       'frames/border_none.png',
@@ -500,7 +509,7 @@ function render(view) {
   if (view === 'equipment')     renderEquipment(c);
   else if (view === 'runes')      renderRunes(c);
   else if (view === 'jewelry')    renderSoon(c, 'Бижутерия');
-  else if (view === 'artifacts')  renderSoon(c, 'Артефакты');
+  else if (view === 'artifacts')  renderArtifacts(c);
   else if (view === 'buffs_class') renderBuffsClass(c);
   else if (view === 'pets_fair')   renderSoon(c, 'Ярмарочные питомцы');
   else if (view === 'pets_deco')   renderSoon(c, 'Декоративные питомцы');
@@ -614,6 +623,18 @@ function renderBuffsClass(c) {
     <div class="buff-grid">${cards}${wfCard}</div>`;
 }
 
+function renderArtifacts(c) {
+  const cards = ARTIFACTS.map((art, i) => `
+    <div class="buff-card" onmouseenter="ttShowArt(${i},event)" onmousemove="ttMove(event)" onmouseleave="ttHide()">
+      ${icoHtml(art.img, art.quality)}
+      <div class="buff-name">${art.name}</div>
+    </div>`).join('');
+
+  c.innerHTML = `
+    <div class="c-title">Артефакты</div>
+    <div class="buff-grid">${cards}</div>`;
+}
+
 function renderSoon(c, title) {
   c.innerHTML = `
     <div class="c-title">${title}</div>
@@ -638,6 +659,17 @@ function ttShow(cls, slotId, quality, itemName, e) {
         return `<div class="tt-row"><span class="tt-key">${s.label}</span><span class="tt-val">+${v}${s.pct?'%':''}</span></div>`;
       }).join('');
   }
+  _tt.innerHTML = html;
+  _tt.classList.add('vis');
+  ttMove(e);
+}
+function ttShowArt(idx, e) {
+  const art = ARTIFACTS[idx];
+  let html = `<div class="tt-name">${art.name}</div>`;
+  html += STAT_LABELS
+    .filter(s => art.stats[s.key] != null)
+    .map(s => `<div class="tt-row"><span class="tt-key">${s.label}</span><span class="tt-val">+${art.stats[s.key]}${s.pct?'%':''}</span></div>`)
+    .join('');
   _tt.innerHTML = html;
   _tt.classList.add('vis');
   ttMove(e);
