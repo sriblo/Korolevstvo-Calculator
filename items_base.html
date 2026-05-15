@@ -233,6 +233,15 @@ a{color:inherit;text-decoration:none}
 .buff-card .rune-ico{width:32px;height:32px;flex-shrink:0}
 .buff-card .ico-img{width:32px;height:32px;object-fit:none}
 .buff-text{flex:1;min-width:0}
+.art-section-divider{
+  display:flex;align-items:center;gap:12px;
+  margin:24px 0 14px;
+  font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+  font-weight:700;color:var(--txt3);
+}
+.art-section-divider::before,.art-section-divider::after{
+  content:'';flex:1;height:1px;background:var(--line);
+}
 .buff-name{font-family:var(--serif);font-size:14px;font-weight:500;color:var(--txt);line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .buff-cls{font-size:11px;color:var(--txt3);margin-top:2px}
 .eq-card:hover{cursor:default;border-color:var(--line2);background:var(--bg3)}
@@ -629,15 +638,25 @@ function renderBuffsClass(c) {
 }
 
 function renderArtifacts(c) {
-  const cards = ARTIFACTS.map((art, i) => `
-    <div class="buff-card" onmouseenter="ttShowArt(${i},event)" onmousemove="ttMove(event)" onmouseleave="ttHide()">
+  function artCard(art, i) {
+    return `<div class="buff-card" onmouseenter="ttShowArt(${i},event)" onmousemove="ttMove(event)" onmouseleave="ttHide()">
       ${icoHtml(art.img, art.quality)}
-      <div class="buff-name">${art.name}</div>
-    </div>`).join('');
+      <div class="buff-text"><div class="buff-name">${art.name}</div></div>
+    </div>`;
+  }
+
+  const unique   = ARTIFACTS.filter(a => a.name !== 'Камень Дружбы');
+  const druzhba  = ARTIFACTS.filter(a => a.name === 'Камень Дружбы');
+  const idxOf    = a => ARTIFACTS.indexOf(a);
+
+  const uniqueCards  = unique.map(a  => artCard(a, idxOf(a))).join('');
+  const druzhbaCards = druzhba.map(a => artCard(a, idxOf(a))).join('');
 
   c.innerHTML = `
     <div class="c-title">Артефакты</div>
-    <div class="buff-grid">${cards}</div>`;
+    <div class="buff-grid">${uniqueCards}</div>
+    <div class="art-section-divider">Камень Дружбы</div>
+    <div class="buff-grid">${druzhbaCards}</div>`;
 }
 
 function renderSoon(c, title) {
