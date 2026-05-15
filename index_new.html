@@ -75,7 +75,7 @@
   }
   .dd-trigger:hover{color:var(--txt);background:var(--bg2)}
   .nav-dd.open .dd-trigger{color:var(--gold-l);background:var(--bg3);border-color:rgba(var(--gold-tint),.3)}
-  .dd-arrow{font-size:10px;opacity:.7;transition:transform .18s;display:inline-block}
+  .dd-arrow{width:16px;height:16px;opacity:1;transition:transform .18s;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
   .nav-dd.open .dd-arrow{transform:rotate(180deg)}
   .dd-menu{
     display:none;position:absolute;top:calc(100% + 8px);left:0;
@@ -363,7 +363,7 @@
   <nav class="nav">
     <a href="index_new.html">Главная</a>
     <div class="nav-dd">
-      <div class="dd-trigger on">Калькуляторы <span class="dd-arrow">▾</span></div>
+      <div class="dd-trigger on">Калькуляторы <span class="dd-arrow"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 4L6 8L10 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
       <div class="dd-menu">
         <span class="dd-item soon">Новый год. Колдер</span>
         <span class="dd-item soon">Экспедиция. Сбор припасов</span>
