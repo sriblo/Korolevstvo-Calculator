@@ -356,18 +356,11 @@ a{color:inherit;text-decoration:none}
   </div>
 </div>
 
+<script src="data.js"></script>
 <script>
-// ── DATA ──────────────────────────────────────────────────────────────────────
-
-const QUALITIES = [
-  { id:'white',       label:'Обычный',          color:'#bbb' },
-  { id:'green',       label:'Редкий',            color:'#8acc60' },
-  { id:'blue',        label:'Элитный',           color:'#78aae0' },
-  { id:'purple',      label:'Героический',       color:'#b888ee' },
-  { id:'purple_plus', label:'Усил. героический', color:'#d898f8' },
-  { id:'red',         label:'Легендарный',       color:'#ee5050' },
-  { id:'orange',      label:'Эпический',         color:'#f0a040' },
-];
+// ── DATA (constants from data.js: QUALITIES, QUALITY_ORDER, QUALITY_LEVEL, QUALITY_FRAME,
+//          CLASS_NAMES, CLASS_ICON_FILE, CLASS_SET_NAMES, CLASS_SLOTS, CLASS_ITEM_NAMES,
+//          getClassSetPath, getItemImg, STAT_LABELS, STATS, ARTIFACTS) ──────────
 
 // Сверху вниз (пользователь описывал снизу вверх)
 const COL_LEFT = [
@@ -409,81 +402,6 @@ const ROW_BOT = [
 
 const ALL_SLOTS = [...COL_LEFT, ...COL_RIGHT, ...ROW_TOP, ...ROW_BOT];
 
-const CLASS_NAMES = {
-  warrior:'Воин', rogue:'Головорез', monk:'Монах',
-  paladin:'Паладин', mage:'Маг', archer:'Лучник',
-};
-const CLASS_ICON_FILE = {
-  warrior:'warrior.png', rogue:'rogue.png', monk:'cleric.png',
-  paladin:'paladin.png', mage:'mage.png',   archer:'shooter.png',
-};
-const QUALITY_FRAME = {
-  white:'frames/border_none.png',       green:'frames/border_low.png',
-  blue:'frames/border_medium.png',      purple:'frames/border_high.png',
-  purple_plus:'frames/border_high.png', red:'frames/border_exclusive.png',
-  orange:'frames/border_special.png',
-};
-
-const STAT_LABELS = [
-  { key:'atk',         label:'Атака' },
-  { key:'def',         label:'Защита' },
-  { key:'hp',          label:'Запас здоровья' },
-  { key:'mana',        label:'Запас маны' },
-  { key:'heal_eff',    label:'Эффект. лечения',  pct:true },
-  { key:'hp_regen',    label:'Восст. жизни' },
-  { key:'crit_dmg',    label:'Сила крита',        pct:true },
-  { key:'crit_chance', label:'Шанс крита',        pct:true },
-  { key:'wind_res',    label:'Сопр. ветра',       pct:true },
-  { key:'fire_res',    label:'Сопр. огня',        pct:true },
-  { key:'light_res',   label:'Сопр. света',       pct:true },
-  { key:'elem_def',    label:'Защита стихий' },
-  { key:'def_eff',     label:'Эффект. защиты',    pct:true },
-  { key:'atk_eff',     label:'Эффект. атаки',     pct:true },
-  { key:'speed',       label:'Скорость',           pct:true },
-];
-
-const SET_NAMES = {
-  warrior: { white:'Решимости', green:'Отваги', blue:'Разрушителя', purple:'Непримиримости', purple_plus:'Непримиримости', red:'Доблести', orange:'' },
-  paladin: { white:'Праведника', green:'Веры', blue:'Благочестия', purple:'Истины', purple_plus:'Истины', red:'Избранного', orange:'' },
-};
-
-const SLOT_ITEMS = {
-  stone_greed:   [{ name:'Артефакт Алчности',              quality:'red',    img:'stats_calculator/artefacts/artefact_stone_rubin.png',  stats:{ atk:3, mana:100, heal_eff:2, def_eff:3, hp:300, def:1, atk_eff:3, speed:1 } }],
-  stone_blood:   [
-    { name:'Камень Крови', quality:'green',  img:'stats_calculator/artefacts/artefact_stone_blood.png', stats:{ atk:1, mana:100, heal_eff:1, hp:100 } },
-    { name:'Камень Крови', quality:'blue',   img:'stats_calculator/artefacts/artefact_stone_blood.png', stats:{ atk:3, mana:200, heal_eff:2, hp:200, crit_chance:1 } },
-  ],
-  stone_travel:  [{ name:'Камень Путешествий',             quality:'red',    img:'stats_calculator/artefacts/artefact_stone_fire.png',   stats:{ def_eff:2, atk_eff:4 } }],
-  stone_contest: [{ name:'Камень Состязаний',              quality:'red',    img:'stats_calculator/artefacts/artefact_stone_light.png',  stats:{ atk:2, mana:100, atk_eff:2 } }],
-  stone_friend:  [
-    { name:'Камень Дружбы', quality:'white',  img:'stats_calculator/artefacts/artefact_stone_dark.png', stats:{ atk:1,  hp:50,       speed:1 } },
-    { name:'Камень Дружбы', quality:'green',  img:'stats_calculator/artefacts/artefact_stone_dark.png', stats:{ atk:3,  hp:100, def:1, speed:2 } },
-    { name:'Камень Дружбы', quality:'blue',   img:'stats_calculator/artefacts/artefact_stone_dark.png', stats:{ atk:5,  hp:200, def:3, speed:3 } },
-    { name:'Камень Дружбы', quality:'purple', img:'stats_calculator/artefacts/artefact_stone_dark.png', stats:{ atk:7,  hp:300, def:5, speed:3 } },
-    { name:'Камень Дружбы', quality:'red',    img:'stats_calculator/artefacts/artefact_stone_dark.png', stats:{ atk:10, hp:500, def:7, speed:3 } },
-    { name:'Камень Дружбы', quality:'orange', img:'stats_calculator/artefacts/artefact_stone_dark.png', stats:{ atk:13, hp:700, def:7, speed:4 } },
-  ],
-  stone_witch:   [
-    { name:'Камень Ведьмака',           quality:'red',    img:'stats_calculator/artefacts/artefact_stone_earth.png',  stats:{ heal_eff:2, hp:150, def:2 } },
-    { name:'Магическая карта Ведьмака', quality:'orange', img:'stats_calculator/artefacts/green_demonic_card.png',    stats:{ hp:500, def:4, mana:200, def_eff:8, heal_eff:8 } },
-  ],
-  stone_labor:   [
-    { name:'Камень Труда', quality:'green',  img:'stats_calculator/artefacts/artefact_stone_water.png', stats:{ atk:1, heal_eff:1, hp:50,  atk_eff:1 } },
-    { name:'Камень Труда', quality:'blue',   img:'stats_calculator/artefacts/artefact_stone_water.png', stats:{ atk:2, heal_eff:2, hp:150, def:1, atk_eff:2 } },
-    { name:'Камень Труда', quality:'purple', img:'stats_calculator/artefacts/artefact_stone_water.png', stats:{ atk:4, heal_eff:3, hp:300, def:2, atk_eff:3, crit_chance:2 } },
-    { name:'Магическая карта Труда',    quality:'orange', img:'stats_calculator/artefacts/red_demonic_card.png',      stats:{ atk:10, hp:600, def:4, mana:200, atk_eff:8, crit_chance:4, heal_eff:6 } },
-  ],
-  stone_lost:    [
-    { name:'Камень Потерянных Земель',                    quality:'green',  img:'stats_calculator/artefacts/artefact_stone_air.png',  stats:{ atk:2, mana:100, def_eff:2, atk_eff:3 } },
-    { name:'Камень Потерянных Земель',                    quality:'blue',   img:'stats_calculator/artefacts/artefact_stone_air.png',  stats:{ atk:3, mana:150, def_eff:3, atk_eff:4, crit_chance:1 } },
-    { name:'Камень Потерянных Земель',                    quality:'purple', img:'stats_calculator/artefacts/artefact_stone_air.png',  stats:{ atk:4, mana:200, def_eff:4, atk_eff:5, crit_chance:2 } },
-    { name:'Магическая карта Потерянных земель',          quality:'orange', img:'stats_calculator/artefacts/blue_demonic_card.png',   stats:{ atk:10, mana:200, def_eff:6, atk_eff:8, crit_chance:4 } },
-  ],
-  stone_luck:    [
-    { name:'Камень Удачи',              quality:'red',    img:'stats_calculator/artefacts/artefact_stone_gold.png',  stats:{ atk:2, mana:100, heal_eff:1, def_eff:2, hp:100, atk_eff:2, speed:1 } },
-    { name:'Магическая карта Удачи',   quality:'orange', img:'stats_calculator/artefacts/yellow_demonic_card.png', stats:{ atk:6, hp:400, def:3, mana:200, def_eff:4, atk_eff:5, heal_eff:5, speed:3 } },
-  ],
-};
 
 const CLASS_BUFFS = [
   { name:'Зоркий глаз',   cls:'archer',  effect:'atk_eff',       value:15 },
@@ -493,35 +411,6 @@ const CLASS_BUFFS = [
   { name:'Пылающий щит',  cls:'warrior', effect:'dmg_taken_red', value:8 },
   { name:'Дар теней',     cls:'rogue',   effect:'dmg_taken_red', value:8 },
 ];
-
-const STATS = {
-  warrior: {
-    red: {
-      weapon:  { atk:12.72, def:37.85, hp:694,  mana:80,  heal_eff:5, hp_regen:50, crit_dmg:5, wind_res:0.80, elem_def:35, atk_eff:2 },
-      pants:   { atk:14.53, def:15.03, hp:713,  mana:120, heal_eff:5, hp_regen:50, crit_dmg:5, wind_res:0.80, elem_def:53, atk_eff:2 },
-      belt:    { atk:15.56, def:8.56,  hp:725,  mana:150, heal_eff:5, hp_regen:50, crit_dmg:5, wind_res:0.80, elem_def:72, atk_eff:2 },
-      boots:   { atk:20.04, def:5.65,  hp:750,  mana:170, heal_eff:5, hp_regen:50, crit_dmg:5, wind_res:0.80, elem_def:92, atk_eff:2 },
-    },
-  },
-  paladin: {
-    green: {
-      weapon:  { atk:5.70,  def:28.47, hp:450, mana:15, fire_res:0.50 },
-      pants:   { atk:6.75,  def:14.23, hp:465, mana:24, fire_res:0.50 },
-      belt:    { atk:7.20,  def:8.59,  hp:485, mana:30, fire_res:0.50 },
-      boots:   { atk:9.70,  def:5.61,  hp:510, mana:36, fire_res:0.50 },
-      gloves:  { atk:10.75, def:3.94,  hp:530, mana:42, fire_res:0.50 },
-    },
-    red: {
-      weapon:  { atk:10.18, def:37.83, hp:949,  mana:80,  heal_eff:5, hp_regen:50, crit_dmg:5, fire_res:0.80, elem_def:35, atk_eff:2 },
-      pants:   { atk:11.64, def:17.84, hp:954,  mana:120, heal_eff:5, hp_regen:50, crit_dmg:5, fire_res:0.80, elem_def:53, atk_eff:2 },
-      belt:    { atk:12.41, def:10.32, hp:985,  mana:150, heal_eff:5, hp_regen:50, crit_dmg:5, fire_res:0.80, elem_def:72, atk_eff:2 },
-      boots:   { atk:16.57, def:6.63,  hp:1023, mana:170, heal_eff:5, hp_regen:50, crit_dmg:5, fire_res:0.80, elem_def:92, atk_eff:2 },
-    },
-    purple_plus: {
-      gloves:  { atk:16.30, def:4.78, hp:855, mana:170, heal_eff:5, fire_res:0.80, elem_def:124 },
-    },
-  },
-};
 
 // ── STATE ─────────────────────────────────────────────────────────────────────
 
@@ -601,50 +490,21 @@ const PH = {
   bracelet: `<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="6" stroke="currentColor" stroke-width="2.5"/></svg>`,
 };
 
-const QUALITY_LEVEL = {
-  white:10, green:11, blue:12, purple:13, purple_plus:13, red:14, orange:15,
-};
-
-const CLASS_SLOTS_IMG = {
-  warrior: { weapon:'sword', offhand:'shield', helm:'helm', chest:'chest', shoulders:'shoulders', pants:'pants', gloves:'gloves', belt:'belt', boots:'boots' },
-  paladin: { weapon:'hammer', offhand:'relic', helm:'helm', chest:'chest', shoulders:'shoulders', pants:'pants', gloves:'gloves', belt:'belt', boots:'boots' },
-};
-
-// Paths differ per class due to folder naming inconsistencies
-function getClassSetPath(cls, quality) {
-  if (cls === 'warrior') return `stats_calculator/classes/warrior/warrior/warrior_sets/${quality}_set/elf`;
-  if (cls === 'paladin') return `stats_calculator/classes/paladin/palladin_sets/${quality}_set/elf`;
-  return `stats_calculator/classes/${cls}/${cls}_sets/${quality}_set/elf`;
-}
-
-function getItemImg(cls, slotId, quality) {
-  const slotMap = CLASS_SLOTS_IMG[cls];
-  if (!slotMap) return null;
-  const slotFile = slotMap[slotId];
-  if (!slotFile) return null;
-  const lvl = QUALITY_LEVEL[quality];
-  if (!lvl) return null;
-  const dir = getClassSetPath(cls, quality);
-  return `${dir}/${cls}_${slotFile}_${lvl}_elf.png`;
-}
-
 const SLOT_PH = {
   trophy:'trophy', badge:'badge', ring1:'ring', ring2:'ring',
   talisman:'amulet', bracelet:'bracelet', amulet:'amulet',
   flask:'flask', battle_bag:'bag', trinket:'key',
 };
 
-const ARTEFACT_PH = {
-  stone_greed:   'stats_calculator/artefacts/artefact_stone_rubin.png',
-  stone_blood:   'stats_calculator/artefacts/artefact_stone_blood.png',
-  stone_travel:  'stats_calculator/artefacts/artefact_stone_fire.png',
-  stone_contest: 'stats_calculator/artefacts/artefact_stone_light.png',
-  stone_friend:  'stats_calculator/artefacts/artefact_stone_dark.png',
-  stone_witch:   'stats_calculator/artefacts/artefact_stone_earth.png',
-  stone_labor:   'stats_calculator/artefacts/artefact_stone_water.png',
-  stone_lost:    'stats_calculator/artefacts/artefact_stone_air.png',
-  stone_luck:    'stats_calculator/artefacts/artefact_stone_gold.png',
-};
+// Derived from ARTIFACTS (data.js): slot → list of items; slot → placeholder image
+const SLOT_ITEMS = {};
+const ARTEFACT_PH = {};
+ARTIFACTS.forEach(a => {
+  if (!a.slotId) return;
+  if (!SLOT_ITEMS[a.slotId]) SLOT_ITEMS[a.slotId] = [];
+  SLOT_ITEMS[a.slotId].push(a);
+  if (!ARTEFACT_PH[a.slotId]) ARTEFACT_PH[a.slotId] = a.img;
+});
 
 function icoHtml(slotId, eq, cls) {
   if (!eq) {
@@ -717,7 +577,7 @@ function getPickerItems(cls, slotId) {
   if (SLOT_ITEMS[slotId]) return SLOT_ITEMS[slotId];
   // Armor/weapon: one item per quality that has image or stats
   const slotName = [...COL_LEFT, ...COL_RIGHT, ...ROW_TOP, ...ROW_BOT].find(s => s.id === slotId)?.name || slotId;
-  const setNames = SET_NAMES[cls] || {};
+  const setNames = CLASS_SET_NAMES[cls] || {};
   return QUALITIES
     .filter(q => getItemImg(cls, slotId, q.id) || getStatsForSlot(cls, slotId, q.id))
     .map(q => ({
