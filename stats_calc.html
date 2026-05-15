@@ -557,6 +557,25 @@ const PH = {
   bracelet: `<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="6" stroke="currentColor" stroke-width="2.5"/></svg>`,
 };
 
+const QUALITY_LEVEL = {
+  white:10, green:11, blue:12, purple:13, purple_plus:13, red:14, orange:15,
+};
+
+const CLASS_SLOTS_IMG = {
+  warrior: { weapon:'sword', offhand:'shield', helm:'helm', chest:'chest', shoulders:'shoulders', pants:'pants', gloves:'gloves', belt:'belt', boots:'boots' },
+  paladin: { weapon:'hammer', offhand:'shield', helm:'helm', chest:'chest', shoulders:'shoulders', pants:'pants', gloves:'gloves', belt:'belt', boots:'boots' },
+};
+
+function getItemImg(cls, slotId, quality) {
+  const slotMap = CLASS_SLOTS_IMG[cls];
+  if (!slotMap) return null;
+  const slotFile = slotMap[slotId];
+  if (!slotFile) return null;
+  const lvl = QUALITY_LEVEL[quality];
+  if (!lvl) return null;
+  return `stats_calculator/classes/${cls}/${cls}_sets/${quality}_set/elf/${cls}_${slotFile}_${lvl}_elf.png`;
+}
+
 const SLOT_PH = {
   trophy:'trophy', badge:'badge', ring1:'ring', ring2:'ring',
   talisman:'amulet', bracelet:'bracelet', amulet:'amulet',
@@ -579,7 +598,7 @@ const WARRIOR_PH = {
   boots:     BASE+'boots_10_elf.png',
 };
 
-function icoHtml(slotId, eq) {
+function icoHtml(slotId, eq, cls) {
   if (!eq) {
     if (WARRIOR_PH[slotId]) {
       return `<img src="${WARRIOR_PH[slotId]}" alt=""
@@ -589,10 +608,12 @@ function icoHtml(slotId, eq) {
     const ph = PH[SLOT_PH[slotId]] || PH.bag;
     return `<span style="opacity:.22;color:var(--txt2);display:flex;align-items:center;justify-content:center">${ph}</span>`;
   }
+  const imgSrc   = getItemImg(cls, slotId, eq.quality);
   const frameSrc = QUALITY_FRAME[eq.quality];
   const qColor   = QUALITIES.find(q => q.id === eq.quality)?.color;
-  return `${frameSrc ? `<img class="frame-img" src="${frameSrc}" alt="" onerror="this.style.display='none'">` : ''}
-          ${qColor ? `<div style="width:10px;height:10px;border-radius:50%;background:${qColor}"></div>` : ''}`;
+  return `${imgSrc   ? `<img src="${imgSrc}" alt="" style="width:32px;height:32px;object-fit:none" onerror="this.style.display='none'">` : ''}
+          ${frameSrc ? `<img class="frame-img" src="${frameSrc}" alt="" style="position:absolute;inset:1px;width:32px;height:32px;pointer-events:none" onerror="this.style.display='none'">` : ''}
+          ${!imgSrc && qColor ? `<div style="width:10px;height:10px;border-radius:50%;background:${qColor}"></div>` : ''}`;
 }
 
 // ── RENDER ────────────────────────────────────────────────────────────────────
@@ -621,7 +642,7 @@ function renderSlotCol(cid, slots, containerId) {
       onclick="openPicker('${cid}','${slot.id}')"
       onmouseenter="showTt(event,'${cid}',${JSON.stringify(slot).replace(/"/g,'&quot;')})"
       onmousemove="moveTt(event)"
-      onmouseleave="hideTt()">${icoHtml(slot.id, eq)}</div>`;
+      onmouseleave="hideTt()">${icoHtml(slot.id, eq, s.cls)}</div>`;
   }).join('');
 }
 
@@ -635,7 +656,7 @@ function renderSlotRow(cid, rowSlots, containerId) {
       onclick="openPicker('${cid}','${slot.id}')"
       onmouseenter="showTt(event,'${cid}',${JSON.stringify(slot).replace(/"/g,'&quot;')})"
       onmousemove="moveTt(event)"
-      onmouseleave="hideTt()">${icoHtml(slot.id, eq)}</div>`;
+      onmouseleave="hideTt()">${icoHtml(slot.id, eq, s.cls)}</div>`;
   }).join('');
 }
 
