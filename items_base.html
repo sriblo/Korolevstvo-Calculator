@@ -322,13 +322,13 @@ const CLASS_NAMES = {
 };
 
 const QUALITIES = [
-  { id:'white',       label:'Белое' },
-  { id:'green',       label:'Зелёное' },
-  { id:'blue',        label:'Синее' },
-  { id:'purple',      label:'Фиолетовое' },
-  { id:'purple_plus', label:'Фиол.+' },
-  { id:'red',         label:'Красное' },
-  { id:'orange',      label:'Оранжевое' },
+  { id:'white',       label:'Белое',      setName:'Решимости' },
+  { id:'green',       label:'Зелёное',    setName:'Отваги' },
+  { id:'blue',        label:'Синее',      setName:'Разрушителя' },
+  { id:'purple',      label:'Фиолетовое', setName:'Непримиримости' },
+  { id:'purple_plus', label:'Фиол.+',     setName:'Непримиримости (усил.)' },
+  { id:'red',         label:'Красное',    setName:'Доблести' },
+  { id:'orange',      label:'Оранжевое',  setName:'' },
 ];
 
 /* slot file name per class (only warrior has images so far) */
@@ -409,6 +409,9 @@ function renderClass(c, cls) {
     `<div class="q-tab${activeQ===q.id?' on':''}" data-q="${q.id}" onclick="switchQ('${q.id}')">${q.label}</div>`
   ).join('');
 
+  const qData = QUALITIES.find(q => q.id === activeQ);
+  const setLabel = qData?.setName ? `Комплект ${qData.setName}` : 'Экипировка';
+
   const cards = SLOTS.map(slot => {
     const img = getItemImg(cls, slot.id, activeQ);
     const ico = img
@@ -419,7 +422,7 @@ function renderClass(c, cls) {
 
   c.innerHTML = `
     <div class="c-title">${CLASS_NAMES[cls]}</div>
-    <div class="c-sub">Основная экипировка</div>
+    <div class="c-sub">${setLabel}</div>
     <div class="q-tabs">${tabs}</div>
     <div class="eq-grid">${cards}</div>`;
 }
