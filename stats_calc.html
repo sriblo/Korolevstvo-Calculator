@@ -558,8 +558,6 @@ const PH = {
 };
 
 const SLOT_PH = {
-  weapon:'sword', offhand:'shield', helm:'helmet', chest:'chest',
-  shoulders:'shoulders', pants:'pants', belt:'belt', boots:'boots', gloves:'gloves',
   trophy:'trophy', badge:'badge', ring1:'ring', ring2:'ring',
   talisman:'amulet', bracelet:'bracelet', amulet:'amulet',
   stone_greed:'gem', stone_blood:'gem', stone_travel:'gem', stone_contest:'gem',
@@ -567,8 +565,27 @@ const SLOT_PH = {
   flask:'flask', battle_bag:'bag', trinket:'key',
 };
 
+// Warrior white set as grayscale placeholders for armor/weapon slots
+const BASE = 'stats_calculator/classes/warrior/warrior_sets/white_set/elf/warrior_';
+const WARRIOR_PH = {
+  weapon:    BASE+'sword_10_elf.png',
+  offhand:   BASE+'shield_10_elf.png',
+  helm:      BASE+'helm_10_elf.png',
+  chest:     BASE+'chest_10_elf.png',
+  shoulders: BASE+'shoulders_10_elf.png',
+  pants:     BASE+'pants_10_elf.png',
+  gloves:    BASE+'gloves_10_elf.png',
+  belt:      BASE+'belt_10_elf.png',
+  boots:     BASE+'boots_10_elf.png',
+};
+
 function icoHtml(slotId, eq) {
   if (!eq) {
+    if (WARRIOR_PH[slotId]) {
+      return `<img src="${WARRIOR_PH[slotId]}" alt=""
+        style="width:32px;height:32px;object-fit:none;filter:grayscale(1);opacity:.28"
+        onerror="this.style.display='none'">`;
+    }
     const ph = PH[SLOT_PH[slotId]] || PH.bag;
     return `<span style="opacity:.22;color:var(--txt2);display:flex;align-items:center;justify-content:center">${ph}</span>`;
   }
