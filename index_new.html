@@ -75,14 +75,14 @@
 
   /* ──────────────────────────── Hero (permanent) ──────────────────────────── */
   .hero{max-width:1180px;margin:0 auto;padding:80px 40px 56px;position:relative}
-  .hero-wrap{overflow:hidden}
   .hero::after{
     content:'';position:absolute;
     top:-40px;right:-80px;width:560px;height:680px;
     background:url('kor_logo.svg') no-repeat center/contain;
-    opacity:.06;pointer-events:none;z-index:0;
-    filter:drop-shadow(0 0 60px rgba(var(--gold-tint),.5));
+    opacity:.09;pointer-events:none;z-index:0;
     transform:rotate(-8deg);
+    -webkit-mask-image:radial-gradient(ellipse 70% 70% at 60% 45%, rgba(0,0,0,.9) 20%, transparent 80%);
+            mask-image:radial-gradient(ellipse 70% 70% at 60% 45%, rgba(0,0,0,.9) 20%, transparent 80%);
   }
   .hero > *{position:relative;z-index:1}
   .eyebrow{
@@ -335,11 +335,11 @@
   </div>
 </header>
 
-<div class="hero-wrap"><section class="hero">
+<section class="hero">
   <h1 class="h1">База знаний<br><em>Королевства</em></h1>
   <p class="lede">Калькуляторы ивентов, репутаций, загруженности локаций, гайды по локациям и ярмарочным питомцам. Создано игроками для игроков.</p>
 
-</section></div>
+</section>
 
 <div class="cal-section">
   <div class="cal">
