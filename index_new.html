@@ -94,6 +94,12 @@
   .dd-item.ready:hover{background:rgba(212,168,67,.08)}
   .dd-item.soon{color:var(--txt3);cursor:default;pointer-events:none}
   .dd-sep{height:1px;background:var(--line);margin:4px 6px}
+  .dd-group-sep{margin:6px 6px}
+  .dd-group-label{
+    padding:6px 12px 4px;
+    font-size:10px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;
+    color:var(--txt3);
+  }
   .top-r{margin-left:auto;display:flex;align-items:center;gap:12px}
   .search{
     background:var(--bg2);border:1px solid var(--line);border-radius:6px;padding:7px 12px 7px 32px;
@@ -365,6 +371,7 @@
     <div class="nav-dd">
       <div class="dd-trigger on">Калькуляторы <span class="dd-arrow">▾</span></div>
       <div class="dd-menu">
+        <div class="dd-group-label">Ивентовые</div>
         <span class="dd-item soon">Новый год. Колдер</span>
         <div class="dd-sep"></div>
         <span class="dd-item soon">Экспедиция. Сбор припасов</span>
@@ -378,10 +385,11 @@
         <span class="dd-item soon">Гоблинский Рай</span>
         <span class="dd-item soon">Небесные Драконы</span>
         <span class="dd-item soon">Тыквенный Фестиваль</span>
-        <div class="dd-sep"></div>
-        <a class="dd-item ready" href="location_calc/loc_calc.html">Калькулятор загруженности копий</a>
-        <a class="dd-item ready" href="reputation_calc/rep_calc.html">Калькулятор прокачки репутаций</a>
-        <a class="dd-item ready" href="stats_calc.html">Калькулятор характеристик</a>
+        <div class="dd-sep dd-group-sep"></div>
+        <div class="dd-group-label">Общие</div>
+        <a class="dd-item ready" href="location_calc/loc_calc.html">Загруженность копий</a>
+        <a class="dd-item ready" href="reputation_calc/rep_calc.html">Прокачка репутаций</a>
+        <a class="dd-item ready" href="stats_calc.html">Характеристики</a>
       </div>
     </div>
     <a href="items_base.html">База предметов</a>
