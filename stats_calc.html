@@ -369,23 +369,23 @@ const QUALITIES = [
   { id:'orange',      label:'Эпический',         color:'#f0a040' },
 ];
 
+// Сверху вниз (пользователь описывал снизу вверх)
 const COL_LEFT = [
-  { id:'trophy',    name:'Трофей' },
-  { id:'boots',     name:'Сапоги' },
-  { id:'pants',     name:'Штаны' },
-  { id:'belt',      name:'Пояс' },
-  { id:'chest',     name:'Нагрудник' },
-  { id:'shoulders', name:'Наплечники' },
   { id:'helm',      name:'Шлем' },
+  { id:'shoulders', name:'Наплечники' },
+  { id:'chest',     name:'Нагрудник' },
+  { id:'belt',      name:'Пояс' },
+  { id:'pants',     name:'Штаны' },
+  { id:'boots',     name:'Сапоги' },
 ];
 const COL_RIGHT = [
-  { id:'badge',     name:'Жетон' },
+  { id:'amulet',    name:'Амулет' },
+  { id:'bracelet',  name:'Браслет' },
+  { id:'talisman',  name:'Талисман' },
+  { id:'gloves',    name:'Перчатки' },
   { id:'ring1',     name:'Кольцо' },
   { id:'ring2',     name:'Кольцо' },
-  { id:'gloves',    name:'Перчатки' },
-  { id:'talisman',  name:'Талисман' },
-  { id:'bracelet',  name:'Браслет' },
-  { id:'amulet',    name:'Амулет' },
+  { id:'badge',     name:'Жетон' },
 ];
 const ROW_TOP = [
   { id:'stone_greed',  name:'Камень Алчности' },
@@ -612,7 +612,7 @@ function icoHtml(slotId, eq, cls) {
   const frameSrc = QUALITY_FRAME[eq.quality];
   const qColor   = QUALITIES.find(q => q.id === eq.quality)?.color;
   return `${imgSrc   ? `<img src="${imgSrc}" alt="" style="width:32px;height:32px;object-fit:none" onerror="this.style.display='none'">` : ''}
-          ${frameSrc ? `<img class="frame-img" src="${frameSrc}" alt="" style="position:absolute;inset:1px;width:32px;height:32px;pointer-events:none" onerror="this.style.display='none'">` : ''}
+          ${frameSrc ? `<img class="frame-img" src="${frameSrc}" alt="" style="position:absolute;inset:0;width:32px;height:32px;pointer-events:none" onerror="this.style.display='none'">` : ''}
           ${!imgSrc && qColor ? `<div style="width:10px;height:10px;border-radius:50%;background:${qColor}"></div>` : ''}`;
 }
 
