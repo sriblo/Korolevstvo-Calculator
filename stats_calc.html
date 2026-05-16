@@ -1578,7 +1578,7 @@ function equipRune(cid, runeIdx) {
   if (!eq) return;
   const rune = RUNES[runeIdx];
   if (!rune) return;
-  eq.rune = { idx: runeIdx, name: rune.name, img: rune.img, stats: rune.stats ? Object.assign({}, rune.stats) : {} };
+  eq.rune = { idx: runeIdx, name: rune.name, img: rune.img, quality: rune.quality, stats: rune.stats ? Object.assign({}, rune.stats) : {} };
   _runeMode[cid] = false;
   renderAll(cid);
 }
