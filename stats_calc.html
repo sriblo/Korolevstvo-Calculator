@@ -122,15 +122,7 @@
     content:'';position:absolute;top:0;left:0;right:0;height:1px;
     background:linear-gradient(90deg,transparent,rgba(var(--gold-tint),.3),transparent);
   }
-  .cmp-pin-btn{
-    background:none;border:1px solid var(--line);border-radius:6px;
-    cursor:pointer;font-size:16px;padding:4px 7px;line-height:1;
-    color:var(--txt2);transition:.15s;flex-shrink:0;margin-left:auto;
-  }
-  .cmp-pin-btn:hover{border-color:var(--line2);color:var(--txt)}
-  .cmp-pin-btn.pinned{border-color:var(--gold-d);background:rgba(var(--gold-tint),.08)}
-  .compare-panel.pinned{position:fixed;top:88px;z-index:40;width:var(--cmp-width)}
-  .cmp-head{display:flex;align-items:flex-start;gap:8px;
+  .cmp-head{
     padding:14px 20px 10px;border-bottom:1px solid var(--line);
     text-align:center;
   }
@@ -693,11 +685,8 @@
     <!-- ── ЦЕНТРАЛЬНАЯ ТАБЛИЦА СРАВНЕНИЯ ── -->
     <aside class="compare-panel" id="comparePanel">
       <div class="cmp-head">
-        <div>
-          <div class="cmp-title">Сравнение характеристик</div>
-          <div class="cmp-sub" id="cmpSub">Соберите снаряжение обоим героям</div>
-        </div>
-        <button class="cmp-pin-btn" id="cmpPinBtn" onclick="toggleCmpPin()" title="Зафиксировать панель">🔓</button>
+        <div class="cmp-title">Сравнение характеристик</div>
+        <div class="cmp-sub" id="cmpSub">Соберите снаряжение обоим героям</div>
       </div>
       <div class="cmp-col-head">
         <div class="h1n" id="cmpHead1">Персонаж 1</div>
@@ -1503,13 +1492,15 @@ function renderCompare() {
 
   const labelOf = function(cid) {
     const s = state[cid];
-    const cls = CLASS_NAMES[s.cls] || s.cls;
-    const sex = s.race.endsWith('Male') ? '♂' : '♀';
-    const race = s.race.startsWith('Elf') ? 'эльф' : 'человек';
-    return `${cls} · ${race} ${sex}`;
+    const clsIco  = `stats_calculator/classes/${CLASS_ICON_FILE[s.cls]}`;
+    const raceNum = s.race.startsWith('Elf') ? '2' : '1';
+    const raceIco = `stats_calculator/race_${raceNum}.png`;
+    const ico = `<img src="${clsIco}" style="width:16px;height:16px;image-rendering:pixelated;border-radius:3px;vertical-align:middle">`;
+    const rico = `<img src="${raceIco}" style="width:16px;height:16px;image-rendering:pixelated;vertical-align:middle">`;
+    return `${ico}&nbsp;${rico}`;
   };
-  if (h1) h1.textContent = labelOf('c1');
-  if (h2) h2.textContent = labelOf('c2');
+  if (h1) h1.innerHTML = labelOf('c1');
+  if (h2) h2.innerHTML = labelOf('c2');
 
   if (!a.hasAny && !b.hasAny) {
     if (sub) sub.textContent = 'Соберите снаряжение обоим героям';
@@ -1746,27 +1737,6 @@ function applyTone(t) {
   document.querySelectorAll('.tone-btn').forEach(function(b) { b.classList.toggle('on', b.dataset.t === t); });
 }
 
-// ── COMPARE PIN ───────────────────────────────────────────────────────────────
-let _cmpPinned = false;
-function toggleCmpPin() {
-  _cmpPinned = !_cmpPinned;
-  const panel = document.getElementById('comparePanel');
-  const btn   = document.getElementById('cmpPinBtn');
-  if (_cmpPinned) {
-    const w = panel.offsetWidth;
-    panel.style.setProperty('--cmp-width', w + 'px');
-    panel.classList.add('pinned');
-    btn.classList.add('pinned');
-    btn.textContent = '🔒';
-    btn.title = 'Открепить панель';
-  } else {
-    panel.classList.remove('pinned');
-    panel.style.removeProperty('--cmp-width');
-    btn.classList.remove('pinned');
-    btn.textContent = '🔓';
-    btn.title = 'Зафиксировать панель';
-  }
-}
 
 // ── INIT ──────────────────────────────────────────────────────────────────────
 renderAll('c1');
