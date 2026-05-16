@@ -1032,8 +1032,8 @@ function renderDoll(cid) {
       return;
     }
     const eq      = s.equipped[layer];
-    const quality = eq ? eq.quality : null;
-    const url     = quality ? dollUrl(s.cls, layer, quality, s.race) : null;
+    const quality = eq ? eq.quality : 'white';
+    const url     = dollUrl(s.cls, layer, quality, s.race);
     el.style.backgroundImage = url ? `url("${url}")` : '';
     if (url) hasAny = true;
   });
