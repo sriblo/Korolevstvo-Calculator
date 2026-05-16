@@ -266,9 +266,9 @@
   .cls-dd-arrow{width:10px;height:10px;opacity:.6;transition:transform .15s}
   .cls-drop.open .cls-dd-arrow{transform:rotate(180deg)}
   .cls-dd-menu{
-    display:none;position:absolute;top:calc(100% + 6px);left:0;
+    display:none;position:fixed;
     background:var(--bg3);border:1px solid var(--line2);border-radius:9px;
-    padding:5px;min-width:170px;z-index:200;
+    padding:5px;min-width:170px;z-index:9999;
     box-shadow:0 12px 32px rgba(0,0,0,.6);
   }
   .cls-drop.open .cls-dd-menu{display:block}
@@ -988,7 +988,8 @@ const CLASS_DOLL = {
   },
 };
 
-const CLASS_URL_KEY = { paladin:'paladin', warrior:'warrior', rogue:'rogue', mage:'mage', archer:'shooter', monk:'cleric' };
+const CLASS_URL_KEY  = { paladin:'paladin', warrior:'warrior', rogue:'rogue', mage:'mage', archer:'shooter', monk:'cleric' };
+const CLASS_ICON_FILE = { paladin:'paladin.png', warrior:'warrior.png', rogue:'rogue.png', mage:'mage.png', archer:'shooter.png', monk:'cleric.png' };
 
 function dollUrl(cls, slotKey, quality, race) {
   const cfg = CLASS_DOLL[cls];
@@ -1673,7 +1674,17 @@ function renderAll(cid) {
 }
 
 // ── ACTIONS ───────────────────────────────────────────────────────────────────
-function toggleClsDrop(cid) { document.getElementById(`clsDrop-${cid}`).classList.toggle('open'); }
+function toggleClsDrop(cid) {
+  const drop = document.getElementById(`clsDrop-${cid}`);
+  const isOpen = drop.classList.toggle('open');
+  if (isOpen) {
+    const trig = drop.querySelector('.cls-dd-trig');
+    const menu = drop.querySelector('.cls-dd-menu');
+    const r = trig.getBoundingClientRect();
+    menu.style.top  = (r.bottom + 6) + 'px';
+    menu.style.left = r.left + 'px';
+  }
+}
 
 function selectClass(cid, cls) {
   const s = state[cid];
