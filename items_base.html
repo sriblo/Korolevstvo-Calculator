@@ -310,9 +310,9 @@ a{color:inherit;text-decoration:none}
       </div>
       <div class="sb-items open">
         <div class="sb-item sb-sub" data-view="equipment" onclick="show(this)">Основная экипировка</div>
+        <div class="sb-item sb-sub" data-view="event_equipment" onclick="show(this)">Ивентовая экипировка</div>
         <div class="sb-item sb-sub" data-view="jewelry" onclick="show(this)">Бижутерия</div>
         <div class="sb-item sb-sub" data-view="artifacts" onclick="show(this)">Артефакты</div>
-        <div class="sb-item sb-sub" data-view="event_equipment" onclick="show(this)">Ивентовая экипировка</div>
         <div class="sb-item sb-sub" data-view="runes" onclick="show(this)">Руны</div>
       </div>
     </div>
@@ -379,18 +379,25 @@ function icoHtml(img, quality) {
     `</div>`;
 }
 const RUNES = [
-  { name:'Титанитовая Великая Руна Фальдира',   slot:'Оружие',        quality:'red',    img:'stats_calculator/rune/rune_weapon.png' },
-  { name:'Руна Пяти Камней',                    slot:'Второе оружие', quality:'red',    img:'stats_calculator/rune/rune_attack_weapon2_1.png' },
-  { name:'Титанитовая Великая Руна Гэтана',     slot:'Штаны',         quality:'red',    img:'stats_calculator/rune/rune_pants.png' },
-  { name:'Великая Руна Варин',                  slot:'Пояс',          quality:'red',    img:'stats_calculator/rune/rune_belt.png' },
-  { name:'Великая Руна Орноса',                 slot:'Сапоги',        quality:'red',    img:'stats_calculator/rune/rune_boots.png' },
-  { name:'Титанитовая Великая Руна Баннора',    slot:'Перчатки',      quality:'red',    img:'stats_calculator/rune/rune_gloves.png' },
-  { name:'Титанитовая Великая Руна Халиэмы',   slot:'Наплечники',    quality:'red',    img:'stats_calculator/rune/rune_shoulders.png' },
-  { name:'Великая Руна Мехила',                 slot:'Нагрудник',     quality:'red',    img:'stats_calculator/rune/rune_chest.png' },
-  { name:'Руна Хенгиста',                       slot:'Амулет',        quality:'purple', img:'stats_calculator/rune/rune_medallion_attack_10.png' },
-  { name:'Руна Усиленной Защиты Хорлата',       slot:'Шлем',          quality:'blue',   img:'stats_calculator/rune/rune_helm_defense_5.png' },
-  { name:'Руна Усиленной Атаки Хорлата',        slot:'Шлем',          quality:'blue',   img:'stats_calculator/rune/rune_helm_attack_5.png' },
-  { name:'Руна Усиленного Здоровья Хорлата',    slot:'Шлем',          quality:'blue',   img:'stats_calculator/rune/rune_helm_health_5.png' },
+  { name:'Титанитовая Великая Руна Фальдира',  slot:'Оружие',        quality:'red',    img:'stats_calculator/rune/rune_weapon.png' },
+  { name:'Руна Пяти Камней',                   slot:'Второе оружие', quality:'red',    img:'stats_calculator/rune/rune_attack_weapon2_1.png',    stats:{ atk:5, hp:140, def:2, atk_eff:1 } },
+  { name:'Руна рома Двух Морей',               slot:'Фляжка',        quality:'red',    img:'stats_calculator/rune/rune_flask.png',                stats:{ atk:4, def:2, atk_eff:4, heal_eff:2, def_eff:2 } },
+  { name:'Титанитовая Великая Руна Гэтана',    slot:'Штаны',         quality:'red',    img:'stats_calculator/rune/rune_pants.png' },
+  { name:'Великая Руна Варин',                 slot:'Пояс',          quality:'red',    img:'stats_calculator/rune/rune_belt.png' },
+  { name:'Великая Руна Орноса',                slot:'Сапоги',        quality:'red',    img:'stats_calculator/rune/rune_boots.png' },
+  { name:'Титанитовая Великая Руна Баннора',   slot:'Перчатки',      quality:'red',    img:'stats_calculator/rune/rune_gloves.png' },
+  { name:'Титанитовая Великая Руна Халиэмы',  slot:'Наплечники',    quality:'red',    img:'stats_calculator/rune/rune_shoulders.png' },
+  { name:'Великая Руна Мехила',                slot:'Нагрудник',     quality:'red',    img:'stats_calculator/rune/rune_chest.png' },
+  { name:'Ярмарочная руна Эльзы',              slot:'Боевая сумка',  quality:'orange', img:'stats_calculator/rune/rune_medallion_attack_10.png',  stats:{ atk:3.2, hp:340, def:1.25, def_eff:3, crit_fatal:3 } },
+  { name:'Ярмарочная руна Лариса',             slot:'Браслет',       quality:'orange', img:'stats_calculator/rune/rune_medallion_attack_10.png',  stats:{ atk:2, hp:200, def:2 } },
+  { name:'Руна Хенгиста',                      slot:'Амулет',        quality:'purple', img:'stats_calculator/rune/rune_medallion_attack_10.png',  stats:{ atk:1.2, hp:80, atk_eff:3, crit_chance:5 } },
+  { name:'Руна Тэмми',                         slot:'Кольцо',        quality:'purple', img:'stats_calculator/rune/rune_medallion_attack_10.png',  stats:{ atk:2, atk_eff:1, crit_chance:7 } },
+  { name:'Руна Анст',                          slot:'Шлем',          quality:'purple', img:'stats_calculator/rune/rune_medallion_attack_10.png',  stats:{ atk:4, hp:140, def:3 } },
+  { name:'Руна Рог',                           slot:'Жетон',         quality:'purple', img:'stats_calculator/rune/rune_medallion_attack_10.png',  stats:{ atk:3, hp:300, atk_eff:3, crit_chance:3 } },
+  { name:'Руна «Превосходство Аргира»',        slot:'Талисман',      quality:'blue',   img:'stats_calculator/rune/sign_of_celestr.png',           stats:{ atk:2.9, hp:130, def:1.8 } },
+  { name:'Руна Усиленной Защиты Хорлата',      slot:'Шлем',          quality:'blue',   img:'stats_calculator/rune/rune_helm_defense_5.png' },
+  { name:'Руна Усиленной Атаки Хорлата',       slot:'Шлем',          quality:'blue',   img:'stats_calculator/rune/rune_helm_attack_5.png' },
+  { name:'Руна Усиленного Здоровья Хорлата',   slot:'Шлем',          quality:'blue',   img:'stats_calculator/rune/rune_helm_health_5.png' },
 ];
 
 let activeQ   = 'purple';
