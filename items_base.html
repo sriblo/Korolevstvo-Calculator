@@ -498,15 +498,12 @@ function renderRunes(c) {
   GROUP_ORDER.forEach(function(g) {
     const items = RUNES.map((r,i) => ({r,i})).filter(function(x){ return x.r.group === g; });
     if (!items.length) return;
-    html += `<div class="art-section-divider">${GROUP_LABELS[g]}</div><div class="rune-list">`;
+    html += `<div class="art-section-divider">${GROUP_LABELS[g]}</div><div class="buff-grid">`;
     html += items.map(function(x) {
       const r = x.r, i = x.i;
-      return `<div class="rune-row" onmouseenter="ttShowRune(${i},event)" onmousemove="ttMove(event)" onmouseleave="ttHide()">
+      return `<div class="buff-card" onmouseenter="ttShowRune(${i},event)" onmousemove="ttMove(event)" onmouseleave="ttHide()">
         ${icoHtml(r.img, r.quality)}
-        <div class="rune-info">
-          <div class="rune-name">${r.name}</div>
-          <div class="rune-meta"><span class="rune-slot">${r.slot}</span></div>
-        </div>
+        <div class="buff-text"><div class="buff-name">${r.name}</div></div>
       </div>`;
     }).join('');
     html += `</div>`;
