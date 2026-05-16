@@ -916,8 +916,8 @@ function applyCharBg(cid) {
   const pos = s.champion ? 'center 5%' : '60% -10%';
   const sz  = s.champion ? 'auto 380px' : 'auto 475px';
   inner.style.backgroundImage    = `${grad}, url("${file}")`;
-  inner.style.backgroundPosition = `center, ${pos}`;
-  inner.style.backgroundSize     = `auto, ${sz}`;
+  inner.style.backgroundPosition = `${pos}, ${pos}`;
+  inner.style.backgroundSize     = `${sz}, ${sz}`;
 }
 
 function toggleChampion(cid) {
