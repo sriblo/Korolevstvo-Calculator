@@ -600,7 +600,7 @@
     <span>Калькулятор характеристик</span>
   </div>
   <h1 class="h1">Калькулятор <em>характеристик</em></h1>
-  <p class="lede">Соберите двух героев бок-о-бок — разные сеты, разные баффы. Центральная таблица в реальном времени показывает разницу по каждой характеристике.</p>
+  <p class="lede">Соберите двух героев бок-о-бок — разные сеты, разные баффы. Центральная таблица показывает разницу по каждой характеристике.</p>
 </section>
 
 <div class="calc-page">
@@ -694,7 +694,7 @@
     <aside class="compare-panel" id="comparePanel">
       <div class="cmp-head">
         <div>
-          <div class="cmp-title">Сравнение <em>характеристик</em></div>
+          <div class="cmp-title">Сравнение характеристик</div>
           <div class="cmp-sub" id="cmpSub">Соберите снаряжение обоим героям</div>
         </div>
         <button class="cmp-pin-btn" id="cmpPinBtn" onclick="toggleCmpPin()" title="Зафиксировать панель">🔓</button>
@@ -1516,7 +1516,7 @@ function renderCompare() {
     body.innerHTML = `<div class="cmp-empty">Оденьте героев и выберите баффы, чтобы увидеть сравнение характеристик</div>`;
     return;
   }
-  if (sub) sub.textContent = `${a.eqCount} ↔ ${b.eqCount} предметов · в реальном времени`;
+  if (sub) sub.textContent = `${a.eqCount} ↔ ${b.eqCount} предметов`;
 
   const keys = STAT_LABELS.filter(function(m){ return m.combat !== false; }).map(m => m.key).filter(function(k) {
     return (a.totals[k] && a.totals[k] !== 0) || (b.totals[k] && b.totals[k] !== 0);
