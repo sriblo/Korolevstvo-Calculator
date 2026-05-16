@@ -551,6 +551,13 @@
   .tone-btn[data-t="brass"] .swatch{background:linear-gradient(135deg,#e8d670,#8c7d28)}
   .tone-btn[data-t="sand"]  .swatch{background:linear-gradient(135deg,#e0c89c,#8a7858)}
 
+  /* ── Rune picker ── */
+  .picker-section-title{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--txt3);padding:8px 0 4px;font-weight:600}
+  .slot-sq.has-rune::after,.slot-sq-cell.has-rune::after{
+    content:'';position:absolute;bottom:2px;right:2px;
+    width:6px;height:6px;border-radius:50%;
+    background:var(--gold);opacity:.8;
+  }
 </style>
 </head>
 <body>
@@ -991,6 +998,12 @@ function showTt(e, cid, slot) {
         html += `<div class="tt-stat"><span class="tt-stat-k">${meta.label}</span><span class="tt-stat-v">${fmt(v)}</span></div>`;
       });
     }
+    if (eq && eq.rune) {
+      html += `<div style="margin-top:8px;padding-top:8px;border-top:1px dashed var(--line);display:flex;gap:8px;align-items:center">
+        <img src="${eq.rune.img}" style="width:24px;height:24px;object-fit:contain;image-rendering:pixelated" onerror="this.style.display='none'">
+        <span style="font-size:11px;color:var(--gold-l)">${eq.rune.name}</span>
+      </div>`;
+    }
   } else {
     html += `<div class="tt-name">${slot.name}</div><div class="tt-empty">пусто</div>`;
   }
@@ -1040,6 +1053,37 @@ ARTIFACTS.forEach(a => {
   });
 });
 
+// ── RUNE_SLOT_MAP ─────────────────────────────────────────────────────────────
+const RUNE_SLOT_MAP = {
+  'Оружие':        'weapon',
+  'Штаны':         'pants',
+  'Пояс':          'belt',
+  'Сапоги':        'boots',
+  'Перчатки':      'gloves',
+  'Наплечники':    'shoulders',
+  'Нагрудник':     'chest',
+  'Шлем':          'helm',
+  'Второе оружие': 'offhand',
+  'Фляжка':        'flask',
+  'Боевая сумка':  'battle_bag',
+  'Браслет':       'bracelet',
+  'Амулет':        'amulet',
+  'Кольцо':        'ring1',
+  'Жетон':         'badge',
+  'Талисман':      'talisman',
+  'Брелок':        'trinket',
+};
+
+// ── SLOT_RUNES ────────────────────────────────────────────────────────────────
+// Строится из глобального RUNES (из data.js)
+const SLOT_RUNES = {};
+RUNES.forEach(function(r) {
+  const slots = r.slot === 'Кольцо' ? ['ring1','ring2'] : [RUNE_SLOT_MAP[r.slot]].filter(Boolean);
+  slots.forEach(function(sid) {
+    if (!SLOT_RUNES[sid]) SLOT_RUNES[sid] = [];
+    SLOT_RUNES[sid].push(r);
+  });
+});
 
 const _ART_DEFAULT = 'stats_calculator/artefacts/artefact_default.png';
 const ARTEFACT_PH = {
@@ -1115,7 +1159,7 @@ function renderSlotCol(cid, slots, containerId) {
   document.getElementById(containerId).innerHTML = slots.map(slot => {
     const eq = s.equipped[slot.id];
     const isActive = s.activeSlot === slot.id;
-    const cls = ['slot-sq', isActive ? 'active' : '', eq ? 'equipped' : ''].filter(Boolean).join(' ');
+    const cls = ['slot-sq', isActive ? 'active' : '', eq ? 'equipped' : '', eq && eq.rune ? 'has-rune' : ''].filter(Boolean).join(' ');
     return `<div class="${cls}"
       onclick="openPicker('${cid}','${slot.id}')"
       onmouseenter="showTt(event,'${cid}',${JSON.stringify(slot).replace(/"/g,'&quot;')})"
@@ -1129,7 +1173,7 @@ function renderSlotRow(cid, rowSlots, containerId) {
   document.getElementById(containerId).innerHTML = rowSlots.map(slot => {
     const eq = s.equipped[slot.id];
     const isActive = s.activeSlot === slot.id;
-    const cls = ['slot-sq-cell', isActive ? 'active' : '', eq ? 'equipped' : ''].filter(Boolean).join(' ');
+    const cls = ['slot-sq-cell', isActive ? 'active' : '', eq ? 'equipped' : '', eq && eq.rune ? 'has-rune' : ''].filter(Boolean).join(' ');
     return `<div class="${cls}"
       onclick="openPicker('${cid}','${slot.id}')"
       onmouseenter="showTt(event,'${cid}',${JSON.stringify(slot).replace(/"/g,'&quot;')})"
@@ -1195,6 +1239,29 @@ function renderPicker(cid) {
     btns.innerHTML = `<div style="font-size:11px;color:var(--txt3);font-style:italic;font-family:var(--serif);padding:6px 2px">Предметов пока нет в базе</div>`;
   }
 
+  // Руны для этого слота
+  const runesForSlot = SLOT_RUNES[s.activeSlot] || [];
+  if (runesForSlot.length) {
+    let runeHtml = `<div class="picker-section-title">Руны</div>`;
+    runeHtml += runesForSlot.map(function(r) {
+      const globalIdx = RUNES.indexOf(r);
+      const isOn = eqItem && eqItem.rune && eqItem.rune.idx === globalIdx;
+      return `<div class="picker-item${isOn ? ' on' : ''}" onclick="equipRune('${cid}',${globalIdx})"
+        onmouseenter="showRuneTt(event,${globalIdx})"
+        onmousemove="moveTt(event)"
+        onmouseleave="hideTt()">
+        <div style="position:relative;width:32px;height:32px;flex-shrink:0">
+          ${r.img ? `<img src="${r.img}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;z-index:1;image-rendering:pixelated" onerror="this.style.display='none'">` : ''}
+          ${QUALITY_FRAME[r.quality] ? `<img src="${QUALITY_FRAME[r.quality]}" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:2" onerror="this.style.display='none'">` : ''}
+        </div>
+      </div>`;
+    }).join('');
+    if (eqItem && eqItem.rune) {
+      runeHtml += `<div style="display:flex;align-items:center;gap:6px;margin-top:6px;cursor:pointer;font-size:11px;color:var(--red);font-family:var(--sans)" onclick="unequipRune('${cid}')">Снять руну</div>`;
+    }
+    btns.innerHTML += runeHtml;
+  }
+
   let actionHtml = '';
   if (eqItem) {
     actionHtml += `<button class="danger" onclick="unequipActiveSlot('${cid}')">Снять предмет</button>`;
@@ -1230,7 +1297,9 @@ function equipItem(cid, slotId, idx) {
   const s = state[cid];
   const item = (_pickerCache[cid] || [])[idx];
   if (!item) return;
+  const prevRune = s.equipped[slotId] ? s.equipped[slotId].rune : undefined;
   s.equipped[slotId] = { name: item.name, quality: item.quality, img: item.img, stats: item.stats };
+  if (prevRune) s.equipped[slotId].rune = prevRune;
   renderAll(cid);
 }
 
@@ -1322,6 +1391,12 @@ function computeTotals(cid) {
     if (eq && eq.stats) {
       hasAny = true;
       Object.entries(eq.stats).forEach(function(entry) {
+        totals[entry[0]] = (totals[entry[0]] || 0) + entry[1];
+      });
+    }
+    if (eq && eq.rune && eq.rune.stats) {
+      hasAny = true;
+      Object.entries(eq.rune.stats).forEach(function(entry) {
         totals[entry[0]] = (totals[entry[0]] || 0) + entry[1];
       });
     }
@@ -1462,6 +1537,52 @@ function renderAll(cid) {
   renderDoll(cid);
   renderStats(cid);
   renderCompare();
+}
+
+// ── RUNE ACTIONS ─────────────────────────────────────────────────────────────
+function equipRune(cid, runeIdx) {
+  const s = state[cid];
+  if (!s.activeSlot) return;
+  const eq = s.equipped[s.activeSlot];
+  if (!eq) return;
+  const rune = RUNES[runeIdx];
+  if (!rune) return;
+  eq.rune = { idx: runeIdx, name: rune.name, img: rune.img, stats: rune.stats ? Object.assign({}, rune.stats) : {} };
+  renderAll(cid);
+}
+
+function unequipRune(cid) {
+  const s = state[cid];
+  if (!s.activeSlot || !s.equipped[s.activeSlot]) return;
+  delete s.equipped[s.activeSlot].rune;
+  renderAll(cid);
+}
+
+function showRuneTt(e, runeIdx) {
+  const r = RUNES[runeIdx];
+  if (!r) return;
+  const q = QUALITIES.find(function(q) { return q.id === r.quality; });
+  let html = `<div class="tt-head">`;
+  if (r.img) html += `<img class="tt-ico" src="${r.img}" onerror="this.style.display='none'">`;
+  html += `<div class="tt-head-text">
+    <div class="tt-name">${r.name}</div>
+    ${q ? `<div class="tt-quality" style="color:${q.color}">${q.label}</div>` : ''}
+  </div></div>`;
+  html += `<div class="tt-stat"><span class="tt-stat-k" style="color:var(--txt3)">Слот: ${r.slot}</span></div>`;
+  if (r.stats) {
+    Object.entries(r.stats).forEach(function(entry) {
+      var k = entry[0]; var v = entry[1];
+      const meta = STAT_LABELS.find(function(m) { return m.key === k; });
+      if (!meta) return;
+      const vStr = meta.pct ? `${v > 0 ? '+' : ''}${Number(v).toFixed(2).replace(/\.00$/,'')}%` : (Number.isInteger(v) ? String(v) : Number(v).toFixed(2));
+      html += `<div class="tt-stat"><span class="tt-stat-k">${meta.label}</span><span class="tt-stat-v">${vStr}</span></div>`;
+    });
+  } else {
+    html += `<div class="tt-empty">данные стат скоро</div>`;
+  }
+  ttEl.innerHTML = html;
+  ttEl.style.display = 'block';
+  moveTt(e);
 }
 
 // ── ACTIONS ───────────────────────────────────────────────────────────────────
