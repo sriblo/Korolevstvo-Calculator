@@ -63,7 +63,7 @@ const CLASS_SLOTS = {
 
 // Отображаемое название предмета по классу и слоту
 const CLASS_ITEM_NAMES = {
-  warrior: { weapon:'Меч',    offhand:'Щит',      helm:'Шлем', chest:'Нагрудник', shoulders:'Наплечники', pants:'Штаны', gloves:'Перчатки', belt:'Пояс', boots:'Сапоги' },
+  warrior: { weapon:'Меч',    offhand:'Щит',      helm:'Шлем', chest:'Кираса',    shoulders:'Наплечники', pants:'Штаны', gloves:'Перчатки', belt:'Пояс', boots:'Сапоги' },
   rogue:   { weapon:'Кинжал', offhand:'Кинжал',   helm:'Шлем', chest:'Нагрудник', shoulders:'Наплечники', pants:'Штаны', gloves:'Перчатки', belt:'Пояс', boots:'Сапоги' },
   monk:    { weapon:'Посох',  offhand:'Орб',      helm:'Шлем', chest:'Нагрудник', shoulders:'Наплечники', pants:'Штаны', gloves:'Перчатки', belt:'Пояс', boots:'Сапоги' },
   paladin: { weapon:'Молот',  offhand:'Реликвия', helm:'Шлем', chest:'Нагрудник', shoulders:'Наплечники', pants:'Штаны', gloves:'Перчатки', belt:'Пояс', boots:'Сапоги' },
@@ -111,10 +111,13 @@ const STAT_LABELS = [
 const STATS = {
   warrior: {
     red: {
-      weapon:    { atk:12.72, def:37.85, hp:694,  mana:80,  heal_eff:5, hp_regen:50, crit_dmg:5, wind_res:0.80, elem_def:35, atk_eff:2 },
-      pants:     { atk:14.53, def:15.03, hp:713,  mana:120, heal_eff:5, hp_regen:50, crit_dmg:5, wind_res:0.80, elem_def:53, atk_eff:2 },
-      belt:      { atk:15.56, def:8.56,  hp:725,  mana:150, heal_eff:5, hp_regen:50, crit_dmg:5, wind_res:0.80, elem_def:72, atk_eff:2 },
-      boots:     { atk:20.04, def:5.65,  hp:750,  mana:170, heal_eff:5, hp_regen:50, crit_dmg:5, wind_res:0.80, elem_def:92, atk_eff:2 },
+      helm:      { atk:40.23, def:3.81,  hp:1662, mana:900, heal_eff:5, hp_regen:60, crit_dmg:6, wind_res:0.80, elem_def:193, atk_eff:22 },
+      shoulders: { atk:21.56, def:3.13,  hp:800,  mana:210, heal_eff:5, hp_regen:60, crit_dmg:6, wind_res:0.80, elem_def:146, atk_eff:2 },
+      chest:     { atk:22.43, def:2.43,  hp:831,  mana:230, heal_eff:5, hp_regen:60, crit_dmg:6, wind_res:0.80, elem_def:169, atk_eff:2 },
+      weapon:    { atk:12.72, def:37.85, hp:694,  mana:80,  heal_eff:5, hp_regen:50, crit_dmg:5, wind_res:0.80, elem_def:35,  atk_eff:2 },
+      pants:     { atk:14.53, def:15.03, hp:713,  mana:120, heal_eff:5, hp_regen:50, crit_dmg:5, wind_res:0.80, elem_def:53,  atk_eff:2 },
+      belt:      { atk:15.56, def:8.56,  hp:725,  mana:150, heal_eff:5, hp_regen:50, crit_dmg:5, wind_res:0.80, elem_def:72,  atk_eff:2 },
+      boots:     { atk:20.04, def:5.65,  hp:750,  mana:170, heal_eff:5, hp_regen:50, crit_dmg:5, wind_res:0.80, elem_def:92,  atk_eff:2 },
     },
   },
   paladin: {
