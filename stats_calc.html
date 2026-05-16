@@ -8,302 +8,582 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root {
-  --gold:      #d4a843;
-  --gold-l:    #f5d878;
-  --gold-d:    #a07d2b;
-  --gold-tint: 212,168,67;
-  --bg:        #0b0907;
-  --bg2:       #120e09;
-  --bg3:       #1a160f;
-  --bg4:       #211810;
-  --line:      rgba(212,168,67,.09);
-  --line2:     rgba(212,168,67,.18);
-  --txt:       #ece4cf;
-  --txt2:      #a99775;
-  --txt3:      #6c5d44;
-  --serif:     'Fraunces', Georgia, serif;
-  --sans:      'Inter', system-ui, sans-serif;
-}
+  :root{
+    --gold:      #d4a843;
+    --gold-l:    #f5d878;
+    --gold-d:    #a07d2b;
+    --gold-tint: 212,168,67;
+    --bg:#0b0907;
+    --bg2:#120e09;
+    --bg3:#1a160f;
+    --bg4:#211810;
+    --line:rgba(var(--gold-tint),.09);
+    --line2:rgba(var(--gold-tint),.18);
+    --line3:rgba(var(--gold-tint),.28);
+    --txt:#ece4cf;
+    --txt2:#a99775;
+    --txt3:#6c5d44;
+    --green:#8ab860;
+    --red:#d97757;
+    --serif:'Fraunces',Georgia,serif;
+    --sans:'Inter',system-ui,sans-serif;
+  }
+  [data-tone="brass"]{ --gold:#c9b552; --gold-l:#e8d670; --gold-d:#8c7d28; --gold-tint:201,181,82; --txt:#ece6cc; --txt2:#a89c70; }
+  [data-tone="sand"]{  --gold:#c2a878; --gold-l:#e0c89c; --gold-d:#8a7858; --gold-tint:194,168,120; --txt:#ece2c8; --txt2:#a89578; }
 
-*{box-sizing:border-box;margin:0;padding:0}
-html,body{min-height:100%;background:var(--bg);color:var(--txt);font-family:var(--sans);font-size:14px;-webkit-font-smoothing:antialiased}
-a{color:inherit;text-decoration:none}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg);color:var(--txt);font-family:var(--sans);font-size:14px;-webkit-font-smoothing:antialiased}
+  body{
+    min-height:100vh;
+    background:
+      radial-gradient(ellipse 80% 50% at 20% -10%, rgba(var(--gold-tint),.12), transparent 60%),
+      radial-gradient(ellipse 50% 40% at 100% 5%, rgba(80,30,15,.18), transparent 60%),
+      var(--bg);
+  }
+  a{color:inherit;text-decoration:none}
+  button{font-family:inherit}
 
-/* ── HEADER ── */
-.top{
-  height:52px;padding:0 28px;
-  border-bottom:1px solid var(--line);
-  background:rgba(11,9,7,.9);backdrop-filter:blur(20px);
-  position:sticky;top:0;z-index:100;
-  display:flex;align-items:center;gap:16px;
-}
-.logo{display:flex;align-items:center;gap:10px}
-.logo img{width:24px;height:24px;filter:drop-shadow(0 0 8px rgba(212,168,67,.4))}
-.logo-n{font-family:var(--serif);font-size:15px;font-weight:600;letter-spacing:-.01em}
-.nav{margin-left:16px;display:flex;gap:2px}
-.nav a{padding:5px 10px;border-radius:6px;font-size:13px;color:var(--txt2);font-weight:500;transition:background .12s,color .12s}
-.nav a:hover{color:var(--txt);background:var(--bg2)}
-.nav a.on{color:var(--gold-l);background:var(--bg3)}
-.h-back{margin-left:auto;font-size:12px;color:var(--txt3);display:flex;align-items:center;gap:5px;transition:color .15s}
-.h-back:hover{color:var(--gold-l)}
-.h-back::before{content:'←'}
+  /* ── Top bar ── */
+  .top{
+    padding:16px 40px;border-bottom:1px solid var(--line);
+    background:rgba(11,9,7,.78);backdrop-filter:blur(20px);
+    position:sticky;top:0;z-index:50;
+    display:flex;align-items:center;gap:18px;
+  }
+  .logo{display:flex;align-items:center;gap:12px}
+  .logo img{width:28px;height:28px;filter:drop-shadow(0 0 10px rgba(var(--gold-tint),.4))}
+  .logo-n{font-family:var(--serif);font-size:16px;font-weight:600;letter-spacing:-.01em;line-height:1}
+  .logo-s{font-size:10px;color:var(--txt3);margin-top:2px;letter-spacing:.02em}
+  .nav{margin-left:24px;display:flex;gap:4px}
+  .nav a{
+    padding:6px 11px;border-radius:6px;font-size:13px;color:var(--txt2);font-weight:500;
+    transition:background .12s,color .12s;cursor:pointer;
+  }
+  .nav a:hover{color:var(--txt);background:var(--bg2)}
+  .nav a.on{color:var(--gold-l);background:var(--bg3)}
+  .top-r{margin-left:auto;display:flex;align-items:center;gap:12px}
+  .top-back{
+    font-size:12px;color:var(--txt3);
+    display:inline-flex;align-items:center;gap:6px;
+    padding:6px 10px;border-radius:6px;transition:.12s;
+  }
+  .top-back:hover{color:var(--gold-l);background:var(--bg2)}
 
-/* ── PAGE ── */
-.page{padding:28px 32px 80px;max-width:1320px;margin:0 auto}
-.page-head{margin-bottom:20px}
-.page-title{font-family:var(--serif);font-size:26px;font-weight:500;letter-spacing:-.015em;margin-bottom:2px}
-.page-sub{font-size:11px;color:var(--txt3);letter-spacing:.1em;text-transform:uppercase}
+  /* ── Hero ── */
+  .hero{max-width:1480px;margin:0 auto;padding:48px 40px 28px;position:relative;overflow:hidden}
+  .hero::after{
+    content:'';position:absolute;
+    top:-40px;right:-60px;width:380px;height:460px;
+    background:url('kor_logo.svg') no-repeat center/contain;
+    opacity:.05;pointer-events:none;z-index:0;
+    filter:drop-shadow(0 0 60px rgba(var(--gold-tint),.5));
+    transform:rotate(-8deg);
+  }
+  .hero > *{position:relative;z-index:1}
+  .eyebrow{
+    font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);font-weight:600;
+    display:inline-flex;align-items:center;gap:10px;margin-bottom:18px;
+  }
+  .eyebrow::before{content:'';width:24px;height:1px;background:var(--gold)}
+  .eyebrow a{color:var(--txt3);transition:color .12s}
+  .eyebrow a:hover{color:var(--gold-l)}
+  .eyebrow .sep{color:var(--txt3)}
+  .h1{
+    font-family:var(--serif);font-size:48px;line-height:1.04;font-weight:400;letter-spacing:-.025em;
+    margin-bottom:14px;max-width:760px;
+  }
+  .h1 em{font-style:italic;color:var(--gold-l);font-weight:300}
+  .lede{
+    font-family:var(--serif);font-size:17px;line-height:1.55;color:var(--txt2);
+    max-width:560px;font-weight:400;
+  }
 
-.calc-layout{
-  display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start;
-}
+  /* ── Main grid ── */
+  .calc-page{max-width:1480px;margin:0 auto;padding:24px 32px 80px}
+  .calc-layout{
+    display:grid;grid-template-columns:minmax(340px,1fr) minmax(360px,440px) minmax(340px,1fr);
+    gap:18px;align-items:start;
+  }
+  @media(max-width:1280px){
+    .calc-layout{grid-template-columns:1fr 1fr;}
+    .compare-panel{grid-column:1 / -1;order:3}
+  }
+  @media(max-width:800px){.calc-layout{grid-template-columns:1fr}}
 
-/* ── CHARACTER BLOCK ── */
-.char-block{
-  background:var(--bg2);border:1px solid var(--line);border-radius:14px;
-  display:flex;flex-direction:column;
-}
-.char-block-head{
-  display:flex;align-items:center;
-  padding:12px 18px 10px;border-bottom:1px solid var(--line);
-}
-.char-block-label{font-family:var(--serif);font-size:14px;font-weight:500;color:var(--txt3)}
-.char-block-inner{padding:14px 16px;display:flex;flex-direction:column;gap:12px}
+  /* ── Compare panel ── */
+  .compare-panel{
+    background:linear-gradient(180deg, rgba(var(--gold-tint),.04), transparent 40%), var(--bg2);
+    border:1px solid var(--line);border-radius:14px;overflow:hidden;
+    position:relative;
+    align-self:start;
+    position:sticky;top:88px;
+  }
+  .compare-panel::before{
+    content:'';position:absolute;top:0;left:0;right:0;height:1px;
+    background:linear-gradient(90deg,transparent,rgba(var(--gold-tint),.3),transparent);
+  }
+  .cmp-head{
+    padding:14px 20px 10px;border-bottom:1px solid var(--line);
+    text-align:center;
+  }
+  .cmp-title{
+    font-family:var(--serif);font-size:18px;font-weight:500;letter-spacing:-.01em;
+    color:var(--txt);
+  }
+  .cmp-title em{font-style:italic;color:var(--gold-l);font-weight:300}
+  .cmp-sub{
+    font-size:10px;color:var(--txt3);letter-spacing:.16em;text-transform:uppercase;
+    font-weight:600;margin-top:4px;
+  }
+  .cmp-col-head{
+    display:grid;grid-template-columns:1fr 1.4fr 1fr;
+    padding:10px 20px;border-bottom:1px solid var(--line);
+    font-size:10px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--gold-d);font-weight:700;
+  }
+  .cmp-col-head .h1n{text-align:right}
+  .cmp-col-head .h2n{text-align:left}
+  .cmp-col-head .hkn{text-align:center;color:var(--txt3)}
+  .cmp-body{padding:6px 0}
+  .cmp-row{
+    display:grid;grid-template-columns:1fr 1.4fr 1fr;align-items:center;
+    padding:7px 20px;border-bottom:1px solid rgba(var(--gold-tint),.05);
+    transition:background .1s;gap:8px;
+  }
+  .cmp-row:last-child{border-bottom:none}
+  .cmp-row:hover{background:rgba(var(--gold-tint),.025)}
+  .cmp-key{
+    font-size:11px;color:var(--txt2);text-align:center;font-family:var(--serif);
+    font-style:italic;letter-spacing:.01em;
+  }
+  .cmp-v{
+    font-family:var(--serif);font-size:14px;color:var(--txt);
+    font-feature-settings:'tnum';font-weight:500;
+    display:flex;align-items:baseline;gap:6px;
+  }
+  .cmp-v1{justify-content:flex-end}
+  .cmp-v2{justify-content:flex-start}
+  .cmp-v.winner{color:var(--gold-l)}
+  .cmp-v.loser{color:var(--txt3);opacity:.7}
+  .cmp-v .diff{
+    font-size:10px;color:var(--green);font-weight:600;
+    letter-spacing:.04em;font-family:var(--sans);font-style:normal;
+  }
+  .cmp-v .diff.neg{color:var(--red)}
+  .cmp-v1 .diff{order:-1}
+  .cmp-empty{
+    padding:32px 20px;text-align:center;
+    font-family:var(--serif);font-style:italic;font-size:13px;color:var(--txt3);line-height:1.5;
+  }
+  .cmp-bar-wrap{
+    grid-column:1 / -1;
+    height:3px;background:var(--bg3);border-radius:2px;overflow:hidden;
+    display:flex;margin-top:2px;
+  }
+  .cmp-bar-1,.cmp-bar-2{height:100%}
+  .cmp-bar-1{background:rgba(var(--gold-tint),.6);border-right:1px solid var(--bg2)}
+  .cmp-bar-2{background:rgba(122,184,255,.55)}
 
-/* ── CONTROLS ROW ── */
-.char-controls{display:flex;align-items:center;gap:10px}
+  /* ── Character block ── */
+  .char-block{
+    background:linear-gradient(180deg, rgba(var(--gold-tint),.025), transparent 30%), var(--bg2);
+    border:1px solid var(--line);border-radius:14px;
+    display:flex;flex-direction:column;overflow:hidden;
+    position:relative;
+  }
+  .char-block::before{
+    content:'';position:absolute;top:0;left:0;right:0;height:1px;
+    background:linear-gradient(90deg,transparent,rgba(var(--gold-tint),.25),transparent);
+  }
+  .cb-head{
+    display:flex;align-items:center;justify-content:space-between;gap:12px;
+    padding:14px 22px;border-bottom:1px solid var(--line);
+  }
+  .cb-label{
+    font-family:var(--serif);font-style:italic;font-size:14px;color:var(--gold-d);
+    letter-spacing:.04em;
+    display:flex;align-items:center;gap:10px;
+  }
+  .cb-label::before{
+    content:'§';font-style:normal;font-size:18px;color:var(--gold);opacity:.6;font-weight:300;
+  }
+  .cb-actions{display:flex;gap:6px}
+  .cb-action{
+    background:transparent;border:1px solid var(--line);border-radius:6px;
+    padding:5px 10px;font-size:11px;color:var(--txt2);cursor:pointer;
+    letter-spacing:.04em;transition:.12s;white-space:nowrap;
+  }
+  .cb-action:hover{border-color:var(--line2);color:var(--txt)}
+  .cb-action.strip:hover{border-color:rgba(217,119,87,.3);color:var(--red)}
+  .cb-action.equip-set{
+    border-color:var(--line2);color:var(--gold-l);
+    background:rgba(var(--gold-tint),.05);
+  }
+  .cb-action.equip-set:hover{background:rgba(var(--gold-tint),.12);border-color:var(--gold-d)}
+  .cb-inner{
+    padding:18px 22px 22px;display:flex;flex-direction:column;gap:16px;
+    position:relative;overflow:hidden;
+    background-color:var(--bg2);
+    background-size:auto 500px;
+    background-position:center top;
+    background-repeat:no-repeat;
+  }
+  .cb-inner::before{
+    content:'';position:absolute;left:0;right:0;top:0;height:500px;
+    pointer-events:none;z-index:0;
+    background:
+      radial-gradient(ellipse 70% 60% at 50% 50%, rgba(11,9,7,.04) 0%, rgba(11,9,7,.28) 55%, rgba(11,9,7,.75) 88%, rgba(11,9,7,.94) 100%);
+  }
+  .cb-inner::after{
+    content:'';position:absolute;left:0;right:0;top:500px;bottom:0;
+    pointer-events:none;z-index:0;
+    background:linear-gradient(180deg, rgba(11,9,7,.95) 0%, var(--bg2) 30%);
+  }
+  .cb-inner > *{position:relative;z-index:1}
 
-.nickname-input{
-  width:130px;flex-shrink:0;
-  padding:6px 10px;
-  background:var(--bg3);border:1px solid var(--line);border-radius:7px;
-  font-size:12px;font-family:var(--sans);color:var(--txt);outline:none;
-  transition:border-color .15s;
-}
-.nickname-input::placeholder{color:var(--txt3)}
-.nickname-input:focus{border-color:var(--line2)}
+  /* ── Controls row ── */
+  .char-controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .nick-input{
+    width:150px;padding:7px 11px;
+    background:var(--bg3);border:1px solid var(--line);border-radius:7px;
+    font-size:12px;font-family:var(--sans);color:var(--txt);outline:none;
+    transition:border-color .15s;
+  }
+  .nick-input::placeholder{color:var(--txt3);font-style:italic}
+  .nick-input:focus{border-color:var(--line2);background:var(--bg4)}
+  .cls-label{font-size:11px;color:var(--txt3);letter-spacing:.08em;text-transform:uppercase}
+  .cls-drop{position:relative}
+  .cls-dd-trig{
+    display:flex;align-items:center;gap:8px;
+    padding:6px 10px;background:var(--bg3);border:1px solid var(--line2);
+    border-radius:7px;cursor:pointer;font-size:12px;color:var(--txt2);
+    font-weight:500;transition:.12s;user-select:none;white-space:nowrap;
+  }
+  .cls-dd-trig:hover,.cls-drop.open .cls-dd-trig{background:var(--bg4);color:var(--txt)}
+  .cls-drop.open .cls-dd-trig{color:var(--gold-l);border-color:rgba(var(--gold-tint),.35)}
+  .cls-dd-ico{width:13px;height:13px;flex-shrink:0;object-fit:contain;image-rendering:pixelated}
+  .cls-dd-arrow{width:10px;height:10px;opacity:.6;transition:transform .15s}
+  .cls-drop.open .cls-dd-arrow{transform:rotate(180deg)}
+  .cls-dd-menu{
+    display:none;position:absolute;top:calc(100% + 6px);left:0;
+    background:var(--bg3);border:1px solid var(--line2);border-radius:9px;
+    padding:5px;min-width:170px;z-index:200;
+    box-shadow:0 12px 32px rgba(0,0,0,.6);
+  }
+  .cls-drop.open .cls-dd-menu{display:block}
+  .cls-dd-item{
+    display:flex;align-items:center;gap:8px;
+    padding:7px 10px;border-radius:6px;
+    font-size:12px;color:var(--txt2);font-weight:500;cursor:pointer;
+    transition:.1s;
+  }
+  .cls-dd-item:hover{background:var(--bg4);color:var(--txt)}
+  .cls-dd-item.on{color:var(--gold-l)}
+  .cls-dd-item img{width:13px;height:13px;flex-shrink:0;object-fit:contain;image-rendering:pixelated}
 
-.cls-label{font-size:12px;color:var(--txt3);flex-shrink:0}
+  /* Race / sex chips */
+  .race-chips{display:flex;align-items:center;gap:4px;margin-left:auto}
+  .chip-sep{width:1px;height:20px;background:var(--line2);margin:0 4px;flex-shrink:0;}
+  .sex-chip,.race-chip{
+    width:34px;height:34px;flex-shrink:0;
+    background-color:var(--bg3);background-repeat:no-repeat;
+    border:1px solid var(--line);border-radius:6px;cursor:pointer;
+    padding:0;transition:border-color .15s,background-color .15s,box-shadow .15s;
+    image-rendering:pixelated;
+  }
+  .sex-chip:hover,.race-chip:hover{border-color:var(--line2);background-color:var(--bg4);}
+  .sex-chip.on,.race-chip.on{
+    border-color:var(--gold);
+    box-shadow:0 0 0 2px rgba(var(--gold-tint),.18);
+    background-color:rgba(var(--gold-tint),.06);
+  }
+  .sex-chip{
+    background-image:url('stats_calculator/ui/select_sex.jpg');
+    background-size:64px 96px;
+  }
+  .sex-chip[data-sex="Male"]{background-position:0 1px}
+  .sex-chip[data-sex="Female"]{background-position:-32px 1px}
+  .sex-chip[data-sex="Male"]:hover{background-position:0 -31px}
+  .sex-chip[data-sex="Female"]:hover{background-position:-32px -31px}
+  .sex-chip[data-sex="Male"].on{background-position:0 -63px}
+  .sex-chip[data-sex="Female"].on{background-position:-32px -63px}
+  .race-chip{background-position:center;background-size:13px 13px;}
+  .race-chip[data-race="Elf"]{background-image:url('stats_calculator/ui/race_elf.png')}
+  .race-chip[data-race="Human"]{background-image:url('stats_calculator/ui/race_human.png')}
+  .champ-chip{
+    width:34px;height:34px;flex-shrink:0;
+    background:var(--bg3);border:1px solid var(--line);border-radius:6px;
+    cursor:pointer;padding:0;
+    display:flex;align-items:center;justify-content:center;
+    transition:border-color .15s,background .15s,box-shadow .2s;
+    position:relative;
+  }
+  .champ-chip:hover{border-color:var(--line2);background:var(--bg4)}
+  .champ-chip .champ-ico{
+    width:32px;height:32px;image-rendering:pixelated;
+    filter:grayscale(1) brightness(.55);transition:filter .2s;
+  }
+  .champ-chip.on{
+    border-color:var(--gold);background:rgba(var(--gold-tint),.08);
+    box-shadow:0 0 0 2px rgba(var(--gold-tint),.18), 0 0 14px rgba(var(--gold-tint),.42);
+  }
+  .champ-chip.on .champ-ico{filter:none}
 
-/* Class dropdown */
-.cls-drop{position:relative}
-.cls-dd-trigger{
-  display:flex;align-items:center;gap:7px;
-  padding:6px 10px;
-  background:var(--bg3);border:1px solid var(--line2);border-radius:7px;
-  cursor:pointer;font-size:12px;color:var(--txt2);font-weight:500;
-  transition:background .12s,color .12s;user-select:none;white-space:nowrap;
-}
-.cls-dd-trigger:hover,.cls-drop.open .cls-dd-trigger{background:var(--bg4);color:var(--txt)}
-.cls-drop.open .cls-dd-trigger{color:var(--gold-l);border-color:rgba(var(--gold-tint),.3)}
-.cls-dd-ico{width:18px;height:18px;border-radius:3px;flex-shrink:0;object-fit:cover}
-.cls-dd-arrow{width:10px;height:10px;opacity:.6;transition:transform .15s;flex-shrink:0}
-.cls-drop.open .cls-dd-arrow{transform:rotate(180deg)}
-.cls-dd-menu{
-  display:none;position:absolute;top:calc(100% + 6px);left:0;
-  background:var(--bg3);border:1px solid var(--line2);border-radius:9px;
-  padding:5px;min-width:160px;z-index:200;
-  box-shadow:0 12px 32px rgba(0,0,0,.6);
-}
-.cls-drop.open .cls-dd-menu{display:block}
-.cls-dd-item{
-  display:flex;align-items:center;gap:8px;
-  padding:7px 10px;border-radius:6px;
-  font-size:12px;color:var(--txt2);font-weight:500;cursor:pointer;
-  transition:background .1s,color .1s;
-}
-.cls-dd-item:hover{background:var(--bg4);color:var(--txt)}
-.cls-dd-item.on{color:var(--gold-l)}
-.cls-dd-item img{width:18px;height:18px;border-radius:3px;object-fit:cover;flex-shrink:0}
+  /* ── Paperdoll ── */
+  .pd-section{display:flex;flex-direction:column;gap:6px;width:274px;margin:0 auto;}
+  .pd-middle{display:flex;gap:6px;align-items:stretch}
+  .slot-col-vert{display:flex;flex-direction:column;gap:6px;flex-shrink:0}
+  .slot-sq,
+  .slot-sq-cell{
+    width:34px;height:34px;flex-shrink:0;
+    background:var(--bg3);border:1px solid var(--line);border-radius:5px;
+    display:flex;align-items:center;justify-content:center;
+    position:relative;overflow:hidden;cursor:pointer;
+    transition:border-color .15s,background .15s,box-shadow .15s;
+  }
+  .slot-sq:hover,.slot-sq-cell:hover{border-color:var(--line2);background:var(--bg4)}
+  .slot-sq.active,.slot-sq-cell.active{border-color:var(--gold);box-shadow:0 0 0 2px rgba(var(--gold-tint),.18)}
+  .slot-sq.equipped,.slot-sq-cell.equipped{border-color:var(--line2)}
+  .slot-sq img.item-img,.slot-sq-cell img.item-img{width:32px;height:32px;object-fit:contain;image-rendering:pixelated}
+  .slot-sq img.frame-img,.slot-sq-cell img.frame-img{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+  .slot-row{display:grid;grid-template-columns:repeat(7,34px);gap:6px}
 
-/* ── PAPERDOLL SECTION (unified grid: 7×34 + 6×6 = 274px) ── */
-.paperdoll-section{
-  display:flex;flex-direction:column;gap:6px;
-  width:274px;margin:0 auto;
-}
-.paperdoll-middle{
-  display:flex;gap:6px;align-items:stretch;
-}
+  /* ── Character figure (paper doll) ── */
+  .char-fig-wrap{
+    flex:1;min-width:0;
+    background:transparent;border:1px solid var(--line);border-radius:8px;
+    position:relative;overflow:hidden;min-height:280px;
+  }
+  .char-fig-wrap::after{
+    content:'';position:absolute;inset:0;pointer-events:none;
+    background:linear-gradient(180deg, rgba(0,0,0,0) 60%, rgba(0,0,0,.25) 100%);
+  }
+  .char-fig-wrap::before{
+    content:'';position:absolute;inset:0;pointer-events:none;opacity:.04;
+    background-image:repeating-linear-gradient(0deg, transparent 0, transparent 2px, rgba(var(--gold-tint),.5) 2px, rgba(var(--gold-tint),.5) 3px);
+    mix-blend-mode:overlay;z-index:1;
+  }
+  .doll-stage{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;}
+  .doll{position:relative;width:140px;height:220px;}
+  .doll .dll{
+    position:absolute;inset:0;
+    background-repeat:no-repeat;background-position:center;background-size:contain;
+    image-rendering:pixelated;
+  }
+  .doll .dll[data-layer="face"]{transform:translateY(-3px)}
+  .char-empty{
+    position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    font-family:var(--serif);font-style:italic;font-size:13px;color:var(--txt3);
+    text-align:center;padding:20px;
+  }
+  .char-empty.hide{display:none}
+  .char-fig-wrap .corner{
+    position:absolute;width:10px;height:10px;
+    border-color:var(--line2);border-style:solid;border-width:0;
+    pointer-events:none;z-index:2;
+  }
+  .char-fig-wrap .corner.tl{top:6px;left:6px;border-top-width:1px;border-left-width:1px}
+  .char-fig-wrap .corner.tr{top:6px;right:6px;border-top-width:1px;border-right-width:1px}
+  .char-fig-wrap .corner.bl{bottom:6px;left:6px;border-bottom-width:1px;border-left-width:1px}
+  .char-fig-wrap .corner.br{bottom:6px;right:6px;border-bottom-width:1px;border-right-width:1px}
 
-/* ── VERTICAL SLOT COLUMNS ── */
-.slot-col-vert{display:flex;flex-direction:column;gap:6px;flex-shrink:0}
+  /* ── Picker ── */
+  .picker{
+    display:none;
+    background:var(--bg3);border:1px solid var(--line2);border-radius:10px;
+    padding:14px 16px;animation:fadeIn .15s ease;
+  }
+  .picker.open{display:block}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(-3px)}to{opacity:1;transform:none}}
+  .picker-head{
+    display:flex;align-items:baseline;justify-content:space-between;gap:8px;
+    margin-bottom:10px;
+  }
+  .picker-title{font-family:var(--serif);font-size:13px;color:var(--txt);font-weight:500}
+  .picker-title em{font-style:italic;color:var(--gold-l);font-weight:300}
+  .picker-btns{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px}
+  .picker-item{
+    position:relative;width:36px;height:36px;flex-shrink:0;
+    background:var(--bg2);border:1px solid var(--line);border-radius:5px;cursor:pointer;overflow:hidden;
+    transition:.12s;
+  }
+  .picker-item:hover{border-color:var(--line2);transform:translateY(-1px)}
+  .picker-item.on{border-color:var(--gold);box-shadow:0 0 0 2px rgba(var(--gold-tint),.2)}
+  .picker-item img{image-rendering:pixelated}
+  .picker-rune-info{
+    display:none;margin-top:10px;padding:9px 12px;
+    background:var(--bg2);border:1px solid var(--line);border-radius:7px;
+    align-items:center;gap:10px;
+  }
+  .picker-rune-info.on{display:flex}
+  .picker-rune-info img{width:26px;height:26px;object-fit:contain;flex-shrink:0;image-rendering:pixelated}
+  .picker-rune-info .rune-lbl{
+    font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold-d);font-weight:600;
+  }
+  .picker-rune-info .rune-name{
+    font-family:var(--serif);font-size:13px;color:var(--gold-l);
+    font-style:italic;letter-spacing:-.005em;line-height:1.2;
+  }
+  .picker-rune-info .rune-text{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+  .picker-actions{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;}
+  .picker-actions:empty{display:none}
+  .picker-actions button{
+    flex:1;min-width:120px;
+    background:var(--bg2);border:1px solid var(--line2);border-radius:6px;
+    padding:8px 12px;font-size:11px;color:var(--txt);
+    font-family:var(--sans);font-weight:500;cursor:pointer;
+    letter-spacing:.04em;transition:.12s;text-align:center;
+  }
+  .picker-actions button:hover{background:var(--bg4);border-color:var(--gold-d);color:var(--gold-l)}
+  .picker-actions button.primary{
+    color:var(--gold-l);background:rgba(var(--gold-tint),.06);border-color:rgba(var(--gold-tint),.3);
+  }
+  .picker-actions button.primary:hover{background:rgba(var(--gold-tint),.12);border-color:var(--gold-d)}
+  .picker-actions button.danger{color:#e8a890;border-color:rgba(217,119,87,.28)}
+  .picker-actions button.danger:hover{background:rgba(217,119,87,.08);border-color:rgba(217,119,87,.55);color:var(--red)}
+  .picker-actions button.ghost{color:var(--txt3);border-color:var(--line)}
+  .picker-actions button.ghost:hover{color:var(--txt2);border-color:var(--line2)}
 
-.slot-sq{
-  width:34px;height:34px;
-  background:var(--bg3);border:1px solid var(--line);border-radius:5px;
-  display:flex;align-items:center;justify-content:center;
-  position:relative;overflow:hidden;
-  cursor:pointer;
-  transition:border-color .15s,background .15s;
-  flex-shrink:0;
-}
-.slot-sq:hover{border-color:var(--line2);background:var(--bg4)}
-.slot-sq.active{border-color:var(--gold)}
-.slot-sq.equipped{border-color:var(--line2)}
-.slot-sq img.item-img{width:32px;height:32px;object-fit:none}
-.slot-sq img.frame-img{position:absolute;inset:4px;width:32px;height:32px;pointer-events:none}
-.slot-sq .ico-empty{opacity:.15}
+  /* slot rune indicator */
+  .slot-sq.has-rune::after,.slot-sq-cell.has-rune::after{
+    content:'';position:absolute;top:2px;right:2px;
+    width:6px;height:6px;border-radius:50%;
+    background:#7ab8ff;box-shadow:0 0 6px rgba(122,184,255,.7), 0 0 2px #fff inset;
+    z-index:5;pointer-events:none;
+  }
 
-/* ── CHARACTER FIGURE — portrait, flex:1 → 184px in 260px container ── */
-.char-figure-wrap{
-  flex:1;min-width:0;
-  display:flex;align-items:center;justify-content:center;
-  background:var(--bg3);border:1px solid var(--line);border-radius:8px;
-  overflow:hidden;min-height:260px;
-}
-.char-figure{max-width:100%;max-height:320px;object-fit:contain;display:block}
-.char-figure-empty{font-family:var(--serif);font-style:italic;font-size:12px;color:var(--txt3)}
+  /* ── Buffs ── */
+  .buffs-h-row{
+    display:flex;align-items:baseline;justify-content:space-between;
+    gap:8px;margin-bottom:10px;
+  }
+  .buffs-h{font-size:10px;color:var(--txt3);text-transform:uppercase;letter-spacing:.16em;font-weight:600;}
+  .buffs-h em{font-style:normal;color:var(--gold-l);font-weight:700;margin-left:2px;font-feature-settings:'tnum';}
+  .buffs-clear{
+    background:transparent;border:none;cursor:pointer;
+    font-size:10px;color:var(--txt3);letter-spacing:.06em;
+    padding:2px 4px;text-transform:uppercase;font-weight:600;
+    font-family:var(--sans);transition:.12s;
+  }
+  .buffs-clear:hover{color:var(--red)}
+  .buff-tabs{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:10px;}
+  .buff-tab{
+    background:var(--bg3);border:1px solid var(--line);border-radius:5px;
+    padding:5px 8px;font-size:10px;font-weight:600;color:var(--txt3);
+    letter-spacing:.04em;cursor:pointer;font-family:var(--sans);
+    transition:.12s;text-transform:uppercase;
+    display:inline-flex;align-items:center;gap:5px;
+  }
+  .buff-tab:hover{color:var(--txt2);border-color:var(--line2)}
+  .buff-tab.on{color:var(--gold-l);background:rgba(var(--gold-tint),.08);border-color:rgba(var(--gold-tint),.3);}
+  .buff-tab-count{
+    display:inline-flex;align-items:center;justify-content:center;
+    min-width:14px;height:14px;padding:0 4px;
+    background:var(--gold-d);color:var(--bg);border-radius:7px;
+    font-size:9px;font-weight:700;letter-spacing:0;font-feature-settings:'tnum';
+  }
+  .buff-tab.on .buff-tab-count{background:var(--gold);color:var(--bg)}
+  .buff-grid{display:grid;grid-template-columns:repeat(auto-fill, 32px);gap:5px;min-height:34px;}
+  .buff-tile{
+    width:32px;height:32px;flex-shrink:0;
+    background:var(--bg3);border:1px solid var(--line);border-radius:5px;
+    cursor:pointer;position:relative;overflow:hidden;
+    display:flex;align-items:center;justify-content:center;
+    transition:.12s;
+    font-family:var(--serif);font-size:11px;font-weight:600;color:var(--txt3);
+  }
+  .buff-tile:hover{border-color:var(--line2);background:var(--bg4);color:var(--txt2);transform:translateY(-1px);}
+  .buff-tile.on{
+    border-color:var(--gold);box-shadow:0 0 0 2px rgba(var(--gold-tint),.18);
+    background:rgba(var(--gold-tint),.07);color:var(--gold-l);
+  }
+  .buff-tile img{width:28px;height:28px;object-fit:contain;image-rendering:pixelated;}
+  .buff-grid-empty{grid-column:1 / -1;font-size:11px;color:var(--txt3);font-style:italic;font-family:var(--serif);padding:6px 0;}
 
-/* ── BOTTOM SLOT ROWS — square, no labels ── */
-.slot-row{display:grid;grid-template-columns:repeat(7,34px);gap:6px}
+  /* ── Stats panel ── */
+  .stats-panel{background:var(--bg3);border:1px solid var(--line);border-radius:10px;overflow:hidden;}
+  .stats-head{
+    padding:11px 16px;border-bottom:1px solid var(--line);
+    display:flex;align-items:baseline;justify-content:space-between;
+    background:linear-gradient(180deg, rgba(var(--gold-tint),.04), transparent);
+  }
+  .stats-title{font-family:var(--serif);font-size:15px;font-weight:500;color:var(--txt);letter-spacing:-.005em}
+  .stats-title em{font-style:italic;color:var(--gold-l);font-weight:300}
+  .stats-hint{font-size:11px;color:var(--txt3);font-style:italic;font-family:var(--serif)}
+  .stat-row{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:8px 16px;border-bottom:1px solid rgba(var(--gold-tint),.04);transition:background .1s;
+  }
+  .stat-row:last-child{border-bottom:none}
+  .stat-row:hover{background:rgba(var(--gold-tint),.025)}
+  .stat-key{font-size:12px;color:var(--txt2)}
+  .stat-val{font-family:var(--serif);font-size:14px;color:var(--gold-l);font-feature-settings:'tnum';font-weight:500;}
+  .stat-empty{color:var(--txt3);font-size:12px;font-style:italic;font-family:var(--serif);padding:24px 16px;text-align:center;line-height:1.5;}
+  .stat-buff-tag{font-size:10px;color:var(--gold);margin-left:6px;font-family:var(--sans);font-style:italic;font-weight:400;}
 
-.slot-sq-cell{
-  width:34px;height:34px;flex-shrink:0;
-  background:var(--bg3);border:1px solid var(--line);border-radius:5px;
-  display:flex;align-items:center;justify-content:center;
-  position:relative;overflow:hidden;
-  cursor:pointer;
-  transition:border-color .15s,background .15s;
-}
-.slot-sq-cell:hover{border-color:var(--line2);background:var(--bg4)}
-.slot-sq-cell.active{border-color:var(--gold)}
-.slot-sq-cell.equipped{border-color:var(--line2)}
-.slot-sq-cell img.item-img{width:32px;height:32px;object-fit:none;max-width:80%;max-height:80%}
-.slot-sq-cell img.frame-img{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;object-fit:cover}
-.slot-sq-cell .ico-empty{opacity:.15}
+  /* ── Tooltip ── */
+  #tt{
+    position:fixed;z-index:1000;display:none;pointer-events:none;
+    background:var(--bg3);border:1px solid var(--line2);border-radius:9px;
+    padding:11px 14px;min-width:180px;max-width:260px;
+    box-shadow:0 10px 28px rgba(0,0,0,.7);
+  }
+  .tt-head{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+  .tt-ico{
+    width:36px;height:36px;flex-shrink:0;
+    background:var(--bg2);border:1px solid var(--line);border-radius:5px;
+    object-fit:contain;image-rendering:pixelated;padding:2px;
+  }
+  .tt-head-text{flex:1;min-width:0}
+  .tt-name{font-family:var(--serif);font-size:13px;font-weight:500;color:var(--txt);letter-spacing:-.005em;line-height:1.15}
+  .tt-quality{font-size:11px;font-style:italic;font-family:var(--serif);margin-top:2px}
+  .tt-stat{display:flex;justify-content:space-between;gap:14px;font-size:11px;padding:2px 0}
+  .tt-stat-k{color:var(--txt3)}
+  .tt-stat-v{color:var(--gold-l);font-feature-settings:'tnum';font-weight:500}
+  .tt-rune-add{color:#7ab8ff;font-size:11px;font-weight:500;margin-left:1px}
+  .tt-empty{font-size:11px;color:var(--txt3);font-style:italic;font-family:var(--serif)}
+  .tt-rune{display:flex;gap:9px;align-items:flex-start;margin-top:9px;padding-top:9px;border-top:1px dashed var(--line);}
+  .tt-rune img{
+    width:28px;height:28px;flex-shrink:0;
+    background:var(--bg2);border:1px solid rgba(122,184,255,.3);border-radius:5px;
+    object-fit:contain;image-rendering:pixelated;padding:2px;
+  }
+  .tt-rune-body{flex:1;min-width:0}
+  .tt-rune-lbl{font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:#7ab8ff;font-weight:700;margin-bottom:2px}
+  .tt-rune-name{font-family:var(--serif);font-size:12px;font-style:italic;color:var(--gold-l);line-height:1.2;margin-bottom:3px}
 
-/* ── QUALITY PICKER ── */
-.picker-panel{
-  display:none;
-  background:var(--bg3);border:1px solid var(--line2);border-radius:10px;
-  padding:12px 14px;animation:fadeIn .13s ease;
-}
-.picker-panel.open{display:block}
-@keyframes fadeIn{from{opacity:0;transform:translateY(-3px)}to{opacity:1;transform:none}}
-.picker-btns{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px}
-.picker-item{
-  position:relative;width:34px;height:34px;flex-shrink:0;
-  border:1px solid var(--line);border-radius:4px;cursor:pointer;overflow:hidden;
-  transition:border-color .12s;
-}
-.picker-item:hover{border-color:var(--line2);background:var(--bg4)}
-.picker-item.on{border-color:var(--gold)}
-.picker-unequip{
-  padding:4px 10px;border-radius:5px;cursor:pointer;font-size:10px;font-family:var(--sans);
-  background:transparent;border:1px dashed var(--line2);color:var(--txt3);
-  transition:color .12s,border-color .12s;
-}
-.picker-unequip:hover{color:var(--txt2);border-color:rgba(212,168,67,.3)}
+  /* ── Footer ── */
+  .ftr{
+    max-width:1480px;margin:60px auto 0;padding:32px 40px 60px;
+    border-top:1px solid var(--line);
+    display:flex;justify-content:space-between;align-items:center;gap:24px;flex-wrap:wrap;
+    font-size:12px;color:var(--txt3);
+  }
+  .ftr-l{font-family:var(--serif);font-style:italic}
+  .ftr-r{display:flex;gap:18px}
+  .ftr-r a{color:var(--txt3);transition:color .12s;cursor:pointer}
+  .ftr-r a:hover{color:var(--gold-l)}
 
-/* ── BUFFS ── */
-.buffs-title{font-size:10px;color:var(--txt3);text-transform:uppercase;letter-spacing:.12em;font-weight:600;margin-bottom:8px}
-.buffs-list{display:flex;flex-wrap:wrap;gap:5px}
-.buff-toggle{
-  display:flex;align-items:center;gap:6px;padding:5px 10px;border-radius:6px;cursor:pointer;
-  background:var(--bg3);border:1px solid var(--line);
-  font-size:11px;color:var(--txt2);font-weight:500;
-  transition:border-color .12s,color .12s,background .12s;user-select:none;
-}
-.buff-toggle:hover{border-color:var(--line2);color:var(--txt)}
-.buff-toggle.on{border-color:rgba(212,168,67,.35);color:var(--gold-l);background:rgba(212,168,67,.06)}
-.buff-check{
-  width:12px;height:12px;border-radius:3px;border:1px solid var(--line2);background:var(--bg4);
-  flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:8px;
-}
-.buff-toggle.on .buff-check{background:rgba(212,168,67,.15);border-color:var(--gold);color:var(--gold-l)}
-.buff-cls-badge{font-size:10px;color:var(--txt3);font-weight:400}
-
-/* ── STATS PANEL ── */
-.stats-panel{background:var(--bg3);border:1px solid var(--line);border-radius:10px;overflow:hidden}
-.stats-header{
-  padding:10px 14px;border-bottom:1px solid var(--line);
-  display:flex;align-items:center;justify-content:space-between;
-}
-.stats-title{font-family:var(--serif);font-size:14px;font-weight:500;color:var(--txt)}
-.stats-hint{font-size:11px;color:var(--txt3);font-style:italic}
-.stat-row{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:7px 14px;border-bottom:1px solid rgba(212,168,67,.04);transition:background .1s;
-}
-.stat-row:last-child{border-bottom:none}
-.stat-row:hover{background:rgba(212,168,67,.02)}
-.stat-key{font-size:12px;color:var(--txt2)}
-.stat-val{font-family:var(--serif);font-size:13px;color:var(--gold-l);font-feature-settings:'tnum';font-weight:500}
-.stat-empty{color:var(--txt3);font-size:12px;font-style:italic;padding:18px 14px;text-align:center}
-.stat-buff-tag{font-size:10px;color:var(--gold);margin-left:4px;font-family:var(--sans)}
-
-/* ── TOOLTIP ── */
-#tt{
-  position:fixed;z-index:1000;display:none;pointer-events:none;
-  background:var(--bg3);border:1px solid var(--line2);border-radius:9px;
-  padding:10px 13px;min-width:150px;max-width:220px;
-  box-shadow:0 10px 28px rgba(0,0,0,.6);
-}
-.tt-name{font-family:var(--serif);font-size:13px;font-weight:500;color:var(--txt);margin-bottom:2px}
-.tt-quality{font-size:11px;margin-bottom:6px}
-.tt-stat{display:flex;justify-content:space-between;gap:12px;font-size:11px;padding:2px 0}
-.tt-stat-k{color:var(--txt3)}
-.tt-stat-v{color:var(--gold-l);font-feature-settings:'tnum'}
-.tt-empty{font-size:11px;color:var(--txt3);font-style:italic}
-
-/* ── PLACEHOLDER ── */
-.char-block-placeholder{
-  display:flex;align-items:center;justify-content:center;min-height:460px;
-  font-family:var(--serif);font-style:italic;font-size:15px;color:var(--txt3);
-}
-
-/* ── RUNE INDICATOR DOT ── */
-.slot-sq.has-rune::after,
-.slot-sq-cell.has-rune::after {
-  content:'';position:absolute;top:2px;right:2px;
-  width:6px;height:6px;border-radius:50%;
-  background:#7ab8ff;
-  box-shadow:0 0 6px rgba(122,184,255,.7),0 0 2px #fff inset;
-  z-index:5;pointer-events:none;
-}
-
-/* ── PICKER ACTIONS ── */
-.picker-actions{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
-.picker-actions:empty{display:none}
-.picker-actions button{
-  flex:1;min-width:120px;
-  background:var(--bg2);border:1px solid var(--line2);border-radius:6px;
-  padding:8px 12px;font-size:11px;color:var(--txt);
-  font-family:var(--sans);font-weight:500;cursor:pointer;
-  letter-spacing:.04em;transition:.12s;text-align:center;
-}
-.picker-actions button:hover{background:var(--bg4)}
-.picker-actions button.primary{color:var(--gold-l);background:rgba(var(--gold-tint),.06);border-color:rgba(var(--gold-tint),.3)}
-.picker-actions button.primary:hover{background:rgba(var(--gold-tint),.12)}
-.picker-actions button.danger{color:#e8a890;border-color:rgba(217,119,87,.28)}
-.picker-actions button.danger:hover{background:rgba(217,119,87,.08)}
-.picker-actions button.ghost{color:var(--txt3);border-color:var(--line)}
-.picker-actions button.ghost:hover{color:var(--txt2)}
-
-/* ── PICKER RUNE INFO STRIP ── */
-.picker-rune-info{
-  display:none;margin-top:10px;padding:9px 12px;
-  background:var(--bg2);border:1px solid var(--line);border-radius:7px;
-  align-items:center;gap:10px;
-}
-.picker-rune-info.on{display:flex}
-.picker-rune-info img{width:28px;height:28px;border-radius:4px;border:1px solid rgba(122,184,255,.3);flex-shrink:0}
-.picker-rune-lbl{font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:#7ab8ff;font-weight:700;margin-bottom:2px}
-.picker-rune-name{font-family:var(--serif);font-size:12px;font-style:italic;color:var(--gold-l)}
-
-/* ── PICKER MODE LABEL ── */
-.picker-mode-label{font-size:10px;color:var(--txt3);text-transform:uppercase;letter-spacing:.1em;font-weight:600;margin-bottom:6px;min-height:14px}
-
-/* ── TOOLTIP RUNE SECTION ── */
-.tt-rune{display:flex;gap:9px;align-items:flex-start;margin-top:9px;padding-top:9px;border-top:1px dashed var(--line)}
-.tt-rune img{width:28px;height:28px;border-radius:4px;border:1px solid rgba(122,184,255,.3);flex-shrink:0}
-.tt-rune-lbl{font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:#7ab8ff;font-weight:700;margin-bottom:2px}
-.tt-rune-name{font-family:var(--serif);font-size:12px;font-style:italic;color:var(--gold-l)}
-
-/* ── MOBILE ── */
-@media(max-width:1000px){.calc-layout{grid-template-columns:1fr}}
-@media(max-width:600px){.page{padding:20px 16px 60px}.top{padding:0 14px}.nav{display:none}}
+  /* ── Tone picker ── */
+  .tone{
+    position:fixed;bottom:18px;right:18px;z-index:80;
+    background:rgba(11,9,7,.92);backdrop-filter:blur(20px);
+    border:1px solid var(--line2);border-radius:10px;padding:8px;
+    display:flex;align-items:center;gap:4px;
+    box-shadow:0 12px 40px rgba(0,0,0,.6);
+  }
+  .tone-l{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--txt3);font-weight:700;padding:0 6px 0 4px}
+  .tone-btn{
+    width:26px;height:26px;border:1px solid var(--line);border-radius:6px;cursor:pointer;
+    background:none;padding:0;transition:.12s;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .tone-btn:hover{transform:translateY(-1px)}
+  .tone-btn.on{border-color:var(--gold);box-shadow:0 0 0 2px rgba(var(--gold-tint),.2)}
+  .tone-btn .swatch{width:14px;height:14px;border-radius:50%;display:block}
+  .tone-btn[data-t="amber"] .swatch{background:linear-gradient(135deg,#f5d878,#a07d2b)}
+  .tone-btn[data-t="brass"] .swatch{background:linear-gradient(135deg,#e8d670,#8c7d28)}
+  .tone-btn[data-t="sand"]  .swatch{background:linear-gradient(135deg,#e0c89c,#8a7858)}
 </style>
 </head>
 <body>
@@ -313,38 +593,50 @@ a{color:inherit;text-decoration:none}
 <header class="top">
   <a class="logo" href="index_new.html">
     <img src="kor_logo.svg" alt="">
-    <div class="logo-n">Korolevstvo</div>
+    <div>
+      <div class="logo-n">Korolevstvo</div>
+      <div class="logo-s">База знаний игроков · kor.ru</div>
+    </div>
   </a>
   <nav class="nav">
     <a href="index_new.html">Главная</a>
     <a href="items_base.html">База предметов</a>
     <a class="on" href="stats_calc.html">Характеристики</a>
   </nav>
-  <a class="h-back" href="index_new.html">На главную</a>
+  <div class="top-r">
+    <a class="top-back" href="index_new.html">← на главную</a>
+  </div>
 </header>
 
-<div class="page">
-  <div class="page-head">
-    <div class="page-title">Калькулятор характеристик</div>
-    <div class="page-sub">Сравнение двух персонажей</div>
+<section class="hero">
+  <div class="eyebrow">
+    <a href="index_new.html">База знаний</a>
+    <span class="sep">/</span>
+    <span>Калькулятор характеристик</span>
   </div>
+  <h1 class="h1">Калькулятор <em>характеристик</em></h1>
+  <p class="lede">Соберите двух героев бок-о-бок — разные сеты, разные руны, разные баффы. Центральная таблица в реальном времени показывает разницу по каждой характеристике.</p>
+</section>
 
+<div class="calc-page">
   <div class="calc-layout">
 
     <!-- ── ПЕРСОНАЖ 1 ── -->
-    <div class="char-block" id="cb-c1">
-      <div class="char-block-head">
-        <span class="char-block-label">Персонаж 1</span>
-      </div>
-      <div class="char-block-inner">
+    <article class="char-block" id="cb-c1">
+      <header class="cb-head">
+        <div class="cb-label">Персонаж 1</div>
+        <div class="cb-actions">
+          <button class="cb-action equip-set" onclick="equipFullSet('c1','white')">Одеть белый сет</button>
+          <button class="cb-action strip" onclick="stripAll('c1')">Снять всё</button>
+        </div>
+      </header>
 
-        <!-- Никнейм + класс -->
-        <div class="char-controls">
-          <input class="nickname-input" type="text" id="nickname-c1" placeholder="Никнейм">
-          <span class="cls-label">Класс:</span>
+      <div class="cb-inner">
+        <div class="char-controls" id="ctrls-c1">
+          <span class="cls-label">Класс</span>
           <div class="cls-drop" id="clsDrop-c1">
-            <div class="cls-dd-trigger" onclick="toggleClsDrop('c1')">
-              <img class="cls-dd-ico" id="clsDdIco-c1" src="" alt="" onerror="this.style.display='none'">
+            <div class="cls-dd-trig" onclick="toggleClsDrop('c1')">
+              <img class="cls-dd-ico" id="clsDdIco-c1" alt="" onerror="this.style.display='none'">
               <span id="clsDdLabel-c1">Паладин</span>
               <svg class="cls-dd-arrow" viewBox="0 0 10 10" fill="none">
                 <path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
@@ -352,16 +644,38 @@ a{color:inherit;text-decoration:none}
             </div>
             <div class="cls-dd-menu" id="clsDdMenu-c1"></div>
           </div>
+          <span class="cls-label">Пол</span>
+          <button class="sex-chip on" data-sex="Male" title="Мужской пол"></button>
+          <button class="sex-chip" data-sex="Female" title="Женский пол"></button>
+          <span class="cls-label">Раса</span>
+          <button class="race-chip on" data-race="Elf" title="Эльф"></button>
+          <button class="race-chip" data-race="Human" title="Человек"></button>
+          <button class="champ-chip" id="champBtn-c1" onclick="toggleChampion('c1')" title="Чемпион расы">
+            <img class="champ-ico" src="stats_calculator/ui/champion.png" alt="" onerror="this.style.display='none'">
+          </button>
         </div>
 
-        <!-- Папердолл (260px: 7×32 + 6×6) -->
-        <div class="paperdoll-section">
-          <div class="paperdoll-middle">
+        <div class="pd-section">
+          <div class="pd-middle">
             <div class="slot-col-vert" id="colLeft-c1"></div>
-            <div class="char-figure-wrap" id="charFigureWrap-c1">
-              <img class="char-figure" id="charFigure-c1" src="" alt=""
-                onerror="this.style.display='none';document.getElementById('charFigureEmpty-c1').style.display='block'">
-              <div class="char-figure-empty" id="charFigureEmpty-c1">персонаж</div>
+            <div class="char-fig-wrap" id="charFigWrap-c1">
+              <span class="corner tl"></span><span class="corner tr"></span>
+              <span class="corner bl"></span><span class="corner br"></span>
+              <div class="doll-stage">
+                <div class="doll" id="doll-c1">
+                  <div class="dll" data-layer="boots"></div>
+                  <div class="dll" data-layer="pants"></div>
+                  <div class="dll" data-layer="belt"></div>
+                  <div class="dll" data-layer="face"></div>
+                  <div class="dll" data-layer="offhand"></div>
+                  <div class="dll" data-layer="weapon"></div>
+                  <div class="dll" data-layer="chest"></div>
+                  <div class="dll" data-layer="gloves"></div>
+                  <div class="dll" data-layer="shoulders"></div>
+                  <div class="dll" data-layer="helm"></div>
+                </div>
+              </div>
+              <div class="char-empty" id="charEmpty-c1">наденьте предметы<br>и увидите персонажа</div>
             </div>
             <div class="slot-col-vert" id="colRight-c1"></div>
           </div>
@@ -369,56 +683,146 @@ a{color:inherit;text-decoration:none}
           <div class="slot-row" id="slotRowBot-c1"></div>
         </div>
 
-        <!-- Пикер -->
-        <div class="picker-panel" id="pickerPanel-c1">
-          <div class="picker-mode-label" id="pickerModeLabel-c1"></div>
-          <div class="picker-btns" id="pickerBtns-c1"></div>
-          <div class="picker-rune-info" id="pickerRuneInfo-c1">
-            <img id="pickerRuneImg-c1" src="" alt="">
-            <div>
-              <div class="picker-rune-lbl">РУНА</div>
-              <div class="picker-rune-name" id="pickerRuneName-c1"></div>
-            </div>
+        <div class="picker" id="pickerPanel-c1">
+          <div class="picker-head">
+            <div class="picker-title" id="pickerTitle-c1">Предметы</div>
           </div>
+          <div class="picker-btns" id="pickerBtns-c1"></div>
+          <div class="picker-rune-info" id="pickerRuneInfo-c1"></div>
           <div class="picker-actions" id="pickerActions-c1"></div>
         </div>
 
-        <!-- Баффы -->
-        <div>
-          <div class="buffs-title">Баффы группы</div>
-          <div class="buffs-list" id="buffsList-c1"></div>
-        </div>
+        <div class="buffs-card" id="buffsList-c1"></div>
 
-        <!-- Статы -->
         <div class="stats-panel">
-          <div class="stats-header">
+          <div class="stats-head">
             <div class="stats-title">Характеристики</div>
             <div class="stats-hint" id="statsHint-c1">выберите предметы</div>
           </div>
           <div class="stats-body" id="statsBody-c1"></div>
         </div>
-
       </div>
-    </div>
+    </article>
+
+    <!-- ── ЦЕНТРАЛЬНАЯ ТАБЛИЦА СРАВНЕНИЯ ── -->
+    <aside class="compare-panel">
+      <div class="cmp-head">
+        <div class="cmp-title">Сравнение <em>характеристик</em></div>
+        <div class="cmp-sub" id="cmpSub">Соберите снаряжение обоим героям</div>
+      </div>
+      <div class="cmp-col-head">
+        <div class="h1n" id="cmpHead1">Персонаж 1</div>
+        <div class="hkn">·</div>
+        <div class="h2n" id="cmpHead2">Персонаж 2</div>
+      </div>
+      <div class="cmp-body" id="cmpBody"></div>
+    </aside>
 
     <!-- ── ПЕРСОНАЖ 2 ── -->
-    <div class="char-block">
-      <div class="char-block-head">
-        <span class="char-block-label">Персонаж 2</span>
+    <article class="char-block" id="cb-c2">
+      <header class="cb-head">
+        <div class="cb-label">Персонаж 2</div>
+        <div class="cb-actions">
+          <button class="cb-action equip-set" onclick="equipFullSet('c2','white')">Одеть белый сет</button>
+          <button class="cb-action strip" onclick="stripAll('c2')">Снять всё</button>
+        </div>
+      </header>
+
+      <div class="cb-inner">
+        <div class="char-controls" id="ctrls-c2">
+          <span class="cls-label">Класс</span>
+          <div class="cls-drop" id="clsDrop-c2">
+            <div class="cls-dd-trig" onclick="toggleClsDrop('c2')">
+              <img class="cls-dd-ico" id="clsDdIco-c2" alt="" onerror="this.style.display='none'">
+              <span id="clsDdLabel-c2">Паладин</span>
+              <svg class="cls-dd-arrow" viewBox="0 0 10 10" fill="none">
+                <path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div class="cls-dd-menu" id="clsDdMenu-c2"></div>
+          </div>
+          <span class="cls-label">Пол</span>
+          <button class="sex-chip on" data-sex="Male" title="Мужской пол"></button>
+          <button class="sex-chip" data-sex="Female" title="Женский пол"></button>
+          <span class="cls-label">Раса</span>
+          <button class="race-chip on" data-race="Elf" title="Эльф"></button>
+          <button class="race-chip" data-race="Human" title="Человек"></button>
+          <button class="champ-chip" id="champBtn-c2" onclick="toggleChampion('c2')" title="Чемпион расы">
+            <img class="champ-ico" src="stats_calculator/ui/champion.png" alt="" onerror="this.style.display='none'">
+          </button>
+        </div>
+
+        <div class="pd-section">
+          <div class="pd-middle">
+            <div class="slot-col-vert" id="colLeft-c2"></div>
+            <div class="char-fig-wrap" id="charFigWrap-c2">
+              <span class="corner tl"></span><span class="corner tr"></span>
+              <span class="corner bl"></span><span class="corner br"></span>
+              <div class="doll-stage">
+                <div class="doll" id="doll-c2">
+                  <div class="dll" data-layer="boots"></div>
+                  <div class="dll" data-layer="pants"></div>
+                  <div class="dll" data-layer="belt"></div>
+                  <div class="dll" data-layer="face"></div>
+                  <div class="dll" data-layer="offhand"></div>
+                  <div class="dll" data-layer="weapon"></div>
+                  <div class="dll" data-layer="chest"></div>
+                  <div class="dll" data-layer="gloves"></div>
+                  <div class="dll" data-layer="shoulders"></div>
+                  <div class="dll" data-layer="helm"></div>
+                </div>
+              </div>
+              <div class="char-empty" id="charEmpty-c2">наденьте предметы<br>и увидите персонажа</div>
+            </div>
+            <div class="slot-col-vert" id="colRight-c2"></div>
+          </div>
+          <div class="slot-row" id="slotRowTop-c2"></div>
+          <div class="slot-row" id="slotRowBot-c2"></div>
+        </div>
+
+        <div class="picker" id="pickerPanel-c2">
+          <div class="picker-head">
+            <div class="picker-title" id="pickerTitle-c2">Предметы</div>
+          </div>
+          <div class="picker-btns" id="pickerBtns-c2"></div>
+          <div class="picker-rune-info" id="pickerRuneInfo-c2"></div>
+          <div class="picker-actions" id="pickerActions-c2"></div>
+        </div>
+
+        <div class="buffs-card" id="buffsList-c2"></div>
+
+        <div class="stats-panel">
+          <div class="stats-head">
+            <div class="stats-title">Характеристики</div>
+            <div class="stats-hint" id="statsHint-c2">выберите предметы</div>
+          </div>
+          <div class="stats-body" id="statsBody-c2"></div>
+        </div>
       </div>
-      <div class="char-block-placeholder">скоро</div>
-    </div>
+    </article>
 
   </div>
 </div>
 
+<footer class="ftr">
+  <div class="ftr-l">Сделано с любовью к Королевству · не является официальным ресурсом</div>
+  <div class="ftr-r">
+    <a href="index_new.html">Главная</a>
+    <a href="items_base.html">База предметов</a>
+    <a href="stats_calc.html">Характеристики</a>
+  </div>
+</footer>
+
+<div class="tone">
+  <span class="tone-l">Оттенок</span>
+  <button class="tone-btn on" data-t="amber" title="Тёплое янтарное"><span class="swatch"></span></button>
+  <button class="tone-btn"    data-t="brass" title="Холодное латунное"><span class="swatch"></span></button>
+  <button class="tone-btn"    data-t="sand"  title="Бледный песочный"><span class="swatch"></span></button>
+</div>
+
 <script src="data.js"></script>
 <script>
-// ── DATA (constants from data.js: QUALITIES, QUALITY_ORDER, QUALITY_LEVEL, QUALITY_FRAME,
-//          CLASS_NAMES, CLASS_ICON_FILE, CLASS_SET_NAMES, CLASS_SLOTS, CLASS_ITEM_NAMES,
-//          getClassSetPath, getItemImg, STAT_LABELS, STATS, ARTIFACTS) ──────────
-
-// Сверху вниз (пользователь описывал снизу вверх)
+// ── SLOT LAYOUT ───────────────────────────────────────────────────────────────
 const COL_LEFT = [
   { id:'helm',      name:'Шлем' },
   { id:'shoulders', name:'Наплечники' },
@@ -429,13 +833,13 @@ const COL_LEFT = [
   { id:'trophy',    name:'Трофей' },
 ];
 const COL_RIGHT = [
-  { id:'amulet',    name:'Амулет' },
-  { id:'bracelet',  name:'Браслет' },
-  { id:'talisman',  name:'Талисман' },
-  { id:'gloves',    name:'Перчатки' },
-  { id:'ring1',     name:'Кольцо' },
-  { id:'ring2',     name:'Кольцо' },
-  { id:'badge',     name:'Жетон' },
+  { id:'amulet',   name:'Амулет' },
+  { id:'bracelet', name:'Браслет' },
+  { id:'talisman', name:'Талисман' },
+  { id:'gloves',   name:'Перчатки' },
+  { id:'ring1',    name:'Кольцо' },
+  { id:'ring2',    name:'Кольцо' },
+  { id:'badge',    name:'Жетон' },
 ];
 const ROW_TOP = [
   { id:'stone_greed',  name:'Камень Алчности' },
@@ -455,98 +859,278 @@ const ROW_BOT = [
   { id:'stone_lost',    name:'Камень Потерянных Земель' },
   { id:'stone_luck',    name:'Камень Удачи' },
 ];
-
 const ALL_SLOTS = [...COL_LEFT, ...COL_RIGHT, ...ROW_TOP, ...ROW_BOT];
 
-
-const CLASS_BUFFS = [
-  { name:'Зоркий глаз',   cls:'archer',  effect:'atk_eff',       value:15 },
-  { name:'Ураган',        cls:'mage',    effect:'atk_eff',       value:15 },
-  { name:'Благословение', cls:'monk',    effect:'hp',            value:8, pct:true },
-  { name:'Святое слово',  cls:'paladin', effect:'hp',            value:8, pct:true },
-  { name:'Пылающий щит',  cls:'warrior', effect:'dmg_taken_red', value:8 },
-  { name:'Дар теней',     cls:'rogue',   effect:'dmg_taken_red', value:8 },
+// ── BUFFS ─────────────────────────────────────────────────────────────────────
+const BUFFS = [
+  { id:'cls_archer_eye',   cat:'class', name:'Зоркий глаз',     sub:'Лучник',    effect:'atk_eff',       value:15, pct:true },
+  { id:'cls_mage_storm',   cat:'class', name:'Ураган',           sub:'Маг',       effect:'atk_eff',       value:15, pct:true },
+  { id:'cls_monk_bless',   cat:'class', name:'Благословение',    sub:'Монах',     effect:'hp',            value:8,  pct:true },
+  { id:'cls_pala_holy',    cat:'class', name:'Святое слово',     sub:'Паладин',   effect:'hp',            value:8,  pct:true },
+  { id:'cls_warr_shield',  cat:'class', name:'Пылающий щит',     sub:'Воин',      effect:'dmg_taken_red', value:8 },
+  { id:'cls_rogue_shadow', cat:'class', name:'Дар теней',        sub:'Головорез', effect:'dmg_taken_red', value:8 },
+  { id:'pet_griffin_atk',  cat:'pet',   name:'Грифон',           sub:'атака',     effect:'atk',           value:50 },
+  { id:'pet_phoenix_hp',   cat:'pet',   name:'Феникс',           sub:'здоровье',  effect:'hp',            value:500 },
+  { id:'pet_bear_def',     cat:'pet',   name:'Медведь',          sub:'защита',    effect:'def',           value:30 },
+  { id:'pet_owl_crit',     cat:'pet',   name:'Сова',             sub:'крит',      effect:'crit_chance',   value:2, pct:true },
+  { id:'pet_wolf_speed',   cat:'pet',   name:'Волк',             sub:'скорость',  effect:'speed',         value:3, pct:true },
+  { id:'elx_atk_1',        cat:'elixir', name:'Эликсир атаки',   sub:'малый',     effect:'atk',           value:10 },
+  { id:'elx_atk_2',        cat:'elixir', name:'Эликсир атаки',   sub:'большой',   effect:'atk',           value:25 },
+  { id:'elx_def_1',        cat:'elixir', name:'Эликсир защиты',  sub:'малый',     effect:'def',           value:10 },
+  { id:'elx_def_2',        cat:'elixir', name:'Эликсир защиты',  sub:'большой',   effect:'def',           value:25 },
+  { id:'elx_hp_1',         cat:'elixir', name:'Эликсир жизни',   sub:'малый',     effect:'hp',            value:200 },
+  { id:'elx_hp_2',         cat:'elixir', name:'Эликсир жизни',   sub:'большой',   effect:'hp',            value:500 },
+  { id:'elx_mana_1',       cat:'elixir', name:'Эликсир маны',    sub:'малый',     effect:'mana',          value:100 },
+  { id:'elx_crit_dmg',     cat:'elixir', name:'Эликсир силы крита', effect:'crit_dmg', value:5, pct:true },
+  { id:'elx_heal',         cat:'elixir', name:'Эликсир лечения',  effect:'heal_eff', value:8, pct:true },
+  { id:'scr_speed',        cat:'scroll', name:'Свиток скорости',  effect:'speed',         value:5, pct:true },
+  { id:'scr_crit',         cat:'scroll', name:'Свиток крита',     effect:'crit_chance',   value:5, pct:true },
+  { id:'scr_atk_eff',      cat:'scroll', name:'Свиток силы',      effect:'atk_eff',       value:8, pct:true },
+  { id:'scr_def_eff',      cat:'scroll', name:'Свиток стойкости', effect:'def_eff',       value:8, pct:true },
+  { id:'evt_hop',          cat:'event',  name:'Месяц цветущего хмеля', effect:'hp_regen', value:30 },
+  { id:'evt_glubin',       cat:'event',  name:'Зов глубин',            effect:'atk_eff',  value:5, pct:true },
+  { id:'evt_dragon',       cat:'event',  name:'Небесные драконы',      effect:'wind_res', value:3, pct:true },
+  { id:'evt_pumpkin',      cat:'event',  name:'Тыквенный фестиваль',   effect:'fire_res', value:3, pct:true },
+  { id:'evt_ny',           cat:'event',  name:'Новый год · Колдер',    effect:'crit_dmg', value:4, pct:true },
+  { id:'rep_warrior',      cat:'rep',    name:'Совет воинов',     effect:'atk',           value:8 },
+  { id:'rep_archer',       cat:'rep',    name:'Совет лучников',   effect:'crit_dmg',      value:3, pct:true },
+  { id:'rep_kabana',       cat:'rep',    name:'Совет кабана',     effect:'hp',            value:300 },
+  { id:'rep_indyuka',      cat:'rep',    name:'Совет индюка',     effect:'def',           value:10 },
+  { id:'rep_master_aren',  cat:'rep',    name:'Мастер арены',     effect:'atk_eff',       value:3, pct:true },
+  { id:'rep_master_voiny', cat:'rep',    name:'Мастер войны',     effect:'crit_chance',   value:2, pct:true },
+  { id:'food_meat',        cat:'food',   name:'Жареное мясо',     effect:'hp',            value:150 },
+  { id:'food_fish',        cat:'food',   name:'Печёная рыба',     effect:'mana',          value:80 },
+  { id:'food_bread',       cat:'food',   name:'Праздничный хлеб', effect:'hp_regen',      value:20 },
+  { id:'food_wine',        cat:'food',   name:'Кубок вина',       effect:'crit_dmg',      value:2, pct:true },
 ];
 
-// ── STATE ─────────────────────────────────────────────────────────────────────
+const BUFF_CATS = [
+  { id:'class',  name:'Классовые',  hint:'групповые баффы класса' },
+  { id:'pet',    name:'Питомцы',    hint:'активные питомцы' },
+  { id:'elixir', name:'Эликсиры',   hint:'зелья и микстуры' },
+  { id:'scroll', name:'Свитки',     hint:'временные свитки' },
+  { id:'event',  name:'Ивенты',     hint:'ивентовые баффы' },
+  { id:'rep',    name:'Репутации',  hint:'награды репутаций' },
+  { id:'food',   name:'Еда',        hint:'эффекты от еды' },
+];
 
+const BUFFS_BY_ID = Object.fromEntries(BUFFS.map(b => [b.id, b]));
+
+// ── RUNES ─────────────────────────────────────────────────────────────────────
+const RUNES = [
+  { id:'helm_atk',  slot:'helm', name:'Руна атаки шлема',     img:'stats_calculator/rune/rune_helm_attack_5.png',  stats:{ atk:5 } },
+  { id:'helm_def',  slot:'helm', name:'Руна защиты шлема',    img:'stats_calculator/rune/rune_helm_defense_5.png', stats:{ def:5 } },
+  { id:'helm_hp',   slot:'helm', name:'Руна здоровья шлема',  img:'stats_calculator/rune/rune_helm_health_5.png',  stats:{ hp:50 } },
+  { id:'shoulders', slot:'shoulders', name:'Руна наплечников', img:'stats_calculator/rune/rune_shoulders.png', stats:{ def:3 } },
+  { id:'chest',     slot:'chest',     name:'Руна нагрудника',  img:'stats_calculator/rune/rune_chest.png',     stats:{ hp:80, def:4 } },
+  { id:'gloves',    slot:'gloves',    name:'Руна перчаток',    img:'stats_calculator/rune/rune_gloves.png',    stats:{ atk:4 } },
+  { id:'belt',      slot:'belt',      name:'Руна пояса',       img:'stats_calculator/rune/rune_belt.png',      stats:{ hp:50 } },
+  { id:'pants',     slot:'pants',     name:'Руна штанов',      img:'stats_calculator/rune/rune_pants.png',     stats:{ def:5 } },
+  { id:'boots',     slot:'boots',     name:'Руна сапог',       img:'stats_calculator/rune/rune_boots.png',     stats:{ speed:2 } },
+  { id:'weapon',     slot:'weapon', name:'Руна оружия',          img:'stats_calculator/rune/rune_weapon.png',           stats:{ atk:6 } },
+  { id:'weapon_atk', slot:'weapon', name:'Руна атаки оружия II', img:'stats_calculator/rune/rune_attack_weapon2_1.png', stats:{ atk:10 } },
+  { id:'amulet_atk', slot:'amulet', name:'Медальон атаки',       img:'stats_calculator/rune/rune_medallion_attack_10.png', stats:{ atk:10 } },
+];
+
+const SLOT_RUNES = {};
+RUNES.forEach(r => {
+  if (!SLOT_RUNES[r.slot]) SLOT_RUNES[r.slot] = [];
+  SLOT_RUNES[r.slot].push(r);
+});
+
+// ── STATE ─────────────────────────────────────────────────────────────────────
 const state = {
-  c1: { cls:'paladin', activeSlot:null, equipped:{}, buffs:new Set(), pickerMode:'item' },
-  c2: { cls:'paladin', activeSlot:null, equipped:{}, buffs:new Set(), pickerMode:'item' },
+  c1: { cls:'paladin', race:'ElfMale', champion:false, activeSlot:null, pickerMode:'item', equipped:{}, buffs:new Set(), activeCat:'class' },
+  c2: { cls:'paladin', race:'ElfMale', champion:false, activeSlot:null, pickerMode:'item', equipped:{}, buffs:new Set(), activeCat:'class' },
 };
 
-// ── TOOLTIP ───────────────────────────────────────────────────────────────────
+// ── PAPER DOLL ────────────────────────────────────────────────────────────────
+const CLASS_DOLL = {
+  paladin: {
+    parts: { helm:'Helm', shoulders:'Shoulders', chest:'Chest', pants:'Pants', boots:'Boots',
+             gloves:'Gloves', belt:'Belt', weapon:'Hammer', offhand:'Relic' },
+    order: ['boots','pants','belt','face','offhand','weapon','chest','gloves','shoulders','helm'],
+    faceDy: -3,
+  },
+  warrior: {
+    parts: { helm:'Helm', shoulders:'Shoulders', chest:'Chest', pants:'Pants', boots:'Boots',
+             gloves:'Gloves', belt:'Belt', weapon:'Sword', offhand:'Shield' },
+    order: ['pants','boots','belt','face','chest','gloves','shoulders','helm','offhand','weapon'],
+    faceDy: -4,
+  },
+  rogue: {
+    parts: { helm:'Helm', shoulders:'Shoulders', chest:'Chest', pants:'Pants', boots:'Boots',
+             gloves:'Gloves', belt:'Belt', weapon:'Daggers', offhand:'Daggers' },
+    order: ['boots','pants','belt','weapon','face','chest','gloves','shoulders','helm'],
+    faceDy: -1,
+  },
+  archer: {
+    parts: { helm:'Helm', shoulders:'Shoulders', chest:'Chest', pants:'Pants', boots:'Boots',
+             gloves:'Gloves', belt:'Belt', weapon:'Bow', offhand:'Quiver' },
+    order: ['boots','pants','belt','face','chest','gloves','shoulders','helm','offhand','weapon'],
+    faceDy: -1,
+  },
+  mage: {
+    parts: { helm:'Helm', shoulders:'Shoulders', chest:'Chest', pants:'Pants', boots:'Boots',
+             gloves:'Gloves', belt:'Belt', weapon:'Staff', offhand:'Orb' },
+    order: ['pants','boots','belt','shoulders','chest','face','gloves','helm','offhand','weapon'],
+    faceDy: 4,
+  },
+  monk: {
+    parts: { helm:'Helm', shoulders:'Shoulders', chest:'Chest', pants:'Pants', boots:'Boots',
+             gloves:'Gloves', belt:'Belt', weapon:'Censer', offhand:'Orb' },
+    order: ['pants','boots','belt','shoulders','chest','face','gloves','helm','offhand','weapon'],
+    faceDy: 3,
+  },
+};
 
+const CLASS_URL_KEY = { paladin:'paladin', warrior:'warrior', rogue:'rogue', mage:'mage', archer:'shooter', monk:'cleric' };
+
+function dollUrl(cls, slotKey, quality, race) {
+  const cfg = CLASS_DOLL[cls];
+  if (!cfg) return null;
+  const part = cfg.parts[slotKey];
+  if (!part) return null;
+  const lvl = QUALITY_LEVEL[quality] || 10;
+  const urlCls = CLASS_URL_KEY[cls] || cls;
+  const ClsCap = urlCls[0].toUpperCase() + urlCls.slice(1);
+  return `https://m1.kor.ru/media//game/assets/characters/items/${urlCls}/${ClsCap}${part}${lvl}${race}.png`;
+}
+
+function faceUrl(race) {
+  const map = { ElfMale:'elf_male', ElfFemale:'elf_female', HumanMale:'human_male', HumanFemale:'human_female' };
+  const r = map[race] || 'elf_male';
+  return `https://m1.kor.ru/media/avatars/face/${r}_s1_b1_e1_n1_l1.png`;
+}
+
+function setupDollDOM(cid) {
+  const s = state[cid];
+  const cfg = CLASS_DOLL[s.cls];
+  const root = document.getElementById(`doll-${cid}`);
+  if (!root || !cfg) return;
+  root.innerHTML = cfg.order.map(layer =>
+    `<div class="dll" data-layer="${layer}"${
+      layer === 'face' ? ` style="transform:translateY(${cfg.faceDy}px)"` : ''
+    }></div>`
+  ).join('');
+}
+
+function renderDoll(cid) {
+  const s = state[cid];
+  const cfg = CLASS_DOLL[s.cls];
+  const root = document.getElementById(`doll-${cid}`);
+  if (!root || !cfg) return;
+  const emptyEl = document.getElementById(`charEmpty-${cid}`);
+  if (emptyEl) emptyEl.classList.add('hide');
+  root.querySelectorAll('.dll').forEach(el => {
+    const layer = el.dataset.layer;
+    if (layer === 'face') {
+      el.style.backgroundImage = `url("${faceUrl(s.race)}")`;
+      return;
+    }
+    const eq = s.equipped[layer];
+    const quality = eq ? eq.quality : 'white';
+    const url = dollUrl(s.cls, layer, quality, s.race);
+    el.style.backgroundImage = url ? `url("${url}")` : '';
+  });
+  applyCharBg(cid);
+}
+
+function applyCharBg(cid) {
+  const s = state[cid];
+  const block = document.getElementById(`cb-${cid}`);
+  if (!block) return;
+  const inner = block.querySelector('.cb-inner');
+  if (!inner) return;
+  const raceNum = s.race.startsWith('Elf') ? '2' : '1';
+  const file = s.champion
+    ? `stats_calculator/ui/bg_champion_race_${raceNum}.jpg`
+    : `stats_calculator/ui/bg_race_${raceNum}.jpg`;
+  inner.style.backgroundImage = `url("${file}")`;
+}
+
+function toggleChampion(cid) {
+  const s = state[cid];
+  s.champion = !s.champion;
+  const btn = document.getElementById(`champBtn-${cid}`);
+  if (btn) btn.classList.toggle('on', s.champion);
+  applyCharBg(cid);
+}
+
+// ── TOOLTIP ───────────────────────────────────────────────────────────────────
 const ttEl = document.getElementById('tt');
 
 function showTt(e, cid, slot) {
-  const s   = state[cid];
-  const eq  = s.equipped[slot.id];
-  const q   = eq ? QUALITIES.find(q => q.id === eq.quality) : null;
-
-  let html = `<div class="tt-name">${eq ? eq.name : slot.name}</div>`;
-  if (eq && q) {
-    html += `<div class="tt-quality" style="color:${q.color}">${q.label}</div>`;
-    if (eq.stats) {
-      Object.entries(eq.stats).forEach(([k, v]) => {
+  const s  = state[cid];
+  const eq = s.equipped[slot.id];
+  const q  = eq ? QUALITIES.find(q => q.id === eq.quality) : null;
+  let html = '';
+  if (eq) {
+    const itemImg = eq.img || getItemImg(s.cls, slot.id, eq.quality);
+    html += `<div class="tt-head">`;
+    if (itemImg) html += `<img class="tt-ico" src="${itemImg}" onerror="this.style.display='none'">`;
+    html += `<div class="tt-head-text">
+      <div class="tt-name">${eq.name}</div>
+      ${q ? `<div class="tt-quality" style="color:${q.color}">${q.label}</div>` : ''}
+    </div></div>`;
+    const itemStats = eq.stats || {};
+    const runeStats = eq.rune && eq.rune.stats ? eq.rune.stats : {};
+    const keys = new Set([...Object.keys(itemStats), ...Object.keys(runeStats)]);
+    if (keys.size === 0) {
+      html += `<div class="tt-empty">нет данных стат</div>`;
+    } else {
+      keys.forEach(k => {
         const meta = STAT_LABELS.find(m => m.key === k);
         if (!meta) return;
-        const vStr = meta.pct ? `+${Number(v).toFixed(2).replace(/\.00$/,'')}%` : (Number.isInteger(v) ? String(v) : Number(v).toFixed(2));
-        html += `<div class="tt-stat"><span class="tt-stat-k">${meta.label}</span><span class="tt-stat-v">${vStr}</span></div>`;
+        const iv = itemStats[k];
+        const rv = runeStats[k];
+        const fmt = v => meta.pct
+          ? `${v > 0 ? '+' : ''}${Number(v).toFixed(2).replace(/\.00$/,'')}%`
+          : (Number.isInteger(v) ? String(v) : Number(v).toFixed(2));
+        let val = '';
+        if (iv !== undefined) val = fmt(iv);
+        if (rv !== undefined) {
+          const rStr = meta.pct ? `+${rv}%` : `+${rv}`;
+          val += `${val ? ' ' : ''}<span class="tt-rune-add">(${rStr})</span>`;
+        }
+        html += `<div class="tt-stat"><span class="tt-stat-k">${meta.label}</span><span class="tt-stat-v">${val}</span></div>`;
       });
-    } else {
-      html += `<div class="tt-empty">нет данных</div>`;
     }
     if (eq.rune) {
       html += `<div class="tt-rune">
-        ${eq.rune.img ? `<img src="${eq.rune.img}" alt="">` : ''}
-        <div>
-          <div class="tt-rune-lbl">РУНА</div>
+        <img src="${eq.rune.img}" onerror="this.style.display='none'">
+        <div class="tt-rune-body">
+          <div class="tt-rune-lbl">Руна</div>
           <div class="tt-rune-name">${eq.rune.name}</div>
         </div>
       </div>`;
     }
   } else {
-    html += `<div class="tt-empty">пусто</div>`;
+    html += `<div class="tt-name">${slot.name}</div><div class="tt-empty">пусто</div>`;
   }
-
   ttEl.innerHTML = html;
   ttEl.style.display = 'block';
   moveTt(e);
 }
 
 function moveTt(e) {
-  const margin = 14;
-  let x = e.clientX + margin;
-  let y = e.clientY + margin;
-  if (x + 230 > window.innerWidth)  x = e.clientX - 230;
-  if (y + ttEl.offsetHeight + 10 > window.innerHeight) y = e.clientY - ttEl.offsetHeight - margin;
+  const m = 14;
+  let x = e.clientX + m, y = e.clientY + m;
+  if (x + 250 > window.innerWidth)  x = e.clientX - 250;
+  if (y + ttEl.offsetHeight + 10 > window.innerHeight) y = e.clientY - ttEl.offsetHeight - m;
   ttEl.style.left = x + 'px';
   ttEl.style.top  = y + 'px';
 }
-
 function hideTt() { ttEl.style.display = 'none'; }
 
 // ── HELPERS ───────────────────────────────────────────────────────────────────
-
 function getStatsForSlot(cls, slotId, quality) {
-  return STATS[cls]?.[quality]?.[slotId] || null;
+  return STATS[cls] && STATS[cls][quality] ? STATS[cls][quality][slotId] || null : null;
 }
 
-// Placeholder SVGs for empty slots
 const PH = {
-  sword:    `<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4 16L14 6M11 3l3 3M6 14l-2 2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="14" cy="6" r="2" stroke="currentColor" stroke-width="1.2"/></svg>`,
-  shield:   `<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 2L3 5.5v5c0 3.5 3 6 7 7 4-1 7-3.5 7-7v-5L10 2z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>`,
-  helmet:   `<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M5 11c0-2.8 2.2-6 5-6s5 3.2 5 6M3 11h14M6 15h8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>`,
-  chest:    `<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4 7h12v9a2 2 0 01-2 2H6a2 2 0 01-2-2V7z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M8 7V5a2 2 0 014 0v2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>`,
-  shoulders:`<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M2 12c0-3 1.5-5 4-5s4 2 4 5M10 12c0-3 1.5-5 4-5s4 2 4 5M2 12h16" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>`,
-  pants:    `<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4 4h12v4l-2 10H9l-1-6-1 6H5L3 8V4z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>`,
-  belt:     `<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="2" y="8" width="16" height="4" rx="2" stroke="currentColor" stroke-width="1.4"/><rect x="8" y="9.2" width="4" height="1.6" rx="0.5" stroke="currentColor" stroke-width="1.2"/></svg>`,
-  boots:    `<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M7 3v9l-3 3h9l1-3V3H7z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>`,
-  gloves:   `<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M6 14V9.5a1 1 0 012 0V8a1 1 0 012 0V7a1 1 0 012 0v2.5a1 1 0 002 0V9a1 1 0 012 0V14c0 1.7-1.3 3-3 3H9a3 3 0 01-3-3z" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
   ring:     `<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="6" stroke="currentColor" stroke-width="1.4"/><circle cx="10" cy="10" r="3" stroke="currentColor" stroke-width="1.1"/></svg>`,
   amulet:   `<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 2l2.5 5.5H18l-4.5 3.5 1.5 5.5L10 14l-5 2.5 1.5-5.5L2 7.5h5.5L10 2z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg>`,
-  gem:      `<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 2L17 8L10 18L3 8L10 2z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M3 8h14M10 2L6 8l4 10M10 2l4 6-4 10" stroke="currentColor" stroke-width="1" opacity=".5"/></svg>`,
   flask:    `<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M8 3h4M7.5 3v6L4 15a1 1 0 001 1h10a1 1 0 001-1l-3.5-6V3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
   bag:      `<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="3" y="8" width="14" height="10" rx="2" stroke="currentColor" stroke-width="1.4"/><path d="M7 8V6a3 3 0 016 0v2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>`,
   trophy:   `<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M7 17h6M10 14v3M6 3h8l-1 7a3 3 0 01-6 0L6 3z" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M6 5H3l1 5M14 5h3l-1 5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>`,
@@ -554,15 +1138,12 @@ const PH = {
   key:      `<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="8" cy="8" r="4" stroke="currentColor" stroke-width="1.4"/><path d="M11 11l5 5M14 13l-2 2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>`,
   bracelet: `<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="6" stroke="currentColor" stroke-width="2.5"/></svg>`,
 };
-
 const SLOT_PH = {
   trophy:'trophy', badge:'badge', ring1:'ring', ring2:'ring',
   talisman:'amulet', bracelet:'bracelet', amulet:'amulet',
   flask:'flask', battle_bag:'bag', trinket:'key',
 };
 
-// Derived from ARTIFACTS (data.js): slot → list of items; slot → placeholder image
-// slotId:'ring' разворачивается в ring1 и ring2 (кольца — в любой из двух слотов)
 const SLOT_ITEMS = {};
 const ARTEFACT_PH = {};
 ARTIFACTS.forEach(a => {
@@ -574,44 +1155,30 @@ ARTIFACTS.forEach(a => {
     if (!ARTEFACT_PH[sid]) ARTEFACT_PH[sid] = a.img;
   });
 });
-// Явная заглушка для слотов колец
-ARTEFACT_PH['ring1']      = ARTEFACT_PH['ring2'] = 'stats_calculator/bizha/rings/ring_default.png';
-// Единая заглушка для каменных слотов
-Object.keys(ARTEFACT_PH).filter(k => k.startsWith('stone_')).forEach(k => {
-  ARTEFACT_PH[k] = 'stats_calculator/artefacts/artefact_default.png';
-});
-ARTEFACT_PH['bracelet']   = 'stats_calculator/bizha/bracelet/bracelet_default.png';
-ARTEFACT_PH['amulet']     = 'stats_calculator/bizha/amulet/amulet_default.png';
-ARTEFACT_PH['talisman']   = 'stats_calculator/bizha/talisman/talisman_default.png';
-ARTEFACT_PH['badge']      = 'stats_calculator/bizha/medallion/medallion_default.png';
-ARTEFACT_PH['trinket']    = 'stats_calculator/bizha/trinket/trinket_default.png';
-ARTEFACT_PH['battle_bag'] = 'stats_calculator/bizha/battle%20bag/battle_bag_default.png';
-ARTEFACT_PH['trophy']     = 'stats_calculator/bizha/trophy/trophy_default.png';
+ARTEFACT_PH['ring1'] = ARTEFACT_PH['ring2'] = 'stats_calculator/bizha/rings/ring_default.png';
 
 function icoHtml(slotId, eq, cls) {
   if (!eq) {
-    // Use class-specific white set as grayscale placeholder for armor/weapon slots
     const phSrc = getItemImg(cls, slotId, 'white') || ARTEFACT_PH[slotId];
     if (phSrc) {
       return `<img src="${phSrc}" alt=""
-        style="width:32px;height:32px;object-fit:none;filter:grayscale(1);opacity:.28"
+        style="width:32px;height:32px;object-fit:contain;filter:grayscale(1);opacity:.22"
         onerror="this.style.display='none'">`;
     }
     const ph = PH[SLOT_PH[slotId]] || PH.bag;
-    return `<span style="opacity:.22;color:var(--txt2);display:flex;align-items:center;justify-content:center">${ph}</span>`;
+    return `<span style="opacity:.2;color:var(--txt2);display:flex;align-items:center;justify-content:center">${ph}</span>`;
   }
   const imgSrc   = eq.img || getItemImg(cls, slotId, eq.quality);
   const frameSrc = QUALITY_FRAME[eq.quality];
-  const qColor   = QUALITIES.find(q => q.id === eq.quality)?.color || '#888';
-  // Icon behind (z-index:1), frame on top with transparent center (z-index:2)
-  return `${imgSrc   ? `<img src="${imgSrc}" alt="" style="position:absolute;inset:0;width:32px;height:32px;object-fit:none;z-index:1" onerror="this.style.display='none'">` : ''}
-          ${!imgSrc  ? `<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:1"><div style="width:10px;height:10px;border-radius:50%;background:${qColor}"></div></div>` : ''}
-          ${frameSrc ? `<img class="frame-img" src="${frameSrc}" alt="" style="position:absolute;inset:0;width:32px;height:32px;pointer-events:none;z-index:2" onerror="this.style.display='none'">` : ''}
-          <div style="position:absolute;bottom:0;left:0;right:0;height:2px;background:${qColor};z-index:3;opacity:.7"></div>`;
+  const qColor   = QUALITIES.find(q => q.id === eq.quality) ? QUALITIES.find(q => q.id === eq.quality).color : '#888';
+  return `
+    ${imgSrc   ? `<img src="${imgSrc}" alt="" style="position:absolute;inset:1px;width:calc(100% - 2px);height:calc(100% - 2px);object-fit:contain;z-index:1" onerror="this.style.display='none'">` : ''}
+    ${!imgSrc  ? `<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:1"><div style="width:10px;height:10px;border-radius:50%;background:${qColor}"></div></div>` : ''}
+    ${frameSrc ? `<img class="frame-img" src="${frameSrc}" alt="" style="z-index:2" onerror="this.style.display='none'">` : ''}
+    <div style="position:absolute;bottom:0;left:0;right:0;height:2px;background:${qColor};z-index:3;opacity:.75"></div>`;
 }
 
 // ── RENDER ────────────────────────────────────────────────────────────────────
-
 function renderClsDrop(cid) {
   const s = state[cid];
   const ico = document.getElementById(`clsDdIco-${cid}`);
@@ -626,12 +1193,24 @@ function renderClsDrop(cid) {
   ).join('');
 }
 
+function renderRaceChips(cid) {
+  const s = state[cid];
+  const sex  = s.race.endsWith('Male') ? 'Male' : 'Female';
+  const race = s.race.startsWith('Elf') ? 'Elf'  : 'Human';
+  document.querySelectorAll(`#ctrls-${cid} .sex-chip`).forEach(b => {
+    b.classList.toggle('on', b.dataset.sex === sex);
+  });
+  document.querySelectorAll(`#ctrls-${cid} .race-chip`).forEach(b => {
+    b.classList.toggle('on', b.dataset.race === race);
+  });
+}
+
 function renderSlotCol(cid, slots, containerId) {
   const s = state[cid];
   document.getElementById(containerId).innerHTML = slots.map(slot => {
     const eq = s.equipped[slot.id];
     const isActive = s.activeSlot === slot.id;
-    const cls = ['slot-sq', isActive ? 'active' : '', eq ? 'equipped' : '', eq?.rune ? 'has-rune' : ''].filter(Boolean).join(' ');
+    const cls = ['slot-sq', isActive ? 'active' : '', eq ? 'equipped' : '', eq && eq.rune ? 'has-rune' : ''].filter(Boolean).join(' ');
     return `<div class="${cls}"
       onclick="openPicker('${cid}','${slot.id}')"
       onmouseenter="showTt(event,'${cid}',${JSON.stringify(slot).replace(/"/g,'&quot;')})"
@@ -645,7 +1224,7 @@ function renderSlotRow(cid, rowSlots, containerId) {
   document.getElementById(containerId).innerHTML = rowSlots.map(slot => {
     const eq = s.equipped[slot.id];
     const isActive = s.activeSlot === slot.id;
-    const cls = ['slot-sq-cell', isActive ? 'active' : '', eq ? 'equipped' : '', eq?.rune ? 'has-rune' : ''].filter(Boolean).join(' ');
+    const cls = ['slot-sq-cell', isActive ? 'active' : '', eq ? 'equipped' : '', eq && eq.rune ? 'has-rune' : ''].filter(Boolean).join(' ');
     return `<div class="${cls}"
       onclick="openPicker('${cid}','${slot.id}')"
       onmouseenter="showTt(event,'${cid}',${JSON.stringify(slot).replace(/"/g,'&quot;')})"
@@ -657,14 +1236,11 @@ function renderSlotRow(cid, rowSlots, containerId) {
 let _pickerCache = {};
 
 function getPickerItems(cls, slotId) {
-  const extraItems = SLOT_ITEMS[slotId] || [];
-  // Не классовый слот (камни, кольца, браслеты и т.д.) — только из ARTIFACTS
-  if (!CLASS_SLOTS[cls]?.[slotId]) return extraItems;
-  // Классовый слот (шлем, нагрудник, оружие...) — сетовые предметы + ивентовые
-  const slotName = CLASS_ITEM_NAMES[cls]?.[slotId] ||
-    [...COL_LEFT, ...COL_RIGHT, ...ROW_TOP, ...ROW_BOT].find(s => s.id === slotId)?.name || slotId;
+  if (SLOT_ITEMS[slotId]) return SLOT_ITEMS[slotId];
+  const slotName = (CLASS_ITEM_NAMES[cls] && CLASS_ITEM_NAMES[cls][slotId])
+    || (ALL_SLOTS.find(s => s.id === slotId) || {}).name || slotId;
   const setNames = CLASS_SET_NAMES[cls] || {};
-  const setItems = QUALITIES
+  return QUALITIES
     .filter(q => getItemImg(cls, slotId, q.id) || getStatsForSlot(cls, slotId, q.id))
     .map(q => ({
       name:  [slotName, setNames[q.id]].filter(Boolean).join(' '),
@@ -672,94 +1248,113 @@ function getPickerItems(cls, slotId) {
       img:   getItemImg(cls, slotId, q.id),
       stats: getStatsForSlot(cls, slotId, q.id),
     }));
-  return [...setItems, ...extraItems];
 }
 
 function renderPicker(cid) {
-  const s          = state[cid];
-  const panel      = document.getElementById(`pickerPanel-${cid}`);
-  const btns       = document.getElementById(`pickerBtns-${cid}`);
-  const runeInfo   = document.getElementById(`pickerRuneInfo-${cid}`);
-  const runeImg    = document.getElementById(`pickerRuneImg-${cid}`);
-  const runeNameEl = document.getElementById(`pickerRuneName-${cid}`);
-  const actions    = document.getElementById(`pickerActions-${cid}`);
-  const modeLabel  = document.getElementById(`pickerModeLabel-${cid}`);
-
+  const s = state[cid];
+  const panel = document.getElementById(`pickerPanel-${cid}`);
+  const btns  = document.getElementById(`pickerBtns-${cid}`);
+  const title = document.getElementById(`pickerTitle-${cid}`);
+  const runeInfo = document.getElementById(`pickerRuneInfo-${cid}`);
+  const actions  = document.getElementById(`pickerActions-${cid}`);
   if (!s.activeSlot) { panel.classList.remove('open'); return; }
 
+  const slot = ALL_SLOTS.find(x => x.id === s.activeSlot);
+  const slotName = slot ? slot.name : 'Предмет';
   const eqItem = s.equipped[s.activeSlot];
+  const runesForSlot = SLOT_RUNES[s.activeSlot] || [];
 
-  function itemBtn(item, idx, onclickFn, tooltipFn) {
+  if (s.pickerMode === 'rune' && eqItem) {
+    if (title) title.innerHTML = `${slotName} <em>· выберите руну</em>`;
+    runeInfo.classList.remove('on');
+    runeInfo.innerHTML = '';
+    btns.innerHTML = runesForSlot.map((r) =>
+      `<div class="picker-item${eqItem.rune && eqItem.rune.id === r.id ? ' on' : ''}"
+        onclick="setRune('${cid}','${r.id}')"
+        onmouseenter="showRuneTt(event,'${r.id}')"
+        onmousemove="moveTt(event)"
+        onmouseleave="hideTt()">
+        <img src="${r.img}" style="position:absolute;inset:1px;width:calc(100% - 2px);height:calc(100% - 2px);object-fit:contain;z-index:1" onerror="this.style.display='none'">
+        <div style="position:absolute;bottom:0;left:0;right:0;height:2px;background:#7ab8ff;z-index:3;opacity:.7"></div>
+      </div>`
+    ).join('') || `<div style="font-size:11px;color:var(--txt3);font-style:italic;font-family:var(--serif);padding:6px 2px">Для этого слота рун пока нет</div>`;
+    actions.innerHTML = `<button class="ghost" onclick="exitRuneMode('${cid}')">← к выбору предмета</button>`;
+    panel.classList.add('open');
+    return;
+  }
+
+  if (title) title.innerHTML = `${slotName} <em>· выберите качество</em>`;
+
+  const items = getPickerItems(s.cls, s.activeSlot);
+  _pickerCache[cid] = items;
+
+  btns.innerHTML = items.map((item, idx) => {
     const frameSrc = QUALITY_FRAME[item.quality] || '';
-    const qColor   = QUALITIES.find(q => q.id === item.quality)?.color || '#888';
+    const qData = QUALITIES.find(q => q.id === item.quality);
+    const qColor = qData ? qData.color : '#888';
     const isOn = eqItem && eqItem.name === item.name && eqItem.quality === item.quality;
     return `<div class="picker-item${isOn ? ' on' : ''}"
-      onclick="${onclickFn}('${cid}','${s.activeSlot}',${idx})"
-      onmouseenter="${tooltipFn}(event,'${cid}',${idx})"
-      onmousemove="moveTt(event)" onmouseleave="hideTt()">
-      ${item.img ? `<img src="${item.img}" style="position:absolute;inset:0;width:32px;height:32px;object-fit:none;z-index:1" onerror="this.style.display='none'">` : ''}
-      ${frameSrc ? `<img src="${frameSrc}" style="position:absolute;inset:0;width:32px;height:32px;pointer-events:none;z-index:2" onerror="this.style.display='none'">` : ''}
-      <div style="position:absolute;bottom:0;left:0;right:0;height:2px;background:${qColor};z-index:3;opacity:.8"></div>
+      onclick="equipItem('${cid}','${s.activeSlot}',${idx})"
+      onmouseenter="showPickerTt(event,'${cid}',${idx})"
+      onmousemove="moveTt(event)"
+      onmouseleave="hideTt()">
+      ${item.img ? `<img src="${item.img}" style="position:absolute;inset:1px;width:calc(100% - 2px);height:calc(100% - 2px);object-fit:contain;z-index:1" onerror="this.style.display='none'">` : ''}
+      ${frameSrc ? `<img src="${frameSrc}" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:2" onerror="this.style.display='none'">` : ''}
+      <div style="position:absolute;bottom:0;left:0;right:0;height:2px;background:${qColor};z-index:3;opacity:.85"></div>
     </div>`;
+  }).join('');
+
+  if (items.length === 0) {
+    btns.innerHTML = `<div style="font-size:11px;color:var(--txt3);font-style:italic;font-family:var(--serif);padding:6px 2px">Предметов пока нет в базе</div>`;
   }
 
-  if (s.pickerMode === 'rune') {
-    // ── РЕЖИМ ВЫБОРА РУНЫ ──
-    modeLabel.textContent = 'Выберите руну';
-    const compatRunes = RUNES.filter(r => r.slotId === s.activeSlot);
-    _pickerCache[cid] = compatRunes;
-    if (compatRunes.length > 0) {
-      btns.innerHTML = compatRunes.map((rune, idx) => {
-        const frameSrc = QUALITY_FRAME[rune.quality] || '';
-        const qColor   = QUALITIES.find(q => q.id === rune.quality)?.color || '#888';
-        const isOn = eqItem?.rune?.name === rune.name;
-        return `<div class="picker-item${isOn ? ' on' : ''}"
-          onclick="insertRune('${cid}','${s.activeSlot}',${idx})"
-          onmouseenter="showRunePickerTt(event,'${cid}',${idx})"
-          onmousemove="moveTt(event)" onmouseleave="hideTt()">
-          ${rune.img ? `<img src="${rune.img}" style="position:absolute;inset:0;width:32px;height:32px;object-fit:none;z-index:1" onerror="this.style.display='none'">` : ''}
-          ${frameSrc ? `<img src="${frameSrc}" style="position:absolute;inset:0;width:32px;height:32px;pointer-events:none;z-index:2" onerror="this.style.display='none'">` : ''}
-          <div style="position:absolute;bottom:0;left:0;right:0;height:2px;background:${qColor};z-index:3;opacity:.8"></div>
-        </div>`;
-      }).join('');
-    } else {
-      btns.innerHTML = `<div style="font-size:11px;color:var(--txt3);font-style:italic;padding:4px 0">Нет доступных рун для этого слота</div>`;
-    }
-    runeInfo.classList.remove('on');
-    actions.innerHTML = `<button class="ghost" onclick="setPickerMode('${cid}','item')">← Назад</button>`;
-
+  if (eqItem && eqItem.rune) {
+    runeInfo.classList.add('on');
+    runeInfo.innerHTML = `
+      <img src="${eqItem.rune.img}" onerror="this.style.display='none'">
+      <div class="rune-text">
+        <div class="rune-lbl">Вставлена руна</div>
+        <div class="rune-name">${eqItem.rune.name}</div>
+      </div>`;
   } else {
-    // ── РЕЖИМ ВЫБОРА ПРЕДМЕТА ──
-    modeLabel.textContent = '';
-    const items = getPickerItems(s.cls, s.activeSlot);
-    _pickerCache[cid] = items;
-    btns.innerHTML = items.map((item, idx) => itemBtn(item, idx, 'equipItem', 'showPickerTt')).join('');
-
-    // Полоска с руной (если вставлена)
-    if (eqItem?.rune) {
-      runeInfo.classList.add('on');
-      runeImg.src = eqItem.rune.img || '';
-      runeNameEl.textContent = eqItem.rune.name;
-    } else {
-      runeInfo.classList.remove('on');
-    }
-
-    // Кнопки действий (только если предмет надет)
-    if (eqItem) {
-      let actHtml = '';
-      if (!eqItem.rune) {
-        actHtml += `<button class="primary" onclick="setPickerMode('${cid}','rune')">Вставить руну в этот предмет</button>`;
-      } else {
-        actHtml += `<button class="ghost" onclick="removeRune('${cid}')">Достать руну</button>`;
-      }
-      actHtml += `<button class="danger" onclick="unequipActiveSlot('${cid}')">Снять предмет</button>`;
-      actions.innerHTML = actHtml;
-    } else {
-      actions.innerHTML = '';
-    }
+    runeInfo.classList.remove('on');
+    runeInfo.innerHTML = '';
   }
+
+  let actionHtml = '';
+  if (eqItem) {
+    if (runesForSlot.length > 0) {
+      if (eqItem.rune) {
+        actionHtml += `<button class="primary" onclick="enterRuneMode('${cid}')">Сменить руну</button>`;
+        actionHtml += `<button onclick="removeRune('${cid}')">Достать руну</button>`;
+      } else {
+        actionHtml += `<button class="primary" onclick="enterRuneMode('${cid}')">Вставить руну в этот предмет</button>`;
+      }
+    }
+    actionHtml += `<button class="danger" onclick="unequipActiveSlot('${cid}')">Снять предмет</button>`;
+  }
+  actions.innerHTML = actionHtml;
 
   panel.classList.add('open');
+}
+
+function showRuneTt(e, runeId) {
+  const r = RUNES.find(x => x.id === runeId);
+  if (!r) return;
+  let html = `<div class="tt-name">${r.name}</div>`;
+  html += `<div class="tt-quality" style="color:#7ab8ff">Руна</div>`;
+  if (r.stats) {
+    Object.entries(r.stats).forEach(function(entry) {
+      var k = entry[0]; var v = entry[1];
+      const meta = STAT_LABELS.find(m => m.key === k);
+      if (!meta) return;
+      const vStr = meta.pct ? `+${v}%` : `+${v}`;
+      html += `<div class="tt-stat"><span class="tt-stat-k">${meta.label}</span><span class="tt-stat-v">${vStr}</span></div>`;
+    });
+  }
+  ttEl.innerHTML = html;
+  ttEl.style.display = 'block';
+  moveTt(e);
 }
 
 function showPickerTt(e, cid, idx) {
@@ -769,10 +1364,15 @@ function showPickerTt(e, cid, idx) {
   let html = `<div class="tt-name">${item.name}</div>`;
   if (q) html += `<div class="tt-quality" style="color:${q.color}">${q.label}</div>`;
   if (item.stats) {
-    Object.entries(item.stats).forEach(([k, v]) => {
+    Object.entries(item.stats).forEach(function(entry) {
+      var k = entry[0]; var v = entry[1];
       const meta = STAT_LABELS.find(m => m.key === k);
-      if (meta) html += `<div class="tt-stat"><span class="tt-sk">${meta.label}</span><span class="tt-sv">+${meta.pct ? v+'%' : v}</span></div>`;
+      if (!meta) return;
+      const vStr = meta.pct ? `+${Number(v).toFixed(2).replace(/\.00$/,'')}%` : (Number.isInteger(v) ? String(v) : Number(v).toFixed(2));
+      html += `<div class="tt-stat"><span class="tt-stat-k">${meta.label}</span><span class="tt-stat-v">${vStr}</span></div>`;
     });
+  } else {
+    html += `<div class="tt-empty">данные стат скоро</div>`;
   }
   ttEl.innerHTML = html;
   ttEl.style.display = 'block';
@@ -783,92 +1383,276 @@ function equipItem(cid, slotId, idx) {
   const s = state[cid];
   const item = (_pickerCache[cid] || [])[idx];
   if (!item) return;
-  // Сохраняем руну если это тот же предмет, иначе сбрасываем
-  const prevEq = s.equipped[slotId];
-  const rune = (prevEq?.name === item.name && prevEq?.quality === item.quality) ? prevEq.rune : undefined;
-  s.equipped[slotId] = { name: item.name, quality: item.quality, img: item.img, stats: item.stats, rune };
-  // Пикер остаётся открытым — показываем кнопки действий
+  const prevRune = s.equipped[slotId] ? s.equipped[slotId].rune : undefined;
+  s.equipped[slotId] = { name: item.name, quality: item.quality, img: item.img, stats: item.stats };
+  if (prevRune) s.equipped[slotId].rune = prevRune;
   s.pickerMode = 'item';
   renderAll(cid);
 }
 
-function renderBuffs(cid) {
+// ── RUNE ACTIONS ──────────────────────────────────────────────────────────────
+function enterRuneMode(cid) {
   const s = state[cid];
-  document.getElementById(`buffsList-${cid}`).innerHTML = CLASS_BUFFS.map((b, i) =>
-    `<div class="buff-toggle${s.buffs.has(i) ? ' on' : ''}" onclick="toggleBuff('${cid}',${i})">
-      <div class="buff-check">${s.buffs.has(i) ? '✓' : ''}</div>
-      ${b.name} <span class="buff-cls-badge">(${CLASS_NAMES[b.cls]})</span>
-    </div>`
-  ).join('');
+  if (!s.activeSlot || !s.equipped[s.activeSlot]) return;
+  s.pickerMode = 'rune';
+  renderPicker(cid);
+}
+function exitRuneMode(cid) {
+  state[cid].pickerMode = 'item';
+  renderPicker(cid);
+}
+function setRune(cid, runeId) {
+  const s = state[cid];
+  if (!s.activeSlot) return;
+  const eq = s.equipped[s.activeSlot];
+  if (!eq) return;
+  const rune = RUNES.find(r => r.id === runeId);
+  if (!rune) return;
+  eq.rune = { id: rune.id, name: rune.name, img: rune.img, slot: rune.slot, stats: Object.assign({}, rune.stats) };
+  s.pickerMode = 'item';
+  renderAll(cid);
+}
+function removeRune(cid) {
+  const s = state[cid];
+  if (!s.activeSlot) return;
+  const eq = s.equipped[s.activeSlot];
+  if (!eq) return;
+  delete eq.rune;
+  renderAll(cid);
 }
 
+// ── BUFFS RENDER ─────────────────────────────────────────────────────────────
+function renderBuffs(cid) {
+  const s = state[cid];
+  const root = document.getElementById(`buffsList-${cid}`);
+  if (!root) return;
+  const activeCat = s.activeCat || 'class';
+  const totalSel = s.buffs.size;
+
+  const tabsHtml = BUFF_CATS.map(function(c) {
+    const count = BUFFS.filter(b => b.cat === c.id && s.buffs.has(b.id)).length;
+    return `<button class="buff-tab${c.id === activeCat ? ' on' : ''}"
+        onclick="setBuffCat('${cid}','${c.id}')"
+        title="${c.hint}">
+      ${c.name}${count ? `<span class="buff-tab-count">${count}</span>` : ''}
+    </button>`;
+  }).join('');
+
+  const catBuffs = BUFFS.filter(b => b.cat === activeCat);
+  const gridHtml = catBuffs.map(function(b) {
+    const isOn = s.buffs.has(b.id);
+    const abbr = (b.name.replace(/[^а-яА-Яa-zA-Z ]/g,'').split(' ')[0] || '?').slice(0,2);
+    return `<div class="buff-tile${isOn ? ' on' : ''}"
+        onclick="toggleBuff('${cid}','${b.id}')"
+        onmouseenter="showBuffTt(event,'${b.id}')"
+        onmousemove="moveTt(event)"
+        onmouseleave="hideTt()">
+      ${b.icon ? `<img src="${b.icon}" onerror="this.textContent='${abbr}';this.remove()">` : abbr}
+    </div>`;
+  }).join('') || `<div class="buff-grid-empty">в этой категории пусто</div>`;
+
+  root.innerHTML = `
+    <div class="buffs-h-row">
+      <div class="buffs-h">Баффы группы${totalSel ? ` · <em>${totalSel}</em>` : ''}</div>
+      ${totalSel ? `<button class="buffs-clear" onclick="clearBuffs('${cid}')">Сбросить</button>` : ''}
+    </div>
+    <div class="buff-tabs">${tabsHtml}</div>
+    <div class="buff-grid">${gridHtml}</div>
+  `;
+}
+
+function setBuffCat(cid, catId) {
+  state[cid].activeCat = catId;
+  renderBuffs(cid);
+}
+
+function clearBuffs(cid) {
+  state[cid].buffs.clear();
+  renderBuffs(cid);
+  renderStats(cid);
+  renderCompare();
+}
+
+function showBuffTt(e, buffId) {
+  const b = BUFFS_BY_ID[buffId];
+  if (!b) return;
+  let html = `<div class="tt-head"><div class="tt-head-text">
+    <div class="tt-name">${b.name}</div>
+    ${b.sub ? `<div class="tt-quality" style="color:var(--gold-d);font-style:italic">${b.sub}</div>` : ''}
+  </div></div>`;
+  const meta = STAT_LABELS.find(m => m.key === b.effect);
+  const label = meta ? meta.label : (b.effect === 'dmg_taken_red' ? 'Снижение урона' : b.effect);
+  const isPct = b.pct || (meta && meta.pct);
+  const vStr = isPct ? `+${b.value}%` : `+${b.value}`;
+  html += `<div class="tt-stat"><span class="tt-stat-k">${label}</span><span class="tt-stat-v">${vStr}</span></div>`;
+  ttEl.innerHTML = html;
+  ttEl.style.display = 'block';
+  moveTt(e);
+}
+
+// ── COMPUTE TOTALS ────────────────────────────────────────────────────────────
+function computeTotals(cid) {
+  const s = state[cid];
+  const totals = {};
+  let hasAny = false;
+  Object.values(s.equipped).forEach(function(eq) {
+    if (eq && eq.stats) {
+      hasAny = true;
+      Object.entries(eq.stats).forEach(function(entry) {
+        totals[entry[0]] = (totals[entry[0]] || 0) + entry[1];
+      });
+    }
+    if (eq && eq.rune && eq.rune.stats) {
+      hasAny = true;
+      Object.entries(eq.rune.stats).forEach(function(entry) {
+        totals[entry[0]] = (totals[entry[0]] || 0) + entry[1];
+      });
+    }
+  });
+  const buffEffects = {};
+  var dmgRed = 0;
+  s.buffs.forEach(function(buffId) {
+    const b = BUFFS_BY_ID[buffId];
+    if (!b) return;
+    if (b.effect === 'dmg_taken_red') { dmgRed += b.value; return; }
+    const bonus = b.pct ? (totals[b.effect] || 0) * b.value / 100 : b.value;
+    buffEffects[b.effect] = (buffEffects[b.effect] || 0) + bonus;
+  });
+  Object.entries(buffEffects).forEach(function(entry) {
+    totals[entry[0]] = (totals[entry[0]] || 0) + entry[1];
+    hasAny = true;
+  });
+  if (dmgRed) { totals.dmg_taken_red = dmgRed; hasAny = true; }
+  return { totals: totals, hasAny: hasAny, eqCount: Object.keys(s.equipped).length };
+}
+
+// ── RENDER STATS ──────────────────────────────────────────────────────────────
 function renderStats(cid) {
-  const s    = state[cid];
   const body = document.getElementById(`statsBody-${cid}`);
   const hint = document.getElementById(`statsHint-${cid}`);
+  const r = computeTotals(cid);
+  const totals = r.totals;
+  const hasAny = r.hasAny;
+  const eqCount = r.eqCount;
 
-  // Базовые статы персонажа
-  const base = BASE_STATS[s.cls] || {};
-  const totals = { ...base };
-
-  let hasAny = false;
-  Object.values(s.equipped).forEach(eq => {
-    if (!eq) return;
-    if (eq.stats) {
-      hasAny = true;
-      Object.entries(eq.stats).forEach(([k,v]) => { totals[k] = (totals[k]||0)+v; });
+  if (!hasAny) {
+    if (eqCount > 0) {
+      hint.textContent = `${eqCount} надето · нет данных`;
+      body.innerHTML = `<div class="stat-empty">Для этого качества данных пока нет.<br>Попробуйте красное (легендарное) или зелёное.</div>`;
+    } else {
+      hint.textContent = 'выберите предметы';
+      body.innerHTML = `<div class="stat-empty">Откройте слот и выберите качество предмета,<br>чтобы увидеть характеристики</div>`;
     }
-    if (eq.rune?.stats) {
-      Object.entries(eq.rune.stats).forEach(([k,v]) => { totals[k] = (totals[k]||0)+v; });
-    }
-  });
-  if (!hasAny && !Object.keys(base).length) {
-    hint.textContent = 'выберите предметы';
-    body.innerHTML = `<div class="stat-empty">Выберите предметы, чтобы увидеть характеристики</div>`;
     return;
   }
-  const cnt = Object.keys(s.equipped).length;
-  hint.textContent = cnt ? `${cnt} ${cnt===1?'предмет':cnt<5?'предмета':'предметов'}` : 'базовые статы';
-  const buffEffects = {};
-  s.buffs.forEach(i => {
-    const b = CLASS_BUFFS[i];
-    if (!b || b.effect==='dmg_taken_red') return;
-    const bonus = b.pct ? (totals[b.effect]||0)*b.value/100 : b.value;
-    buffEffects[b.effect] = (buffEffects[b.effect]||0)+bonus;
-  });
-  const dmgRed = CLASS_BUFFS.filter((b,i)=>b.effect==='dmg_taken_red'&&s.buffs.has(i)).reduce((s,b)=>s+b.value,0);
+  hint.textContent = `${eqCount} ${eqCount===1?'предмет':eqCount<5?'предмета':'предметов'}`;
   let html = '';
-  STAT_LABELS.forEach(meta => {
-    const total = (totals[meta.key]||0)+(buffEffects[meta.key]||0);
-    if (total===0) return;
-    const valStr = meta.pct ? `+${total.toFixed(2).replace(/\.00$/,'')}%` : (Number.isInteger(total)?String(total):total.toFixed(2));
-    const bonus = buffEffects[meta.key]||0;
-    const buffTag = bonus>0 ? `<span class="stat-buff-tag">+${meta.pct?bonus.toFixed(1)+'%':Math.round(bonus)} бафф</span>` : '';
-    html += `<div class="stat-row"><span class="stat-key">${meta.label}</span><span class="stat-val">${valStr}${buffTag}</span></div>`;
+  STAT_LABELS.forEach(function(meta) {
+    const total = totals[meta.key] || 0;
+    if (total === 0) return;
+    const valStr = meta.pct
+      ? `+${total.toFixed(2).replace(/\.00$/,'')}%`
+      : (Number.isInteger(total) ? String(total) : total.toFixed(2));
+    html += `<div class="stat-row"><span class="stat-key">${meta.label}</span><span class="stat-val">${valStr}</span></div>`;
   });
-  if (dmgRed>0) html += `<div class="stat-row"><span class="stat-key">Снижение урона (бафф)</span><span class="stat-val">−${dmgRed}%</span></div>`;
+  if (totals.dmg_taken_red) {
+    html += `<div class="stat-row"><span class="stat-key">Снижение урона (бафф)</span><span class="stat-val">−${totals.dmg_taken_red}%</span></div>`;
+  }
   if (!html) html = `<div class="stat-empty">Нет данных для выбранных слотов</div>`;
   body.innerHTML = html;
 }
 
+// ── COMPARE TABLE ─────────────────────────────────────────────────────────────
+function renderCompare() {
+  const a = computeTotals('c1');
+  const b = computeTotals('c2');
+  const body = document.getElementById('cmpBody');
+  const sub  = document.getElementById('cmpSub');
+  const h1   = document.getElementById('cmpHead1');
+  const h2   = document.getElementById('cmpHead2');
+  if (!body) return;
+
+  const labelOf = function(cid) {
+    const s = state[cid];
+    const cls = CLASS_NAMES[s.cls] || s.cls;
+    const sex = s.race.endsWith('Male') ? '♂' : '♀';
+    const race = s.race.startsWith('Elf') ? 'эльф' : 'человек';
+    return `${cls} · ${race} ${sex}`;
+  };
+  if (h1) h1.textContent = labelOf('c1');
+  if (h2) h2.textContent = labelOf('c2');
+
+  if (!a.hasAny && !b.hasAny) {
+    if (sub) sub.textContent = 'Соберите снаряжение обоим героям';
+    body.innerHTML = `<div class="cmp-empty">Оденьте героев или вставьте руны, чтобы увидеть сравнение характеристик</div>`;
+    return;
+  }
+  if (sub) sub.textContent = `${a.eqCount} ↔ ${b.eqCount} предметов · в реальном времени`;
+
+  const keys = STAT_LABELS.map(m => m.key).filter(function(k) {
+    return (a.totals[k] && a.totals[k] !== 0) || (b.totals[k] && b.totals[k] !== 0);
+  });
+  if (a.totals.dmg_taken_red || b.totals.dmg_taken_red) keys.push('dmg_taken_red');
+
+  if (keys.length === 0) {
+    body.innerHTML = `<div class="cmp-empty">Для надетых предметов нет данных по статам</div>`;
+    return;
+  }
+
+  body.innerHTML = keys.map(function(k) {
+    const meta = STAT_LABELS.find(m => m.key === k) || { key:k, label: k === 'dmg_taken_red' ? 'Снижение урона' : k, pct: k === 'dmg_taken_red' };
+    const v1 = a.totals[k] || 0;
+    const v2 = b.totals[k] || 0;
+    const fmt = function(v) {
+      if (meta.pct) return `${v > 0 ? '+' : ''}${Number(v).toFixed(2).replace(/\.00$/,'')}%`;
+      return Number.isInteger(v) ? String(v) : Number(v).toFixed(2);
+    };
+    const v1Str = v1 === 0 ? '—' : fmt(v1);
+    const v2Str = v2 === 0 ? '—' : fmt(v2);
+    const v1Cls = v1 > v2 ? 'winner' : (v1 < v2 ? 'loser' : '');
+    const v2Cls = v2 > v1 ? 'winner' : (v2 < v1 ? 'loser' : '');
+    const diff = v1 - v2;
+    const diffAbs = Math.abs(diff);
+    const diffStr = diffAbs === 0 ? '' : (meta.pct
+      ? `+${diffAbs.toFixed(2).replace(/\.00$/,'')}%`
+      : (Number.isInteger(diffAbs) ? `+${diffAbs}` : `+${diffAbs.toFixed(2)}`));
+    const v1Diff = v1 > v2 && diffStr ? `<span class="diff">${diffStr}</span>` : '';
+    const v2Diff = v2 > v1 && diffStr ? `<span class="diff">${diffStr}</span>` : '';
+    const total = (v1 > 0 ? v1 : 0) + (v2 > 0 ? v2 : 0);
+    const p1 = total > 0 ? (v1 > 0 ? v1 / total * 100 : 0) : 0;
+    const p2 = total > 0 ? (v2 > 0 ? v2 / total * 100 : 0) : 0;
+    return `
+      <div class="cmp-row">
+        <div class="cmp-v cmp-v1 ${v1Cls}">${v1Diff}<span>${v1Str}</span></div>
+        <div class="cmp-key">${meta.label}</div>
+        <div class="cmp-v cmp-v2 ${v2Cls}"><span>${v2Str}</span>${v2Diff}</div>
+        ${total > 0 ? `<div class="cmp-bar-wrap"><div class="cmp-bar-1" style="width:${p1}%"></div><div class="cmp-bar-2" style="width:${p2}%"></div></div>` : ''}
+      </div>`;
+  }).join('');
+}
+
+// ── RENDER ALL ────────────────────────────────────────────────────────────────
 function renderAll(cid) {
   renderClsDrop(cid);
+  renderRaceChips(cid);
   renderSlotCol(cid, COL_LEFT,  `colLeft-${cid}`);
   renderSlotCol(cid, COL_RIGHT, `colRight-${cid}`);
   renderSlotRow(cid, ROW_TOP,   `slotRowTop-${cid}`);
   renderSlotRow(cid, ROW_BOT,   `slotRowBot-${cid}`);
   renderPicker(cid);
   renderBuffs(cid);
+  setupDollDOM(cid);
+  renderDoll(cid);
   renderStats(cid);
+  renderCompare();
 }
 
 // ── ACTIONS ───────────────────────────────────────────────────────────────────
-
 function toggleClsDrop(cid) { document.getElementById(`clsDrop-${cid}`).classList.toggle('open'); }
 
 function selectClass(cid, cls) {
   const s = state[cid];
-  s.cls = cls; s.activeSlot = null;
+  s.cls = cls; s.activeSlot = null; s.pickerMode = 'item';
   Object.keys(s.equipped).forEach(k => delete s.equipped[k]);
   document.getElementById(`clsDrop-${cid}`).classList.remove('open');
   renderAll(cid);
@@ -876,29 +1660,13 @@ function selectClass(cid, cls) {
 
 function openPicker(cid, slotId) {
   const s = state[cid];
-  if (s.activeSlot === slotId) {
-    s.activeSlot = null;
-  } else {
-    s.activeSlot = slotId;
-    s.pickerMode = 'item'; // сброс режима при открытии нового слота
-  }
+  s.activeSlot = s.activeSlot === slotId ? null : slotId;
+  s.pickerMode = 'item';
   renderSlotCol(cid, COL_LEFT,  `colLeft-${cid}`);
   renderSlotCol(cid, COL_RIGHT, `colRight-${cid}`);
   renderSlotRow(cid, ROW_TOP,   `slotRowTop-${cid}`);
   renderSlotRow(cid, ROW_BOT,   `slotRowBot-${cid}`);
   renderPicker(cid);
-}
-
-function equipSlot(cid, slotId, quality) {
-  const s = state[cid];
-  s.equipped[slotId] = { quality, stats: getStatsForSlot(s.cls, slotId, quality) };
-  s.activeSlot = null;
-  renderSlotCol(cid, COL_LEFT,  `colLeft-${cid}`);
-  renderSlotCol(cid, COL_RIGHT, `colRight-${cid}`);
-  renderSlotRow(cid, ROW_TOP,   `slotRowTop-${cid}`);
-  renderSlotRow(cid, ROW_BOT,   `slotRowBot-${cid}`);
-  renderPicker(cid);
-  renderStats(cid);
 }
 
 function unequipActiveSlot(cid) {
@@ -906,69 +1674,98 @@ function unequipActiveSlot(cid) {
   if (!s.activeSlot) return;
   delete s.equipped[s.activeSlot];
   s.activeSlot = null;
-  renderSlotCol(cid, COL_LEFT,  `colLeft-${cid}`);
-  renderSlotCol(cid, COL_RIGHT, `colRight-${cid}`);
-  renderSlotRow(cid, ROW_TOP,   `slotRowTop-${cid}`);
-  renderSlotRow(cid, ROW_BOT,   `slotRowBot-${cid}`);
-  renderPicker(cid);
-  renderStats(cid);
-}
-
-function setPickerMode(cid, mode) {
-  state[cid].pickerMode = mode;
-  renderPicker(cid);
-}
-
-function insertRune(cid, slotId, idx) {
-  const s = state[cid];
-  const rune = (_pickerCache[cid] || [])[idx];
-  if (!rune || !s.equipped[slotId]) return;
-  s.equipped[slotId].rune = { name: rune.name, img: rune.img, stats: rune.stats || null };
   s.pickerMode = 'item';
   renderAll(cid);
 }
 
-function removeRune(cid) {
+function toggleBuff(cid, buffId) {
   const s = state[cid];
-  if (!s.activeSlot || !s.equipped[s.activeSlot]) return;
-  delete s.equipped[s.activeSlot].rune;
+  if (s.buffs.has(buffId)) s.buffs.delete(buffId); else s.buffs.add(buffId);
+  renderBuffs(cid);
+  renderStats(cid);
+  renderCompare();
+}
+
+function equipFullSet(cid, quality) {
+  const s = state[cid];
+  const setNames = CLASS_SET_NAMES[s.cls] || {};
+  const slotMap = CLASS_SLOTS[s.cls];
+  if (!slotMap) return;
+  Object.keys(slotMap).forEach(function(slotId) {
+    const img = getItemImg(s.cls, slotId, quality);
+    if (!img) return;
+    const slotName = (CLASS_ITEM_NAMES[s.cls] && CLASS_ITEM_NAMES[s.cls][slotId]) || slotId;
+    const stats = getStatsForSlot(s.cls, slotId, quality);
+    s.equipped[slotId] = {
+      name: [slotName, setNames[quality]].filter(Boolean).join(' '),
+      quality: quality, img: img, stats: stats
+    };
+  });
+  s.activeSlot = null;
   renderAll(cid);
 }
 
-function showRunePickerTt(e, cid, idx) {
-  const rune = (_pickerCache[cid] || [])[idx];
-  if (!rune) return;
-  const q = QUALITIES.find(q => q.id === rune.quality);
-  let html = `<div class="tt-name">${rune.name}</div>`;
-  if (q) html += `<div class="tt-quality" style="color:${q.color}">${q.label}</div>`;
-  html += `<div class="tt-empty">${rune.slot}</div>`;
-  if (rune.stats) {
-    Object.entries(rune.stats).forEach(([k, v]) => {
-      const meta = STAT_LABELS.find(m => m.key === k);
-      if (meta) html += `<div class="tt-stat"><span class="tt-stat-k">${meta.label}</span><span class="tt-stat-v">+${meta.pct ? v+'%' : v}</span></div>`;
-    });
-  }
-  ttEl.innerHTML = html;
-  ttEl.style.display = 'block';
-  moveTt(e);
-}
-
-function toggleBuff(cid, i) {
+function stripAll(cid) {
   const s = state[cid];
-  if (s.buffs.has(i)) s.buffs.delete(i); else s.buffs.add(i);
-  renderBuffs(cid);
-  renderStats(cid);
+  s.equipped = {};
+  s.activeSlot = null;
+  s.pickerMode = 'item';
+  renderAll(cid);
 }
 
-document.addEventListener('click', e => {
-  ['c1','c2'].forEach(cid => {
+function setRace(cid, race) {
+  state[cid].race = race;
+  renderRaceChips(cid);
+  renderDoll(cid);
+  renderCompare();
+}
+
+// Close dropdowns on outside click
+document.addEventListener('click', function(e) {
+  ['c1','c2'].forEach(function(cid) {
     const drop = document.getElementById(`clsDrop-${cid}`);
     if (drop && !drop.contains(e.target)) drop.classList.remove('open');
   });
 });
 
+// Race / sex chip wiring
+document.querySelectorAll('[id^="ctrls-"]').forEach(function(box) {
+  const cid = box.id.replace('ctrls-','');
+  box.addEventListener('click', function(e) {
+    const sexBtn  = e.target.closest('.sex-chip');
+    const raceBtn = e.target.closest('.race-chip');
+    const cur = state[cid].race;
+    if (sexBtn) {
+      const newSex   = sexBtn.dataset.sex;
+      const racePart = cur.startsWith('Elf') ? 'Elf' : 'Human';
+      setRace(cid, racePart + newSex);
+    } else if (raceBtn) {
+      const newRace = raceBtn.dataset.race;
+      const sexPart = cur.endsWith('Male') ? 'Male' : 'Female';
+      setRace(cid, newRace + sexPart);
+    }
+  });
+});
+
+// Tone picker
+const savedTone = (typeof localStorage !== 'undefined' && localStorage.getItem('kor-tone')) || 'amber';
+applyTone(savedTone);
+document.querySelectorAll('.tone-btn').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    const t = btn.dataset.t;
+    applyTone(t);
+    if (typeof localStorage !== 'undefined') localStorage.setItem('kor-tone', t);
+  });
+});
+function applyTone(t) {
+  document.documentElement.dataset.tone = t === 'amber' ? '' : t;
+  document.querySelectorAll('.tone-btn').forEach(function(b) { b.classList.toggle('on', b.dataset.t === t); });
+}
+
 // ── INIT ──────────────────────────────────────────────────────────────────────
 renderAll('c1');
+renderAll('c2');
+renderCompare();
 </script>
 </body>
 </html>
