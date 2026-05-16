@@ -774,6 +774,7 @@ function ttShowEventBuff(idx, e) {
   const q = QUALITIES.find(q2 => q2.id === b.quality);
   let html = `<div class="tt-name">${b.name}</div>`;
   if (q) html += `<div class="tt-row"><span class="tt-key" style="color:${q.color}">${q.label}</span></div>`;
+  if (b.note) html += `<div class="tt-row"><span class="tt-key" style="font-style:italic;color:var(--txt3)">${b.note}</span></div>`;
   if (b.stats) {
     html += STAT_LABELS.filter(s => b.stats[s.key] != null)
       .map(s => `<div class="tt-row"><span class="tt-key">${s.label}</span><span class="tt-val">${fmtVal(b.stats[s.key],s.pct)}</span></div>`)
