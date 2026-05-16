@@ -912,11 +912,12 @@ function applyCharBg(cid) {
   const file = s.champion
     ? `stats_calculator/ui/bg_champion_race_${raceNum}.jpg`
     : `stats_calculator/ui/bg_race_${raceNum}.jpg`;
+  const grad = 'linear-gradient(to top, var(--bg2) 0%, transparent 50%)';
   const pos = s.champion ? 'center 5%' : '60% -10%';
   const sz  = s.champion ? 'auto 380px' : 'auto 475px';
-  inner.style.backgroundImage    = `url("${file}")`;
-  inner.style.backgroundPosition = pos;
-  inner.style.backgroundSize     = sz;
+  inner.style.backgroundImage    = `${grad}, url("${file}")`;
+  inner.style.backgroundPosition = `${pos}, ${pos}`;
+  inner.style.backgroundSize     = `${sz}, ${sz}`;
 }
 
 function toggleChampion(cid) {
