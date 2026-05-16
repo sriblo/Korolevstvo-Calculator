@@ -379,25 +379,28 @@ function icoHtml(img, quality) {
     `</div>`;
 }
 const RUNES = [
-  { name:'Титанитовая Великая Руна Фальдира',  slot:'Оружие',        quality:'red',    img:'stats_calculator/rune/rune_weapon.png' },
-  { name:'Руна Пяти Камней',                   slot:'Второе оружие', quality:'red',    img:'stats_calculator/rune/rune_attack_weapon2_1.png',    stats:{ atk:5, hp:140, def:2, atk_eff:1 } },
-  { name:'Руна рома Двух Морей',               slot:'Фляжка',        quality:'red',    img:'stats_calculator/rune/rune_flask.png',                stats:{ atk:4, def:2, atk_eff:4, heal_eff:2, def_eff:2 } },
-  { name:'Титанитовая Великая Руна Гэтана',    slot:'Штаны',         quality:'red',    img:'stats_calculator/rune/rune_pants.png' },
-  { name:'Великая Руна Варин',                 slot:'Пояс',          quality:'red',    img:'stats_calculator/rune/rune_belt.png' },
-  { name:'Великая Руна Орноса',                slot:'Сапоги',        quality:'red',    img:'stats_calculator/rune/rune_boots.png' },
-  { name:'Титанитовая Великая Руна Баннора',   slot:'Перчатки',      quality:'red',    img:'stats_calculator/rune/rune_gloves.png' },
-  { name:'Титанитовая Великая Руна Халиэмы',  slot:'Наплечники',    quality:'red',    img:'stats_calculator/rune/rune_shoulders.png' },
-  { name:'Великая Руна Мехила',                slot:'Нагрудник',     quality:'red',    img:'stats_calculator/rune/rune_chest.png' },
-  { name:'Ярмарочная руна Эльты',              slot:'Боевая сумка',  quality:'orange', img:'stats_calculator/rune/rune_medallion_attack_10.png',  stats:{ atk:3.2, hp:340, def:1.25, exp_gain:-2, def_eff:3, crit_def:3 } },
-  { name:'Ярмарочная руна Ларгиса',            slot:'Браслет',       quality:'orange', img:'stats_calculator/rune/rune_medallion_attack_10.png',  stats:{ atk:2, hp:200, def:2, rep_guard:10, rep_gladiator:10, rep_conqueror:10, rep_lord:10, rep_hunter:10, rep_witch:10, rep_archaeologist:10, rep_tamer:10 } },
-  { name:'Руна Хенгиста',                      slot:'Амулет',        quality:'purple', img:'stats_calculator/rune/rune_medallion_attack_10.png',  stats:{ atk:1.2, hp:80, atk_eff:3, crit_chance:5 } },
-  { name:'Руна Тэмми',                         slot:'Кольцо',        quality:'purple', img:'stats_calculator/rune/rune_medallion_attack_10.png',  stats:{ atk:2, atk_eff:1, crit_chance:7 } },
-  { name:'Руна Анст',                          slot:'Шлем',          quality:'purple', img:'stats_calculator/rune/rune_medallion_attack_10.png',  stats:{ atk:4, hp:140, def:3 } },
-  { name:'Руна Рог',                           slot:'Жетон',         quality:'purple', img:'stats_calculator/rune/rune_medallion_attack_10.png',  stats:{ atk:3, hp:300, atk_eff:3, crit_chance:3 } },
-  { name:'Руна «Превосходство Аргира»',        slot:'Талисман',      quality:'blue',   img:'stats_calculator/rune/sign_of_celestr.png',           stats:{ atk:2.9, hp:130, def:1.8 } },
-  { name:'Руна Усиленной Защиты Хорлата',      slot:'Шлем',          quality:'blue',   img:'stats_calculator/rune/rune_helm_defense_5.png' },
-  { name:'Руна Усиленной Атаки Хорлата',       slot:'Шлем',          quality:'blue',   img:'stats_calculator/rune/rune_helm_attack_5.png' },
-  { name:'Руна Усиленного Здоровья Хорлата',   slot:'Шлем',          quality:'blue',   img:'stats_calculator/rune/rune_helm_health_5.png' },
+  // Руны в экипировку
+  { group:'equip', name:'Титанитовая Великая Руна Фальдира',  slot:'Оружие',        quality:'red',    img:'stats_calculator/rune/rune_weapon.png' },
+  { group:'equip', name:'Титанитовая Великая Руна Гэтана',    slot:'Штаны',         quality:'red',    img:'stats_calculator/rune/rune_pants.png' },
+  { group:'equip', name:'Великая Руна Вархин',                slot:'Пояс',          quality:'red',    img:'stats_calculator/rune/rune_belt.png' },
+  { group:'equip', name:'Великая Руна Орноса',                slot:'Сапоги',        quality:'red',    img:'stats_calculator/rune/rune_boots.png' },
+  { group:'equip', name:'Титанитовая Великая Руна Баннора',   slot:'Перчатки',      quality:'red',    img:'stats_calculator/rune/rune_gloves.png' },
+  { group:'equip', name:'Титанитовая Великая Руна Халиэмы',  slot:'Наплечники',    quality:'red',    img:'stats_calculator/rune/rune_shoulders.png' },
+  { group:'equip', name:'Великая Руна Мехила',                slot:'Нагрудник',     quality:'red',    img:'stats_calculator/rune/rune_chest.png' },
+  { group:'equip', name:'Руна Анст',                          slot:'Шлем',          quality:'purple', img:'stats_calculator/rune/rune_medallion_attack_10.png',  stats:{ atk:4, hp:140, def:3 } },
+  { group:'equip', name:'Руна Пяти Камней',                   slot:'Второе оружие', quality:'red',    img:'stats_calculator/rune/rune_attack_weapon2_1.png',     stats:{ atk:5, hp:140, def:2, atk_eff:1 } },
+  { group:'equip', name:'Руна рома Двух Морей',               slot:'Фляжка',        quality:'red',    img:'stats_calculator/rune/rune_flask.png',                 stats:{ atk:4, def:2, atk_eff:4, heal_eff:2, def_eff:2 } },
+  // Руны в бижутерию
+  { group:'jewel', name:'Ярмарочная руна Эльты',              slot:'Боевая сумка',  quality:'orange', img:'stats_calculator/rune/rune_medallion_attack_10.png',  stats:{ atk:3.2, hp:340, def:1.25, exp_gain:-2, def_eff:3, crit_def:3 } },
+  { group:'jewel', name:'Ярмарочная руна Ларгиса',            slot:'Браслет',       quality:'orange', img:'stats_calculator/rune/rune_medallion_attack_10.png',  stats:{ atk:2, hp:200, def:2, rep_guard:10, rep_gladiator:10, rep_conqueror:10, rep_lord:10, rep_hunter:10, rep_witch:10, rep_archaeologist:10, rep_tamer:10 } },
+  { group:'jewel', name:'Руна Хенгиста',                      slot:'Амулет',        quality:'purple', img:'stats_calculator/rune/rune_medallion_attack_10.png',  stats:{ atk:1.2, hp:80, atk_eff:3, crit_chance:5 } },
+  { group:'jewel', name:'Руна Тэмми',                         slot:'Кольцо',        quality:'purple', img:'stats_calculator/rune/rune_medallion_attack_10.png',  stats:{ atk:2, atk_eff:1, crit_chance:7 } },
+  { group:'jewel', name:'Руна Рог',                           slot:'Жетон',         quality:'purple', img:'stats_calculator/rune/rune_medallion_attack_10.png',  stats:{ atk:3, hp:300, atk_eff:3, crit_chance:3 } },
+  { group:'jewel', name:'Руна «Превосходство Аргира»',        slot:'Талисман',      quality:'blue',   img:'stats_calculator/rune/sign_of_celestr.png',           stats:{ atk:2.9, hp:130, def:1.8 } },
+  // Руны Экзорциста
+  { group:'exorc', name:'Руна Усиленной Защиты Хорлата',      slot:'Шлем',          quality:'blue',   img:'stats_calculator/rune/rune_helm_defense_5.png' },
+  { group:'exorc', name:'Руна Усиленной Атаки Хорлата',       slot:'Шлем',          quality:'blue',   img:'stats_calculator/rune/rune_helm_attack_5.png' },
+  { group:'exorc', name:'Руна Усиленного Здоровья Хорлата',   slot:'Шлем',          quality:'blue',   img:'stats_calculator/rune/rune_helm_health_5.png' },
 ];
 
 let activeQ   = 'purple';
@@ -489,21 +492,30 @@ function switchQ(q) {
 }
 
 function renderRunes(c) {
-  const rows = RUNES.map((r, i) => `
-    <div class="rune-row" onmouseenter="ttShowRune(${i},event)" onmousemove="ttMove(event)" onmouseleave="ttHide()">
-      ${icoHtml(r.img, r.quality)}
-      <div class="rune-info">
-        <div class="rune-name">${r.name}</div>
-        <div class="rune-meta">
-          <span class="rune-slot">${r.slot}</span>
+  const GROUP_LABELS = { equip:'Руны в экипировку', jewel:'Руны в бижутерию', exorc:'Руны Экзорциста' };
+  const GROUP_ORDER  = ['equip','jewel','exorc'];
+  let html = '';
+  GROUP_ORDER.forEach(function(g) {
+    const items = RUNES.map((r,i) => ({r,i})).filter(function(x){ return x.r.group === g; });
+    if (!items.length) return;
+    html += `<div class="art-section-divider">${GROUP_LABELS[g]}</div><div class="rune-list">`;
+    html += items.map(function(x) {
+      const r = x.r, i = x.i;
+      return `<div class="rune-row" onmouseenter="ttShowRune(${i},event)" onmousemove="ttMove(event)" onmouseleave="ttHide()">
+        ${icoHtml(r.img, r.quality)}
+        <div class="rune-info">
+          <div class="rune-name">${r.name}</div>
+          <div class="rune-meta"><span class="rune-slot">${r.slot}</span></div>
         </div>
-      </div>
-    </div>`).join('');
+      </div>`;
+    }).join('');
+    html += `</div>`;
+  });
 
   c.innerHTML = `
     <div class="c-title">Руны</div>
     <div class="c-sub">Наложение на экипировку</div>
-    <div class="rune-list">${rows}</div>`;
+    ${html}`;
 }
 
 
