@@ -122,10 +122,18 @@
     content:'';position:absolute;top:0;left:0;right:0;height:1px;
     background:linear-gradient(90deg,transparent,rgba(var(--gold-tint),.3),transparent);
   }
-  .cmp-head{
+  .cmp-head{display:flex;align-items:flex-start;gap:8px;
     padding:14px 20px 10px;border-bottom:1px solid var(--line);
-    text-align:center;
   }
+  .cmp-head-text{text-align:center;flex:1}
+  .cmp-pin-btn{
+    background:none;border:1px solid var(--line);border-radius:6px;
+    cursor:pointer;font-size:16px;padding:4px 7px;line-height:1;
+    color:var(--txt2);transition:.15s;flex-shrink:0;
+  }
+  .cmp-pin-btn:hover{border-color:var(--line2);color:var(--txt)}
+  .cmp-pin-btn.pinned{border-color:var(--gold-d);background:rgba(var(--gold-tint),.08)}
+  .compare-panel.pinned{position:fixed;top:88px;z-index:40;width:var(--cmp-width)}
   .cmp-title{
     font-family:var(--serif);font-size:18px;font-weight:500;letter-spacing:-.01em;
     color:var(--txt);
@@ -685,8 +693,11 @@
     <!-- ── ЦЕНТРАЛЬНАЯ ТАБЛИЦА СРАВНЕНИЯ ── -->
     <aside class="compare-panel" id="comparePanel">
       <div class="cmp-head">
-        <div class="cmp-title">Сравнение характеристик</div>
-        <div class="cmp-sub" id="cmpSub">Соберите снаряжение обоим героям</div>
+        <div class="cmp-head-text">
+          <div class="cmp-title">Сравнение характеристик</div>
+          <div class="cmp-sub" id="cmpSub">Соберите снаряжение обоим героям</div>
+        </div>
+        <button class="cmp-pin-btn" id="cmpPinBtn" onclick="toggleCmpPin()" title="Зафиксировать панель">🔓</button>
       </div>
       <div class="cmp-col-head">
         <div class="h1n" id="cmpHead1">Персонаж 1</div>
@@ -1737,6 +1748,27 @@ function applyTone(t) {
   document.querySelectorAll('.tone-btn').forEach(function(b) { b.classList.toggle('on', b.dataset.t === t); });
 }
 
+// ── COMPARE PIN ───────────────────────────────────────────────────────────────
+let _cmpPinned = false;
+function toggleCmpPin() {
+  _cmpPinned = !_cmpPinned;
+  const panel = document.getElementById('comparePanel');
+  const btn   = document.getElementById('cmpPinBtn');
+  if (_cmpPinned) {
+    const w = panel.offsetWidth;
+    panel.style.setProperty('--cmp-width', w + 'px');
+    panel.classList.add('pinned');
+    btn.classList.add('pinned');
+    btn.textContent = '🔒';
+    btn.title = 'Открепить панель';
+  } else {
+    panel.classList.remove('pinned');
+    panel.style.removeProperty('--cmp-width');
+    btn.classList.remove('pinned');
+    btn.textContent = '🔓';
+    btn.title = 'Зафиксировать панель';
+  }
+}
 
 // ── INIT ──────────────────────────────────────────────────────────────────────
 renderAll('c1');
