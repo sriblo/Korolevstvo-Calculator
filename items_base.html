@@ -489,8 +489,8 @@ function switchQ(q) {
 }
 
 function renderRunes(c) {
-  const rows = RUNES.map(r => `
-    <div class="rune-row">
+  const rows = RUNES.map((r, i) => `
+    <div class="rune-row" onmouseenter="ttShowRune(${i},event)" onmousemove="ttMove(event)" onmouseleave="ttHide()">
       ${icoHtml(r.img, r.quality)}
       <div class="rune-info">
         <div class="rune-name">${r.name}</div>
@@ -721,6 +721,22 @@ function ttShowWF(e) {
   let html = `<div class="tt-name">${wf.name}</div>`;
   html += wf.effects.map(ef => `<div class="tt-row"><span class="tt-key" style="color:var(--txt2)">${ef}</span></div>`).join('');
   html += `<div class="tt-row" style="margin-top:4px"><span class="tt-key" style="font-style:italic;color:var(--txt3)">${wf.note}</span></div>`;
+  _tt.innerHTML = html;
+  _tt.classList.add('vis');
+  ttMove(e);
+}
+function ttShowRune(idx, e) {
+  const r = RUNES[idx];
+  let html = `<div class="tt-name">${r.name}</div>`;
+  html += `<div class="tt-row"><span class="tt-key" style="color:var(--txt3)">Вставляется в: ${r.slot}</span></div>`;
+  if (r.stats) {
+    html += STAT_LABELS
+      .filter(s => r.stats[s.key] != null)
+      .map(s => `<div class="tt-row"><span class="tt-key">${s.label}</span><span class="tt-val">+${r.stats[s.key]}${s.pct?'%':''}</span></div>`)
+      .join('');
+  } else {
+    html += `<div class="tt-empty">Данные не добавлены</div>`;
+  }
   _tt.innerHTML = html;
   _tt.classList.add('vis');
   ttMove(e);
