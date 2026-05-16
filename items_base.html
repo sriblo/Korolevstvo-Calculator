@@ -221,6 +221,8 @@ a{color:inherit;text-decoration:none}
 /* buff cards */
 .buff-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px}
 .pair-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.ring-pair-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:4px}
+.ring-col-items{display:flex;flex-direction:column;gap:8px}
 .buff-card{
   display:flex;flex-direction:row;align-items:center;gap:12px;
   padding:12px 14px;
@@ -599,10 +601,21 @@ function renderJewelry(c) {
     return html;
   }
 
-  const RING_GROUPS = ['Кольцо сквайра','Кольцо рыцаря','Кольцо лорда','Кольцо барона'];
-  const RING_PAIR_GROUPS = ['Кольцо сквайра','Кольцо рыцаря','Кольцо лорда','Кольцо барона'];
+  function ringPair(g1, g2) {
+    const col = g => {
+      const items = sortByQuality(ARTIFACTS.filter(a => a.slotId === 'ring' && a.group === g && !a.event));
+      return items.length ? `<div class="ring-pair-col"><div class="art-section-divider">${g}</div><div class="ring-col-items">${items.map(jewCard).join('')}</div></div>` : '';
+    };
+    const c1 = col(g1), c2 = col(g2);
+    return (c1 || c2) ? `<div class="ring-pair-grid">${c1}${c2}</div>` : '';
+  }
+
+  const ringUngrouped = sortByQuality(ARTIFACTS.filter(a => a.slotId === 'ring' && !a.group && !a.event));
   c.innerHTML = `<div class="c-title">Бижутерия</div>
-    ${section('Кольца',    'ring',     RING_GROUPS, RING_PAIR_GROUPS)}
+    <div class="jewel-section-head">Кольца</div>
+    ${ringPair('Кольцо сквайра', 'Кольцо рыцаря')}
+    ${ringPair('Кольцо лорда', 'Кольцо барона')}
+    ${ringUngrouped.length ? `<div class="buff-grid">${ringUngrouped.map(jewCard).join('')}</div>` : ''}
     ${section('Браслеты',  'bracelet')}
     ${section('Амулеты',   'amulet')}
     ${section('Трофеи',    'trophy')}
