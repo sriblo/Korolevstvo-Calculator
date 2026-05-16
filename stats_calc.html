@@ -1504,6 +1504,16 @@ function computeTotals(cid) {
   const s = state[cid];
   const totals = {};
   let hasAny = false;
+
+  // Базовые статы класса
+  const base = BASE_STATS[s.cls];
+  if (base) {
+    Object.entries(base).forEach(function(entry) {
+      totals[entry[0]] = (totals[entry[0]] || 0) + entry[1];
+    });
+    hasAny = true;
+  }
+
   Object.values(s.equipped).forEach(function(eq) {
     if (eq && eq.stats) {
       hasAny = true;
