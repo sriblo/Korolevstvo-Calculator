@@ -261,7 +261,7 @@
   }
   .cls-dd-trig:hover,.cls-drop.open .cls-dd-trig{background:var(--bg4);color:var(--txt)}
   .cls-drop.open .cls-dd-trig{color:var(--gold-l);border-color:rgba(var(--gold-tint),.35)}
-  .cls-dd-ico{width:13px;height:13px;flex-shrink:0;object-fit:contain;image-rendering:pixelated}
+  .cls-dd-ico{width:18px;height:18px;flex-shrink:0;object-fit:contain;border-radius:3px;}
   .cls-dd-arrow{width:10px;height:10px;opacity:.6;transition:transform .15s}
   .cls-drop.open .cls-dd-arrow{transform:rotate(180deg)}
   .cls-dd-menu{
@@ -279,7 +279,7 @@
   }
   .cls-dd-item:hover{background:var(--bg4);color:var(--txt)}
   .cls-dd-item.on{color:var(--gold-l)}
-  .cls-dd-item img{width:13px;height:13px;flex-shrink:0;object-fit:contain;image-rendering:pixelated}
+  .cls-dd-item img{width:18px;height:18px;flex-shrink:0;object-fit:contain;border-radius:3px;}
 
   /* Race / sex chips */
   .race-chips{display:flex;align-items:center;gap:4px;margin-left:auto}
@@ -298,7 +298,7 @@
     background-color:rgba(var(--gold-tint),.06);
   }
   .sex-chip{
-    background-image:url('stats_calculator/ui/select_sex.jpg');
+    background-image:url('stats_calculator/select_sex.jpg');
     background-size:64px 96px;
   }
   .sex-chip[data-sex="Male"]{background-position:0 1px}
@@ -308,8 +308,8 @@
   .sex-chip[data-sex="Male"].on{background-position:0 -63px}
   .sex-chip[data-sex="Female"].on{background-position:-32px -63px}
   .race-chip{background-position:center;background-size:13px 13px;}
-  .race-chip[data-race="Elf"]{background-image:url('stats_calculator/ui/race_elf.png')}
-  .race-chip[data-race="Human"]{background-image:url('stats_calculator/ui/race_human.png')}
+  .race-chip[data-race="Elf"]{background-image:url('stats_calculator/race_2.png')}
+  .race-chip[data-race="Human"]{background-image:url('stats_calculator/race_1.png')}
   .champ-chip{
     width:34px;height:34px;flex-shrink:0;
     background:var(--bg3);border:1px solid var(--line);border-radius:6px;
@@ -319,15 +319,13 @@
     position:relative;
   }
   .champ-chip:hover{border-color:var(--line2);background:var(--bg4)}
-  .champ-chip .champ-ico{
-    width:32px;height:32px;image-rendering:pixelated;
-    filter:grayscale(1) brightness(.55);transition:filter .2s;
-  }
+  .champ-chip .champ-ico{color:var(--txt3);transition:color .2s,opacity .2s}
+  .champ-chip:hover .champ-ico{opacity:.8}
   .champ-chip.on{
     border-color:var(--gold);background:rgba(var(--gold-tint),.08);
     box-shadow:0 0 0 2px rgba(var(--gold-tint),.18), 0 0 14px rgba(var(--gold-tint),.42);
   }
-  .champ-chip.on .champ-ico{filter:none}
+  .champ-chip.on .champ-ico{color:var(--gold-l);opacity:1}
 
   /* ── Paperdoll ── */
   .pd-section{display:flex;flex-direction:column;gap:6px;width:274px;margin:0 auto;}
@@ -651,7 +649,9 @@
           <button class="race-chip on" data-race="Elf" title="Эльф"></button>
           <button class="race-chip" data-race="Human" title="Человек"></button>
           <button class="champ-chip" id="champBtn-c1" onclick="toggleChampion('c1')" title="Чемпион расы">
-            <img class="champ-ico" src="stats_calculator/ui/champion.png" alt="" onerror="this.style.display='none'">
+            <svg width="18" height="18" viewBox="0 0 20 20" fill="none" style="opacity:.5;transition:opacity .2s" class="champ-ico">
+              <path d="M3 14h14M4 14L2 6l4 3 4-6 4 6 4-3-2 8H4z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+            </svg>
           </button>
         </div>
 
@@ -748,7 +748,9 @@
           <button class="race-chip on" data-race="Elf" title="Эльф"></button>
           <button class="race-chip" data-race="Human" title="Человек"></button>
           <button class="champ-chip" id="champBtn-c2" onclick="toggleChampion('c2')" title="Чемпион расы">
-            <img class="champ-ico" src="stats_calculator/ui/champion.png" alt="" onerror="this.style.display='none'">
+            <svg width="18" height="18" viewBox="0 0 20 20" fill="none" style="opacity:.5;transition:opacity .2s" class="champ-ico">
+              <path d="M3 14h14M4 14L2 6l4 3 4-6 4 6 4-3-2 8H4z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+            </svg>
           </button>
         </div>
 
@@ -984,27 +986,8 @@ const CLASS_DOLL = {
   },
 };
 
-const CLASS_URL_KEY = { paladin:'paladin', warrior:'warrior', rogue:'rogue', mage:'mage', archer:'shooter', monk:'cleric' };
-
-function dollUrl(cls, slotKey, quality, race) {
-  const cfg = CLASS_DOLL[cls];
-  if (!cfg) return null;
-  const part = cfg.parts[slotKey];
-  if (!part) return null;
-  const lvl = QUALITY_LEVEL[quality] || 10;
-  const urlCls = CLASS_URL_KEY[cls] || cls;
-  const ClsCap = urlCls[0].toUpperCase() + urlCls.slice(1);
-  return `https://m1.kor.ru/media//game/assets/characters/items/${urlCls}/${ClsCap}${part}${lvl}${race}.png`;
-}
-
-function faceUrl(race) {
-  const map = { ElfMale:'elf_male', ElfFemale:'elf_female', HumanMale:'human_male', HumanFemale:'human_female' };
-  const r = map[race] || 'elf_male';
-  return `https://m1.kor.ru/media/avatars/face/${r}_s1_b1_e1_n1_l1.png`;
-}
-
 function setupDollDOM(cid) {
-  const s = state[cid];
+  const s   = state[cid];
   const cfg = CLASS_DOLL[s.cls];
   const root = document.getElementById(`doll-${cid}`);
   if (!root || !cfg) return;
@@ -1016,23 +999,26 @@ function setupDollDOM(cid) {
 }
 
 function renderDoll(cid) {
-  const s = state[cid];
+  const s   = state[cid];
   const cfg = CLASS_DOLL[s.cls];
   const root = document.getElementById(`doll-${cid}`);
   if (!root || !cfg) return;
-  const emptyEl = document.getElementById(`charEmpty-${cid}`);
-  if (emptyEl) emptyEl.classList.add('hide');
+
+  let hasAny = false;
   root.querySelectorAll('.dll').forEach(el => {
     const layer = el.dataset.layer;
-    if (layer === 'face') {
-      el.style.backgroundImage = `url("${faceUrl(s.race)}")`;
-      return;
-    }
-    const eq = s.equipped[layer];
-    const quality = eq ? eq.quality : 'white';
-    const url = dollUrl(s.cls, layer, quality, s.race);
+    if (layer === 'face') { el.style.backgroundImage = ''; return; }
+    const eq  = s.equipped[layer];
+    // Берём локальную картинку из нашего репозитория через getItemImg
+    const url = eq
+      ? (eq.img || getItemImg(s.cls, layer, eq.quality))
+      : null;
     el.style.backgroundImage = url ? `url("${url}")` : '';
+    if (url) hasAny = true;
   });
+
+  const emptyEl = document.getElementById(`charEmpty-${cid}`);
+  if (emptyEl) emptyEl.classList.toggle('hide', hasAny);
   applyCharBg(cid);
 }
 
