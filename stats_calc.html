@@ -1183,6 +1183,7 @@ function renderSlotRow(cid, rowSlots, containerId) {
 }
 
 let _pickerCache = {};
+const _runeMode = { c1: false, c2: false };
 
 const EQUIPMENT_SLOTS = ['helm','chest','shoulders','pants','belt','boots','weapon','offhand','gloves'];
 
@@ -1220,53 +1221,57 @@ function renderPicker(cid) {
   const items = getPickerItems(s.cls, s.activeSlot);
   _pickerCache[cid] = items;
 
-  btns.innerHTML = items.map((item, idx) => {
-    const frameSrc = QUALITY_FRAME[item.quality] || '';
-    const qData = QUALITIES.find(q => q.id === item.quality);
-    const qColor = qData ? qData.color : '#888';
-    const isOn = eqItem && eqItem.name === item.name && eqItem.quality === item.quality;
-    return `<div class="picker-item${isOn ? ' on' : ''}"
-      onclick="equipItem('${cid}','${s.activeSlot}',${idx})"
-      onmouseenter="showPickerTt(event,'${cid}',${idx})"
-      onmousemove="moveTt(event)"
-      onmouseleave="hideTt()">
-      ${item.img ? `<img src="${item.img}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;z-index:1" onerror="this.style.display='none'">` : ''}
-      ${frameSrc ? `<img src="${frameSrc}" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:2" onerror="this.style.display='none'">` : ''}
-    </div>`;
-  }).join('');
-
-  if (items.length === 0) {
-    btns.innerHTML = `<div style="font-size:11px;color:var(--txt3);font-style:italic;font-family:var(--serif);padding:6px 2px">Предметов пока нет в базе</div>`;
-  }
-
-  // Руны для этого слота
   const runesForSlot = SLOT_RUNES[s.activeSlot] || [];
-  if (runesForSlot.length) {
-    let runeHtml = `<div class="picker-section-title">Руны</div>`;
-    runeHtml += runesForSlot.map(function(r) {
+
+  if (_runeMode[cid]) {
+    // ── Режим выбора руны ──────────────────────────────────────────────────────
+    if (title) title.innerHTML = `${slotName} <em>· выберите руну</em>`;
+    btns.innerHTML = runesForSlot.map(function(r) {
       const globalIdx = RUNES.indexOf(r);
       const isOn = eqItem && eqItem.rune && eqItem.rune.idx === globalIdx;
       return `<div class="picker-item${isOn ? ' on' : ''}" onclick="equipRune('${cid}',${globalIdx})"
         onmouseenter="showRuneTt(event,${globalIdx})"
         onmousemove="moveTt(event)"
         onmouseleave="hideTt()">
-        <div style="position:relative;width:32px;height:32px;flex-shrink:0">
-          ${r.img ? `<img src="${r.img}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;z-index:1;image-rendering:pixelated" onerror="this.style.display='none'">` : ''}
-          ${QUALITY_FRAME[r.quality] ? `<img src="${QUALITY_FRAME[r.quality]}" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:2" onerror="this.style.display='none'">` : ''}
-        </div>
+        ${r.img ? `<img src="${r.img}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;z-index:1;image-rendering:pixelated" onerror="this.style.display='none'">` : ''}
+        ${QUALITY_FRAME[r.quality] ? `<img src="${QUALITY_FRAME[r.quality]}" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:2" onerror="this.style.display='none'">` : ''}
       </div>`;
     }).join('');
+    let actionHtml = `<button onclick="exitRuneMode('${cid}')">← Назад к предмету</button>`;
     if (eqItem && eqItem.rune) {
-      runeHtml += `<div style="display:flex;align-items:center;gap:6px;margin-top:6px;cursor:pointer;font-size:11px;color:var(--red);font-family:var(--sans)" onclick="unequipRune('${cid}')">Снять руну</div>`;
+      actionHtml += `<button class="danger" onclick="unequipRune('${cid}')">Снять руну</button>`;
     }
-    btns.innerHTML += runeHtml;
+    actions.innerHTML = actionHtml;
+  } else {
+    // ── Режим выбора предмета ─────────────────────────────────────────────────
+    if (title) title.innerHTML = `${slotName} <em>· выберите качество</em>`;
+    btns.innerHTML = items.map((item, idx) => {
+      const frameSrc = QUALITY_FRAME[item.quality] || '';
+      const isOn = eqItem && eqItem.name === item.name && eqItem.quality === item.quality;
+      return `<div class="picker-item${isOn ? ' on' : ''}"
+        onclick="equipItem('${cid}','${s.activeSlot}',${idx})"
+        onmouseenter="showPickerTt(event,'${cid}',${idx})"
+        onmousemove="moveTt(event)"
+        onmouseleave="hideTt()">
+        ${item.img ? `<img src="${item.img}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;z-index:1" onerror="this.style.display='none'">` : ''}
+        ${frameSrc ? `<img src="${frameSrc}" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:2" onerror="this.style.display='none'">` : ''}
+      </div>`;
+    }).join('');
+    if (items.length === 0) {
+      btns.innerHTML = `<div style="font-size:11px;color:var(--txt3);font-style:italic;font-family:var(--serif);padding:6px 2px">Предметов пока нет в базе</div>`;
+    }
+    let actionHtml = '';
+    if (eqItem) {
+      if (runesForSlot.length) {
+        const runeBtn = eqItem.rune
+          ? `<button onclick="enterRuneMode('${cid}')">Сменить руну</button>`
+          : `<button onclick="enterRuneMode('${cid}')">Вставить руну</button>`;
+        actionHtml += runeBtn;
+      }
+      actionHtml += `<button class="danger" onclick="unequipActiveSlot('${cid}')">Снять предмет</button>`;
+    }
+    actions.innerHTML = actionHtml;
   }
-
-  let actionHtml = '';
-  if (eqItem) {
-    actionHtml += `<button class="danger" onclick="unequipActiveSlot('${cid}')">Снять предмет</button>`;
-  }
-  actions.innerHTML = actionHtml;
 
   panel.classList.add('open');
 }
@@ -1540,6 +1545,16 @@ function renderAll(cid) {
 }
 
 // ── RUNE ACTIONS ─────────────────────────────────────────────────────────────
+function enterRuneMode(cid) {
+  _runeMode[cid] = true;
+  renderPicker(cid);
+}
+
+function exitRuneMode(cid) {
+  _runeMode[cid] = false;
+  renderPicker(cid);
+}
+
 function equipRune(cid, runeIdx) {
   const s = state[cid];
   if (!s.activeSlot) return;
@@ -1548,6 +1563,7 @@ function equipRune(cid, runeIdx) {
   const rune = RUNES[runeIdx];
   if (!rune) return;
   eq.rune = { idx: runeIdx, name: rune.name, img: rune.img, stats: rune.stats ? Object.assign({}, rune.stats) : {} };
+  _runeMode[cid] = false;
   renderAll(cid);
 }
 
@@ -1601,6 +1617,7 @@ function selectClass(cid, cls) {
 function openPicker(cid, slotId) {
   const s = state[cid];
   s.activeSlot = s.activeSlot === slotId ? null : slotId;
+  _runeMode[cid] = false;
   renderSlotCol(cid, COL_LEFT,  `colLeft-${cid}`);
   renderSlotCol(cid, COL_RIGHT, `colRight-${cid}`);
   renderSlotRow(cid, ROW_TOP,   `slotRowTop-${cid}`);
