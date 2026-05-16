@@ -497,13 +497,17 @@ const SLOT_PH = {
 };
 
 // Derived from ARTIFACTS (data.js): slot → list of items; slot → placeholder image
+// slotId:'ring' разворачивается в ring1 и ring2 (кольца — в любой из двух слотов)
 const SLOT_ITEMS = {};
 const ARTEFACT_PH = {};
 ARTIFACTS.forEach(a => {
   if (!a.slotId) return;
-  if (!SLOT_ITEMS[a.slotId]) SLOT_ITEMS[a.slotId] = [];
-  SLOT_ITEMS[a.slotId].push(a);
-  if (!ARTEFACT_PH[a.slotId]) ARTEFACT_PH[a.slotId] = a.img;
+  const slots = a.slotId === 'ring' ? ['ring1','ring2'] : [a.slotId];
+  slots.forEach(sid => {
+    if (!SLOT_ITEMS[sid]) SLOT_ITEMS[sid] = [];
+    SLOT_ITEMS[sid].push(a);
+    if (!ARTEFACT_PH[sid]) ARTEFACT_PH[sid] = a.img;
+  });
 });
 
 function icoHtml(slotId, eq, cls) {

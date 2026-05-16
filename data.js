@@ -169,4 +169,13 @@ const ARTIFACTS = [
   { slotId:'stone_friend',  group:'Камень Дружбы', name:'Камень Дружбы', quality:'orange', img:'stats_calculator/artefacts/artefact_stone_dark.png',   stats:{ atk:13, hp:700, def:7, speed:4 } },
   { slotId:'stone_blood',   group:'Камень Крови',  name:'Камень Крови',  quality:'green',  img:'stats_calculator/artefacts/artefact_stone_blood.png',  stats:{ atk:1, mana:100, heal_eff:1, hp:100 } },
   { slotId:'stone_blood',   group:'Камень Крови',  name:'Камень Крови',  quality:'blue',   img:'stats_calculator/artefacts/artefact_stone_blood.png',  stats:{ atk:3, mana:200, heal_eff:2, hp:200, crit_chance:1 } },
+  // ── КОЛЬЦА (бижа) ── slotId:'ring' → ring1 и ring2 в калькуляторе
+  { slotId:'ring', group:'Кольцо сквайра',  name:'Кольцо сквайра',           quality:'blue',   img:'stats_calculator/bizha/warrior_ring_10.png' },
+  { slotId:'ring', group:'Кольцо сквайра',  name:'Усиленное кольцо сквайра', quality:'blue',   img:'stats_calculator/bizha/warrior_ring_10.png' },
+  { slotId:'ring', group:'Кольцо рыцаря',   name:'Кольцо рыцаря',            quality:'purple', img:'stats_calculator/bizha/rogue_ring_11.png' },
+  { slotId:'ring', group:'Кольцо рыцаря',   name:'Усиленное кольцо рыцаря',  quality:'purple', img:'stats_calculator/bizha/rogue_ring_11.png' },
+  { slotId:'ring', group:'Кольцо лорда',    name:'Кольцо лорда',             quality:'red',    img:'stats_calculator/bizha/cleric_ring_12.png' },
+  { slotId:'ring', group:'Кольцо лорда',    name:'Усиленное кольцо лорда',   quality:'red',    img:'stats_calculator/bizha/cleric_ring_12.png' },
+  { slotId:'ring', group:'Кольцо барона',   name:'Кольцо барона',            quality:'orange', img:'stats_calculator/bizha/ring_blood_moon_10.png' },
+  { slotId:'ring', group:'Кольцо барона',   name:'Усиленное кольцо барона',  quality:'orange', img:'stats_calculator/bizha/ring_blood_moon_10.png' },
 ];
