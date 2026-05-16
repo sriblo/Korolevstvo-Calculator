@@ -105,6 +105,8 @@ const STAT_LABELS = [
   { key:'def_eff',     label:'Эффект. защиты',    pct:true },
   { key:'atk_eff',     label:'Эффект. атаки',     pct:true },
   { key:'speed',       label:'Скорость',           pct:true },
+  { key:'speed_out',  label:'Скорость вне боя',   pct:true },
+  { key:'speed_in',   label:'Скорость в бою',      pct:true },
 ];
 
 // ── СТАТЫ ЭКИПИРОВКИ ──────────────────────────────────────────────────────────
@@ -169,6 +171,15 @@ const ARTIFACTS = [
   { slotId:'stone_friend',  group:'Камень Дружбы', name:'Камень Дружбы', quality:'orange', img:'stats_calculator/artefacts/artefact_stone_dark.png',   stats:{ atk:13, hp:700, def:7, speed:4 } },
   { slotId:'stone_blood',   group:'Камень Крови',  name:'Камень Крови',  quality:'green',  img:'stats_calculator/artefacts/artefact_stone_blood.png',  stats:{ atk:1, mana:100, heal_eff:1, hp:100 } },
   { slotId:'stone_blood',   group:'Камень Крови',  name:'Камень Крови',  quality:'blue',   img:'stats_calculator/artefacts/artefact_stone_blood.png',  stats:{ atk:3, mana:200, heal_eff:2, hp:200, crit_chance:1 } },
+  // ── БРАСЛЕТЫ ──────────────────────────────────────────────────────────────────
+  { slotId:'bracelet', name:'Браслет Лёгкого шага',          quality:'orange', img:'stats_calculator/bizha/bracelet/bracelet_speed.png', stats:{ speed_out:8, mana:15 } },
+  { slotId:'bracelet', name:'Браслет Спасительной верткости', quality:'orange', img:'stats_calculator/bizha/bracelet/bracelet_speed.png', stats:{ hp:735, speed_out:8, mana:25 } },
+  { slotId:'bracelet', name:'Браслет Гончей',                 quality:'orange', img:'stats_calculator/bizha/bracelet/bracelet_speed.png', stats:{ atk:12.75, hp:735, speed_out:8, mana:35 } },
+  { slotId:'bracelet', name:'Браслет Необычайной лёгкости',   quality:'orange', img:'stats_calculator/bizha/bracelet/bracelet_speed.png', stats:{ speed_out:8, speed_in:8, mana:45 } },
+  { slotId:'bracelet', name:'Браслет Фантома',                quality:'orange', img:'stats_calculator/bizha/bracelet/bracelet_speed.png', stats:{ hp:735, speed_out:8, speed_in:8, mana:45 } },
+  { slotId:'bracelet', name:'Браслет Сорвиголовы',            quality:'orange', img:'stats_calculator/bizha/bracelet/bracelet_speed.png', stats:{ atk:12.75, hp:735, speed_out:8, speed_in:8, mana:55 } },
+  { slotId:'bracelet', name:'Браслет Тайфуна',                quality:'orange', img:'stats_calculator/bizha/bracelet/bracelet_speed.png', stats:{ atk:12.75, def:4.6, speed_out:8, speed_in:12, mana:55 } },
+  { slotId:'bracelet', name:'Браслет Высшей силы',            quality:'orange', img:'stats_calculator/bizha/bracelet/bracelet_speed.png', stats:{ atk:12.75, hp:735, speed_out:8, speed_in:12, mana:55 } },
   // ── КОЛЬЦА (бижа) ── slotId:'ring' → ring1 и ring2 в калькуляторе
   { slotId:'ring', group:'Кольцо сквайра',  name:'Кольцо сквайра',           quality:'blue',   img:'stats_calculator/bizha/rings/warrior_ring_10.png' },
   { slotId:'ring', group:'Кольцо сквайра',  name:'Усиленное кольцо сквайра', quality:'blue',   img:'stats_calculator/bizha/rings/warrior_ring_10.png' },
