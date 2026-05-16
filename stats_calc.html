@@ -199,7 +199,7 @@
     display:flex;align-items:center;gap:10px;
   }
   .cb-label::before{
-    content:'§';font-style:normal;font-size:18px;color:var(--gold);opacity:.6;font-weight:300;
+    content:'';font-style:normal;font-size:18px;color:var(--gold);opacity:.6;font-weight:300;
   }
   .cb-actions{display:flex;gap:6px}
   .cb-action{
@@ -1490,10 +1490,10 @@ function renderCompare() {
     const raceIco = `stats_calculator/race_${raceNum}.png`;
     const ico = `<img src="${clsIco}" style="width:16px;height:16px;image-rendering:pixelated;border-radius:3px;vertical-align:middle">`;
     const rico = `<img src="${raceIco}" style="width:16px;height:16px;image-rendering:pixelated;vertical-align:middle">`;
-    return `${ico}&nbsp;${rico}`;
+    return { normal: `${ico}&nbsp;${rico}`, mirror: `${rico}&nbsp;${ico}` };
   };
-  if (h1) h1.innerHTML = labelOf('c1');
-  if (h2) h2.innerHTML = labelOf('c2');
+  if (h1) h1.innerHTML = labelOf('c1').mirror;
+  if (h2) h2.innerHTML = labelOf('c2').normal;
 
   if (!a.hasAny && !b.hasAny) {
     if (sub) sub.textContent = 'Соберите снаряжение обоим героям';
