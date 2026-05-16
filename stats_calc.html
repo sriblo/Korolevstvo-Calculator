@@ -509,6 +509,8 @@ ARTIFACTS.forEach(a => {
     if (!ARTEFACT_PH[sid]) ARTEFACT_PH[sid] = a.img;
   });
 });
+// Явная заглушка для слотов колец
+ARTEFACT_PH['ring1'] = ARTEFACT_PH['ring2'] = 'stats_calculator/bizha/rings/ring_default.png';
 
 function icoHtml(slotId, eq, cls) {
   if (!eq) {
