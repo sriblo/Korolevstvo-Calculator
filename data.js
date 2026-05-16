@@ -107,8 +107,18 @@ const STAT_LABELS = [
   { key:'speed',       label:'Скорость',           pct:true },
   { key:'speed_out',   label:'Скорость вне боя',        pct:true },
   { key:'speed_in',    label:'Скорость в бою',           pct:true },
-  { key:'charisma',    label:'Харизма' },
-  { key:'crit_fatal',  label:'Шанс смерт. удара',        pct:true },
+  { key:'charisma',          label:'Харизма' },
+  { key:'crit_fatal',        label:'Шанс смерт. удара',             pct:true },
+  { key:'crit_def',          label:'Защита от крит. удара',         pct:true },
+  { key:'exp_gain',          label:'Получение опыта',                pct:true, combat:false },
+  { key:'rep_guard',         label:'Репутация Королевской Гвардии', pct:true, combat:false },
+  { key:'rep_gladiator',     label:'Репутация Гладиатора',          pct:true, combat:false },
+  { key:'rep_conqueror',     label:'Репутация Завоевателя',         pct:true, combat:false },
+  { key:'rep_lord',          label:'Репутация Властителя земель',   pct:true, combat:false },
+  { key:'rep_hunter',        label:'Репутация Охотника на демонов', pct:true, combat:false },
+  { key:'rep_witch',         label:'Репутация Ведьмака',            pct:true, combat:false },
+  { key:'rep_archaeologist', label:'Репутация Археолога',           pct:true, combat:false },
+  { key:'rep_tamer',         label:'Репутация Дрессировщика',       pct:true, combat:false },
 ];
 
 // ── БАЗОВЫЕ ХАРАКТЕРИСТИКИ (голый персонаж без шмота и бафов) ────────────────

@@ -1584,7 +1584,7 @@ function renderStats(cid) {
   }
   hint.textContent = `${eqCount} ${eqCount===1?'предмет':eqCount<5?'предмета':'предметов'}`;
   let html = '';
-  STAT_LABELS.forEach(function(meta) {
+  STAT_LABELS.filter(function(m){ return m.combat !== false; }).forEach(function(meta) {
     const total = totals[meta.key] || 0;
     if (total === 0) return;
     const valStr = meta.pct
@@ -1626,7 +1626,7 @@ function renderCompare() {
   }
   if (sub) sub.textContent = `${a.eqCount} ↔ ${b.eqCount} предметов · в реальном времени`;
 
-  const keys = STAT_LABELS.map(m => m.key).filter(function(k) {
+  const keys = STAT_LABELS.filter(function(m){ return m.combat !== false; }).map(m => m.key).filter(function(k) {
     return (a.totals[k] && a.totals[k] !== 0) || (b.totals[k] && b.totals[k] !== 0);
   });
   if (a.totals.dmg_taken_red || b.totals.dmg_taken_red) keys.push('dmg_taken_red');

@@ -388,8 +388,8 @@ const RUNES = [
   { name:'Титанитовая Великая Руна Баннора',   slot:'Перчатки',      quality:'red',    img:'stats_calculator/rune/rune_gloves.png' },
   { name:'Титанитовая Великая Руна Халиэмы',  slot:'Наплечники',    quality:'red',    img:'stats_calculator/rune/rune_shoulders.png' },
   { name:'Великая Руна Мехила',                slot:'Нагрудник',     quality:'red',    img:'stats_calculator/rune/rune_chest.png' },
-  { name:'Ярмарочная руна Эльты',              slot:'Боевая сумка',  quality:'orange', img:'stats_calculator/rune/rune_medallion_attack_10.png',  stats:{ atk:3.2, hp:340, def:1.25, def_eff:3, crit_fatal:3 } },
-  { name:'Ярмарочная руна Ларгиса',            slot:'Браслет',       quality:'orange', img:'stats_calculator/rune/rune_medallion_attack_10.png',  stats:{ atk:2, hp:200, def:2 } },
+  { name:'Ярмарочная руна Эльты',              slot:'Боевая сумка',  quality:'orange', img:'stats_calculator/rune/rune_medallion_attack_10.png',  stats:{ atk:3.2, hp:340, def:1.25, exp_gain:-2, def_eff:3, crit_def:3 } },
+  { name:'Ярмарочная руна Ларгиса',            slot:'Браслет',       quality:'orange', img:'stats_calculator/rune/rune_medallion_attack_10.png',  stats:{ atk:2, hp:200, def:2, rep_guard:10, rep_gladiator:10, rep_conqueror:10, rep_lord:10, rep_hunter:10, rep_witch:10, rep_archaeologist:10, rep_tamer:10 } },
   { name:'Руна Хенгиста',                      slot:'Амулет',        quality:'purple', img:'stats_calculator/rune/rune_medallion_attack_10.png',  stats:{ atk:1.2, hp:80, atk_eff:3, crit_chance:5 } },
   { name:'Руна Тэмми',                         slot:'Кольцо',        quality:'purple', img:'stats_calculator/rune/rune_medallion_attack_10.png',  stats:{ atk:2, atk_eff:1, crit_chance:7 } },
   { name:'Руна Анст',                          slot:'Шлем',          quality:'purple', img:'stats_calculator/rune/rune_medallion_attack_10.png',  stats:{ atk:4, hp:140, def:3 } },
@@ -692,6 +692,8 @@ const _tt = document.createElement('div');
 _tt.className = 'eq-tt';
 document.body.appendChild(_tt);
 
+function fmtVal(v, pct) { return (v >= 0 ? '+' : '') + v + (pct ? '%' : ''); }
+
 function ttShow(cls, slotId, quality, itemName, e) {
   const stats = STATS[cls]?.[quality]?.[slotId];
   let html = `<div class="tt-name">${itemName}</div>`;
@@ -702,7 +704,7 @@ function ttShow(cls, slotId, quality, itemName, e) {
       .filter(s => stats[s.key] != null)
       .map(s => {
         const v = stats[s.key];
-        return `<div class="tt-row"><span class="tt-key">${s.label}</span><span class="tt-val">+${v}${s.pct?'%':''}</span></div>`;
+        return `<div class="tt-row"><span class="tt-key">${s.label}</span><span class="tt-val">${fmtVal(v,s.pct)}</span></div>`;
       }).join('');
   }
   _tt.innerHTML = html;
@@ -732,7 +734,7 @@ function ttShowRune(idx, e) {
   if (r.stats) {
     html += STAT_LABELS
       .filter(s => r.stats[s.key] != null)
-      .map(s => `<div class="tt-row"><span class="tt-key">${s.label}</span><span class="tt-val">+${r.stats[s.key]}${s.pct?'%':''}</span></div>`)
+      .map(s => `<div class="tt-row"><span class="tt-key">${s.label}</span><span class="tt-val">${fmtVal(r.stats[s.key],s.pct)}</span></div>`)
       .join('');
   } else {
     html += `<div class="tt-empty">Данные не добавлены</div>`;
@@ -747,7 +749,7 @@ function ttShowArt(idx, e) {
   if (art.stats) {
     html += STAT_LABELS
       .filter(s => art.stats[s.key] != null)
-      .map(s => `<div class="tt-row"><span class="tt-key">${s.label}</span><span class="tt-val">+${art.stats[s.key]}${s.pct?'%':''}</span></div>`)
+      .map(s => `<div class="tt-row"><span class="tt-key">${s.label}</span><span class="tt-val">${fmtVal(art.stats[s.key],s.pct)}</span></div>`)
       .join('');
   } else {
     html += `<div class="tt-empty">Данные не добавлены</div>`;
@@ -763,7 +765,7 @@ function ttShowEventBuff(idx, e) {
   if (q) html += `<div class="tt-row"><span class="tt-key" style="color:${q.color}">${q.label}</span></div>`;
   if (b.stats) {
     html += STAT_LABELS.filter(s => b.stats[s.key] != null)
-      .map(s => `<div class="tt-row"><span class="tt-key">${s.label}</span><span class="tt-val">+${b.stats[s.key]}${s.pct?'%':''}</span></div>`)
+      .map(s => `<div class="tt-row"><span class="tt-key">${s.label}</span><span class="tt-val">${fmtVal(b.stats[s.key],s.pct)}</span></div>`)
       .join('');
   } else {
     html += `<div class="tt-empty">Данные не добавлены</div>`;
