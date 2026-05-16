@@ -1305,17 +1305,25 @@ function renderBuffs(cid) {
   }).join('');
 
   const catBuffs = BUFFS.filter(b => b.cat === activeCat);
-  const gridHtml = catBuffs.map(function(b) {
+  let gridHtml = '';
+  let lastGroup = null;
+  catBuffs.forEach(function(b) {
     const isOn = s.buffs.has(b.id);
     const abbr = (b.name.replace(/[^а-яА-Яa-zA-Z ]/g,'').split(' ')[0] || '?').slice(0,2);
-    return `<div class="buff-tile${isOn ? ' on' : ''}"
+    if (b.group && b.group !== lastGroup) {
+      const lvl = b.level != null ? ` <span style="color:var(--gold-l)">${b.level}</span>` : '';
+      gridHtml += `<div style="grid-column:1/-1;font-size:10px;color:var(--txt3);text-transform:uppercase;letter-spacing:.1em;padding:4px 0 2px;border-top:1px solid var(--line);margin-top:4px">${b.group}${b.level != null ? ` · <span style="color:var(--txt3)">ур.</span>${lvl}` : ''}</div>`;
+      lastGroup = b.group;
+    }
+    gridHtml += `<div class="buff-tile${isOn ? ' on' : ''}"
         onclick="toggleBuff('${cid}','${b.id}')"
         onmouseenter="showBuffTt(event,'${b.id}')"
         onmousemove="moveTt(event)"
         onmouseleave="hideTt()">
       ${b.icon ? `<img src="${b.icon}" onerror="this.textContent='${abbr}';this.remove()">` : abbr}
     </div>`;
-  }).join('') || `<div class="buff-grid-empty">в этой категории пусто</div>`;
+  });
+  if (!gridHtml) gridHtml = `<div class="buff-grid-empty">в этой категории пусто</div>`;
 
   root.innerHTML = `
     <div class="buffs-h-row">
@@ -1344,13 +1352,19 @@ function showBuffTt(e, buffId) {
   if (!b) return;
   let html = `<div class="tt-head"><div class="tt-head-text">
     <div class="tt-name">${b.name}</div>
-    ${b.sub ? `<div class="tt-quality" style="color:var(--gold-d);font-style:italic">${b.sub}</div>` : ''}
+    ${b.group ? `<div class="tt-quality" style="color:var(--txt2);font-style:italic">${b.group}</div>` : ''}
+    ${b.sub   ? `<div class="tt-quality" style="color:var(--gold-d);font-style:italic">${b.sub}</div>` : ''}
   </div></div>`;
-  const meta = STAT_LABELS.find(m => m.key === b.effect);
-  const label = meta ? meta.label : (b.effect === 'dmg_taken_red' ? 'Снижение урона' : b.effect);
-  const isPct = b.pct || (meta && meta.pct);
-  const vStr = isPct ? `+${b.value}%` : `+${b.value}`;
-  html += `<div class="tt-stat"><span class="tt-stat-k">${label}</span><span class="tt-stat-v">${vStr}</span></div>`;
+  if (b.level != null) {
+    html += `<div class="tt-stat"><span class="tt-stat-k" style="color:var(--txt3)">Требуемый уровень</span><span class="tt-stat-v" style="color:var(--gold-l)">${b.level}</span></div>`;
+  }
+  if (b.effect) {
+    const meta = STAT_LABELS.find(m => m.key === b.effect);
+    const label = meta ? meta.label : (b.effect === 'dmg_taken_red' ? 'Снижение урона' : b.effect);
+    const isPct = b.pct || (meta && meta.pct);
+    const vStr = isPct ? `+${b.value}%` : `+${b.value}`;
+    html += `<div class="tt-stat"><span class="tt-stat-k">${label}</span><span class="tt-stat-v">${vStr}</span></div>`;
+  }
   ttEl.innerHTML = html;
   ttEl.style.display = 'block';
   moveTt(e);

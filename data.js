@@ -304,5 +304,40 @@ const BUFF_CATS = [
 ];
 
 const BUFFS = [
+  // ── Еда Флоринга (ур. 3) ────────────────────────────────────────────────────
+  { id:'food_floring_breakfast', cat:'food', group:'Еда Флоринга',              level:3, name:'Завтрак Флоринга' },
+  { id:'food_floring_shashlik',  cat:'food', group:'Еда Флоринга',              level:3, name:'Шашлык Флоринга' },
+  { id:'food_floring_uha',       cat:'food', group:'Еда Флоринга',              level:3, name:'Уха Флоринга' },
+  { id:'food_floring_lunch',     cat:'food', group:'Еда Флоринга',              level:3, name:'Обед Флоринга' },
+  // ── Еда Кохилльского Архипелага (ур. 4) ─────────────────────────────────────
+  { id:'food_kohill_breakfast',  cat:'food', group:'Еда Кохилльского Архипелага', level:4, name:'Завтрак Кохилльского Архипелага' },
+  { id:'food_kohill_shashlik',   cat:'food', group:'Еда Кохилльского Архипелага', level:4, name:'Шашлык Кохилльского Архипелага' },
+  { id:'food_kohill_uha',        cat:'food', group:'Еда Кохилльского Архипелага', level:4, name:'Уха Кохилльского Архипелага' },
+  { id:'food_kohill_lunch',      cat:'food', group:'Еда Кохилльского Архипелага', level:4, name:'Обед Кохилльского Архипелага' },
+  // ── Еда Гайны (ур. 5) ───────────────────────────────────────────────────────
+  { id:'food_gaina_breakfast',   cat:'food', group:'Еда Гайны',                 level:5, name:'Завтрак Гайны' },
+  { id:'food_gaina_shashlik',    cat:'food', group:'Еда Гайны',                 level:5, name:'Шашлык Гайны' },
+  { id:'food_gaina_uha',         cat:'food', group:'Еда Гайны',                 level:5, name:'Уха Гайны' },
+  { id:'food_gaina_lunch',       cat:'food', group:'Еда Гайны',                 level:5, name:'Обед Гайны' },
+  // ── Еда Весеннего Берега (ур. 6) ────────────────────────────────────────────
+  { id:'food_spring_breakfast',  cat:'food', group:'Еда Весеннего Берега',      level:6, name:'Завтрак Весеннего Берега' },
+  { id:'food_spring_shashlik',   cat:'food', group:'Еда Весеннего Берега',      level:6, name:'Шашлык Весеннего Берега' },
+  { id:'food_spring_uha',        cat:'food', group:'Еда Весеннего Берега',      level:6, name:'Уха Весеннего Берега' },
+  { id:'food_spring_lunch',      cat:'food', group:'Еда Весеннего Берега',      level:6, name:'Обед Весеннего Берега' },
+  // ── Еда Хирна (ур. 7) ───────────────────────────────────────────────────────
+  { id:'food_hirn_breakfast',    cat:'food', group:'Еда Хирна',                 level:7, name:'Завтрак Хирна' },
+  { id:'food_hirn_shashlik',     cat:'food', group:'Еда Хирна',                 level:7, name:'Шашлык Хирна' },
+  { id:'food_hirn_uha',          cat:'food', group:'Еда Хирна',                 level:7, name:'Уха Хирна' },
+  { id:'food_hirn_lunch',        cat:'food', group:'Еда Хирна',                 level:7, name:'Обед Хирна' },
+  // ── Еда Южного Фьорла (ур. 8) ───────────────────────────────────────────────
+  { id:'food_south_breakfast',   cat:'food', group:'Еда Южного Фьорла',         level:8, name:'Завтрак Южного Фьорла' },
+  { id:'food_south_shashlik',    cat:'food', group:'Еда Южного Фьорла',         level:8, name:'Шашлык Южного Фьорла' },
+  { id:'food_south_uha',         cat:'food', group:'Еда Южного Фьорла',         level:8, name:'Уха Южного Фьорла' },
+  { id:'food_south_lunch',       cat:'food', group:'Еда Южного Фьорла',         level:8, name:'Обед Южного Фьорла' },
+  // ── Еда Северного Фьорла (ур. 9) ────────────────────────────────────────────
+  { id:'food_north_breakfast',   cat:'food', group:'Еда Северного Фьорла',      level:9, name:'Завтрак Северного Фьорла' },
+  { id:'food_north_shashlik',    cat:'food', group:'Еда Северного Фьорла',      level:9, name:'Шашлык Северного Фьорла' },
+  { id:'food_north_uha',         cat:'food', group:'Еда Северного Фьорла',      level:9, name:'Уха Северного Фьорла' },
+  { id:'food_north_lunch',       cat:'food', group:'Еда Северного Фьорла',      level:9, name:'Обед Северного Фьорла' },
 ];
 
