@@ -304,40 +304,40 @@ const BUFF_CATS = [
 ];
 
 const BUFFS = [
-  // ── Еда Флоринга (ур. 3) ────────────────────────────────────────────────────
-  { id:'food_floring_breakfast', cat:'food', group:'Еда Флоринга',              level:3, name:'Завтрак Флоринга' },
-  { id:'food_floring_shashlik',  cat:'food', group:'Еда Флоринга',              level:3, name:'Шашлык Флоринга' },
-  { id:'food_floring_uha',       cat:'food', group:'Еда Флоринга',              level:3, name:'Уха Флоринга' },
-  { id:'food_floring_lunch',     cat:'food', group:'Еда Флоринга',              level:3, name:'Обед Флоринга' },
-  // ── Еда Кохилльского Архипелага (ур. 4) ─────────────────────────────────────
-  { id:'food_kohill_breakfast',  cat:'food', group:'Еда Кохилльского Архипелага', level:4, name:'Завтрак Кохилльского Архипелага' },
-  { id:'food_kohill_shashlik',   cat:'food', group:'Еда Кохилльского Архипелага', level:4, name:'Шашлык Кохилльского Архипелага' },
-  { id:'food_kohill_uha',        cat:'food', group:'Еда Кохилльского Архипелага', level:4, name:'Уха Кохилльского Архипелага' },
-  { id:'food_kohill_lunch',      cat:'food', group:'Еда Кохилльского Архипелага', level:4, name:'Обед Кохилльского Архипелага' },
-  // ── Еда Гайны (ур. 5) ───────────────────────────────────────────────────────
-  { id:'food_gaina_breakfast',   cat:'food', group:'Еда Гайны',                 level:5, name:'Завтрак Гайны' },
-  { id:'food_gaina_shashlik',    cat:'food', group:'Еда Гайны',                 level:5, name:'Шашлык Гайны' },
-  { id:'food_gaina_uha',         cat:'food', group:'Еда Гайны',                 level:5, name:'Уха Гайны' },
-  { id:'food_gaina_lunch',       cat:'food', group:'Еда Гайны',                 level:5, name:'Обед Гайны' },
-  // ── Еда Весеннего Берега (ур. 6) ────────────────────────────────────────────
-  { id:'food_spring_breakfast',  cat:'food', group:'Еда Весеннего Берега',      level:6, name:'Завтрак Весеннего Берега' },
-  { id:'food_spring_shashlik',   cat:'food', group:'Еда Весеннего Берега',      level:6, name:'Шашлык Весеннего Берега' },
-  { id:'food_spring_uha',        cat:'food', group:'Еда Весеннего Берега',      level:6, name:'Уха Весеннего Берега' },
-  { id:'food_spring_lunch',      cat:'food', group:'Еда Весеннего Берега',      level:6, name:'Обед Весеннего Берега' },
-  // ── Еда Хирна (ур. 7) ───────────────────────────────────────────────────────
-  { id:'food_hirn_breakfast',    cat:'food', group:'Еда Хирна',                 level:7, name:'Завтрак Хирна' },
-  { id:'food_hirn_shashlik',     cat:'food', group:'Еда Хирна',                 level:7, name:'Шашлык Хирна' },
-  { id:'food_hirn_uha',          cat:'food', group:'Еда Хирна',                 level:7, name:'Уха Хирна' },
-  { id:'food_hirn_lunch',        cat:'food', group:'Еда Хирна',                 level:7, name:'Обед Хирна' },
-  // ── Еда Южного Фьорла (ур. 8) ───────────────────────────────────────────────
-  { id:'food_south_breakfast',   cat:'food', group:'Еда Южного Фьорла',         level:8, name:'Завтрак Южного Фьорла' },
-  { id:'food_south_shashlik',    cat:'food', group:'Еда Южного Фьорла',         level:8, name:'Шашлык Южного Фьорла' },
-  { id:'food_south_uha',         cat:'food', group:'Еда Южного Фьорла',         level:8, name:'Уха Южного Фьорла' },
-  { id:'food_south_lunch',       cat:'food', group:'Еда Южного Фьорла',         level:8, name:'Обед Южного Фьорла' },
-  // ── Еда Северного Фьорла (ур. 9) ────────────────────────────────────────────
-  { id:'food_north_breakfast',   cat:'food', group:'Еда Северного Фьорла',      level:9, name:'Завтрак Северного Фьорла' },
-  { id:'food_north_shashlik',    cat:'food', group:'Еда Северного Фьорла',      level:9, name:'Шашлык Северного Фьорла' },
-  { id:'food_north_uha',         cat:'food', group:'Еда Северного Фьорла',      level:9, name:'Уха Северного Фьорла' },
-  { id:'food_north_lunch',       cat:'food', group:'Еда Северного Фьорла',      level:9, name:'Обед Северного Фьорла' },
+  // ── Еда Флоринга (ур. 3, white) ─────────────────────────────────────────────
+  { id:'food_floring_breakfast', cat:'food', group:'Еда Флоринга',               level:3, quality:'white',  name:'Завтрак Флоринга',                icon:'stats_calculator/buffs/food/Баф1_рыба_white.png' },
+  { id:'food_floring_shashlik',  cat:'food', group:'Еда Флоринга',               level:3, quality:'white',  name:'Шашлык Флоринга',                 icon:'stats_calculator/buffs/food/Баф2_шашлык_white.png' },
+  { id:'food_floring_uha',       cat:'food', group:'Еда Флоринга',               level:3, quality:'white',  name:'Уха Флоринга',                    icon:'stats_calculator/buffs/food/Баф3_уха_white.png' },
+  { id:'food_floring_lunch',     cat:'food', group:'Еда Флоринга',               level:3, quality:'white',  name:'Обед Флоринга',                   icon:'stats_calculator/buffs/food/Баф4_обед_white.png' },
+  // ── Еда Кохилльского Архипелага (ур. 4, white) ──────────────────────────────
+  { id:'food_kohill_breakfast',  cat:'food', group:'Еда Кохилльского Архипелага', level:4, quality:'white',  name:'Завтрак Кохилльского Архипелага', icon:'stats_calculator/buffs/food/Баф1_рыба_white.png' },
+  { id:'food_kohill_shashlik',   cat:'food', group:'Еда Кохилльского Архипелага', level:4, quality:'white',  name:'Шашлык Кохилльского Архипелага', icon:'stats_calculator/buffs/food/Баф2_шашлык_white.png' },
+  { id:'food_kohill_uha',        cat:'food', group:'Еда Кохилльского Архипелага', level:4, quality:'white',  name:'Уха Кохилльского Архипелага',    icon:'stats_calculator/buffs/food/Баф3_уха_white.png' },
+  { id:'food_kohill_lunch',      cat:'food', group:'Еда Кохилльского Архипелага', level:4, quality:'white',  name:'Обед Кохилльского Архипелага',   icon:'stats_calculator/buffs/food/Баф4_обед_white.png' },
+  // ── Еда Гайны (ур. 5, green) ────────────────────────────────────────────────
+  { id:'food_gaina_breakfast',   cat:'food', group:'Еда Гайны',                  level:5, quality:'green',  name:'Завтрак Гайны',                   icon:'stats_calculator/buffs/food/Баф1_рыба_green.png' },
+  { id:'food_gaina_shashlik',    cat:'food', group:'Еда Гайны',                  level:5, quality:'green',  name:'Шашлык Гайны',                    icon:'stats_calculator/buffs/food/Баф2_шашлык_green.png' },
+  { id:'food_gaina_uha',         cat:'food', group:'Еда Гайны',                  level:5, quality:'green',  name:'Уха Гайны',                       icon:'stats_calculator/buffs/food/Баф3_уха_green.png' },
+  { id:'food_gaina_lunch',       cat:'food', group:'Еда Гайны',                  level:5, quality:'green',  name:'Обед Гайны',                      icon:'stats_calculator/buffs/food/Баф4_обед_green.png' },
+  // ── Еда Весеннего Берега (ур. 6, blue) ──────────────────────────────────────
+  { id:'food_spring_breakfast',  cat:'food', group:'Еда Весеннего Берега',       level:6, quality:'blue',   name:'Завтрак Весеннего Берега',         icon:'stats_calculator/buffs/food/Баф1_рыба_blue.png' },
+  { id:'food_spring_shashlik',   cat:'food', group:'Еда Весеннего Берега',       level:6, quality:'blue',   name:'Шашлык Весеннего Берега',          icon:'stats_calculator/buffs/food/Баф2_шашлык_blue.png' },
+  { id:'food_spring_uha',        cat:'food', group:'Еда Весеннего Берега',       level:6, quality:'blue',   name:'Уха Весеннего Берега',             icon:'stats_calculator/buffs/food/Баф3_уха_blue.png' },
+  { id:'food_spring_lunch',      cat:'food', group:'Еда Весеннего Берега',       level:6, quality:'blue',   name:'Обед Весеннего Берега',            icon:'stats_calculator/buffs/food/Баф4_обед_blue.png' },
+  // ── Еда Хирна (ур. 7, purple) ───────────────────────────────────────────────
+  { id:'food_hirn_breakfast',    cat:'food', group:'Еда Хирна',                  level:7, quality:'purple', name:'Завтрак Хирна',                    icon:'stats_calculator/buffs/food/Баф1_рыба_purple.png' },
+  { id:'food_hirn_shashlik',     cat:'food', group:'Еда Хирна',                  level:7, quality:'purple', name:'Шашлык Хирна',                     icon:'stats_calculator/buffs/food/Баф2_шашлык_purple.png' },
+  { id:'food_hirn_uha',          cat:'food', group:'Еда Хирна',                  level:7, quality:'purple', name:'Уха Хирна',                        icon:'stats_calculator/buffs/food/Баф3_уха_purple.png' },
+  { id:'food_hirn_lunch',        cat:'food', group:'Еда Хирна',                  level:7, quality:'purple', name:'Обед Хирна',                       icon:'stats_calculator/buffs/food/Баф4_обед_purple.png' },
+  // ── Еда Южного Фьорла (ур. 8, red) ─────────────────────────────────────────
+  { id:'food_south_breakfast',   cat:'food', group:'Еда Южного Фьорла',          level:8, quality:'red',    name:'Завтрак Южного Фьорла',            icon:'stats_calculator/buffs/food/Баф1_рыба_red.png' },
+  { id:'food_south_shashlik',    cat:'food', group:'Еда Южного Фьорла',          level:8, quality:'red',    name:'Шашлык Южного Фьорла',             icon:'stats_calculator/buffs/food/Баф2_шашлык_red.png' },
+  { id:'food_south_uha',         cat:'food', group:'Еда Южного Фьорла',          level:8, quality:'red',    name:'Уха Южного Фьорла',                icon:'stats_calculator/buffs/food/Баф3_уха_red.png' },
+  { id:'food_south_lunch',       cat:'food', group:'Еда Южного Фьорла',          level:8, quality:'red',    name:'Обед Южного Фьорла',               icon:'stats_calculator/buffs/food/Баф4_обед_red.png' },
+  // ── Еда Северного Фьорла (ур. 9, orange) ────────────────────────────────────
+  { id:'food_north_breakfast',   cat:'food', group:'Еда Северного Фьорла',       level:9, quality:'orange', name:'Завтрак Северного Фьорла',         icon:'stats_calculator/buffs/food/Баф1_рыба_orange.png' },
+  { id:'food_north_shashlik',    cat:'food', group:'Еда Северного Фьорла',       level:9, quality:'orange', name:'Шашлык Северного Фьорла',          icon:'stats_calculator/buffs/food/Баф2_шашлык_orange.png' },
+  { id:'food_north_uha',         cat:'food', group:'Еда Северного Фьорла',       level:9, quality:'orange', name:'Уха Северного Фьорла',             icon:'stats_calculator/buffs/food/Баф3_уха_orange.png' },
+  { id:'food_north_lunch',       cat:'food', group:'Еда Северного Фьорла',       level:9, quality:'orange', name:'Обед Северного Фьорла',            icon:'stats_calculator/buffs/food/Баф4_обед_orange.png' },
 ];
 
