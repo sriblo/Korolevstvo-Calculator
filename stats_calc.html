@@ -1676,15 +1676,27 @@ function renderAll(cid) {
 // ── ACTIONS ───────────────────────────────────────────────────────────────────
 function toggleClsDrop(cid) {
   const drop = document.getElementById(`clsDrop-${cid}`);
+  const menu = drop.querySelector('.cls-dd-menu');
   const isOpen = drop.classList.toggle('open');
   if (isOpen) {
-    const trig = drop.querySelector('.cls-dd-trig');
-    const menu = drop.querySelector('.cls-dd-menu');
-    const r = trig.getBoundingClientRect();
+    const r = drop.querySelector('.cls-dd-trig').getBoundingClientRect();
     menu.style.top  = (r.bottom + 6) + 'px';
     menu.style.left = r.left + 'px';
+    document.body.appendChild(menu);
+    menu._origin = drop;
+  } else {
+    drop.appendChild(menu);
   }
 }
+document.addEventListener('click', function(e) {
+  document.querySelectorAll('.cls-drop.open').forEach(drop => {
+    const menu = drop.querySelector('.cls-dd-menu') || (document.body._clsMenus && document.body._clsMenus.find(m => m._origin === drop));
+    if (!drop.contains(e.target) && !(menu && menu.contains(e.target))) {
+      drop.classList.remove('open');
+      if (menu && menu._origin === drop) drop.appendChild(menu);
+    }
+  });
+});
 
 function selectClass(cid, cls) {
   const s = state[cid];
