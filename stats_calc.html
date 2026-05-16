@@ -1263,12 +1263,14 @@ function renderSlotRow(cid, rowSlots, containerId) {
 
 let _pickerCache = {};
 
+const EQUIPMENT_SLOTS = ['helm','chest','shoulders','pants','belt','boots','weapon','offhand','gloves'];
+
 function getPickerItems(cls, slotId) {
-  if (SLOT_ITEMS[slotId]) return SLOT_ITEMS[slotId];
+  if (SLOT_ITEMS[slotId] && !EQUIPMENT_SLOTS.includes(slotId)) return SLOT_ITEMS[slotId];
   const slotName = (CLASS_ITEM_NAMES[cls] && CLASS_ITEM_NAMES[cls][slotId])
     || (ALL_SLOTS.find(s => s.id === slotId) || {}).name || slotId;
   const setNames = CLASS_SET_NAMES[cls] || {};
-  return QUALITIES
+  const statsItems = QUALITIES
     .filter(q => getItemImg(cls, slotId, q.id) || getStatsForSlot(cls, slotId, q.id))
     .map(q => ({
       name:  [slotName, setNames[q.id]].filter(Boolean).join(' '),
@@ -1276,6 +1278,8 @@ function getPickerItems(cls, slotId) {
       img:   getItemImg(cls, slotId, q.id),
       stats: getStatsForSlot(cls, slotId, q.id),
     }));
+  const eventItems = SLOT_ITEMS[slotId] || [];
+  return [...statsItems, ...eventItems];
 }
 
 function renderPicker(cid) {
