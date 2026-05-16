@@ -405,6 +405,7 @@
   .picker-item{
     position:relative;width:32px;height:32px;flex-shrink:0;
     cursor:pointer;overflow:visible;transition:opacity .12s;
+    background:rgba(255,255,255,.04);border-radius:2px;
   }
   .picker-item:hover{opacity:.8}
   .picker-item.on{opacity:1}
@@ -1253,7 +1254,7 @@ function renderPicker(cid) {
         onmouseenter="showPickerTt(event,'${cid}',${idx})"
         onmousemove="moveTt(event)"
         onmouseleave="hideTt()">
-        ${item.img ? `<img src="${item.img}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;z-index:1" onerror="this.style.display='none'">` : ''}
+        ${item.img ? `<img src="${item.img}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:none;z-index:1;image-rendering:pixelated" onerror="this.style.display='none'">` : ''}
         ${frameSrc ? `<img src="${frameSrc}" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:2" onerror="this.style.display='none'">` : ''}
       </div>`;
     }).join('');
@@ -1263,10 +1264,18 @@ function renderPicker(cid) {
     let actionHtml = '';
     if (eqItem) {
       if (runesForSlot.length) {
-        const runeBtn = eqItem.rune
-          ? `<button onclick="enterRuneMode('${cid}')">Сменить руну</button>`
-          : `<button onclick="enterRuneMode('${cid}')">Вставить руну</button>`;
-        actionHtml += runeBtn;
+        if (eqItem.rune) {
+          const rf = QUALITY_FRAME[eqItem.rune.quality] || '';
+          actionHtml += `<button onclick="enterRuneMode('${cid}')" style="display:flex;align-items:center;gap:6px">
+            <span style="position:relative;width:20px;height:20px;flex-shrink:0;display:inline-block">
+              ${eqItem.rune.img ? `<img src="${eqItem.rune.img}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:none;image-rendering:pixelated" onerror="this.style.display='none'">` : ''}
+              ${rf ? `<img src="${rf}" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none" onerror="this.style.display='none'">` : ''}
+            </span>
+            Сменить руну
+          </button>`;
+        } else {
+          actionHtml += `<button onclick="enterRuneMode('${cid}')">Вставить руну</button>`;
+        }
       }
       actionHtml += `<button class="danger" onclick="unequipActiveSlot('${cid}')">Снять предмет</button>`;
     }
@@ -1280,8 +1289,7 @@ function showPickerTt(e, cid, idx) {
   const item = (_pickerCache[cid] || [])[idx];
   if (!item) return;
   const q = QUALITIES.find(q => q.id === item.quality);
-  let html = `<div class="tt-name">${item.name}</div>`;
-  if (q) html += `<div class="tt-quality" style="color:${q.color}">${q.label}</div>`;
+  let html = `<div class="tt-name" style="color:${q ? q.color : 'var(--txt)'}">${item.name}</div>`;
   if (item.stats) {
     Object.entries(item.stats).forEach(function(entry) {
       var k = entry[0]; var v = entry[1];
@@ -1581,8 +1589,7 @@ function showRuneTt(e, runeIdx) {
   let html = `<div class="tt-head">`;
   if (r.img) html += `<img class="tt-ico" src="${r.img}" onerror="this.style.display='none'">`;
   html += `<div class="tt-head-text">
-    <div class="tt-name">${r.name}</div>
-    ${q ? `<div class="tt-quality" style="color:${q.color}">${q.label}</div>` : ''}
+    <div class="tt-name" style="color:${q ? q.color : 'var(--txt)'}">${r.name}</div>
   </div></div>`;
   html += `<div class="tt-stat"><span class="tt-stat-k" style="color:var(--txt3)">Слот: ${r.slot}</span></div>`;
   if (r.stats) {
