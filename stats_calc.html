@@ -109,25 +109,16 @@
   .compare-panel{
     background:linear-gradient(180deg, rgba(var(--gold-tint),.04), transparent 40%), var(--bg2);
     border:1px solid var(--line);border-radius:14px;overflow:hidden;
-    position:sticky;top:9999px;align-self:start;
+    position:sticky;top:88px;align-self:start;z-index:20;
   }
-  .compare-panel.pinned{top:88px;}
   .compare-panel::before{
     content:'';position:absolute;top:0;left:0;right:0;height:1px;
     background:linear-gradient(90deg,transparent,rgba(var(--gold-tint),.3),transparent);
   }
-  .cmp-head{display:flex;align-items:flex-start;gap:8px;
+  .cmp-head{
     padding:14px 20px 10px;border-bottom:1px solid var(--line);
+    text-align:center;
   }
-  .cmp-head-text{text-align:center;flex:1}
-  .cmp-pin-btn{
-    background:none;border:1px solid var(--line);border-radius:6px;
-    cursor:pointer;font-size:16px;padding:4px 7px;line-height:1;
-    color:var(--txt2);transition:.15s;flex-shrink:0;
-  }
-  .cmp-pin-btn:hover{border-color:var(--line2);color:var(--txt)}
-  .cmp-pin-btn.pinned{border-color:var(--gold-d);background:rgba(var(--gold-tint),.08)}
-  .compare-panel.pinned{position:fixed;top:88px;left:var(--cmp-left);z-index:40;width:var(--cmp-width)}
   .cmp-title{
     font-family:var(--serif);font-size:18px;font-weight:500;letter-spacing:-.01em;
     color:var(--txt);
@@ -687,11 +678,8 @@
     <!-- ── ЦЕНТРАЛЬНАЯ ТАБЛИЦА СРАВНЕНИЯ ── -->
     <aside class="compare-panel pinned" id="comparePanel">
       <div class="cmp-head">
-        <div class="cmp-head-text">
-          <div class="cmp-title">Сравнение характеристик</div>
-          <div class="cmp-sub" id="cmpSub">Соберите снаряжение обоим героям</div>
-        </div>
-        <button class="cmp-pin-btn pinned" id="cmpPinBtn" onclick="toggleCmpPin()" title="Открепить панель">🔒</button>
+        <div class="cmp-title">Сравнение характеристик</div>
+        <div class="cmp-sub" id="cmpSub">Соберите снаряжение обоим героям</div>
       </div>
       <div class="cmp-col-head">
         <div class="h1n" id="cmpHead1">Персонаж 1</div>
@@ -1742,15 +1730,6 @@ function applyTone(t) {
   document.querySelectorAll('.tone-btn').forEach(function(b) { b.classList.toggle('on', b.dataset.t === t); });
 }
 
-// ── COMPARE PIN ───────────────────────────────────────────────────────────────
-function toggleCmpPin() {
-  const panel = document.getElementById('comparePanel');
-  const btn   = document.getElementById('cmpPinBtn');
-  const on = panel.classList.toggle('pinned');
-  btn.classList.toggle('pinned', on);
-  btn.textContent = on ? '🔒' : '🔓';
-  btn.title = on ? 'Открепить панель' : 'Зафиксировать панель';
-}
 
 // ── INIT ──────────────────────────────────────────────────────────────────────
 renderAll('c1');
