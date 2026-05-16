@@ -265,7 +265,9 @@ a{color:inherit;text-decoration:none}
   box-shadow:0 8px 28px rgba(0,0,0,.5);
 }
 .eq-tt.vis{display:block}
-.tt-name{font-family:var(--serif);font-size:14px;font-weight:500;margin-bottom:9px;color:var(--txt)}
+.tt-head{display:flex;align-items:center;gap:10px;margin-bottom:9px}
+.tt-ico{width:40px;height:40px;flex-shrink:0;border-radius:4px;background:var(--bg4);position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.tt-name{font-family:var(--serif);font-size:14px;font-weight:500;color:var(--txt)}
 .tt-row{display:flex;justify-content:space-between;gap:16px;padding:3px 0;font-size:12px;border-bottom:1px solid var(--line)}
 .tt-row:last-child{border-bottom:none}
 .tt-key{color:var(--txt2)}
@@ -472,7 +474,7 @@ function renderEquipment(c) {
     const baseName = CLASS_ITEM_NAMES[activeCls]?.[slot.id] || slot.name;
     const prefix = activeQ === 'purple_plus' ? (УСИЛ[baseName] || 'Усиленный') + ' ' : '';
     const itemName = setName ? `${prefix}${baseName} ${setName}` : `${prefix}${baseName}`;
-    return `<div class="eq-card" onmouseenter="ttShow('${activeCls}','${slot.id}','${activeQ}','${itemName}',event)" onmousemove="ttMove(event)" onmouseleave="ttHide()">${ico}<div class="eq-slot-name">${itemName}</div></div>`;
+    return `<div class="eq-card" onmouseenter="ttShow('${activeCls}','${slot.id}','${activeQ}','${itemName}','${img||''}',event)" onmousemove="ttMove(event)" onmouseleave="ttHide()">${ico}<div class="eq-slot-name">${itemName}</div></div>`;
   }).join('');
 
   c.innerHTML = `
@@ -705,9 +707,20 @@ document.body.appendChild(_tt);
 
 function fmtVal(v, pct) { return (v >= 0 ? '+' : '') + v + (pct ? '%' : ''); }
 
-function ttShow(cls, slotId, quality, itemName, e) {
+function ttHead(img, quality, name) {
+  const q = QUALITIES.find(function(q2){ return q2.id === quality; });
+  const color = q ? q.color : 'var(--txt)';
+  const frame = QUALITY_FRAME[quality] || '';
+  const frameHtml = frame ? `<img class="ico-frame" src="${frame}" alt="">` : '';
+  const ico = img
+    ? `<div class="tt-ico"><img class="ico-img" src="${img}" alt="" onerror="this.style.opacity=0">${frameHtml}</div>`
+    : (frame ? `<div class="tt-ico">${frameHtml}</div>` : '');
+  return `<div class="tt-head">${ico}<div class="tt-name" style="color:${color}">${name}</div></div>`;
+}
+
+function ttShow(cls, slotId, quality, itemName, img, e) {
   const stats = STATS[cls]?.[quality]?.[slotId];
-  let html = `<div class="tt-name">${itemName}</div>`;
+  let html = ttHead(img, quality, itemName);
   if (!stats) {
     html += `<div class="tt-empty">Данные не добавлены</div>`;
   } else {
@@ -724,14 +737,15 @@ function ttShow(cls, slotId, quality, itemName, e) {
 }
 function ttShowBuff(idx, e) {
   const b = CLASS_BUFFS[idx];
-  _tt.innerHTML = `<div class="tt-name">${b.name}</div>
-    <div class="tt-row"><span class="tt-key">${b.cls}</span><span class="tt-val">${b.effect}</span></div>`;
+  let html = ttHead(b.img, b.quality, b.name);
+  html += `<div class="tt-row"><span class="tt-key">${b.cls}</span><span class="tt-val">${b.effect}</span></div>`;
+  _tt.innerHTML = html;
   _tt.classList.add('vis');
   ttMove(e);
 }
 function ttShowWF(e) {
   const wf = WITCH_FLAME;
-  let html = `<div class="tt-name">${wf.name}</div>`;
+  let html = ttHead(wf.img, wf.quality, wf.name);
   html += wf.effects.map(ef => `<div class="tt-row"><span class="tt-key" style="color:var(--txt2)">${ef}</span></div>`).join('');
   html += `<div class="tt-row" style="margin-top:4px"><span class="tt-key" style="font-style:italic;color:var(--txt3)">${wf.note}</span></div>`;
   _tt.innerHTML = html;
@@ -740,7 +754,7 @@ function ttShowWF(e) {
 }
 function ttShowRune(idx, e) {
   const r = RUNES[idx];
-  let html = `<div class="tt-name">${r.name}</div>`;
+  let html = ttHead(r.img, r.quality, r.name);
   html += `<div class="tt-row"><span class="tt-key" style="color:var(--txt3)">Вставляется в: ${r.slot}</span></div>`;
   if (r.stats) {
     html += STAT_LABELS
@@ -756,7 +770,7 @@ function ttShowRune(idx, e) {
 }
 function ttShowArt(idx, e) {
   const art = ARTIFACTS[idx];
-  let html = `<div class="tt-name">${art.name}</div>`;
+  let html = ttHead(art.img, art.quality, art.name);
   if (art.stats) {
     html += STAT_LABELS
       .filter(s => art.stats[s.key] != null)
@@ -771,7 +785,7 @@ function ttShowArt(idx, e) {
 }
 function ttShowEventBuff(idx, e) {
   const b = EVENT_BUFFS[idx];
-  let html = `<div class="tt-name">${b.name}</div>`;
+  let html = ttHead(b.img, b.quality, b.name);
   if (b.note) html += `<div class="tt-row"><span class="tt-key" style="font-style:italic;color:var(--txt3)">${b.note}</span></div>`;
   if (b.stats) {
     html += STAT_LABELS.filter(s => b.stats[s.key] != null)
