@@ -1488,8 +1488,8 @@ function renderCompare() {
     const clsIco  = `stats_calculator/classes/${CLASS_ICON_FILE[s.cls]}`;
     const raceNum = s.race.startsWith('Elf') ? '2' : '1';
     const raceIco = `stats_calculator/race_${raceNum}.png`;
-    const ico = `<img src="${clsIco}" style="width:16px;height:16px;image-rendering:pixelated;border-radius:3px;vertical-align:middle">`;
-    const rico = `<img src="${raceIco}" style="width:16px;height:16px;image-rendering:pixelated;vertical-align:middle">`;
+    const ico = `<img src="${clsIco}" style="width:13px;height:13px;image-rendering:pixelated;border-radius:3px;vertical-align:middle">`;
+    const rico = `<img src="${raceIco}" style="width:13px;height:13px;image-rendering:pixelated;vertical-align:middle">`;
     return { normal: `${ico}&nbsp;${rico}`, mirror: `${rico}&nbsp;${ico}` };
   };
   if (h1) h1.innerHTML = labelOf('c1').mirror;
