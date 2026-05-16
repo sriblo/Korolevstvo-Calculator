@@ -918,8 +918,8 @@ function applyCharBg(cid) {
     ? `stats_calculator/ui/bg_champion_race_${raceNum}.jpg`
     : `stats_calculator/ui/bg_race_${raceNum}.jpg`;
   inner.style.backgroundImage = `url("${file}")`;
-  inner.style.backgroundPosition = 'center -25%';
-  inner.style.backgroundSize = 'auto 500px';
+  inner.style.backgroundPosition = s.champion ? 'center -25%' : '60% -10%';
+  inner.style.backgroundSize = s.champion ? 'auto 500px' : 'auto 900px';
 }
 
 function toggleChampion(cid) {
