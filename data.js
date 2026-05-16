@@ -304,21 +304,5 @@ const BUFF_CATS = [
 ];
 
 const BUFFS = [
-  { id:'cls_archer_eye',   cat:'class', name:'Зоркий глаз',     sub:'Лучник',    effect:'atk_eff',        value:15, pct:true },
-  { id:'cls_mage_storm',   cat:'class', name:'Ураган',           sub:'Маг',       effect:'atk_eff',        value:15, pct:true },
-  { id:'cls_monk_bless',   cat:'class', name:'Благословение',    sub:'Монах',     effect:'hp',             value:8,  pct:true },
-  { id:'cls_pala_holy',    cat:'class', name:'Святое слово',     sub:'Паладин',   effect:'hp',             value:8,  pct:true },
-  { id:'cls_warr_shield',  cat:'class', name:'Пылающий щит',     sub:'Воин',      effect:'dmg_taken_red',  value:8 },
-  { id:'cls_rogue_shadow', cat:'class', name:'Дар теней',        sub:'Головорез', effect:'dmg_taken_red',  value:8 },
-  { id:'rep_warrior',      cat:'rep',   name:'Совет воинов',     effect:'atk',          value:8 },
-  { id:'rep_archer',       cat:'rep',   name:'Совет лучников',   effect:'crit_dmg',     value:3,  pct:true },
-  { id:'rep_kabana',       cat:'rep',   name:'Совет кабана',     effect:'hp',           value:300 },
-  { id:'rep_indyuka',      cat:'rep',   name:'Совет индюка',     effect:'def',          value:10 },
-  { id:'rep_master_aren',  cat:'rep',   name:'Мастер арены',     effect:'atk_eff',      value:3,  pct:true },
-  { id:'rep_master_voiny', cat:'rep',   name:'Мастер войны',     effect:'crit_chance',  value:2,  pct:true },
-  { id:'food_meat',        cat:'food',  name:'Жареное мясо',     effect:'hp',           value:150 },
-  { id:'food_fish',        cat:'food',  name:'Печёная рыба',     effect:'mana',         value:80 },
-  { id:'food_bread',       cat:'food',  name:'Праздничный хлеб', effect:'hp_regen',     value:20 },
-  { id:'food_wine',        cat:'food',  name:'Кубок вина',       effect:'crit_dmg',     value:2,  pct:true },
 ];
 
