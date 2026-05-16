@@ -250,21 +250,3 @@ const EVENT_BUFFS = [
   { group:'Кубок с Ледяных островов', name:'Кубок с Ледяных островов', quality:'orange', img:'stats_calculator/buffs/event_buff/expedition_ice_boul.png' },
 ];
 
-// ── РУНЫ ─────────────────────────────────────────────────────────────────────
-// slot   — название слота для отображения в базе предметов (рус.)
-// slotId — ID слота в калькуляторе статов для фильтрации совместимых рун
-// stats  — характеристики руны (null = данных пока нет)
-const RUNES = [
-  { name:'Титанитовая Великая Руна Фальдира',  slot:'Оружие',        slotId:'weapon',    quality:'red',    img:'stats_calculator/rune/rune_weapon.png',              stats:null },
-  { name:'Руна Пяти Камней',                   slot:'Второе оружие', slotId:'offhand',   quality:'red',    img:'stats_calculator/rune/rune_attack_weapon2_1.png',    stats:null },
-  { name:'Титанитовая Великая Руна Гэтана',    slot:'Штаны',         slotId:'pants',     quality:'red',    img:'stats_calculator/rune/rune_pants.png',               stats:null },
-  { name:'Великая Руна Варин',                 slot:'Пояс',          slotId:'belt',      quality:'red',    img:'stats_calculator/rune/rune_belt.png',                stats:null },
-  { name:'Великая Руна Орноса',                slot:'Сапоги',        slotId:'boots',     quality:'red',    img:'stats_calculator/rune/rune_boots.png',               stats:null },
-  { name:'Титанитовая Великая Руна Баннора',   slot:'Перчатки',      slotId:'gloves',    quality:'red',    img:'stats_calculator/rune/rune_gloves.png',              stats:null },
-  { name:'Титанитовая Великая Руна Халиэмы',  slot:'Наплечники',    slotId:'shoulders', quality:'red',    img:'stats_calculator/rune/rune_shoulders.png',           stats:null },
-  { name:'Великая Руна Мехила',                slot:'Нагрудник',     slotId:'chest',     quality:'red',    img:'stats_calculator/rune/rune_chest.png',               stats:null },
-  { name:'Руна Хенгиста',                      slot:'Амулет',        slotId:'amulet',    quality:'purple', img:'stats_calculator/rune/rune_medallion_attack_10.png', stats:null },
-  { name:'Руна Усиленной Защиты Хорлата',      slot:'Шлем',          slotId:'helm',      quality:'blue',   img:'stats_calculator/rune/rune_helm_defense_5.png',      stats:null },
-  { name:'Руна Усиленной Атаки Хорлата',       slot:'Шлем',          slotId:'helm',      quality:'blue',   img:'stats_calculator/rune/rune_helm_attack_5.png',       stats:null },
-  { name:'Руна Усиленного Здоровья Хорлата',   slot:'Шлем',          slotId:'helm',      quality:'blue',   img:'stats_calculator/rune/rune_helm_health_5.png',       stats:null },
-];

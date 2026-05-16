@@ -374,7 +374,20 @@ function icoHtml(img, quality) {
     (frame ? `<img class="ico-frame" src="${frame}" alt="">` : '') +
     `</div>`;
 }
-// RUNES определён в data.js (единый источник данных)
+const RUNES = [
+  { name:'Титанитовая Великая Руна Фальдира',   slot:'Оружие',        quality:'red',    img:'stats_calculator/rune/rune_weapon.png' },
+  { name:'Руна Пяти Камней',                    slot:'Второе оружие', quality:'red',    img:'stats_calculator/rune/rune_attack_weapon2_1.png' },
+  { name:'Титанитовая Великая Руна Гэтана',     slot:'Штаны',         quality:'red',    img:'stats_calculator/rune/rune_pants.png' },
+  { name:'Великая Руна Варин',                  slot:'Пояс',          quality:'red',    img:'stats_calculator/rune/rune_belt.png' },
+  { name:'Великая Руна Орноса',                 slot:'Сапоги',        quality:'red',    img:'stats_calculator/rune/rune_boots.png' },
+  { name:'Титанитовая Великая Руна Баннора',    slot:'Перчатки',      quality:'red',    img:'stats_calculator/rune/rune_gloves.png' },
+  { name:'Титанитовая Великая Руна Халиэмы',   slot:'Наплечники',    quality:'red',    img:'stats_calculator/rune/rune_shoulders.png' },
+  { name:'Великая Руна Мехила',                 slot:'Нагрудник',     quality:'red',    img:'stats_calculator/rune/rune_chest.png' },
+  { name:'Руна Хенгиста',                       slot:'Амулет',        quality:'purple', img:'stats_calculator/rune/rune_medallion_attack_10.png' },
+  { name:'Руна Усиленной Защиты Хорлата',       slot:'Шлем',          quality:'blue',   img:'stats_calculator/rune/rune_helm_defense_5.png' },
+  { name:'Руна Усиленной Атаки Хорлата',        slot:'Шлем',          quality:'blue',   img:'stats_calculator/rune/rune_helm_attack_5.png' },
+  { name:'Руна Усиленного Здоровья Хорлата',    slot:'Шлем',          quality:'blue',   img:'stats_calculator/rune/rune_helm_health_5.png' },
+];
 
 let activeQ   = 'purple';
 let activeCls = 'warrior';
