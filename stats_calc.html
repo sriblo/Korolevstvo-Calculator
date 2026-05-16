@@ -1193,7 +1193,7 @@ function icoHtml(slotId, eq, cls) {
     const phSrc = getItemImg(cls, slotId, 'white') || ARTEFACT_PH[slotId];
     if (phSrc) {
       return `<img src="${phSrc}" alt=""
-        style="width:32px;height:32px;object-fit:contain;filter:grayscale(1);opacity:.22"
+        style="width:32px;height:32px;object-fit:contain;filter:grayscale(1);opacity:.55"
         onerror="this.style.display='none'">`;
     }
     const ph = PH[SLOT_PH[slotId]] || PH.bag;
