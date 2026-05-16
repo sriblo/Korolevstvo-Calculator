@@ -615,9 +615,9 @@ function renderJewelry(c) {
   const ringUngrouped = sortByQuality(ARTIFACTS.filter(a => a.slotId === 'ring' && !a.group && !a.event));
   c.innerHTML = `<div class="c-title">Бижутерия</div>
     <div class="jewel-section-head">Кольца</div>
+    ${ringUngrouped.length ? `<div class="buff-grid">${ringUngrouped.map(jewCard).join('')}</div>` : ''}
     ${ringPair('Кольцо сквайра', 'Кольцо рыцаря')}
     ${ringPair('Кольцо лорда', 'Кольцо барона')}
-    ${ringUngrouped.length ? `<div class="buff-grid">${ringUngrouped.map(jewCard).join('')}</div>` : ''}
     ${section('Браслеты',  'bracelet')}
     ${section('Амулеты',   'amulet')}
     ${section('Трофеи',    'trophy')}
