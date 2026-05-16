@@ -1624,7 +1624,6 @@ function toggleClsDrop(cid) {
 function selectClass(cid, cls) {
   const s = state[cid];
   s.cls = cls; s.activeSlot = null;
-  Object.keys(s.equipped).forEach(k => delete s.equipped[k]);
   document.getElementById(`clsDrop-${cid}`).classList.remove('open');
   renderAll(cid);
 }
