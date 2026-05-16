@@ -236,7 +236,7 @@
   .cb-inner > *{position:relative;z-index:1}
 
   /* ── Controls row ── */
-  .char-controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap;position:relative;z-index:10}
+  .char-controls{display:flex;align-items:center;gap:6px;flex-wrap:wrap;position:relative;z-index:10;justify-content:space-between}
   .nick-input{
     width:150px;padding:7px 11px;
     background:var(--bg3);border:1px solid var(--line);border-radius:7px;
@@ -307,20 +307,18 @@
   .race-chip[data-race="Human"]{background-image:url('stats_calculator/race_1.png')}
   .champ-chip{
     width:24px;height:24px;flex-shrink:0;
-    background:var(--bg3);border:1px solid var(--line);border-radius:6px;
+    background:var(--bg3) url('stats_calculator/champ_off.png') center/20px 20px no-repeat;
+    border:1px solid var(--line);border-radius:6px;
     cursor:pointer;padding:0;
-    display:flex;align-items:center;justify-content:center;
-    transition:border-color .15s,background .15s,box-shadow .2s;
-    position:relative;
+    transition:border-color .15s,background-color .15s,box-shadow .2s;
+    image-rendering:pixelated;
   }
-  .champ-chip:hover{border-color:var(--line2);background:var(--bg4)}
-  .champ-chip .champ-ico{color:var(--txt3);transition:color .2s,opacity .2s}
-  .champ-chip:hover .champ-ico{opacity:.8}
+  .champ-chip:hover{border-color:var(--line2);background-color:var(--bg4)}
   .champ-chip.on{
-    border-color:var(--gold);background:rgba(var(--gold-tint),.08);
+    background-image:url('stats_calculator/champ_on.png');
+    border-color:var(--gold);background-color:rgba(var(--gold-tint),.08);
     box-shadow:0 0 0 2px rgba(var(--gold-tint),.18), 0 0 14px rgba(var(--gold-tint),.42);
   }
-  .champ-chip.on .champ-ico{color:var(--gold-l);opacity:1}
 
   /* ── Paperdoll ── */
   .pd-section{display:flex;flex-direction:column;gap:6px;width:274px;margin:0 auto;}
@@ -601,11 +599,8 @@
           <div class="chip-sep"></div>
           <button class="race-chip on" data-race="Elf" title="Эльф"></button>
           <button class="race-chip" data-race="Human" title="Человек"></button>
-          <button class="champ-chip" id="champBtn-c1" onclick="toggleChampion('c1')" title="Чемпион расы">
-            <svg width="18" height="18" viewBox="0 0 20 20" fill="none" style="opacity:.5;transition:opacity .2s" class="champ-ico">
-              <path d="M3 14h14M4 14L2 6l4 3 4-6 4 6 4-3-2 8H4z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
-            </svg>
-          </button>
+          <div class="chip-sep"></div>
+          <button class="champ-chip" id="champBtn-c1" onclick="toggleChampion('c1')" title="Чемпион расы"></button>
         </div>
 
         <div class="pd-section">
@@ -699,11 +694,8 @@
           <div class="chip-sep"></div>
           <button class="race-chip on" data-race="Elf" title="Эльф"></button>
           <button class="race-chip" data-race="Human" title="Человек"></button>
-          <button class="champ-chip" id="champBtn-c2" onclick="toggleChampion('c2')" title="Чемпион расы">
-            <svg width="18" height="18" viewBox="0 0 20 20" fill="none" style="opacity:.5;transition:opacity .2s" class="champ-ico">
-              <path d="M3 14h14M4 14L2 6l4 3 4-6 4 6 4-3-2 8H4z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
-            </svg>
-          </button>
+          <div class="chip-sep"></div>
+          <button class="champ-chip" id="champBtn-c2" onclick="toggleChampion('c2')" title="Чемпион расы"></button>
         </div>
 
         <div class="pd-section">
