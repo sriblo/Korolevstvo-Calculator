@@ -176,9 +176,7 @@ a{color:inherit;text-decoration:none}
 .ico-frame{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
 .rune-info{flex:1;min-width:0}
 .rune-name{font-family:var(--serif);font-size:15px;font-weight:500;margin-bottom:3px}
-.rune-meta{font-size:11px;color:var(--txt3);display:flex;gap:6px;align-items:center;flex-wrap:wrap}
-.rune-slot{color:var(--txt3)}
-.rune-stat{color:var(--txt2);background:var(--bg4);padding:1px 6px;border-radius:3px;font-size:10px;white-space:nowrap}
+.rune-meta{font-size:11px;color:var(--txt3);display:flex;gap:10px;align-items:center;flex-wrap:wrap}
 .q-badge{display:inline-block;padding:1px 7px;border-radius:3px;font-size:10px;font-weight:700;letter-spacing:.06em;font-family:var(--sans)}
 .q-badge.white {background:rgba(200,200,200,.1);color:#bbb}
 .q-badge.green  {background:rgba(106,170,64,.15);color:#8acc60}
@@ -491,24 +489,16 @@ function switchQ(q) {
 }
 
 function renderRunes(c) {
-  const rows = RUNES.map(r => {
-    const statsHtml = r.stats
-      ? STAT_LABELS.filter(s => r.stats[s.key] != null)
-          .map(s => `<span class="rune-stat">+${r.stats[s.key]}${s.pct?'%':''} ${s.label}</span>`)
-          .join('')
-      : '';
-    return `
+  const rows = RUNES.map(r => `
     <div class="rune-row">
       ${icoHtml(r.img, r.quality)}
       <div class="rune-info">
         <div class="rune-name">${r.name}</div>
         <div class="rune-meta">
-          <span class="rune-slot">Вставляется в: ${r.slot}</span>
-          ${statsHtml}
+          <span class="rune-slot">${r.slot}</span>
         </div>
       </div>
-    </div>`;
-  }).join('');
+    </div>`).join('');
 
   c.innerHTML = `
     <div class="c-title">Руны</div>
