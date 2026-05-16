@@ -220,6 +220,7 @@ a{color:inherit;text-decoration:none}
 
 /* buff cards */
 .buff-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px}
+.pair-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .buff-card{
   display:flex;flex-direction:row;align-items:center;gap:12px;
   padding:12px 14px;
@@ -287,9 +288,10 @@ a{color:inherit;text-decoration:none}
     <div class="logo-n">Korolevstvo</div>
   </a>
   <nav class="nav">
-    <a href="index_new.html">Калькуляторы</a>
+    <a href="index_new.html">Главная</a>
     <a class="on" href="items_base.html">База предметов</a>
-    <a href="stats_calc.html">Статы</a><a>Гайды<span style="font-size:10px;color:var(--txt3);margin-left:4px">скоро</span></a>
+    <a href="stats_calc.html">Характеристики</a>
+    <a>Гайды<span style="font-size:10px;color:var(--txt3);margin-left:4px">скоро</span></a>
     <a>Сообщество</a>
   </nav>
   <a class="h-back" href="index_new.html">На главную</a>
@@ -574,8 +576,8 @@ function renderJewelry(c) {
     </div>`;
   }
 
-  function section(title, slotId, groupOrder) {
-    const items = ARTIFACTS.filter(a => a.slotId === slotId);
+  function section(title, slotId, groupOrder, pairGroups) {
+    const items = ARTIFACTS.filter(a => a.slotId === slotId && !a.event);
     if (!items.length) return '';
     let html = `<div class="jewel-section-head">${title}</div>`;
     if (groupOrder) {
@@ -583,7 +585,8 @@ function renderJewelry(c) {
       if (ungrouped.length) html += `<div class="buff-grid">${ungrouped.map(jewCard).join('')}</div>`;
       for (const g of groupOrder) {
         const grp = sortByQuality(items.filter(a => a.group === g));
-        if (grp.length) html += `<div class="art-section-divider">${g}</div><div class="buff-grid">${grp.map(jewCard).join('')}</div>`;
+        const gridCls = pairGroups && pairGroups.includes(g) ? 'pair-grid' : 'buff-grid';
+        if (grp.length) html += `<div class="art-section-divider">${g}</div><div class="${gridCls}">${grp.map(jewCard).join('')}</div>`;
       }
     } else {
       const ungrouped = sortByQuality(items.filter(a => !a.group));
@@ -598,8 +601,9 @@ function renderJewelry(c) {
   }
 
   const RING_GROUPS = ['Кольцо сквайра','Кольцо рыцаря','Кольцо лорда','Кольцо барона'];
+  const RING_PAIR_GROUPS = ['Кольцо сквайра','Кольцо рыцаря','Кольцо лорда','Кольцо барона'];
   c.innerHTML = `<div class="c-title">Бижутерия</div>
-    ${section('Кольца',    'ring',     RING_GROUPS)}
+    ${section('Кольца',    'ring',     RING_GROUPS, RING_PAIR_GROUPS)}
     ${section('Браслеты',  'bracelet')}
     ${section('Амулеты',   'amulet')}
     ${section('Трофеи',    'trophy')}
@@ -629,9 +633,10 @@ function renderEventBuffs(c) {
 
 function renderEventEquipment(c) {
   const idxOf = a => ARTIFACTS.indexOf(a);
-  // Ивентовые предметы — всё в ARTIFACTS, кроме камней, колец и бижутерии
+  // Ивентовые предметы — всё кроме камней + предметы из бижутерии с флагом event:true
   const JEWELRY_SLOTS = ['ring','bracelet','amulet','trophy','trinket','badge','talisman'];
-  const eventItems = ARTIFACTS.filter(a => a.slotId && !a.slotId.startsWith('stone_') && !JEWELRY_SLOTS.includes(a.slotId));
+  const eventItems = ARTIFACTS.filter(a => a.slotId && !a.slotId.startsWith('stone_') &&
+    (!JEWELRY_SLOTS.includes(a.slotId) || a.event));
 
   function evCard(art) {
     const q = QUALITIES.find(q2 => q2.id === art.quality);
