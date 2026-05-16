@@ -569,10 +569,9 @@ function renderJewelry(c) {
 
   function jewCard(art) {
     const q = QUALITIES.find(q2 => q2.id === art.quality);
-    const qLabel = q ? `<div class="buff-cls" style="color:${q.color}">${q.label}</div>` : '';
     return `<div class="buff-card" onmouseenter="ttShowArt(${idxOf(art)},event)" onmousemove="ttMove(event)" onmouseleave="ttHide()">
       ${icoHtml(art.img, art.quality)}
-      <div class="buff-text"><div class="buff-name">${art.name}</div>${qLabel}</div>
+      <div class="buff-text"><div class="buff-name">${art.name}</div></div>
     </div>`;
   }
 
@@ -615,11 +614,9 @@ function renderJewelry(c) {
 function renderEventBuffs(c) {
   const idxOf = b => EVENT_BUFFS.indexOf(b);
   function buffCard(b) {
-    const q = QUALITIES.find(q2 => q2.id === b.quality);
-    const qLabel = q ? `<div class="buff-cls" style="color:${q.color}">${q.label}</div>` : '';
     return `<div class="buff-card" onmouseenter="ttShowEventBuff(${idxOf(b)},event)" onmousemove="ttMove(event)" onmouseleave="ttHide()">
       ${icoHtml(b.img, b.quality)}
-      <div class="buff-text"><div class="buff-name">${b.name}</div>${qLabel}</div>
+      <div class="buff-text"><div class="buff-name">${b.name}</div></div>
     </div>`;
   }
   const groups = [...new Set(EVENT_BUFFS.map(b => b.group))];
@@ -639,11 +636,9 @@ function renderEventEquipment(c) {
     (!JEWELRY_SLOTS.includes(a.slotId) || a.event));
 
   function evCard(art) {
-    const q = QUALITIES.find(q2 => q2.id === art.quality);
-    const qLabel = q ? `<div class="buff-cls" style="color:${q.color}">${q.label}</div>` : '';
     return `<div class="buff-card" onmouseenter="ttShowArt(${idxOf(art)},event)" onmousemove="ttMove(event)" onmouseleave="ttHide()">
       ${icoHtml(art.img, art.quality)}
-      <div class="buff-text"><div class="buff-name">${art.name}</div>${qLabel}</div>
+      <div class="buff-text"><div class="buff-name">${art.name}</div></div>
     </div>`;
   }
 
