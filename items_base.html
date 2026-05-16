@@ -411,7 +411,7 @@ function render(view) {
   const c = document.getElementById('content');
   if (view === 'equipment')     renderEquipment(c);
   else if (view === 'runes')      renderRunes(c);
-  else if (view === 'jewelry')    renderSoon(c, 'Бижутерия');
+  else if (view === 'jewelry')    renderJewelry(c);
   else if (view === 'artifacts')  renderArtifacts(c);
   else if (view === 'buffs_class') renderBuffsClass(c);
   else if (view === 'pets_fair')   renderSoon(c, 'Ярмарочные питомцы');
@@ -548,6 +548,38 @@ function renderArtifacts(c) {
   c.innerHTML = html;
 }
 
+function renderJewelry(c) {
+  const rings = ARTIFACTS.filter(a => a.slotId === 'ring');
+  const idxOf = a => ARTIFACTS.indexOf(a);
+
+  function ringCard(art) {
+    const q = QUALITIES.find(q => q.id === art.quality);
+    const qLabel = q ? `<div class="buff-cls" style="color:${q.color}">${q.label}</div>` : '';
+    return `<div class="buff-card" onmouseenter="ttShowArt(${idxOf(art)},event)" onmousemove="ttMove(event)" onmouseleave="ttHide()">
+      ${icoHtml(art.img, art.quality)}
+      <div class="buff-text"><div class="buff-name">${art.name}</div>${qLabel}</div>
+    </div>`;
+  }
+
+  const GROUP_ORDER = ['Кольцо сквайра','Кольцо рыцаря','Кольцо лорда','Кольцо барона'];
+  const unique  = sortByQuality(rings.filter(a => !a.group));
+  let html = `<div class="c-title">Бижутерия</div>`;
+
+  if (unique.length) {
+    html += `<div class="art-section-divider">Кольца Фалькона</div>
+             <div class="buff-grid">${unique.map(ringCard).join('')}</div>`;
+  }
+  for (const g of GROUP_ORDER) {
+    const items = sortByQuality(rings.filter(a => a.group === g));
+    if (items.length) {
+      html += `<div class="art-section-divider">${g}</div>
+               <div class="buff-grid">${items.map(ringCard).join('')}</div>`;
+    }
+  }
+
+  c.innerHTML = html;
+}
+
 function renderSoon(c, title) {
   c.innerHTML = `
     <div class="c-title">${title}</div>
@@ -595,10 +627,14 @@ function ttShowWF(e) {
 function ttShowArt(idx, e) {
   const art = ARTIFACTS[idx];
   let html = `<div class="tt-name">${art.name}</div>`;
-  html += STAT_LABELS
-    .filter(s => art.stats[s.key] != null)
-    .map(s => `<div class="tt-row"><span class="tt-key">${s.label}</span><span class="tt-val">+${art.stats[s.key]}${s.pct?'%':''}</span></div>`)
-    .join('');
+  if (art.stats) {
+    html += STAT_LABELS
+      .filter(s => art.stats[s.key] != null)
+      .map(s => `<div class="tt-row"><span class="tt-key">${s.label}</span><span class="tt-val">+${art.stats[s.key]}${s.pct?'%':''}</span></div>`)
+      .join('');
+  } else {
+    html += `<div class="tt-empty">Данные не добавлены</div>`;
+  }
   _tt.innerHTML = html;
   _tt.classList.add('vis');
   ttMove(e);
