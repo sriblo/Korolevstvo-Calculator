@@ -253,6 +253,54 @@ a{color:inherit;text-decoration:none}
   font-family:var(--serif);font-style:italic;font-size:15px;color:var(--txt3);
 }
 
+/* ── RUNE INDICATOR DOT ── */
+.slot-sq.has-rune::after,
+.slot-sq-cell.has-rune::after {
+  content:'';position:absolute;top:2px;right:2px;
+  width:6px;height:6px;border-radius:50%;
+  background:#7ab8ff;
+  box-shadow:0 0 6px rgba(122,184,255,.7),0 0 2px #fff inset;
+  z-index:5;pointer-events:none;
+}
+
+/* ── PICKER ACTIONS ── */
+.picker-actions{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.picker-actions:empty{display:none}
+.picker-actions button{
+  flex:1;min-width:120px;
+  background:var(--bg2);border:1px solid var(--line2);border-radius:6px;
+  padding:8px 12px;font-size:11px;color:var(--txt);
+  font-family:var(--sans);font-weight:500;cursor:pointer;
+  letter-spacing:.04em;transition:.12s;text-align:center;
+}
+.picker-actions button:hover{background:var(--bg4)}
+.picker-actions button.primary{color:var(--gold-l);background:rgba(var(--gold-tint),.06);border-color:rgba(var(--gold-tint),.3)}
+.picker-actions button.primary:hover{background:rgba(var(--gold-tint),.12)}
+.picker-actions button.danger{color:#e8a890;border-color:rgba(217,119,87,.28)}
+.picker-actions button.danger:hover{background:rgba(217,119,87,.08)}
+.picker-actions button.ghost{color:var(--txt3);border-color:var(--line)}
+.picker-actions button.ghost:hover{color:var(--txt2)}
+
+/* ── PICKER RUNE INFO STRIP ── */
+.picker-rune-info{
+  display:none;margin-top:10px;padding:9px 12px;
+  background:var(--bg2);border:1px solid var(--line);border-radius:7px;
+  align-items:center;gap:10px;
+}
+.picker-rune-info.on{display:flex}
+.picker-rune-info img{width:28px;height:28px;border-radius:4px;border:1px solid rgba(122,184,255,.3);flex-shrink:0}
+.picker-rune-lbl{font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:#7ab8ff;font-weight:700;margin-bottom:2px}
+.picker-rune-name{font-family:var(--serif);font-size:12px;font-style:italic;color:var(--gold-l)}
+
+/* ── PICKER MODE LABEL ── */
+.picker-mode-label{font-size:10px;color:var(--txt3);text-transform:uppercase;letter-spacing:.1em;font-weight:600;margin-bottom:6px;min-height:14px}
+
+/* ── TOOLTIP RUNE SECTION ── */
+.tt-rune{display:flex;gap:9px;align-items:flex-start;margin-top:9px;padding-top:9px;border-top:1px dashed var(--line)}
+.tt-rune img{width:28px;height:28px;border-radius:4px;border:1px solid rgba(122,184,255,.3);flex-shrink:0}
+.tt-rune-lbl{font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:#7ab8ff;font-weight:700;margin-bottom:2px}
+.tt-rune-name{font-family:var(--serif);font-size:12px;font-style:italic;color:var(--gold-l)}
+
 /* ── MOBILE ── */
 @media(max-width:1000px){.calc-layout{grid-template-columns:1fr}}
 @media(max-width:600px){.page{padding:20px 16px 60px}.top{padding:0 14px}.nav{display:none}}
@@ -323,8 +371,16 @@ a{color:inherit;text-decoration:none}
 
         <!-- Пикер -->
         <div class="picker-panel" id="pickerPanel-c1">
-          <div class="picker-btns"  id="pickerBtns-c1"></div>
-          <button class="picker-unequip" onclick="unequipActiveSlot('c1')">— Снять</button>
+          <div class="picker-mode-label" id="pickerModeLabel-c1"></div>
+          <div class="picker-btns" id="pickerBtns-c1"></div>
+          <div class="picker-rune-info" id="pickerRuneInfo-c1">
+            <img id="pickerRuneImg-c1" src="" alt="">
+            <div>
+              <div class="picker-rune-lbl">РУНА</div>
+              <div class="picker-rune-name" id="pickerRuneName-c1"></div>
+            </div>
+          </div>
+          <div class="picker-actions" id="pickerActions-c1"></div>
         </div>
 
         <!-- Баффы -->
@@ -415,8 +471,8 @@ const CLASS_BUFFS = [
 // ── STATE ─────────────────────────────────────────────────────────────────────
 
 const state = {
-  c1: { cls:'paladin', activeSlot:null, equipped:{}, buffs:new Set() },
-  c2: { cls:'paladin', activeSlot:null, equipped:{}, buffs:new Set() },
+  c1: { cls:'paladin', activeSlot:null, equipped:{}, buffs:new Set(), pickerMode:'item' },
+  c2: { cls:'paladin', activeSlot:null, equipped:{}, buffs:new Set(), pickerMode:'item' },
 };
 
 // ── TOOLTIP ───────────────────────────────────────────────────────────────────
@@ -440,6 +496,15 @@ function showTt(e, cid, slot) {
       });
     } else {
       html += `<div class="tt-empty">нет данных</div>`;
+    }
+    if (eq.rune) {
+      html += `<div class="tt-rune">
+        ${eq.rune.img ? `<img src="${eq.rune.img}" alt="">` : ''}
+        <div>
+          <div class="tt-rune-lbl">РУНА</div>
+          <div class="tt-rune-name">${eq.rune.name}</div>
+        </div>
+      </div>`;
     }
   } else {
     html += `<div class="tt-empty">пусто</div>`;
@@ -566,7 +631,7 @@ function renderSlotCol(cid, slots, containerId) {
   document.getElementById(containerId).innerHTML = slots.map(slot => {
     const eq = s.equipped[slot.id];
     const isActive = s.activeSlot === slot.id;
-    const cls = ['slot-sq', isActive ? 'active' : '', eq ? 'equipped' : ''].filter(Boolean).join(' ');
+    const cls = ['slot-sq', isActive ? 'active' : '', eq ? 'equipped' : '', eq?.rune ? 'has-rune' : ''].filter(Boolean).join(' ');
     return `<div class="${cls}"
       onclick="openPicker('${cid}','${slot.id}')"
       onmouseenter="showTt(event,'${cid}',${JSON.stringify(slot).replace(/"/g,'&quot;')})"
@@ -580,7 +645,7 @@ function renderSlotRow(cid, rowSlots, containerId) {
   document.getElementById(containerId).innerHTML = rowSlots.map(slot => {
     const eq = s.equipped[slot.id];
     const isActive = s.activeSlot === slot.id;
-    const cls = ['slot-sq-cell', isActive ? 'active' : '', eq ? 'equipped' : ''].filter(Boolean).join(' ');
+    const cls = ['slot-sq-cell', isActive ? 'active' : '', eq ? 'equipped' : '', eq?.rune ? 'has-rune' : ''].filter(Boolean).join(' ');
     return `<div class="${cls}"
       onclick="openPicker('${cid}','${slot.id}')"
       onmouseenter="showTt(event,'${cid}',${JSON.stringify(slot).replace(/"/g,'&quot;')})"
@@ -611,29 +676,88 @@ function getPickerItems(cls, slotId) {
 }
 
 function renderPicker(cid) {
-  const s = state[cid];
-  const panel = document.getElementById(`pickerPanel-${cid}`);
-  const btns  = document.getElementById(`pickerBtns-${cid}`);
+  const s          = state[cid];
+  const panel      = document.getElementById(`pickerPanel-${cid}`);
+  const btns       = document.getElementById(`pickerBtns-${cid}`);
+  const runeInfo   = document.getElementById(`pickerRuneInfo-${cid}`);
+  const runeImg    = document.getElementById(`pickerRuneImg-${cid}`);
+  const runeNameEl = document.getElementById(`pickerRuneName-${cid}`);
+  const actions    = document.getElementById(`pickerActions-${cid}`);
+  const modeLabel  = document.getElementById(`pickerModeLabel-${cid}`);
+
   if (!s.activeSlot) { panel.classList.remove('open'); return; }
 
-  const items = getPickerItems(s.cls, s.activeSlot);
-  _pickerCache[cid] = items;
   const eqItem = s.equipped[s.activeSlot];
 
-  btns.innerHTML = items.map((item, idx) => {
+  function itemBtn(item, idx, onclickFn, tooltipFn) {
     const frameSrc = QUALITY_FRAME[item.quality] || '';
     const qColor   = QUALITIES.find(q => q.id === item.quality)?.color || '#888';
     const isOn = eqItem && eqItem.name === item.name && eqItem.quality === item.quality;
     return `<div class="picker-item${isOn ? ' on' : ''}"
-      onclick="equipItem('${cid}','${s.activeSlot}',${idx})"
-      onmouseenter="showPickerTt(event,'${cid}',${idx})"
-      onmousemove="moveTt(event)"
-      onmouseleave="hideTt()">
+      onclick="${onclickFn}('${cid}','${s.activeSlot}',${idx})"
+      onmouseenter="${tooltipFn}(event,'${cid}',${idx})"
+      onmousemove="moveTt(event)" onmouseleave="hideTt()">
       ${item.img ? `<img src="${item.img}" style="position:absolute;inset:0;width:32px;height:32px;object-fit:none;z-index:1" onerror="this.style.display='none'">` : ''}
       ${frameSrc ? `<img src="${frameSrc}" style="position:absolute;inset:0;width:32px;height:32px;pointer-events:none;z-index:2" onerror="this.style.display='none'">` : ''}
       <div style="position:absolute;bottom:0;left:0;right:0;height:2px;background:${qColor};z-index:3;opacity:.8"></div>
     </div>`;
-  }).join('');
+  }
+
+  if (s.pickerMode === 'rune') {
+    // ── РЕЖИМ ВЫБОРА РУНЫ ──
+    modeLabel.textContent = 'Выберите руну';
+    const compatRunes = RUNES.filter(r => r.slotId === s.activeSlot);
+    _pickerCache[cid] = compatRunes;
+    if (compatRunes.length > 0) {
+      btns.innerHTML = compatRunes.map((rune, idx) => {
+        const frameSrc = QUALITY_FRAME[rune.quality] || '';
+        const qColor   = QUALITIES.find(q => q.id === rune.quality)?.color || '#888';
+        const isOn = eqItem?.rune?.name === rune.name;
+        return `<div class="picker-item${isOn ? ' on' : ''}"
+          onclick="insertRune('${cid}','${s.activeSlot}',${idx})"
+          onmouseenter="showRunePickerTt(event,'${cid}',${idx})"
+          onmousemove="moveTt(event)" onmouseleave="hideTt()">
+          ${rune.img ? `<img src="${rune.img}" style="position:absolute;inset:0;width:32px;height:32px;object-fit:none;z-index:1" onerror="this.style.display='none'">` : ''}
+          ${frameSrc ? `<img src="${frameSrc}" style="position:absolute;inset:0;width:32px;height:32px;pointer-events:none;z-index:2" onerror="this.style.display='none'">` : ''}
+          <div style="position:absolute;bottom:0;left:0;right:0;height:2px;background:${qColor};z-index:3;opacity:.8"></div>
+        </div>`;
+      }).join('');
+    } else {
+      btns.innerHTML = `<div style="font-size:11px;color:var(--txt3);font-style:italic;padding:4px 0">Нет доступных рун для этого слота</div>`;
+    }
+    runeInfo.classList.remove('on');
+    actions.innerHTML = `<button class="ghost" onclick="setPickerMode('${cid}','item')">← Назад</button>`;
+
+  } else {
+    // ── РЕЖИМ ВЫБОРА ПРЕДМЕТА ──
+    modeLabel.textContent = '';
+    const items = getPickerItems(s.cls, s.activeSlot);
+    _pickerCache[cid] = items;
+    btns.innerHTML = items.map((item, idx) => itemBtn(item, idx, 'equipItem', 'showPickerTt')).join('');
+
+    // Полоска с руной (если вставлена)
+    if (eqItem?.rune) {
+      runeInfo.classList.add('on');
+      runeImg.src = eqItem.rune.img || '';
+      runeNameEl.textContent = eqItem.rune.name;
+    } else {
+      runeInfo.classList.remove('on');
+    }
+
+    // Кнопки действий (только если предмет надет)
+    if (eqItem) {
+      let actHtml = '';
+      if (!eqItem.rune) {
+        actHtml += `<button class="primary" onclick="setPickerMode('${cid}','rune')">Вставить руну в этот предмет</button>`;
+      } else {
+        actHtml += `<button class="ghost" onclick="removeRune('${cid}')">Достать руну</button>`;
+      }
+      actHtml += `<button class="danger" onclick="unequipActiveSlot('${cid}')">Снять предмет</button>`;
+      actions.innerHTML = actHtml;
+    } else {
+      actions.innerHTML = '';
+    }
+  }
 
   panel.classList.add('open');
 }
@@ -659,8 +783,12 @@ function equipItem(cid, slotId, idx) {
   const s = state[cid];
   const item = (_pickerCache[cid] || [])[idx];
   if (!item) return;
-  s.equipped[slotId] = { name: item.name, quality: item.quality, img: item.img, stats: item.stats };
-  s.activeSlot = null;
+  // Сохраняем руну если это тот же предмет, иначе сбрасываем
+  const prevEq = s.equipped[slotId];
+  const rune = (prevEq?.name === item.name && prevEq?.quality === item.quality) ? prevEq.rune : undefined;
+  s.equipped[slotId] = { name: item.name, quality: item.quality, img: item.img, stats: item.stats, rune };
+  // Пикер остаётся открытым — показываем кнопки действий
+  s.pickerMode = 'item';
   renderAll(cid);
 }
 
@@ -685,9 +813,14 @@ function renderStats(cid) {
 
   let hasAny = false;
   Object.values(s.equipped).forEach(eq => {
-    if (!eq?.stats) return;
-    hasAny = true;
-    Object.entries(eq.stats).forEach(([k,v]) => { totals[k] = (totals[k]||0)+v; });
+    if (!eq) return;
+    if (eq.stats) {
+      hasAny = true;
+      Object.entries(eq.stats).forEach(([k,v]) => { totals[k] = (totals[k]||0)+v; });
+    }
+    if (eq.rune?.stats) {
+      Object.entries(eq.rune.stats).forEach(([k,v]) => { totals[k] = (totals[k]||0)+v; });
+    }
   });
   if (!hasAny && !Object.keys(base).length) {
     hint.textContent = 'выберите предметы';
@@ -743,7 +876,12 @@ function selectClass(cid, cls) {
 
 function openPicker(cid, slotId) {
   const s = state[cid];
-  s.activeSlot = s.activeSlot===slotId ? null : slotId;
+  if (s.activeSlot === slotId) {
+    s.activeSlot = null;
+  } else {
+    s.activeSlot = slotId;
+    s.pickerMode = 'item'; // сброс режима при открытии нового слота
+  }
   renderSlotCol(cid, COL_LEFT,  `colLeft-${cid}`);
   renderSlotCol(cid, COL_RIGHT, `colRight-${cid}`);
   renderSlotRow(cid, ROW_TOP,   `slotRowTop-${cid}`);
@@ -774,6 +912,45 @@ function unequipActiveSlot(cid) {
   renderSlotRow(cid, ROW_BOT,   `slotRowBot-${cid}`);
   renderPicker(cid);
   renderStats(cid);
+}
+
+function setPickerMode(cid, mode) {
+  state[cid].pickerMode = mode;
+  renderPicker(cid);
+}
+
+function insertRune(cid, slotId, idx) {
+  const s = state[cid];
+  const rune = (_pickerCache[cid] || [])[idx];
+  if (!rune || !s.equipped[slotId]) return;
+  s.equipped[slotId].rune = { name: rune.name, img: rune.img, stats: rune.stats || null };
+  s.pickerMode = 'item';
+  renderAll(cid);
+}
+
+function removeRune(cid) {
+  const s = state[cid];
+  if (!s.activeSlot || !s.equipped[s.activeSlot]) return;
+  delete s.equipped[s.activeSlot].rune;
+  renderAll(cid);
+}
+
+function showRunePickerTt(e, cid, idx) {
+  const rune = (_pickerCache[cid] || [])[idx];
+  if (!rune) return;
+  const q = QUALITIES.find(q => q.id === rune.quality);
+  let html = `<div class="tt-name">${rune.name}</div>`;
+  if (q) html += `<div class="tt-quality" style="color:${q.color}">${q.label}</div>`;
+  html += `<div class="tt-empty">${rune.slot}</div>`;
+  if (rune.stats) {
+    Object.entries(rune.stats).forEach(([k, v]) => {
+      const meta = STAT_LABELS.find(m => m.key === k);
+      if (meta) html += `<div class="tt-stat"><span class="tt-stat-k">${meta.label}</span><span class="tt-stat-v">+${meta.pct ? v+'%' : v}</span></div>`;
+    });
+  }
+  ttEl.innerHTML = html;
+  ttEl.style.display = 'block';
+  moveTt(e);
 }
 
 function toggleBuff(cid, i) {
