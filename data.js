@@ -112,6 +112,7 @@ const STAT_LABELS = [
   { key:'crit_def',          label:'Защита от крит. удара',         pct:true },
   { key:'hp_pct',            label:'Запас здоровья',                pct:true },
   { key:'dmg_out',           label:'Исходящий урон',                pct:true },
+  { key:'dmg_taken_red',     label:'Снижение входящего урона',      pct:true, combat:false },
   { key:'exp_gain',          label:'Получение опыта',                pct:true, combat:false },
   { key:'rep_guard',         label:'Репутация Королевской Гвардии', pct:true, combat:false },
   { key:'rep_gladiator',     label:'Репутация Гладиатора',          pct:true, combat:false },
@@ -262,8 +263,8 @@ const EVENT_BUFFS = [
   { group:'Кубок с Ледяных островов', name:'Кубок с Ледяных островов', quality:'red',    img:'stats_calculator/buffs/event_buff/expedition_ice_boul.png' },
   { group:'Кубок с Ледяных островов', name:'Кубок с Ледяных островов', quality:'orange', img:'stats_calculator/buffs/event_buff/expedition_ice_boul.png' },
   { group:'Свиток редких драконьих техник', name:'Свиток редких драконьих техник', quality:'blue',   img:'stats_calculator/buffs/event_buff/big_scroll_fire.png', note:'Усиливает баф питомца. Отдельно не применяется.' },
-  { group:'Свиток редких драконьих техник', name:'Свиток редких драконьих техник', quality:'purple', img:'stats_calculator/buffs/event_buff/big_scroll_fire.png', note:'Усиливает баф питомца. Отдельно не применяется.', stats:{ hp_pct:23, dmg_out:28, speed_in:5 } },
-  { group:'Свиток редких драконьих техник', name:'Свиток редких драконьих техник', quality:'red',    img:'stats_calculator/buffs/event_buff/big_scroll_fire.png', note:'Усиливает баф питомца. Отдельно не применяется.', stats:{ hp_pct:25, dmg_out:32, speed_in:5 } },
-  { group:'Свиток редких драконьих техник', name:'Свиток редких драконьих техник', quality:'orange', img:'stats_calculator/buffs/event_buff/big_scroll_fire.png', note:'Усиливает баф питомца. Отдельно не применяется.', stats:{ hp_pct:25, dmg_out:36, speed_in:5 } },
+  { group:'Свиток редких драконьих техник', name:'Свиток редких драконьих техник', quality:'purple', img:'stats_calculator/buffs/event_buff/big_scroll_fire.png', note:'Усиливает баф питомца. Отдельно не применяется.', stats:{ hp_pct:23, dmg_out:28, dmg_taken_red:20, speed_in:5 } },
+  { group:'Свиток редких драконьих техник', name:'Свиток редких драконьих техник', quality:'red',    img:'stats_calculator/buffs/event_buff/big_scroll_fire.png', note:'Усиливает баф питомца. Отдельно не применяется.', stats:{ hp_pct:25, dmg_out:32, dmg_taken_red:22, speed_in:5 } },
+  { group:'Свиток редких драконьих техник', name:'Свиток редких драконьих техник', quality:'orange', img:'stats_calculator/buffs/event_buff/big_scroll_fire.png', note:'Усиливает баф питомца. Отдельно не применяется.', stats:{ hp_pct:25, dmg_out:36, dmg_taken_red:24, speed_in:5 } },
 ];
 
