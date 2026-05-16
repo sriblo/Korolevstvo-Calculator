@@ -988,18 +988,23 @@ function showTt(e, cid, slot) {
         <div class="tt-name" style="color:${q ? q.color : 'var(--txt)'}">${eq.name}</div>
       </div></div>`;
     const itemStats = eq.stats || {};
-    const keys = Object.keys(itemStats);
-    if (keys.length === 0) {
+    const runeStats = (eq.rune && eq.rune.stats) || {};
+    const allKeys = Array.from(new Set([...Object.keys(itemStats), ...Object.keys(runeStats)]));
+    if (allKeys.length === 0) {
       html += `<div class="tt-empty">нет данных стат</div>`;
     } else {
-      keys.forEach(k => {
+      allKeys.forEach(function(k) {
         const meta = STAT_LABELS.find(m => m.key === k);
         if (!meta) return;
-        const v = itemStats[k];
-        const fmt = v => meta.pct
+        const fmt = function(v) { return meta.pct
           ? `${v > 0 ? '+' : ''}${Number(v).toFixed(2).replace(/\.00$/,'')}%`
-          : (Number.isInteger(v) ? String(v) : Number(v).toFixed(2));
-        html += `<div class="tt-stat"><span class="tt-stat-k">${meta.label}</span><span class="tt-stat-v">${fmt(v)}</span></div>`;
+          : (Number.isInteger(v) ? String(v) : Number(v).toFixed(2)); };
+        const itemVal = itemStats[k];
+        const runeVal = runeStats[k];
+        let valHtml = '';
+        if (itemVal !== undefined) valHtml += `<span>${fmt(itemVal)}</span>`;
+        if (runeVal !== undefined) valHtml += `<span style="color:#7ab8ff;margin-left:3px">${runeVal > 0 ? '+' : ''}${fmt(runeVal)}</span>`;
+        html += `<div class="tt-stat"><span class="tt-stat-k">${meta.label}</span><span class="tt-stat-v">${valHtml}</span></div>`;
       });
     }
     if (eq && eq.rune) {
