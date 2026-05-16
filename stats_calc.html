@@ -525,25 +525,6 @@
   .ftr-r a:hover{color:var(--gold-l)}
 
   /* ── Tone picker ── */
-  .tone{
-    position:fixed;bottom:18px;right:18px;z-index:80;
-    background:rgba(11,9,7,.92);backdrop-filter:blur(20px);
-    border:1px solid var(--line2);border-radius:10px;padding:8px;
-    display:flex;align-items:center;gap:4px;
-    box-shadow:0 12px 40px rgba(0,0,0,.6);
-  }
-  .tone-l{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--txt3);font-weight:700;padding:0 6px 0 4px}
-  .tone-btn{
-    width:26px;height:26px;border:1px solid var(--line);border-radius:6px;cursor:pointer;
-    background:none;padding:0;transition:.12s;
-    display:flex;align-items:center;justify-content:center;
-  }
-  .tone-btn:hover{transform:translateY(-1px)}
-  .tone-btn.on{border-color:var(--gold);box-shadow:0 0 0 2px rgba(var(--gold-tint),.2)}
-  .tone-btn .swatch{width:14px;height:14px;border-radius:50%;display:block}
-  .tone-btn[data-t="amber"] .swatch{background:linear-gradient(135deg,#f5d878,#a07d2b)}
-  .tone-btn[data-t="brass"] .swatch{background:linear-gradient(135deg,#e8d670,#8c7d28)}
-  .tone-btn[data-t="sand"]  .swatch{background:linear-gradient(135deg,#e0c89c,#8a7858)}
 
   /* ── Rune picker ── */
   .picker-section-title{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--txt3);padding:8px 0 4px;font-weight:600}
@@ -614,10 +595,10 @@
             </div>
             <div class="cls-dd-menu" id="clsDdMenu-c1"></div>
           </div>
-          <span class="cls-label">Пол</span>
+          <div class="chip-sep"></div>
           <button class="sex-chip on" data-sex="Male" title="Мужской пол"></button>
           <button class="sex-chip" data-sex="Female" title="Женский пол"></button>
-          <span class="cls-label">Раса</span>
+          <div class="chip-sep"></div>
           <button class="race-chip on" data-race="Elf" title="Эльф"></button>
           <button class="race-chip" data-race="Human" title="Человек"></button>
           <button class="champ-chip" id="champBtn-c1" onclick="toggleChampion('c1')" title="Чемпион расы">
@@ -712,10 +693,10 @@
             </div>
             <div class="cls-dd-menu" id="clsDdMenu-c2"></div>
           </div>
-          <span class="cls-label">Пол</span>
+          <div class="chip-sep"></div>
           <button class="sex-chip on" data-sex="Male" title="Мужской пол"></button>
           <button class="sex-chip" data-sex="Female" title="Женский пол"></button>
-          <span class="cls-label">Раса</span>
+          <div class="chip-sep"></div>
           <button class="race-chip on" data-race="Elf" title="Эльф"></button>
           <button class="race-chip" data-race="Human" title="Человек"></button>
           <button class="champ-chip" id="champBtn-c2" onclick="toggleChampion('c2')" title="Чемпион расы">
@@ -785,12 +766,6 @@
   </div>
 </footer>
 
-<div class="tone">
-  <span class="tone-l">Оттенок</span>
-  <button class="tone-btn on" data-t="amber" title="Тёплое янтарное"><span class="swatch"></span></button>
-  <button class="tone-btn"    data-t="brass" title="Холодное латунное"><span class="swatch"></span></button>
-  <button class="tone-btn"    data-t="sand"  title="Бледный песочный"><span class="swatch"></span></button>
-</div>
 
 <script src="data.js"></script>
 <script>
@@ -1715,20 +1690,6 @@ document.querySelectorAll('[id^="ctrls-"]').forEach(function(box) {
   });
 });
 
-// Tone picker
-const savedTone = (typeof localStorage !== 'undefined' && localStorage.getItem('kor-tone')) || 'amber';
-applyTone(savedTone);
-document.querySelectorAll('.tone-btn').forEach(function(btn) {
-  btn.addEventListener('click', function() {
-    const t = btn.dataset.t;
-    applyTone(t);
-    if (typeof localStorage !== 'undefined') localStorage.setItem('kor-tone', t);
-  });
-});
-function applyTone(t) {
-  document.documentElement.dataset.tone = t === 'amber' ? '' : t;
-  document.querySelectorAll('.tone-btn').forEach(function(b) { b.classList.toggle('on', b.dataset.t === t); });
-}
 
 
 // ── INIT ──────────────────────────────────────────────────────────────────────
