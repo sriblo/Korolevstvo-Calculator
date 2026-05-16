@@ -606,8 +606,8 @@ function renderJewelry(c) {
     const i2 = sortByQuality(ARTIFACTS.filter(a => a.slotId === 'ring' && a.group === g2 && !a.event));
     if (!i1.length && !i2.length) return '';
     return `<div class="ring-quad-grid">
-      <div class="ring-quad-header" style="grid-column:1/3">${g1}</div>
-      <div class="ring-quad-header" style="grid-column:3/5">${g2}</div>
+      <div class="art-section-divider" style="grid-column:1/3">${g1}</div>
+      <div class="art-section-divider" style="grid-column:3/5">${g2}</div>
       ${i1.map(jewCard).join('')}${i2.map(jewCard).join('')}
     </div>`;
   }
