@@ -178,4 +178,7 @@ const ARTIFACTS = [
   { slotId:'ring', group:'Кольцо лорда',    name:'Усиленное кольцо лорда',   quality:'red',    img:'stats_calculator/bizha/cleric_ring_12.png' },
   { slotId:'ring', group:'Кольцо барона',   name:'Кольцо барона',            quality:'orange', img:'stats_calculator/bizha/ring_blood_moon_10.png' },
   { slotId:'ring', group:'Кольцо барона',   name:'Усиленное кольцо барона',  quality:'orange', img:'stats_calculator/bizha/ring_blood_moon_10.png' },
+  { slotId:'ring', name:'Кольцо милосердия Фалькона', quality:'purple', img:'stats_calculator/bizha/fair_defense_ring.png' },
+  { slotId:'ring', name:'Кольцо лезвий Фалькона',     quality:'purple', img:'stats_calculator/bizha/fair_attack_ring.png' },
+  { slotId:'ring', name:'Кольцо власти Фалькона',     quality:'red',    img:'stats_calculator/bizha/big_fucking_ring.png' },
 ];
