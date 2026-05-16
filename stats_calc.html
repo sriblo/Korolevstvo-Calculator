@@ -409,21 +409,6 @@
   .picker-item:hover{opacity:.8}
   .picker-item.on{opacity:1}
   .picker-item img{image-rendering:pixelated}
-  .picker-rune-info{
-    display:none;margin-top:10px;padding:9px 12px;
-    background:var(--bg2);border:1px solid var(--line);border-radius:7px;
-    align-items:center;gap:10px;
-  }
-  .picker-rune-info.on{display:flex}
-  .picker-rune-info img{width:26px;height:26px;object-fit:contain;flex-shrink:0;image-rendering:pixelated}
-  .picker-rune-info .rune-lbl{
-    font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold-d);font-weight:600;
-  }
-  .picker-rune-info .rune-name{
-    font-family:var(--serif);font-size:13px;color:var(--gold-l);
-    font-style:italic;letter-spacing:-.005em;line-height:1.2;
-  }
-  .picker-rune-info .rune-text{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
   .picker-actions{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;}
   .picker-actions:empty{display:none}
   .picker-actions button{
@@ -442,14 +427,6 @@
   .picker-actions button.danger:hover{background:rgba(217,119,87,.08);border-color:rgba(217,119,87,.55);color:var(--red)}
   .picker-actions button.ghost{color:var(--txt3);border-color:var(--line)}
   .picker-actions button.ghost:hover{color:var(--txt2);border-color:var(--line2)}
-
-  /* slot rune indicator */
-  .slot-sq.has-rune::after,.slot-sq-cell.has-rune::after{
-    content:'';position:absolute;top:2px;right:2px;
-    width:6px;height:6px;border-radius:50%;
-    background:#7ab8ff;box-shadow:0 0 6px rgba(122,184,255,.7), 0 0 2px #fff inset;
-    z-index:5;pointer-events:none;
-  }
 
   /* ── Buffs ── */
   .buffs-h-row{
@@ -539,17 +516,7 @@
   .tt-stat{display:flex;justify-content:space-between;gap:14px;font-size:11px;padding:2px 0}
   .tt-stat-k{color:var(--txt3)}
   .tt-stat-v{color:var(--gold-l);font-feature-settings:'tnum';font-weight:500}
-  .tt-rune-add{color:#7ab8ff;font-size:11px;font-weight:500;margin-left:1px}
   .tt-empty{font-size:11px;color:var(--txt3);font-style:italic;font-family:var(--serif)}
-  .tt-rune{display:flex;gap:9px;align-items:flex-start;margin-top:9px;padding-top:9px;border-top:1px dashed var(--line);}
-  .tt-rune img{
-    width:28px;height:28px;flex-shrink:0;
-    background:var(--bg2);border:1px solid rgba(122,184,255,.3);border-radius:5px;
-    object-fit:contain;image-rendering:pixelated;padding:2px;
-  }
-  .tt-rune-body{flex:1;min-width:0}
-  .tt-rune-lbl{font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:#7ab8ff;font-weight:700;margin-bottom:2px}
-  .tt-rune-name{font-family:var(--serif);font-size:12px;font-style:italic;color:var(--gold-l);line-height:1.2;margin-bottom:3px}
 
   /* ── Footer ── */
   .ftr{
@@ -583,6 +550,14 @@
   .tone-btn[data-t="amber"] .swatch{background:linear-gradient(135deg,#f5d878,#a07d2b)}
   .tone-btn[data-t="brass"] .swatch{background:linear-gradient(135deg,#e8d670,#8c7d28)}
   .tone-btn[data-t="sand"]  .swatch{background:linear-gradient(135deg,#e0c89c,#8a7858)}
+
+  /* ── Rune picker ── */
+  .picker-section-title{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--txt3);padding:8px 0 4px;font-weight:600}
+  .slot-sq.has-rune::after,.slot-sq-cell.has-rune::after{
+    content:'';position:absolute;bottom:2px;right:2px;
+    width:6px;height:6px;border-radius:50%;
+    background:var(--gold);opacity:.8;
+  }
 </style>
 </head>
 <body>
@@ -616,7 +591,7 @@
     <span>Калькулятор характеристик</span>
   </div>
   <h1 class="h1">Калькулятор <em>характеристик</em></h1>
-  <p class="lede">Соберите двух героев бок-о-бок — разные сеты, разные руны, разные баффы. Центральная таблица в реальном времени показывает разницу по каждой характеристике.</p>
+  <p class="lede">Соберите двух героев бок-о-бок — разные сеты, разные баффы. Центральная таблица в реальном времени показывает разницу по каждой характеристике.</p>
 </section>
 
 <div class="calc-page">
@@ -691,7 +666,6 @@
             <div class="picker-title" id="pickerTitle-c1">Предметы</div>
           </div>
           <div class="picker-btns" id="pickerBtns-c1"></div>
-          <div class="picker-rune-info" id="pickerRuneInfo-c1"></div>
           <div class="picker-actions" id="pickerActions-c1"></div>
         </div>
 
@@ -790,7 +764,6 @@
             <div class="picker-title" id="pickerTitle-c2">Предметы</div>
           </div>
           <div class="picker-btns" id="pickerBtns-c2"></div>
-          <div class="picker-rune-info" id="pickerRuneInfo-c2"></div>
           <div class="picker-actions" id="pickerActions-c2"></div>
         </div>
 
@@ -867,86 +840,13 @@ const ROW_BOT = [
 const ALL_SLOTS = [...COL_LEFT, ...COL_RIGHT, ...ROW_TOP, ...ROW_BOT];
 
 // ── BUFFS ─────────────────────────────────────────────────────────────────────
-const BUFFS = [
-  { id:'cls_archer_eye',   cat:'class', name:'Зоркий глаз',     sub:'Лучник',    effect:'atk_eff',       value:15, pct:true },
-  { id:'cls_mage_storm',   cat:'class', name:'Ураган',           sub:'Маг',       effect:'atk_eff',       value:15, pct:true },
-  { id:'cls_monk_bless',   cat:'class', name:'Благословение',    sub:'Монах',     effect:'hp',            value:8,  pct:true },
-  { id:'cls_pala_holy',    cat:'class', name:'Святое слово',     sub:'Паладин',   effect:'hp',            value:8,  pct:true },
-  { id:'cls_warr_shield',  cat:'class', name:'Пылающий щит',     sub:'Воин',      effect:'dmg_taken_red', value:8 },
-  { id:'cls_rogue_shadow', cat:'class', name:'Дар теней',        sub:'Головорез', effect:'dmg_taken_red', value:8 },
-  { id:'pet_griffin_atk',  cat:'pet',   name:'Грифон',           sub:'атака',     effect:'atk',           value:50 },
-  { id:'pet_phoenix_hp',   cat:'pet',   name:'Феникс',           sub:'здоровье',  effect:'hp',            value:500 },
-  { id:'pet_bear_def',     cat:'pet',   name:'Медведь',          sub:'защита',    effect:'def',           value:30 },
-  { id:'pet_owl_crit',     cat:'pet',   name:'Сова',             sub:'крит',      effect:'crit_chance',   value:2, pct:true },
-  { id:'pet_wolf_speed',   cat:'pet',   name:'Волк',             sub:'скорость',  effect:'speed',         value:3, pct:true },
-  { id:'elx_atk_1',        cat:'elixir', name:'Эликсир атаки',   sub:'малый',     effect:'atk',           value:10 },
-  { id:'elx_atk_2',        cat:'elixir', name:'Эликсир атаки',   sub:'большой',   effect:'atk',           value:25 },
-  { id:'elx_def_1',        cat:'elixir', name:'Эликсир защиты',  sub:'малый',     effect:'def',           value:10 },
-  { id:'elx_def_2',        cat:'elixir', name:'Эликсир защиты',  sub:'большой',   effect:'def',           value:25 },
-  { id:'elx_hp_1',         cat:'elixir', name:'Эликсир жизни',   sub:'малый',     effect:'hp',            value:200 },
-  { id:'elx_hp_2',         cat:'elixir', name:'Эликсир жизни',   sub:'большой',   effect:'hp',            value:500 },
-  { id:'elx_mana_1',       cat:'elixir', name:'Эликсир маны',    sub:'малый',     effect:'mana',          value:100 },
-  { id:'elx_crit_dmg',     cat:'elixir', name:'Эликсир силы крита', effect:'crit_dmg', value:5, pct:true },
-  { id:'elx_heal',         cat:'elixir', name:'Эликсир лечения',  effect:'heal_eff', value:8, pct:true },
-  { id:'scr_speed',        cat:'scroll', name:'Свиток скорости',  effect:'speed',         value:5, pct:true },
-  { id:'scr_crit',         cat:'scroll', name:'Свиток крита',     effect:'crit_chance',   value:5, pct:true },
-  { id:'scr_atk_eff',      cat:'scroll', name:'Свиток силы',      effect:'atk_eff',       value:8, pct:true },
-  { id:'scr_def_eff',      cat:'scroll', name:'Свиток стойкости', effect:'def_eff',       value:8, pct:true },
-  { id:'evt_hop',          cat:'event',  name:'Месяц цветущего хмеля', effect:'hp_regen', value:30 },
-  { id:'evt_glubin',       cat:'event',  name:'Зов глубин',            effect:'atk_eff',  value:5, pct:true },
-  { id:'evt_dragon',       cat:'event',  name:'Небесные драконы',      effect:'wind_res', value:3, pct:true },
-  { id:'evt_pumpkin',      cat:'event',  name:'Тыквенный фестиваль',   effect:'fire_res', value:3, pct:true },
-  { id:'evt_ny',           cat:'event',  name:'Новый год · Колдер',    effect:'crit_dmg', value:4, pct:true },
-  { id:'rep_warrior',      cat:'rep',    name:'Совет воинов',     effect:'atk',           value:8 },
-  { id:'rep_archer',       cat:'rep',    name:'Совет лучников',   effect:'crit_dmg',      value:3, pct:true },
-  { id:'rep_kabana',       cat:'rep',    name:'Совет кабана',     effect:'hp',            value:300 },
-  { id:'rep_indyuka',      cat:'rep',    name:'Совет индюка',     effect:'def',           value:10 },
-  { id:'rep_master_aren',  cat:'rep',    name:'Мастер арены',     effect:'atk_eff',       value:3, pct:true },
-  { id:'rep_master_voiny', cat:'rep',    name:'Мастер войны',     effect:'crit_chance',   value:2, pct:true },
-  { id:'food_meat',        cat:'food',   name:'Жареное мясо',     effect:'hp',            value:150 },
-  { id:'food_fish',        cat:'food',   name:'Печёная рыба',     effect:'mana',          value:80 },
-  { id:'food_bread',       cat:'food',   name:'Праздничный хлеб', effect:'hp_regen',      value:20 },
-  { id:'food_wine',        cat:'food',   name:'Кубок вина',       effect:'crit_dmg',      value:2, pct:true },
-];
-
-const BUFF_CATS = [
-  { id:'class',  name:'Классовые',  hint:'групповые баффы класса' },
-  { id:'pet',    name:'Питомцы',    hint:'активные питомцы' },
-  { id:'elixir', name:'Эликсиры',   hint:'зелья и микстуры' },
-  { id:'scroll', name:'Свитки',     hint:'временные свитки' },
-  { id:'event',  name:'Ивенты',     hint:'ивентовые баффы' },
-  { id:'rep',    name:'Репутации',  hint:'награды репутаций' },
-  { id:'food',   name:'Еда',        hint:'эффекты от еды' },
-];
-
+// BUFFS, BUFF_CATS — из data.js
 const BUFFS_BY_ID = Object.fromEntries(BUFFS.map(b => [b.id, b]));
-
-// ── RUNES ─────────────────────────────────────────────────────────────────────
-const RUNES = [
-  { id:'helm_atk',  slot:'helm', name:'Руна атаки шлема',     img:'stats_calculator/rune/rune_helm_attack_5.png',  stats:{ atk:5 } },
-  { id:'helm_def',  slot:'helm', name:'Руна защиты шлема',    img:'stats_calculator/rune/rune_helm_defense_5.png', stats:{ def:5 } },
-  { id:'helm_hp',   slot:'helm', name:'Руна здоровья шлема',  img:'stats_calculator/rune/rune_helm_health_5.png',  stats:{ hp:50 } },
-  { id:'shoulders', slot:'shoulders', name:'Руна наплечников', img:'stats_calculator/rune/rune_shoulders.png', stats:{ def:3 } },
-  { id:'chest',     slot:'chest',     name:'Руна нагрудника',  img:'stats_calculator/rune/rune_chest.png',     stats:{ hp:80, def:4 } },
-  { id:'gloves',    slot:'gloves',    name:'Руна перчаток',    img:'stats_calculator/rune/rune_gloves.png',    stats:{ atk:4 } },
-  { id:'belt',      slot:'belt',      name:'Руна пояса',       img:'stats_calculator/rune/rune_belt.png',      stats:{ hp:50 } },
-  { id:'pants',     slot:'pants',     name:'Руна штанов',      img:'stats_calculator/rune/rune_pants.png',     stats:{ def:5 } },
-  { id:'boots',     slot:'boots',     name:'Руна сапог',       img:'stats_calculator/rune/rune_boots.png',     stats:{ speed:2 } },
-  { id:'weapon',     slot:'weapon', name:'Руна оружия',          img:'stats_calculator/rune/rune_weapon.png',           stats:{ atk:6 } },
-  { id:'weapon_atk', slot:'weapon', name:'Руна атаки оружия II', img:'stats_calculator/rune/rune_attack_weapon2_1.png', stats:{ atk:10 } },
-  { id:'amulet_atk', slot:'amulet', name:'Медальон атаки',       img:'stats_calculator/rune/rune_medallion_attack_10.png', stats:{ atk:10 } },
-];
-
-const SLOT_RUNES = {};
-RUNES.forEach(r => {
-  if (!SLOT_RUNES[r.slot]) SLOT_RUNES[r.slot] = [];
-  SLOT_RUNES[r.slot].push(r);
-});
 
 // ── STATE ─────────────────────────────────────────────────────────────────────
 const state = {
-  c1: { cls:'paladin', race:'ElfMale', champion:false, activeSlot:null, pickerMode:'item', equipped:{}, buffs:new Set(), activeCat:'class' },
-  c2: { cls:'paladin', race:'ElfMale', champion:false, activeSlot:null, pickerMode:'item', equipped:{}, buffs:new Set(), activeCat:'class' },
+  c1: { cls:'paladin', race:'ElfMale', champion:false, activeSlot:null, equipped:{}, buffs:new Set(), activeCat:'class' },
+  c2: { cls:'paladin', race:'ElfMale', champion:false, activeSlot:null, equipped:{}, buffs:new Set(), activeCat:'class' },
 };
 
 // ── PAPER DOLL ────────────────────────────────────────────────────────────────
@@ -1084,35 +984,24 @@ function showTt(e, cid, slot) {
       ${q ? `<div class="tt-quality" style="color:${q.color}">${q.label}</div>` : ''}
     </div></div>`;
     const itemStats = eq.stats || {};
-    const runeStats = eq.rune && eq.rune.stats ? eq.rune.stats : {};
-    const keys = new Set([...Object.keys(itemStats), ...Object.keys(runeStats)]);
-    if (keys.size === 0) {
+    const keys = Object.keys(itemStats);
+    if (keys.length === 0) {
       html += `<div class="tt-empty">нет данных стат</div>`;
     } else {
       keys.forEach(k => {
         const meta = STAT_LABELS.find(m => m.key === k);
         if (!meta) return;
-        const iv = itemStats[k];
-        const rv = runeStats[k];
+        const v = itemStats[k];
         const fmt = v => meta.pct
           ? `${v > 0 ? '+' : ''}${Number(v).toFixed(2).replace(/\.00$/,'')}%`
           : (Number.isInteger(v) ? String(v) : Number(v).toFixed(2));
-        let val = '';
-        if (iv !== undefined) val = fmt(iv);
-        if (rv !== undefined) {
-          const rStr = meta.pct ? `+${rv}%` : `+${rv}`;
-          val += `${val ? ' ' : ''}<span class="tt-rune-add">(${rStr})</span>`;
-        }
-        html += `<div class="tt-stat"><span class="tt-stat-k">${meta.label}</span><span class="tt-stat-v">${val}</span></div>`;
+        html += `<div class="tt-stat"><span class="tt-stat-k">${meta.label}</span><span class="tt-stat-v">${fmt(v)}</span></div>`;
       });
     }
-    if (eq.rune) {
-      html += `<div class="tt-rune">
-        <img src="${eq.rune.img}" onerror="this.style.display='none'">
-        <div class="tt-rune-body">
-          <div class="tt-rune-lbl">Руна</div>
-          <div class="tt-rune-name">${eq.rune.name}</div>
-        </div>
+    if (eq && eq.rune) {
+      html += `<div style="margin-top:8px;padding-top:8px;border-top:1px dashed var(--line);display:flex;gap:8px;align-items:center">
+        <img src="${eq.rune.img}" style="width:24px;height:24px;object-fit:contain;image-rendering:pixelated" onerror="this.style.display='none'">
+        <span style="font-size:11px;color:var(--gold-l)">${eq.rune.name}</span>
       </div>`;
     }
   } else {
@@ -1161,6 +1050,38 @@ ARTIFACTS.forEach(a => {
   slots.forEach(sid => {
     if (!SLOT_ITEMS[sid]) SLOT_ITEMS[sid] = [];
     SLOT_ITEMS[sid].push(a);
+  });
+});
+
+// ── RUNE_SLOT_MAP ─────────────────────────────────────────────────────────────
+const RUNE_SLOT_MAP = {
+  'Оружие':        'weapon',
+  'Штаны':         'pants',
+  'Пояс':          'belt',
+  'Сапоги':        'boots',
+  'Перчатки':      'gloves',
+  'Наплечники':    'shoulders',
+  'Нагрудник':     'chest',
+  'Шлем':          'helm',
+  'Второе оружие': 'offhand',
+  'Фляжка':        'flask',
+  'Боевая сумка':  'battle_bag',
+  'Браслет':       'bracelet',
+  'Амулет':        'amulet',
+  'Кольцо':        'ring1',
+  'Жетон':         'badge',
+  'Талисман':      'talisman',
+  'Брелок':        'trinket',
+};
+
+// ── SLOT_RUNES ────────────────────────────────────────────────────────────────
+// Строится из глобального RUNES (из data.js)
+const SLOT_RUNES = {};
+RUNES.forEach(function(r) {
+  const slots = r.slot === 'Кольцо' ? ['ring1','ring2'] : [RUNE_SLOT_MAP[r.slot]].filter(Boolean);
+  slots.forEach(function(sid) {
+    if (!SLOT_RUNES[sid]) SLOT_RUNES[sid] = [];
+    SLOT_RUNES[sid].push(r);
   });
 });
 
@@ -1287,33 +1208,12 @@ function renderPicker(cid) {
   const panel = document.getElementById(`pickerPanel-${cid}`);
   const btns  = document.getElementById(`pickerBtns-${cid}`);
   const title = document.getElementById(`pickerTitle-${cid}`);
-  const runeInfo = document.getElementById(`pickerRuneInfo-${cid}`);
   const actions  = document.getElementById(`pickerActions-${cid}`);
   if (!s.activeSlot) { panel.classList.remove('open'); return; }
 
   const slot = ALL_SLOTS.find(x => x.id === s.activeSlot);
   const slotName = slot ? slot.name : 'Предмет';
   const eqItem = s.equipped[s.activeSlot];
-  const runesForSlot = SLOT_RUNES[s.activeSlot] || [];
-
-  if (s.pickerMode === 'rune' && eqItem) {
-    if (title) title.innerHTML = `${slotName} <em>· выберите руну</em>`;
-    runeInfo.classList.remove('on');
-    runeInfo.innerHTML = '';
-    btns.innerHTML = runesForSlot.map((r) =>
-      `<div class="picker-item${eqItem.rune && eqItem.rune.id === r.id ? ' on' : ''}"
-        onclick="setRune('${cid}','${r.id}')"
-        onmouseenter="showRuneTt(event,'${r.id}')"
-        onmousemove="moveTt(event)"
-        onmouseleave="hideTt()">
-        <img src="${r.img}" style="position:absolute;inset:1px;width:calc(100% - 2px);height:calc(100% - 2px);object-fit:contain;z-index:1" onerror="this.style.display='none'">
-        <div style="position:absolute;bottom:0;left:0;right:0;height:2px;background:#7ab8ff;z-index:3;opacity:.7"></div>
-      </div>`
-    ).join('') || `<div style="font-size:11px;color:var(--txt3);font-style:italic;font-family:var(--serif);padding:6px 2px">Для этого слота рун пока нет</div>`;
-    actions.innerHTML = `<button class="ghost" onclick="exitRuneMode('${cid}')">← к выбору предмета</button>`;
-    panel.classList.add('open');
-    return;
-  }
 
   if (title) title.innerHTML = `${slotName} <em>· выберите качество</em>`;
 
@@ -1339,53 +1239,36 @@ function renderPicker(cid) {
     btns.innerHTML = `<div style="font-size:11px;color:var(--txt3);font-style:italic;font-family:var(--serif);padding:6px 2px">Предметов пока нет в базе</div>`;
   }
 
-  if (eqItem && eqItem.rune) {
-    runeInfo.classList.add('on');
-    runeInfo.innerHTML = `
-      <img src="${eqItem.rune.img}" onerror="this.style.display='none'">
-      <div class="rune-text">
-        <div class="rune-lbl">Вставлена руна</div>
-        <div class="rune-name">${eqItem.rune.name}</div>
+  // Руны для этого слота
+  const runesForSlot = SLOT_RUNES[s.activeSlot] || [];
+  if (runesForSlot.length) {
+    let runeHtml = `<div class="picker-section-title">Руны</div>`;
+    runeHtml += runesForSlot.map(function(r) {
+      const globalIdx = RUNES.indexOf(r);
+      const isOn = eqItem && eqItem.rune && eqItem.rune.idx === globalIdx;
+      return `<div class="picker-item${isOn ? ' on' : ''}" onclick="equipRune('${cid}',${globalIdx})"
+        onmouseenter="showRuneTt(event,${globalIdx})"
+        onmousemove="moveTt(event)"
+        onmouseleave="hideTt()">
+        <div style="position:relative;width:32px;height:32px;flex-shrink:0">
+          ${r.img ? `<img src="${r.img}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;z-index:1;image-rendering:pixelated" onerror="this.style.display='none'">` : ''}
+          ${QUALITY_FRAME[r.quality] ? `<img src="${QUALITY_FRAME[r.quality]}" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:2" onerror="this.style.display='none'">` : ''}
+        </div>
       </div>`;
-  } else {
-    runeInfo.classList.remove('on');
-    runeInfo.innerHTML = '';
+    }).join('');
+    if (eqItem && eqItem.rune) {
+      runeHtml += `<div style="display:flex;align-items:center;gap:6px;margin-top:6px;cursor:pointer;font-size:11px;color:var(--red);font-family:var(--sans)" onclick="unequipRune('${cid}')">Снять руну</div>`;
+    }
+    btns.innerHTML += runeHtml;
   }
 
   let actionHtml = '';
   if (eqItem) {
-    if (runesForSlot.length > 0) {
-      if (eqItem.rune) {
-        actionHtml += `<button class="primary" onclick="enterRuneMode('${cid}')">Сменить руну</button>`;
-        actionHtml += `<button onclick="removeRune('${cid}')">Достать руну</button>`;
-      } else {
-        actionHtml += `<button class="primary" onclick="enterRuneMode('${cid}')">Вставить руну в этот предмет</button>`;
-      }
-    }
     actionHtml += `<button class="danger" onclick="unequipActiveSlot('${cid}')">Снять предмет</button>`;
   }
   actions.innerHTML = actionHtml;
 
   panel.classList.add('open');
-}
-
-function showRuneTt(e, runeId) {
-  const r = RUNES.find(x => x.id === runeId);
-  if (!r) return;
-  let html = `<div class="tt-name">${r.name}</div>`;
-  html += `<div class="tt-quality" style="color:#7ab8ff">Руна</div>`;
-  if (r.stats) {
-    Object.entries(r.stats).forEach(function(entry) {
-      var k = entry[0]; var v = entry[1];
-      const meta = STAT_LABELS.find(m => m.key === k);
-      if (!meta) return;
-      const vStr = meta.pct ? `+${v}%` : `+${v}`;
-      html += `<div class="tt-stat"><span class="tt-stat-k">${meta.label}</span><span class="tt-stat-v">${vStr}</span></div>`;
-    });
-  }
-  ttEl.innerHTML = html;
-  ttEl.style.display = 'block';
-  moveTt(e);
 }
 
 function showPickerTt(e, cid, idx) {
@@ -1417,38 +1300,6 @@ function equipItem(cid, slotId, idx) {
   const prevRune = s.equipped[slotId] ? s.equipped[slotId].rune : undefined;
   s.equipped[slotId] = { name: item.name, quality: item.quality, img: item.img, stats: item.stats };
   if (prevRune) s.equipped[slotId].rune = prevRune;
-  s.pickerMode = 'item';
-  renderAll(cid);
-}
-
-// ── RUNE ACTIONS ──────────────────────────────────────────────────────────────
-function enterRuneMode(cid) {
-  const s = state[cid];
-  if (!s.activeSlot || !s.equipped[s.activeSlot]) return;
-  s.pickerMode = 'rune';
-  renderPicker(cid);
-}
-function exitRuneMode(cid) {
-  state[cid].pickerMode = 'item';
-  renderPicker(cid);
-}
-function setRune(cid, runeId) {
-  const s = state[cid];
-  if (!s.activeSlot) return;
-  const eq = s.equipped[s.activeSlot];
-  if (!eq) return;
-  const rune = RUNES.find(r => r.id === runeId);
-  if (!rune) return;
-  eq.rune = { id: rune.id, name: rune.name, img: rune.img, slot: rune.slot, stats: Object.assign({}, rune.stats) };
-  s.pickerMode = 'item';
-  renderAll(cid);
-}
-function removeRune(cid) {
-  const s = state[cid];
-  if (!s.activeSlot) return;
-  const eq = s.equipped[s.activeSlot];
-  if (!eq) return;
-  delete eq.rune;
   renderAll(cid);
 }
 
@@ -1625,7 +1476,7 @@ function renderCompare() {
 
   if (!a.hasAny && !b.hasAny) {
     if (sub) sub.textContent = 'Соберите снаряжение обоим героям';
-    body.innerHTML = `<div class="cmp-empty">Оденьте героев или вставьте руны, чтобы увидеть сравнение характеристик</div>`;
+    body.innerHTML = `<div class="cmp-empty">Оденьте героев и выберите баффы, чтобы увидеть сравнение характеристик</div>`;
     return;
   }
   if (sub) sub.textContent = `${a.eqCount} ↔ ${b.eqCount} предметов · в реальном времени`;
@@ -1688,6 +1539,52 @@ function renderAll(cid) {
   renderCompare();
 }
 
+// ── RUNE ACTIONS ─────────────────────────────────────────────────────────────
+function equipRune(cid, runeIdx) {
+  const s = state[cid];
+  if (!s.activeSlot) return;
+  const eq = s.equipped[s.activeSlot];
+  if (!eq) return;
+  const rune = RUNES[runeIdx];
+  if (!rune) return;
+  eq.rune = { idx: runeIdx, name: rune.name, img: rune.img, stats: rune.stats ? Object.assign({}, rune.stats) : {} };
+  renderAll(cid);
+}
+
+function unequipRune(cid) {
+  const s = state[cid];
+  if (!s.activeSlot || !s.equipped[s.activeSlot]) return;
+  delete s.equipped[s.activeSlot].rune;
+  renderAll(cid);
+}
+
+function showRuneTt(e, runeIdx) {
+  const r = RUNES[runeIdx];
+  if (!r) return;
+  const q = QUALITIES.find(function(q) { return q.id === r.quality; });
+  let html = `<div class="tt-head">`;
+  if (r.img) html += `<img class="tt-ico" src="${r.img}" onerror="this.style.display='none'">`;
+  html += `<div class="tt-head-text">
+    <div class="tt-name">${r.name}</div>
+    ${q ? `<div class="tt-quality" style="color:${q.color}">${q.label}</div>` : ''}
+  </div></div>`;
+  html += `<div class="tt-stat"><span class="tt-stat-k" style="color:var(--txt3)">Слот: ${r.slot}</span></div>`;
+  if (r.stats) {
+    Object.entries(r.stats).forEach(function(entry) {
+      var k = entry[0]; var v = entry[1];
+      const meta = STAT_LABELS.find(function(m) { return m.key === k; });
+      if (!meta) return;
+      const vStr = meta.pct ? `${v > 0 ? '+' : ''}${Number(v).toFixed(2).replace(/\.00$/,'')}%` : (Number.isInteger(v) ? String(v) : Number(v).toFixed(2));
+      html += `<div class="tt-stat"><span class="tt-stat-k">${meta.label}</span><span class="tt-stat-v">${vStr}</span></div>`;
+    });
+  } else {
+    html += `<div class="tt-empty">данные стат скоро</div>`;
+  }
+  ttEl.innerHTML = html;
+  ttEl.style.display = 'block';
+  moveTt(e);
+}
+
 // ── ACTIONS ───────────────────────────────────────────────────────────────────
 function toggleClsDrop(cid) {
   document.getElementById(`clsDrop-${cid}`).classList.toggle('open');
@@ -1695,7 +1592,7 @@ function toggleClsDrop(cid) {
 
 function selectClass(cid, cls) {
   const s = state[cid];
-  s.cls = cls; s.activeSlot = null; s.pickerMode = 'item';
+  s.cls = cls; s.activeSlot = null;
   Object.keys(s.equipped).forEach(k => delete s.equipped[k]);
   document.getElementById(`clsDrop-${cid}`).classList.remove('open');
   renderAll(cid);
@@ -1704,7 +1601,6 @@ function selectClass(cid, cls) {
 function openPicker(cid, slotId) {
   const s = state[cid];
   s.activeSlot = s.activeSlot === slotId ? null : slotId;
-  s.pickerMode = 'item';
   renderSlotCol(cid, COL_LEFT,  `colLeft-${cid}`);
   renderSlotCol(cid, COL_RIGHT, `colRight-${cid}`);
   renderSlotRow(cid, ROW_TOP,   `slotRowTop-${cid}`);
@@ -1717,7 +1613,6 @@ function unequipActiveSlot(cid) {
   if (!s.activeSlot) return;
   delete s.equipped[s.activeSlot];
   s.activeSlot = null;
-  s.pickerMode = 'item';
   renderAll(cid);
 }
 
@@ -1752,7 +1647,6 @@ function stripAll(cid) {
   const s = state[cid];
   s.equipped = {};
   s.activeSlot = null;
-  s.pickerMode = 'item';
   renderAll(cid);
 }
 

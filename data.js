@@ -241,6 +241,34 @@ const ARTIFACTS = [
   { slotId:'badge', group:'Номерной жетон', name:'Номерной жетон', quality:'red',    event:true, img:'stats_calculator/buffs/event_buff/numbered_token.png' },
 ];
 
+// ── РУНЫ ──────────────────────────────────────────────────────────────────────
+const RUNES = [
+  // Руны в экипировку
+  { group:'equip', name:'Титанитовая Великая Руна Фальдира',  slot:'Оружие',        quality:'red',    img:'stats_calculator/rune/rune_weapon.png' },
+  { group:'equip', name:'Титанитовая Великая Руна Гэтана',    slot:'Штаны',         quality:'red',    img:'stats_calculator/rune/rune_pants.png' },
+  { group:'equip', name:'Великая Руна Вархин',                slot:'Пояс',          quality:'red',    img:'stats_calculator/rune/rune_belt.png' },
+  { group:'equip', name:'Великая Руна Орноса',                slot:'Сапоги',        quality:'red',    img:'stats_calculator/rune/rune_boots.png' },
+  { group:'equip', name:'Титанитовая Великая Руна Баннора',   slot:'Перчатки',      quality:'red',    img:'stats_calculator/rune/rune_gloves.png' },
+  { group:'equip', name:'Титанитовая Великая Руна Халиэмы',  slot:'Наплечники',    quality:'red',    img:'stats_calculator/rune/rune_shoulders.png' },
+  { group:'equip', name:'Великая Руна Мехила',                slot:'Нагрудник',     quality:'red',    img:'stats_calculator/rune/rune_chest.png' },
+  { group:'equip', name:'Руна Анст',                          slot:'Шлем',          quality:'purple', img:'stats_calculator/rune/rune_medallion_attack_10.png',  stats:{ atk:4, hp:140, def:3 } },
+  { group:'equip', name:'Руна Усиленной Защиты Хорлата',      slot:'Шлем',          quality:'blue',   img:'stats_calculator/rune/rune_helm_defense_5.png' },
+  { group:'equip', name:'Руна Усиленной Атаки Хорлата',       slot:'Шлем',          quality:'blue',   img:'stats_calculator/rune/rune_helm_attack_5.png' },
+  { group:'equip', name:'Руна Усиленного Здоровья Хорлата',   slot:'Шлем',          quality:'blue',   img:'stats_calculator/rune/rune_helm_health_5.png' },
+  { group:'equip', name:'Руна Пяти Камней',                   slot:'Второе оружие', quality:'red',    img:'stats_calculator/rune/rune_attack_weapon2_1.png',     stats:{ atk:5, hp:140, def:2, atk_eff:1 } },
+  { group:'equip', name:'Руна рома Двух Морей',               slot:'Фляжка',        quality:'red',    img:'stats_calculator/rune/rune_flask.png',                 stats:{ atk:4, def:2, atk_eff:4, heal_eff:2, def_eff:2 } },
+  // Руны в бижутерию
+  { group:'jewel', name:'Ярмарочная руна Эльты',              slot:'Боевая сумка',  quality:'orange', img:'stats_calculator/rune/rune_medallion_attack_10.png',  stats:{ atk:3.2, hp:340, def:1.25, exp_gain:-2, def_eff:3, crit_def:3 } },
+  { group:'jewel', name:'Ярмарочная руна Ларгиса',            slot:'Браслет',       quality:'orange', img:'stats_calculator/rune/rune_medallion_attack_10.png',  stats:{ atk:2, hp:200, def:2, rep_guard:10, rep_gladiator:10, rep_conqueror:10, rep_lord:10, rep_hunter:10, rep_witch:10, rep_archaeologist:10, rep_tamer:10 } },
+  { group:'jewel', name:'Руна Хенгиста',                      slot:'Амулет',        quality:'purple', img:'stats_calculator/rune/rune_medallion_attack_10.png',  stats:{ atk:1.2, hp:80, atk_eff:3, crit_chance:5 } },
+  { group:'jewel', name:'Руна Тэмми',                         slot:'Кольцо',        quality:'purple', img:'stats_calculator/rune/rune_medallion_attack_10.png',  stats:{ atk:2, atk_eff:1, crit_chance:7 } },
+  { group:'jewel', name:'Руна Рог',                           slot:'Жетон',         quality:'purple', img:'stats_calculator/rune/rune_medallion_attack_10.png',  stats:{ atk:3, hp:300, atk_eff:3, crit_chance:3 } },
+  { group:'jewel', name:'Руна «Превосходство Аргира»',        slot:'Талисман',      quality:'blue',   img:'stats_calculator/rune/sign_of_celestr.png',           stats:{ atk:2.9, hp:130, def:1.8 } },
+  { group:'jewel', name:'Руна драконьего пламени',             slot:'Брелок',        quality:'green',  img:'stats_calculator/rune/fire_energy.png',               stats:{ atk:3, def:1, hp:250, def_eff:3 } },
+  // Руны Экзорциста
+  { group:'exorc', name:'Руна Хранителя Каэны',               slot:'Боевая сумка',  quality:'red',    img:'stats_calculator/rune/sign_of_celestr.png',           stats:{ atk:1.8, hp:190, def:0.85 } },
+];
+
 // ── ИВЕНТОВЫЕ БАФЫ ────────────────────────────────────────────────────────────
 // Расходники/бафы — не слоты экипировки, только для базы предметов
 const EVENT_BUFFS = [
@@ -266,5 +294,31 @@ const EVENT_BUFFS = [
   { group:'Свиток редких драконьих техник', name:'Свиток редких драконьих техник', quality:'purple', img:'stats_calculator/buffs/event_buff/big_scroll_fire.png', note:'Усиливает баф питомца. Отдельно не применяется.', stats:{ hp_pct:23, dmg_out:28, dmg_taken_red:20, speed_in:5 } },
   { group:'Свиток редких драконьих техник', name:'Свиток редких драконьих техник', quality:'red',    img:'stats_calculator/buffs/event_buff/big_scroll_fire.png', note:'Усиливает баф питомца. Отдельно не применяется.', stats:{ hp_pct:25, dmg_out:32, dmg_taken_red:22, speed_in:5 } },
   { group:'Свиток редких драконьих техник', name:'Свиток редких драконьих техник', quality:'orange', img:'stats_calculator/buffs/event_buff/big_scroll_fire.png', note:'Усиливает баф питомца. Отдельно не применяется.', stats:{ hp_pct:25, dmg_out:36, dmg_taken_red:24, speed_in:5 } },
+];
+
+// ── БАФЫ ──────────────────────────────────────────────────────────────────────
+const BUFF_CATS = [
+  { id:'class', name:'Классовые', hint:'групповые баффы класса' },
+  { id:'rep',   name:'Репутации', hint:'награды репутаций' },
+  { id:'food',  name:'Еда',       hint:'эффекты от еды' },
+];
+
+const BUFFS = [
+  { id:'cls_archer_eye',   cat:'class', name:'Зоркий глаз',     sub:'Лучник',    effect:'atk_eff',        value:15, pct:true },
+  { id:'cls_mage_storm',   cat:'class', name:'Ураган',           sub:'Маг',       effect:'atk_eff',        value:15, pct:true },
+  { id:'cls_monk_bless',   cat:'class', name:'Благословение',    sub:'Монах',     effect:'hp',             value:8,  pct:true },
+  { id:'cls_pala_holy',    cat:'class', name:'Святое слово',     sub:'Паладин',   effect:'hp',             value:8,  pct:true },
+  { id:'cls_warr_shield',  cat:'class', name:'Пылающий щит',     sub:'Воин',      effect:'dmg_taken_red',  value:8 },
+  { id:'cls_rogue_shadow', cat:'class', name:'Дар теней',        sub:'Головорез', effect:'dmg_taken_red',  value:8 },
+  { id:'rep_warrior',      cat:'rep',   name:'Совет воинов',     effect:'atk',          value:8 },
+  { id:'rep_archer',       cat:'rep',   name:'Совет лучников',   effect:'crit_dmg',     value:3,  pct:true },
+  { id:'rep_kabana',       cat:'rep',   name:'Совет кабана',     effect:'hp',           value:300 },
+  { id:'rep_indyuka',      cat:'rep',   name:'Совет индюка',     effect:'def',          value:10 },
+  { id:'rep_master_aren',  cat:'rep',   name:'Мастер арены',     effect:'atk_eff',      value:3,  pct:true },
+  { id:'rep_master_voiny', cat:'rep',   name:'Мастер войны',     effect:'crit_chance',  value:2,  pct:true },
+  { id:'food_meat',        cat:'food',  name:'Жареное мясо',     effect:'hp',           value:150 },
+  { id:'food_fish',        cat:'food',  name:'Печёная рыба',     effect:'mana',         value:80 },
+  { id:'food_bread',       cat:'food',  name:'Праздничный хлеб', effect:'hp_regen',     value:20 },
+  { id:'food_wine',        cat:'food',  name:'Кубок вина',       effect:'crit_dmg',     value:2,  pct:true },
 ];
 
