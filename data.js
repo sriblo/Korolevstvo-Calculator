@@ -171,6 +171,20 @@ const ARTIFACTS = [
   { slotId:'stone_friend',  group:'Камень Дружбы', name:'Камень Дружбы', quality:'orange', img:'stats_calculator/artefacts/artefact_stone_dark.png',   stats:{ atk:13, hp:700, def:7, speed:4 } },
   { slotId:'stone_blood',   group:'Камень Крови',  name:'Камень Крови',  quality:'green',  img:'stats_calculator/artefacts/artefact_stone_blood.png',  stats:{ atk:1, mana:100, heal_eff:1, hp:100 } },
   { slotId:'stone_blood',   group:'Камень Крови',  name:'Камень Крови',  quality:'blue',   img:'stats_calculator/artefacts/artefact_stone_blood.png',  stats:{ atk:3, mana:200, heal_eff:2, hp:200, crit_chance:1 } },
+  // ── ИВЕНТОВЫЕ ШЛЕМЫ ───────────────────────────────────────────────────────────
+  { slotId:'helm', group:'Сушеная тыква', name:'Сушеная тыква', quality:'white',  img:'stats_calculator/event%20items/equipment/pumpking_helmet.png' },
+  { slotId:'helm', group:'Сушеная тыква', name:'Сушеная тыква', quality:'green',  img:'stats_calculator/event%20items/equipment/pumpking_helmet.png' },
+  { slotId:'helm', group:'Сушеная тыква', name:'Сушеная тыква', quality:'blue',   img:'stats_calculator/event%20items/equipment/pumpking_helmet.png' },
+  { slotId:'helm', group:'Сушеная тыква', name:'Сушеная тыква', quality:'red',    img:'stats_calculator/event%20items/equipment/pumpking_helmet.png' },
+  { slotId:'helm', group:'Сушеная тыква', name:'Сушеная тыква', quality:'orange', img:'stats_calculator/event%20items/equipment/pumpking_helmet.png' },
+  { slotId:'helm', name:'Волшебная сушеная тыква',               quality:'orange', img:'stats_calculator/event%20items/equipment/pumpking_helmet.png' },
+  // ── АМУЛЕТЫ ───────────────────────────────────────────────────────────────────
+  { slotId:'amulet', group:'Купидонский амулет', name:'Купидонский амулет', quality:'white',  img:'stats_calculator/event%20items/equipment/valentin_amulet_3.png' },
+  { slotId:'amulet', group:'Купидонский амулет', name:'Купидонский амулет', quality:'green',  img:'stats_calculator/event%20items/equipment/valentin_amulet_3.png' },
+  { slotId:'amulet', group:'Купидонский амулет', name:'Купидонский амулет', quality:'blue',   img:'stats_calculator/event%20items/equipment/valentin_amulet_3.png' },
+  { slotId:'amulet', group:'Купидонский амулет', name:'Купидонский амулет', quality:'red',    img:'stats_calculator/event%20items/equipment/valentin_amulet_3.png' },
+  { slotId:'amulet', group:'Купидонский амулет', name:'Купидонский амулет', quality:'orange', img:'stats_calculator/event%20items/equipment/valentin_amulet_3.png' },
+  { slotId:'amulet', name:'Амулет Аррана',                                   quality:'orange', img:'stats_calculator/event%20items/equipment/valentin_amulet_4.png' },
   // ── БРАСЛЕТЫ ──────────────────────────────────────────────────────────────────
   { slotId:'bracelet', name:'Браслет Лёгкого шага',          quality:'orange', img:'stats_calculator/bizha/bracelet/bracelet_speed.png', stats:{ speed_out:8, mana:15 } },
   { slotId:'bracelet', name:'Браслет Спасительной верткости', quality:'orange', img:'stats_calculator/bizha/bracelet/bracelet_speed.png', stats:{ hp:735, speed_out:8, mana:25 } },

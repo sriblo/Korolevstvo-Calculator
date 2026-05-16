@@ -233,6 +233,12 @@ a{color:inherit;text-decoration:none}
 .buff-card .rune-ico{width:32px;height:32px;flex-shrink:0}
 .buff-card .ico-img{width:32px;height:32px;object-fit:none}
 .buff-text{flex:1;min-width:0}
+.jewel-section-head{
+  font-family:var(--serif);font-size:20px;font-weight:500;letter-spacing:-.01em;
+  color:var(--gold-l);margin:32px 0 12px;padding-bottom:10px;
+  border-bottom:1px solid var(--line2);
+}
+.jewel-section-head:first-child{margin-top:4px}
 .art-section-divider{
   display:flex;align-items:center;gap:12px;
   margin:24px 0 14px;
@@ -549,11 +555,10 @@ function renderArtifacts(c) {
 }
 
 function renderJewelry(c) {
-  const rings = ARTIFACTS.filter(a => a.slotId === 'ring');
   const idxOf = a => ARTIFACTS.indexOf(a);
 
-  function ringCard(art) {
-    const q = QUALITIES.find(q => q.id === art.quality);
+  function jewCard(art) {
+    const q = QUALITIES.find(q2 => q2.id === art.quality);
     const qLabel = q ? `<div class="buff-cls" style="color:${q.color}">${q.label}</div>` : '';
     return `<div class="buff-card" onmouseenter="ttShowArt(${idxOf(art)},event)" onmousemove="ttMove(event)" onmouseleave="ttHide()">
       ${icoHtml(art.img, art.quality)}
@@ -561,23 +566,38 @@ function renderJewelry(c) {
     </div>`;
   }
 
-  const GROUP_ORDER = ['Кольцо сквайра','Кольцо рыцаря','Кольцо лорда','Кольцо барона'];
-  const unique  = sortByQuality(rings.filter(a => !a.group));
-  let html = `<div class="c-title">Бижутерия</div>`;
-
-  if (unique.length) {
-    html += `<div class="art-section-divider">Кольца Фалькона</div>
-             <div class="buff-grid">${unique.map(ringCard).join('')}</div>`;
-  }
-  for (const g of GROUP_ORDER) {
-    const items = sortByQuality(rings.filter(a => a.group === g));
-    if (items.length) {
-      html += `<div class="art-section-divider">${g}</div>
-               <div class="buff-grid">${items.map(ringCard).join('')}</div>`;
+  function section(title, slotId, groupOrder) {
+    const items = ARTIFACTS.filter(a => a.slotId === slotId);
+    if (!items.length) return '';
+    let html = `<div class="jewel-section-head">${title}</div>`;
+    if (groupOrder) {
+      const ungrouped = sortByQuality(items.filter(a => !a.group));
+      if (ungrouped.length) html += `<div class="buff-grid">${ungrouped.map(jewCard).join('')}</div>`;
+      for (const g of groupOrder) {
+        const grp = sortByQuality(items.filter(a => a.group === g));
+        if (grp.length) html += `<div class="art-section-divider">${g}</div><div class="buff-grid">${grp.map(jewCard).join('')}</div>`;
+      }
+    } else {
+      const ungrouped = sortByQuality(items.filter(a => !a.group));
+      const groups = [...new Set(items.filter(a => a.group).map(a => a.group))];
+      if (ungrouped.length) html += `<div class="buff-grid">${ungrouped.map(jewCard).join('')}</div>`;
+      for (const g of groups) {
+        const grp = sortByQuality(items.filter(a => a.group === g));
+        html += `<div class="art-section-divider">${g}</div><div class="buff-grid">${grp.map(jewCard).join('')}</div>`;
+      }
     }
+    return html;
   }
 
-  c.innerHTML = html;
+  const RING_GROUPS = ['Кольцо сквайра','Кольцо рыцаря','Кольцо лорда','Кольцо барона'];
+  c.innerHTML = `<div class="c-title">Бижутерия</div>
+    ${section('Кольца',    'ring',     RING_GROUPS)}
+    ${section('Браслеты',  'bracelet')}
+    ${section('Амулеты',   'amulet')}
+    ${section('Трофеи',    'trophy')}
+    ${section('Брелоки',   'trinket')}
+    ${section('Жетоны',    'badge')}
+    ${section('Талисманы', 'talisman')}`;
 }
 
 function renderSoon(c, title) {
