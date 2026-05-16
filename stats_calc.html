@@ -327,7 +327,7 @@
     transition:border-color .15s,background .15s,box-shadow .15s;
   }
   .slot-sq:hover,.slot-sq-cell:hover{border-color:var(--line2);background:var(--bg4)}
-  .slot-sq.active,.slot-sq-cell.active{border-color:var(--gold);box-shadow:0 0 0 2px rgba(var(--gold-tint),.18)}
+  .slot-sq.active,.slot-sq-cell.active{border-color:var(--gold);box-shadow:0 0 0 1px rgba(var(--gold-tint),.18)}
   .slot-sq.equipped,.slot-sq-cell.equipped{border-color:var(--line2)}
   .slot-sq img.item-img,.slot-sq-cell img.item-img{width:32px;height:32px;object-fit:contain;image-rendering:pixelated}
   .slot-sq img.frame-img,.slot-sq-cell img.frame-img{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
@@ -911,7 +911,7 @@ function applyCharBg(cid) {
     ? `stats_calculator/ui/bg_champion_race_${raceNum}.jpg`
     : `stats_calculator/ui/bg_race_${raceNum}.jpg`;
   const grad = 'linear-gradient(to top, var(--bg2) 0%, transparent 50%)';
-  const pos = s.champion ? 'center 5%' : '60% -10%';
+  const pos = s.champion ? 'center 20px' : '60% -50px';
   const sz  = s.champion ? 'auto 380px' : 'auto 475px';
   inner.style.backgroundImage    = `${grad}, url("${file}")`;
   inner.style.backgroundPosition = `${pos}, ${pos}`;
