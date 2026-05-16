@@ -986,6 +986,25 @@ const CLASS_DOLL = {
   },
 };
 
+const CLASS_URL_KEY = { paladin:'paladin', warrior:'warrior', rogue:'rogue', mage:'mage', archer:'shooter', monk:'cleric' };
+
+function dollUrl(cls, slotKey, quality, race) {
+  const cfg = CLASS_DOLL[cls];
+  if (!cfg) return null;
+  const part = cfg.parts[slotKey];
+  if (!part) return null;
+  const lvl = QUALITY_LEVEL[quality] || 10;
+  const urlCls = CLASS_URL_KEY[cls] || cls;
+  const ClsCap = urlCls[0].toUpperCase() + urlCls.slice(1);
+  return `https://m1.kor.ru/media//game/assets/characters/items/${urlCls}/${ClsCap}${part}${lvl}${race}.png`;
+}
+
+function faceUrl(race) {
+  const map = { ElfMale:'elf_male', ElfFemale:'elf_female', HumanMale:'human_male', HumanFemale:'human_female' };
+  const r = map[race] || 'elf_male';
+  return `https://m1.kor.ru/media/avatars/face/${r}_s1_b1_e1_n1_l1.png`;
+}
+
 function setupDollDOM(cid) {
   const s   = state[cid];
   const cfg = CLASS_DOLL[s.cls];
@@ -1007,12 +1026,14 @@ function renderDoll(cid) {
   let hasAny = false;
   root.querySelectorAll('.dll').forEach(el => {
     const layer = el.dataset.layer;
-    if (layer === 'face') { el.style.backgroundImage = ''; return; }
-    const eq  = s.equipped[layer];
-    // Берём локальную картинку из нашего репозитория через getItemImg
-    const url = eq
-      ? (eq.img || getItemImg(s.cls, layer, eq.quality))
-      : null;
+    if (layer === 'face') {
+      el.style.backgroundImage = `url("${faceUrl(s.race)}")`;
+      hasAny = true;
+      return;
+    }
+    const eq      = s.equipped[layer];
+    const quality = eq ? eq.quality : null;
+    const url     = quality ? dollUrl(s.cls, layer, quality, s.race) : null;
     el.style.backgroundImage = url ? `url("${url}")` : '';
     if (url) hasAny = true;
   });
