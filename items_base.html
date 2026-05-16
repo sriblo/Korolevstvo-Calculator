@@ -771,9 +771,7 @@ function ttShowArt(idx, e) {
 }
 function ttShowEventBuff(idx, e) {
   const b = EVENT_BUFFS[idx];
-  const q = QUALITIES.find(q2 => q2.id === b.quality);
   let html = `<div class="tt-name">${b.name}</div>`;
-  if (q) html += `<div class="tt-row"><span class="tt-key" style="color:${q.color}">${q.label}</span></div>`;
   if (b.note) html += `<div class="tt-row"><span class="tt-key" style="font-style:italic;color:var(--txt3)">${b.note}</span></div>`;
   if (b.stats) {
     html += STAT_LABELS.filter(s => b.stats[s.key] != null)
