@@ -321,6 +321,9 @@ a{color:inherit;text-decoration:none}
         <div class="sb-item" data-view="buffs_class" onclick="show(this)">
           <div class="sb-ico"></div>Классовые бафы
         </div>
+        <div class="sb-item" data-view="buffs_event" onclick="show(this)">
+          <div class="sb-ico"></div>Ивентовые бафы
+        </div>
       </div>
     </div>
 
@@ -421,7 +424,8 @@ function render(view) {
   else if (view === 'jewelry')    renderJewelry(c);
   else if (view === 'event_equipment') renderEventEquipment(c);
   else if (view === 'artifacts')  renderArtifacts(c);
-  else if (view === 'buffs_class') renderBuffsClass(c);
+  else if (view === 'buffs_class')  renderBuffsClass(c);
+  else if (view === 'buffs_event')  renderEventBuffs(c);
   else if (view === 'pets_fair')   renderSoon(c, 'Ярмарочные питомцы');
   else if (view === 'pets_deco')   renderSoon(c, 'Декоративные питомцы');
 }
@@ -604,6 +608,25 @@ function renderJewelry(c) {
     ${section('Талисманы', 'talisman')}`;
 }
 
+function renderEventBuffs(c) {
+  const idxOf = b => EVENT_BUFFS.indexOf(b);
+  function buffCard(b) {
+    const q = QUALITIES.find(q2 => q2.id === b.quality);
+    const qLabel = q ? `<div class="buff-cls" style="color:${q.color}">${q.label}</div>` : '';
+    return `<div class="buff-card" onmouseenter="ttShowEventBuff(${idxOf(b)},event)" onmousemove="ttMove(event)" onmouseleave="ttHide()">
+      ${icoHtml(b.img, b.quality)}
+      <div class="buff-text"><div class="buff-name">${b.name}</div>${qLabel}</div>
+    </div>`;
+  }
+  const groups = [...new Set(EVENT_BUFFS.map(b => b.group))];
+  let html = `<div class="c-title">Ивентовые бафы</div>`;
+  for (const g of groups) {
+    const items = sortByQuality(EVENT_BUFFS.filter(b => b.group === g));
+    html += `<div class="art-section-divider">${g}</div><div class="buff-grid">${items.map(buffCard).join('')}</div>`;
+  }
+  c.innerHTML = html;
+}
+
 function renderEventEquipment(c) {
   const idxOf = a => ARTIFACTS.indexOf(a);
   // Ивентовые предметы — всё в ARTIFACTS, кроме камней, колец и бижутерии
@@ -684,6 +707,22 @@ function ttShowArt(idx, e) {
     html += STAT_LABELS
       .filter(s => art.stats[s.key] != null)
       .map(s => `<div class="tt-row"><span class="tt-key">${s.label}</span><span class="tt-val">+${art.stats[s.key]}${s.pct?'%':''}</span></div>`)
+      .join('');
+  } else {
+    html += `<div class="tt-empty">Данные не добавлены</div>`;
+  }
+  _tt.innerHTML = html;
+  _tt.classList.add('vis');
+  ttMove(e);
+}
+function ttShowEventBuff(idx, e) {
+  const b = EVENT_BUFFS[idx];
+  const q = QUALITIES.find(q2 => q2.id === b.quality);
+  let html = `<div class="tt-name">${b.name}</div>`;
+  if (q) html += `<div class="tt-row"><span class="tt-key" style="color:${q.color}">${q.label}</span></div>`;
+  if (b.stats) {
+    html += STAT_LABELS.filter(s => b.stats[s.key] != null)
+      .map(s => `<div class="tt-row"><span class="tt-key">${s.label}</span><span class="tt-val">+${b.stats[s.key]}${s.pct?'%':''}</span></div>`)
       .join('');
   } else {
     html += `<div class="tt-empty">Данные не добавлены</div>`;

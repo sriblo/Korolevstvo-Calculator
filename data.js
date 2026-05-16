@@ -220,4 +220,32 @@ const ARTIFACTS = [
   { slotId:'ring', name:'Кольцо милосердия Фалькона', quality:'purple', img:'stats_calculator/bizha/rings/fair_defense_ring.png', stats:{ hp:485, def:6.75, speed_in:5, speed_out:5, def_eff:8, heal_eff:8, fire_res:5, wind_res:5, light_res:5, charisma:100, crit_fatal:0.1 } },
   { slotId:'ring', name:'Кольцо лезвий Фалькона',     quality:'purple', img:'stats_calculator/bizha/rings/fair_attack_ring.png',  stats:{ atk:17.37, speed_in:5, speed_out:5, atk_eff:8, fire_res:5, wind_res:5, light_res:5, charisma:100, crit_fatal:0.1 } },
   { slotId:'ring', name:'Кольцо власти Фалькона',     quality:'red',    img:'stats_calculator/bizha/rings/big_fucking_ring.png',  stats:{ atk:19, def:7, hp:500, mana:200, speed_in:5, speed_out:5, atk_eff:8, def_eff:8, heal_eff:8, fire_res:5, wind_res:5, light_res:5, charisma:100, crit_fatal:0.1 } },
+  // ── ЖЕТОНЫ ────────────────────────────────────────────────────────────────────
+  { slotId:'badge', group:'Номерной жетон', name:'Номерной жетон', quality:'green',  img:'stats_calculator/buffs/event_buff/numbered_token.png' },
+  { slotId:'badge', group:'Номерной жетон', name:'Номерной жетон', quality:'blue',   img:'stats_calculator/buffs/event_buff/numbered_token.png' },
+  { slotId:'badge', group:'Номерной жетон', name:'Номерной жетон', quality:'purple', img:'stats_calculator/buffs/event_buff/numbered_token.png' },
+  { slotId:'badge', group:'Номерной жетон', name:'Номерной жетон', quality:'red',    img:'stats_calculator/buffs/event_buff/numbered_token.png' },
+];
+
+// ── ИВЕНТОВЫЕ БАФЫ ────────────────────────────────────────────────────────────
+// Расходники/бафы — не слоты экипировки, только для базы предметов
+const EVENT_BUFFS = [
+  { group:'Скрипящие кости',          name:'Скрипящие кости',          quality:'blue',   img:'stats_calculator/buffs/event_buff/creaking_bones.png' },
+  { group:'Скрипящие кости',          name:'Скрипящие кости',          quality:'purple', img:'stats_calculator/buffs/event_buff/creaking_bones.png' },
+  { group:'Скрипящие кости',          name:'Скрипящие кости',          quality:'red',    img:'stats_calculator/buffs/event_buff/creaking_bones.png' },
+  { group:'Скрипящие кости',          name:'Скрипящие кости',          quality:'orange', img:'stats_calculator/buffs/event_buff/creaking_bones.png' },
+  { group:'Медовый хмель',            name:'Медовый хмель',            quality:'blue',   img:'stats_calculator/buffs/event_buff/elixir_attackmagic_11.png' },
+  { group:'Медовый хмель',            name:'Медовый хмель',            quality:'purple', img:'stats_calculator/buffs/event_buff/elixir_attackmagic_11.png' },
+  { group:'Медовый хмель',            name:'Медовый хмель',            quality:'red',    img:'stats_calculator/buffs/event_buff/elixir_attackmagic_11.png' },
+  { group:'Медовый хмель',            name:'Медовый хмель',            quality:'orange', img:'stats_calculator/buffs/event_buff/elixir_attackmagic_11.png' },
+  { group:'Знак экспедиции',          name:'Знак экспедиции',          quality:'green',  img:'stats_calculator/buffs/event_buff/zeppelin_badge.png' },
+  { group:'Знак экспедиции',          name:'Знак экспедиции',          quality:'blue',   img:'stats_calculator/buffs/event_buff/zeppelin_badge.png' },
+  { group:'Знак экспедиции',          name:'Знак экспедиции',          quality:'purple', img:'stats_calculator/buffs/event_buff/zeppelin_badge.png' },
+  { group:'Знак экспедиции',          name:'Знак экспедиции',          quality:'red',    img:'stats_calculator/buffs/event_buff/zeppelin_badge.png' },
+  { group:'Знак экспедиции',          name:'Знак экспедиции',          quality:'orange', img:'stats_calculator/buffs/event_buff/zeppelin_badge.png' },
+  { group:'Кубок с Ледяных островов', name:'Кубок с Ледяных островов', quality:'green',  img:'stats_calculator/buffs/event_buff/expedition_ice_boul.png' },
+  { group:'Кубок с Ледяных островов', name:'Кубок с Ледяных островов', quality:'blue',   img:'stats_calculator/buffs/event_buff/expedition_ice_boul.png' },
+  { group:'Кубок с Ледяных островов', name:'Кубок с Ледяных островов', quality:'purple', img:'stats_calculator/buffs/event_buff/expedition_ice_boul.png' },
+  { group:'Кубок с Ледяных островов', name:'Кубок с Ледяных островов', quality:'red',    img:'stats_calculator/buffs/event_buff/expedition_ice_boul.png' },
+  { group:'Кубок с Ледяных островов', name:'Кубок с Ледяных островов', quality:'orange', img:'stats_calculator/buffs/event_buff/expedition_ice_boul.png' },
 ];
