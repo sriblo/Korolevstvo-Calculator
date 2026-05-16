@@ -1678,11 +1678,6 @@ function renderAll(cid) {
 function toggleClsDrop(cid) {
   document.getElementById(`clsDrop-${cid}`).classList.toggle('open');
 }
-document.addEventListener('click', function(e) {
-  document.querySelectorAll('.cls-drop.open').forEach(drop => {
-    if (!drop.contains(e.target)) drop.classList.remove('open');
-  });
-});
 
 function selectClass(cid, cls) {
   const s = state[cid];
