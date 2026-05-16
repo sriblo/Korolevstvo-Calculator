@@ -101,23 +101,18 @@
   /* ── Main grid ── */
   .calc-page{max-width:1480px;margin:0 auto;padding:24px 32px 80px}
   .calc-layout{
-    display:grid;grid-template-columns:minmax(340px,1fr) minmax(360px,440px) minmax(340px,1fr);
-    gap:18px;align-items:start;
+    display:grid;grid-template-columns:minmax(220px,1fr) minmax(220px,380px) minmax(220px,1fr);
+    gap:14px;align-items:start;
   }
-  @media(max-width:1280px){
-    .calc-layout{grid-template-columns:1fr 1fr;}
-    .compare-panel{grid-column:1 / -1;order:3}
-  }
-  @media(max-width:800px){.calc-layout{grid-template-columns:1fr}}
+  @media(max-width:680px){.calc-layout{grid-template-columns:1fr}}
 
   /* ── Compare panel ── */
   .compare-panel{
     background:linear-gradient(180deg, rgba(var(--gold-tint),.04), transparent 40%), var(--bg2);
     border:1px solid var(--line);border-radius:14px;overflow:hidden;
-    position:relative;
-    align-self:start;
-    position:sticky;top:88px;
+    position:relative;align-self:start;
   }
+  .compare-panel.pinned{position:sticky;top:88px;z-index:20;}
   .compare-panel::before{
     content:'';position:absolute;top:0;left:0;right:0;height:1px;
     background:linear-gradient(90deg,transparent,rgba(var(--gold-tint),.3),transparent);
@@ -1749,27 +1744,13 @@ function applyTone(t) {
 }
 
 // ── COMPARE PIN ───────────────────────────────────────────────────────────────
-let _cmpPinned = false;
 function toggleCmpPin() {
-  _cmpPinned = !_cmpPinned;
   const panel = document.getElementById('comparePanel');
   const btn   = document.getElementById('cmpPinBtn');
-  if (_cmpPinned) {
-    const rect = panel.getBoundingClientRect();
-    panel.style.setProperty('--cmp-width', rect.width + 'px');
-    panel.style.setProperty('--cmp-left',  rect.left  + 'px');
-    panel.classList.add('pinned');
-    btn.classList.add('pinned');
-    btn.textContent = '🔒';
-    btn.title = 'Открепить панель';
-  } else {
-    panel.classList.remove('pinned');
-    panel.style.removeProperty('--cmp-width');
-    panel.style.removeProperty('--cmp-left');
-    btn.classList.remove('pinned');
-    btn.textContent = '🔓';
-    btn.title = 'Зафиксировать панель';
-  }
+  const on = panel.classList.toggle('pinned');
+  btn.classList.toggle('pinned', on);
+  btn.textContent = on ? '🔒' : '🔓';
+  btn.title = on ? 'Открепить панель' : 'Зафиксировать панель';
 }
 
 // ── INIT ──────────────────────────────────────────────────────────────────────
