@@ -111,9 +111,21 @@ const STAT_LABELS = [
   { key:'crit_fatal',  label:'Шанс смерт. удара',        pct:true },
 ];
 
+// ── БАЗОВЫЕ ХАРАКТЕРИСТИКИ (голый персонаж без шмота и бафов) ────────────────
+const BASE_STATS = {
+  warrior: { hp:1155, def:13.65, atk:15.75, mana:125, crit_chance:0, crit_dmg:1.5 },
+};
+
 // ── СТАТЫ ЭКИПИРОВКИ ──────────────────────────────────────────────────────────
 const STATS = {
   warrior: {
+    white: {
+      weapon: { atk:4.75, def:20.18, hp:220, mana:5,  wind_res:0.40 },
+    },
+    green: {
+      pants:  { atk:8.45, def:12.88, hp:350, mana:24, wind_res:0.50 },
+      belt:   { atk:9.00, def:7.91,  hp:360, mana:30, wind_res:0.50 },
+    },
     red: {
       helm:      { atk:40.23, def:3.81,  hp:1662, mana:900, heal_eff:5, hp_regen:60, crit_dmg:6, wind_res:0.80, elem_def:193, atk_eff:22 },
       shoulders: { atk:21.56, def:3.13,  hp:800,  mana:210, heal_eff:5, hp_regen:60, crit_dmg:6, wind_res:0.80, elem_def:146, atk_eff:2 },

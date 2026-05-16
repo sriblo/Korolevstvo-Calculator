@@ -678,20 +678,24 @@ function renderStats(cid) {
   const s    = state[cid];
   const body = document.getElementById(`statsBody-${cid}`);
   const hint = document.getElementById(`statsHint-${cid}`);
-  const totals = {};
+
+  // Базовые статы персонажа
+  const base = BASE_STATS[s.cls] || {};
+  const totals = { ...base };
+
   let hasAny = false;
   Object.values(s.equipped).forEach(eq => {
     if (!eq?.stats) return;
     hasAny = true;
     Object.entries(eq.stats).forEach(([k,v]) => { totals[k] = (totals[k]||0)+v; });
   });
-  if (!hasAny) {
+  if (!hasAny && !Object.keys(base).length) {
     hint.textContent = 'выберите предметы';
     body.innerHTML = `<div class="stat-empty">Выберите предметы, чтобы увидеть характеристики</div>`;
     return;
   }
   const cnt = Object.keys(s.equipped).length;
-  hint.textContent = `${cnt} ${cnt===1?'предмет':cnt<5?'предмета':'предметов'}`;
+  hint.textContent = cnt ? `${cnt} ${cnt===1?'предмет':cnt<5?'предмета':'предметов'}` : 'базовые статы';
   const buffEffects = {};
   s.buffs.forEach(i => {
     const b = CLASS_BUFFS[i];
