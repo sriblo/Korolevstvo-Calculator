@@ -612,10 +612,14 @@ function renderJewelry(c) {
     </div>`;
   }
 
-  const ringUngrouped = sortByQuality(ARTIFACTS.filter(a => a.slotId === 'ring' && !a.group && !a.event));
+  function ringGroup(g) {
+    const items = sortByQuality(ARTIFACTS.filter(a => a.slotId === 'ring' && a.group === g && !a.event));
+    return items.length ? `<div class="art-section-divider">${g}</div><div class="buff-grid">${items.map(jewCard).join('')}</div>` : '';
+  }
+
   c.innerHTML = `<div class="c-title">Бижутерия</div>
     <div class="jewel-section-head">Кольца</div>
-    ${ringUngrouped.length ? `<div class="buff-grid">${ringUngrouped.map(jewCard).join('')}</div>` : ''}
+    ${ringGroup('Кольца Фалькона')}
     ${ringPair('Кольцо сквайра', 'Кольцо рыцаря')}
     ${ringPair('Кольцо лорда', 'Кольцо барона')}
     ${section('Браслеты',  'bracelet')}
