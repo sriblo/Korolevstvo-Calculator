@@ -133,7 +133,7 @@
   }
   .cmp-pin-btn:hover{border-color:var(--line2);color:var(--txt)}
   .cmp-pin-btn.pinned{border-color:var(--gold-d);background:rgba(var(--gold-tint),.08)}
-  .compare-panel.pinned{position:fixed;top:88px;z-index:40;width:var(--cmp-width)}
+  .compare-panel.pinned{position:fixed;top:88px;left:var(--cmp-left);z-index:40;width:var(--cmp-width)}
   .cmp-title{
     font-family:var(--serif);font-size:18px;font-weight:500;letter-spacing:-.01em;
     color:var(--txt);
@@ -1755,8 +1755,9 @@ function toggleCmpPin() {
   const panel = document.getElementById('comparePanel');
   const btn   = document.getElementById('cmpPinBtn');
   if (_cmpPinned) {
-    const w = panel.offsetWidth;
-    panel.style.setProperty('--cmp-width', w + 'px');
+    const rect = panel.getBoundingClientRect();
+    panel.style.setProperty('--cmp-width', rect.width + 'px');
+    panel.style.setProperty('--cmp-left',  rect.left  + 'px');
     panel.classList.add('pinned');
     btn.classList.add('pinned');
     btn.textContent = '🔒';
@@ -1764,6 +1765,7 @@ function toggleCmpPin() {
   } else {
     panel.classList.remove('pinned');
     panel.style.removeProperty('--cmp-width');
+    panel.style.removeProperty('--cmp-left');
     btn.classList.remove('pinned');
     btn.textContent = '🔓';
     btn.title = 'Зафиксировать панель';
