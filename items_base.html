@@ -529,30 +529,6 @@ function switchQ(q) {
   if (view) render(view);
 }
 
-function renderRunes(c) {
-  const GROUP_LABELS = { equip:'Руны в экипировку', jewel:'Руны в бижутерию', exorc:'Руны Экзорциста' };
-  const GROUP_ORDER  = ['equip','jewel','exorc'];
-  let html = '';
-  GROUP_ORDER.forEach(function(g) {
-    const items = RUNES.map((r,i) => ({r,i})).filter(function(x){ return x.r.group === g; });
-    if (!items.length) return;
-    html += `<div class="art-section-divider">${GROUP_LABELS[g]}</div><div class="buff-grid">`;
-    html += items.map(function(x) {
-      const r = x.r, i = x.i;
-      return `<div class="buff-card" onmouseenter="ttShowRune(${i},event)" onmousemove="ttMove(event)" onmouseleave="ttHide()">
-        ${icoHtml(r.img, r.quality)}
-        <div class="buff-text"><div class="buff-name">${r.name}</div></div>
-      </div>`;
-    }).join('');
-    html += `</div>`;
-  });
-
-  c.innerHTML = `
-    <div class="c-title">Руны</div>
-    <div class="c-sub">Наложение на экипировку</div>
-    ${html}`;
-}
-
 
 const CLASS_BUFFS = [
   { name:'Зоркий глаз',   cls:'Лучник',    quality:'green', effect:'+15% наносимый урон',      img:'stats_calculator/buffs/class_buff/skill_alert_eye.png' },
@@ -619,114 +595,49 @@ function renderArtifacts(c) {
   c.innerHTML = html;
 }
 
-function renderJewelry(c) {
-  const idxOf = a => ARTIFACTS.indexOf(a);
+const JEWELRY_SLOTS_DB = [
+  { id:'ring1,ring2', name:'Кольца' },
+  { id:'amulet',      name:'Амулеты' },
+  { id:'bracelet1',   name:'Браслеты' },
+  { id:'medallion',   name:'Медальоны' },
+  { id:'trophy',      name:'Трофеи' },
+  { id:'talisman',    name:'Талисманы' },
+  { id:'accessory1',  name:'Аксессуары' },
+  { id:'accessory2',  name:'Аксессуары 2' },
+];
 
-  function jewCard(art) {
-    const q = QUALITIES.find(q2 => q2.id === art.quality);
-    return `<div class="buff-card" onmouseenter="ttShowArt(${idxOf(art)},event)" onmousemove="ttMove(event)" onmouseleave="ttHide()">
-      ${icoHtml(art.img, art.quality)}
-      <div class="buff-text"><div class="buff-name">${art.name}</div></div>
-    </div>`;
+async function renderJewelry(c) {
+  c.innerHTML = '<div class="c-title" style="color:var(--txt3)">Загрузка…</div>';
+  const allItems = await loadDb('equipment_none');
+  const jewelSlotIds = new Set(JEWELRY_SLOTS_DB.map(s => s.id));
+  const items = allItems.filter(i => jewelSlotIds.has(i.slot));
+
+  const presentQuals = new Set(items.map(i => i.quality));
+  const validQ = QUALITIES.filter(q => presentQuals.has(q.id));
+  if (!validQ.find(q => q.id === activeQ)) activeQ = validQ[validQ.length - 2]?.id || validQ[0]?.id || 'purple';
+
+  const qTabs = validQ.map(q =>
+    `<div class="q-tab${activeQ===q.id?' on':''}" data-q="${q.id}" onclick="switchQ('${q.id}')">${q.label}</div>`
+  ).join('');
+
+  const filtered = items.filter(i => i.quality === activeQ);
+  _ttDbItems = filtered;
+
+  let html = '';
+  for (const slot of JEWELRY_SLOTS_DB) {
+    const slotItems = filtered.filter(i => i.slot === slot.id);
+    if (!slotItems.length) continue;
+    slotItems.sort((a, b) => a.reqlvl - b.reqlvl);
+    html += `<div class="art-section-divider">${slot.name}</div><div class="eq-grid">`;
+    slotItems.forEach(item => { html += dbItemCard(item, filtered.indexOf(item)); });
+    html += `</div>`;
   }
 
-  function section(title, slotId, groupOrder, pairGroups) {
-    const items = ARTIFACTS.filter(a => a.slotId === slotId && !a.event);
-    if (!items.length) return '';
-    let html = `<div class="jewel-section-head">${title}</div>`;
-    if (groupOrder) {
-      const ungrouped = sortByQuality(items.filter(a => !a.group));
-      if (ungrouped.length) html += `<div class="buff-grid">${ungrouped.map(jewCard).join('')}</div>`;
-      for (const g of groupOrder) {
-        const grp = sortByQuality(items.filter(a => a.group === g));
-        const gridCls = pairGroups && pairGroups.includes(g) ? 'pair-grid' : 'buff-grid';
-        if (grp.length) html += `<div class="art-section-divider">${g}</div><div class="${gridCls}">${grp.map(jewCard).join('')}</div>`;
-      }
-    } else {
-      const ungrouped = sortByQuality(items.filter(a => !a.group));
-      const groups = [...new Set(items.filter(a => a.group).map(a => a.group))];
-      if (ungrouped.length) html += `<div class="buff-grid">${ungrouped.map(jewCard).join('')}</div>`;
-      for (const g of groups) {
-        const grp = sortByQuality(items.filter(a => a.group === g));
-        html += `<div class="art-section-divider">${g}</div><div class="buff-grid">${grp.map(jewCard).join('')}</div>`;
-      }
-    }
-    return html;
-  }
-
-  function ringPair(g1, g2) {
-    const i1 = sortByQuality(ARTIFACTS.filter(a => a.slotId === 'ring' && a.group === g1 && !a.event));
-    const i2 = sortByQuality(ARTIFACTS.filter(a => a.slotId === 'ring' && a.group === g2 && !a.event));
-    if (!i1.length && !i2.length) return '';
-    return `<div class="ring-quad-grid">
-      <div class="art-section-divider" style="grid-column:1/3">${g1}</div>
-      <div class="art-section-divider" style="grid-column:3/5">${g2}</div>
-      ${i1.map(jewCard).join('')}${i2.map(jewCard).join('')}
-    </div>`;
-  }
-
-  function ringGroup(g) {
-    const items = sortByQuality(ARTIFACTS.filter(a => a.slotId === 'ring' && a.group === g && !a.event));
-    return items.length ? `<div class="art-section-divider">${g}</div><div class="buff-grid">${items.map(jewCard).join('')}</div>` : '';
-  }
-
-  c.innerHTML = `<div class="c-title">Бижутерия</div>
-    <div class="jewel-section-head">Кольца</div>
-    ${ringGroup('Кольца Фалькона')}
-    ${ringPair('Кольцо сквайра', 'Кольцо рыцаря')}
-    ${ringPair('Кольцо лорда', 'Кольцо барона')}
-    ${section('Браслеты',  'bracelet')}
-    ${section('Амулеты',   'amulet')}
-    ${section('Трофеи',    'trophy')}
-    ${section('Брелоки',   'trinket')}
-    ${section('Жетоны',    'badge')}
-    ${section('Талисманы', 'talisman')}`;
+  c.innerHTML = `<div class="c-title">Украшения</div>
+    <div class="q-tabs">${qTabs}</div>
+    ${html || '<div class="soon-block">Нет предметов для этого качества</div>'}`;
 }
 
-function renderEventBuffs(c) {
-  const idxOf = b => EVENT_BUFFS.indexOf(b);
-  function buffCard(b) {
-    return `<div class="buff-card" onmouseenter="ttShowEventBuff(${idxOf(b)},event)" onmousemove="ttMove(event)" onmouseleave="ttHide()">
-      ${icoHtml(b.img, b.quality)}
-      <div class="buff-text"><div class="buff-name">${b.name}</div></div>
-    </div>`;
-  }
-  const groups = [...new Set(EVENT_BUFFS.map(b => b.group))];
-  let html = `<div class="c-title">Ивентовые бафы</div>`;
-  for (const g of groups) {
-    const items = sortByQuality(EVENT_BUFFS.filter(b => b.group === g));
-    html += `<div class="art-section-divider">${g}</div><div class="buff-grid">${items.map(buffCard).join('')}</div>`;
-  }
-  c.innerHTML = html;
-}
-
-function renderEventEquipment(c) {
-  const idxOf = a => ARTIFACTS.indexOf(a);
-  // Ивентовые предметы — всё кроме камней + предметы из бижутерии с флагом event:true
-  const JEWELRY_SLOTS = ['ring','bracelet','amulet','trophy','trinket','badge','talisman'];
-  const eventItems = ARTIFACTS.filter(a => a.slotId && !a.slotId.startsWith('stone_') &&
-    (!JEWELRY_SLOTS.includes(a.slotId) || a.event));
-
-  function evCard(art) {
-    return `<div class="buff-card" onmouseenter="ttShowArt(${idxOf(art)},event)" onmousemove="ttMove(event)" onmouseleave="ttHide()">
-      ${icoHtml(art.img, art.quality)}
-      <div class="buff-text"><div class="buff-name">${art.name}</div></div>
-    </div>`;
-  }
-
-  if (!eventItems.length) { renderSoon(c, 'Ивентовая экипировка'); return; }
-
-  // Группируем по slotId-группе или названию группы
-  const groups = [...new Set(eventItems.map(a => a.group || a.name))];
-  let html = `<div class="c-title">Ивентовая экипировка</div>`;
-  const ungrouped = sortByQuality(eventItems.filter(a => !a.group));
-  if (ungrouped.length) html += `<div class="buff-grid">${ungrouped.map(evCard).join('')}</div>`;
-  for (const g of [...new Set(eventItems.filter(a => a.group).map(a => a.group))]) {
-    const grp = sortByQuality(eventItems.filter(a => a.group === g));
-    html += `<div class="art-section-divider">${g}</div><div class="buff-grid">${grp.map(evCard).join('')}</div>`;
-  }
-  c.innerHTML = html;
-}
 
 function renderSoon(c, title) {
   c.innerHTML = `
@@ -786,22 +697,6 @@ function ttShowWF(e) {
   _tt.classList.add('vis');
   ttMove(e);
 }
-function ttShowRune(idx, e) {
-  const r = RUNES[idx];
-  let html = ttHead(r.img, r.quality, r.name);
-  html += `<div class="tt-row"><span class="tt-key" style="color:var(--txt3)">Вставляется в: ${r.slot}</span></div>`;
-  if (r.stats) {
-    html += STAT_LABELS
-      .filter(s => r.stats[s.key] != null)
-      .map(s => `<div class="tt-row"><span class="tt-key">${s.label}</span><span class="tt-val">${fmtVal(r.stats[s.key],s.pct)}</span></div>`)
-      .join('');
-  } else {
-    html += `<div class="tt-empty">Данные не добавлены</div>`;
-  }
-  _tt.innerHTML = html;
-  _tt.classList.add('vis');
-  ttMove(e);
-}
 function ttShowArt(idx, e) {
   const art = ARTIFACTS[idx];
   let html = ttHead(art.img, art.quality, art.name);
@@ -855,21 +750,6 @@ function ttShowFood(idx, e) {
   ttMove(e);
 }
 
-function ttShowEventBuff(idx, e) {
-  const b = EVENT_BUFFS[idx];
-  let html = ttHead(b.img, b.quality, b.name);
-  if (b.note) html += `<div class="tt-row"><span class="tt-key" style="font-style:italic;color:var(--txt3)">${b.note}</span></div>`;
-  if (b.stats) {
-    html += STAT_LABELS.filter(s => b.stats[s.key] != null)
-      .map(s => `<div class="tt-row"><span class="tt-key">${s.label}</span><span class="tt-val">${fmtVal(b.stats[s.key],s.pct)}</span></div>`)
-      .join('');
-  } else {
-    html += `<div class="tt-empty">Данные не добавлены</div>`;
-  }
-  _tt.innerHTML = html;
-  _tt.classList.add('vis');
-  ttMove(e);
-}
 function ttMove(e) {
   const x = e.clientX + 14, y = e.clientY + 14;
   _tt.style.left = Math.min(x, window.innerWidth  - _tt.offsetWidth  - 8) + 'px';
@@ -1139,6 +1019,21 @@ function ttShowDbItem(idx, e) {
   // Тип предмета
   const kind = locKind(item.id);
   if (kind) html += `<div class="tt-kind">Тип: ${kind}</div>`;
+
+  // Слот (для рун)
+  if (item.slot && item.category === 'enchant') {
+    const SLOT_RU = {
+      'helm':'Шлем','chest':'Нагрудник','shoulders':'Наплечники','pants':'Штаны',
+      'gloves':'Перчатки','belt':'Пояс','boots':'Сапоги','weapon1':'Оружие',
+      'weapon2':'Второе оружие','ring1,ring2':'Кольцо','amulet':'Амулет',
+      'bracelet1':'Браслет','medallion':'Медальон','trophy':'Трофей',
+      'talisman':'Талисман','accessory1':'Аксессуар 1','accessory2':'Аксессуар 2',
+      'battle_bag':'Боевая сумка',
+    };
+    const slotRu = item.slot.startsWith('artefact') ? 'Артефакт'
+      : (SLOT_RU[item.slot] || item.slot);
+    html += `<div class="tt-kind" style="color:var(--txt3)">Вставляется в: ${slotRu}</div>`;
+  }
 
   // Описание и действие
   const desc   = locDesc(item.id);
