@@ -191,6 +191,7 @@ a{color:inherit;text-decoration:none}
 .sb-divider{height:1px;background:var(--line);margin:6px 12px}
 .sb-sub{padding-left:28px !important;font-size:12px;letter-spacing:0}
 .sb-group-header.on{color:var(--gold-l) !important}
+.sb-cls-ico{width:16px;height:16px;border-radius:2px;flex-shrink:0;object-fit:contain}
 
 /* class tabs in content */
 .cls-tabs{display:flex;gap:2px;flex-wrap:wrap;margin-bottom:20px}
@@ -308,13 +309,30 @@ a{color:inherit;text-decoration:none}
 
     <div class="sb-group">
       <div class="sb-group-header open" onclick="toggleGroup(this)">
-        Экипировка <span class="sb-chevron">▶</span>
+        Снаряжение <span class="sb-chevron">▶</span>
       </div>
       <div class="sb-items open">
-        <div class="sb-item sb-sub" data-view="equipment" onclick="show(this)">Основная экипировка</div>
-        <div class="sb-item sb-sub" data-view="event_equipment" onclick="show(this)">Ивентовая экипировка</div>
-        <div class="sb-item sb-sub" data-view="jewelry" onclick="show(this)">Бижутерия</div>
-        <div class="sb-item sb-sub" data-view="artifacts" onclick="show(this)">Артефакты</div>
+        <div class="sb-item sb-sub" data-view="eq_warrior" onclick="show(this)">
+          <img class="sb-cls-ico" src="stats_calculator/classes/warrior.png" alt="" onerror="this.style.opacity=0">Воин
+        </div>
+        <div class="sb-item sb-sub" data-view="eq_paladin" onclick="show(this)">
+          <img class="sb-cls-ico" src="stats_calculator/classes/paladin.png" alt="" onerror="this.style.opacity=0">Паладин
+        </div>
+        <div class="sb-item sb-sub" data-view="eq_mage" onclick="show(this)">
+          <img class="sb-cls-ico" src="stats_calculator/classes/mage.png" alt="" onerror="this.style.opacity=0">Маг
+        </div>
+        <div class="sb-item sb-sub" data-view="eq_cleric" onclick="show(this)">
+          <img class="sb-cls-ico" src="stats_calculator/classes/cleric.png" alt="" onerror="this.style.opacity=0">Монах
+        </div>
+        <div class="sb-item sb-sub" data-view="eq_rogue" onclick="show(this)">
+          <img class="sb-cls-ico" src="stats_calculator/classes/rogue.png" alt="" onerror="this.style.opacity=0">Головорез
+        </div>
+        <div class="sb-item sb-sub" data-view="eq_shooter" onclick="show(this)">
+          <img class="sb-cls-ico" src="stats_calculator/classes/shooter.png" alt="" onerror="this.style.opacity=0">Лучник
+        </div>
+        <div class="sb-divider"></div>
+        <div class="sb-item sb-sub" data-view="jewelry" onclick="show(this)">Украшения</div>
+        <div class="sb-item sb-sub" data-view="battle_bags" onclick="show(this)">Боевые сумки</div>
         <div class="sb-item sb-sub" data-view="runes" onclick="show(this)">Руны</div>
       </div>
     </div>
@@ -324,29 +342,8 @@ a{color:inherit;text-decoration:none}
         Бафы <span class="sb-chevron">▶</span>
       </div>
       <div class="sb-items">
-        <div class="sb-item" data-view="buffs_class" onclick="show(this)">
-          <div class="sb-ico"></div>Классовые бафы
-        </div>
-        <div class="sb-item" data-view="buffs_event" onclick="show(this)">
-          <div class="sb-ico"></div>Ивентовые бафы
-        </div>
-        <div class="sb-item" data-view="buffs_food" onclick="show(this)">
-          <div class="sb-ico"></div>Еда
-        </div>
-      </div>
-    </div>
-
-    <div class="sb-group">
-      <div class="sb-group-header" onclick="toggleGroup(this)">
-        Питомцы <span class="sb-chevron">▶</span>
-      </div>
-      <div class="sb-items">
-        <div class="sb-item" data-view="pets_fair" onclick="show(this)">
-          <div class="sb-ico"></div>Ярмарочные питомцы
-        </div>
-        <div class="sb-item" data-view="pets_deco" onclick="show(this)">
-          <div class="sb-ico"></div>Декоративные питомцы
-        </div>
+        <div class="sb-item sb-sub" data-view="buffs_event" onclick="show(this)">Ивентовые бафы</div>
+        <div class="sb-item sb-sub" data-view="buffs_food" onclick="show(this)">Еда</div>
       </div>
     </div>
 
@@ -413,16 +410,13 @@ function show(el) {
 
 function render(view) {
   const c = document.getElementById('content');
-  if (view === 'equipment')     renderEquipment(c);
-  else if (view === 'runes')      renderRunes(c);
-  else if (view === 'jewelry')    renderJewelry(c);
-  else if (view === 'event_equipment') renderEventEquipment(c);
-  else if (view === 'artifacts')  renderArtifacts(c);
-  else if (view === 'buffs_class')  renderBuffsClass(c);
-  else if (view === 'buffs_event')  renderEventBuffs(c);
-  else if (view === 'buffs_food')   renderFood(c);
-  else if (view === 'pets_fair')   renderSoon(c, 'Ярмарочные питомцы');
-  else if (view === 'pets_deco')   renderSoon(c, 'Декоративные питомцы');
+  if (view.startsWith('eq_'))       renderEquipmentDb(c, view.slice(3));
+  else if (view === 'runes')         renderRunesDb(c);
+  else if (view === 'jewelry')       renderJewelry(c);
+  else if (view === 'battle_bags')   renderBattleBags(c);
+  else if (view === 'buffs_class')   renderBuffsClass(c);
+  else if (view === 'buffs_event')   renderEventBuffsDb(c);
+  else if (view === 'buffs_food')    renderFood(c);
 }
 
 function renderEquipment(c) {
@@ -459,11 +453,6 @@ function renderEquipment(c) {
     <div class="cls-tabs">${clsTabs}</div>
     <div class="q-tabs">${qTabs}</div>
     <div class="eq-grid">${cards}</div>`;
-}
-
-function switchCls(cls) {
-  activeCls = cls;
-  renderEquipment(document.getElementById('content'));
 }
 
 function switchQ(q) {
@@ -824,6 +813,311 @@ function sv(val, suffix='') {
   return val == null
     ? `<td class="stat-empty">—</td>`
     : `<td class="stat-val">${val}${suffix}</td>`;
+}
+
+// ── DB helpers ───────────────────────────────────────────────────────────────
+
+const DB_CLASSES = {
+  warrior:'Воин', paladin:'Паладин', mage:'Маг',
+  cleric:'Монах', rogue:'Головорез', shooter:'Лучник',
+};
+
+const EQ_MAIN_SLOTS = [
+  { id:'weapon1',   name:'Оружие' },
+  { id:'weapon2',   name:'Второе оружие' },
+  { id:'helm',      name:'Шлем' },
+  { id:'chest',     name:'Нагрудник' },
+  { id:'shoulders', name:'Наплечники' },
+  { id:'pants',     name:'Штаны' },
+  { id:'gloves',    name:'Перчатки' },
+  { id:'belt',      name:'Пояс' },
+  { id:'boots',     name:'Сапоги' },
+];
+
+const DB_STAT_LABELS = [
+  { key:'attack',                           label:'Атака' },
+  { key:'defense',                          label:'Защита' },
+  { key:'max_health',                       label:'Запас здоровья' },
+  { key:'mana',                             label:'Запас маны' },
+  { key:'armor',                            label:'Броня' },
+  { key:'change_heal_sent_percent',         label:'Эффект. лечения',      pct:true },
+  { key:'change_health_regeneration_speed', label:'Восст. жизни' },
+  { key:'critical_attack_multiplier',       label:'Сила крита',            pct:true },
+  { key:'chance_critical_attack',           label:'Шанс крита',            pct:true },
+  { key:'resist_to_wind_percent',           label:'Сопр. ветра',           pct:true },
+  { key:'resist_to_fire_percent',           label:'Сопр. огня',            pct:true },
+  { key:'resist_to_light_percent',          label:'Сопр. света',           pct:true },
+  { key:'elem_def',                         label:'Защита стихий' },
+  { key:'atk_eff',                          label:'Эффект. атаки',         pct:true },
+  { key:'change_damage_sent_percent',       label:'Исходящий урон',        pct:true },
+  { key:'change_damage_received_percent',   label:'Снижение урона',        pct:true },
+  { key:'change_absorb_critical',           label:'Защита от крита',       pct:true },
+  { key:'weakness_to_wind_percent',         label:'Уязв. к ветру',         pct:true },
+  { key:'weakness_to_fire_percent',         label:'Уязв. к огню',          pct:true },
+  { key:'weakness_to_light_percent',        label:'Уязв. к свету',         pct:true },
+  { key:'duration',                         label:'Длительность',          suffix:'с' },
+];
+
+const EVENT_TAG_LABELS = {
+  halloween:'Хэллоуин', caldron:'Котёл', st_patric:'День Святого Патрика',
+  dragons:'Чешуя Дракона', colder:'Зимний праздник', flowers:'8 марта',
+  cook:'Кулинарный конкурс', cards_booster:'Карты', dniwe:'Праздник независимости',
+  joust_2x2:'Турнир 2×2', pets:'Питомцы', pirate_day:'День пирата',
+  arena_sp_useable:'Арена', fair:'Ярмарка', goblin_land:'Земля гоблинов',
+  expedition:'Экспедиция', witcher:'Ведьмак', demon:'Бесы',
+  useable:'Общие', bestsale:'Магазин', gladiator:'Гладиатор',
+  conqueror:'Завоеватель', guardsman:'Охрана', exorcist:'Экзорцист',
+  wedding:'Свадьба', contest:'Конкурс',
+};
+
+const EVENT_TAG_ORDER = [
+  'halloween','caldron','st_patric','dragons','colder','flowers','cook',
+  'cards_booster','dniwe','joust_2x2','pirate_day','fair','goblin_land',
+  'expedition','witcher','demon','arena_sp_useable','pets',
+  'gladiator','conqueror','guardsman','exorcist','wedding','contest',
+  'useable','bestsale',
+];
+
+const RUNE_SLOT_GROUPS = [
+  { label:'Руны в экипировку', slots:new Set(['weapon1','weapon2','helm','chest','shoulders','pants','gloves','belt','boots']) },
+  { label:'Руны в украшения',  slots:new Set(['amulet','ring1,ring2','bracelet1','medallion','trophy','talisman','accessory1','accessory2']) },
+  { label:'Руны в артефакты',  slots:new Set(['artefact1,artefact2,artefact3,artefact4,artefact5,artefact6,artefact7,artefact8,artefact9']) },
+  { label:'Руны в боевые сумки', slots:new Set(['battle_bag']) },
+];
+
+const _dbCache = {};
+async function loadDb(name) {
+  if (!_dbCache[name]) {
+    const r = await fetch(`db/${name}.json`);
+    _dbCache[name] = await r.json();
+  }
+  return _dbCache[name];
+}
+
+let _ttDbItems = [];
+
+function itemDbName(item) {
+  const id = item.id;
+  if (id.startsWith('reinforced_'))      return 'Усиленный';
+  if (id.startsWith('red_equipment_'))   return 'Легендарный';
+  if (id.includes('fair_equipment'))     return 'Ярмарочный';
+  if (id.includes('_guard'))             return 'Гвардейский';
+  if (id.includes('_offer'))             return 'Особый';
+  if (id.includes('halloween'))          return 'Хэллоуин';
+  if (id.includes('march_8'))            return '8 марта';
+  if (id.includes('new_year'))           return 'Новый год';
+  if (id.includes('flowers'))            return 'Цветочный';
+  return 'Стандартный';
+}
+
+function dbStatRows(stats) {
+  if (!stats) return '<div class="tt-empty">Нет статов</div>';
+  return DB_STAT_LABELS
+    .filter(s => stats[s.key] != null)
+    .map(s => {
+      const v = stats[s.key];
+      const disp = s.suffix ? `${v}${s.suffix}` : (s.pct ? `+${v}%` : (v >= 0 ? `+${v}` : v));
+      return `<div class="tt-row"><span class="tt-key">${s.label}</span><span class="tt-val">${disp}</span></div>`;
+    }).join('');
+}
+
+function dbItemCard(item, idx) {
+  const frame = QUALITY_FRAME[item.quality] || '';
+  const frameHtml = frame ? `<img class="ico-frame" src="${frame}" alt="">` : '';
+  return `<div class="buff-card" onmouseenter="ttShowDbItem(${idx},event)" onmousemove="ttMove(event)" onmouseleave="ttHide()">
+    <div class="rune-ico">${frameHtml}</div>
+    <div class="buff-text">
+      <div class="buff-name">${itemDbName(item)}</div>
+      <div class="buff-cls">Ур. ${item.reqlvl}${item.price > 1 ? ' · ' + item.price.toLocaleString('ru') + ' зол.' : ''}</div>
+    </div>
+  </div>`;
+}
+
+function ttShowDbItem(idx, e) {
+  const item = _ttDbItems[idx];
+  if (!item) return;
+  const q = QUALITIES.find(q2 => q2.id === item.quality);
+  const color = q ? q.color : 'var(--txt)';
+  const frame = QUALITY_FRAME[item.quality] || '';
+  const frameHtml = frame ? `<img class="ico-frame" src="${frame}" alt="">` : '';
+  const ico = `<div class="tt-ico">${frameHtml}</div>`;
+  const name = itemDbName(item);
+  let html = `<div class="tt-head">${ico}<div class="tt-name" style="color:${color}">${name}</div></div>`;
+  if (item.reqlvl) html += `<div class="tt-row"><span class="tt-key">Требуемый уровень</span><span class="tt-val" style="color:var(--gold-l)">${item.reqlvl}</span></div>`;
+  if (item.set)    html += `<div class="tt-row"><span class="tt-key">Сет</span><span class="tt-val">${item.set}</span></div>`;
+  html += dbStatRows(item.stats);
+  if (item.price > 1) html += `<div class="tt-row"><span class="tt-key">Цена</span><span class="tt-val">${item.price.toLocaleString('ru')} зол.</span></div>`;
+  if (item.ruby_price) html += `<div class="tt-row"><span class="tt-key">Рубины</span><span class="tt-val">${item.ruby_price}</span></div>`;
+  _tt.innerHTML = html;
+  _tt.classList.add('vis');
+  ttMove(e);
+}
+
+// ── Equipment by class (from db) ─────────────────────────────────────────────
+
+async function renderEquipmentDb(c, cls) {
+  c.innerHTML = '<div class="c-title" style="color:var(--txt3)">Загрузка…</div>';
+  const allItems = await loadDb(`equipment_${cls}`);
+  const clsName = DB_CLASSES[cls] || cls;
+
+  const mainSlotIds = new Set(EQ_MAIN_SLOTS.map(s => s.id));
+  const eqItems = allItems.filter(i => mainSlotIds.has(i.slot));
+
+  const presentQuals = new Set(eqItems.map(i => i.quality));
+  const validQ = QUALITIES.filter(q => presentQuals.has(q.id));
+  if (!validQ.find(q => q.id === activeQ)) activeQ = validQ[validQ.length - 2]?.id || validQ[0]?.id || 'purple';
+
+  const qTabs = validQ.map(q =>
+    `<div class="q-tab${activeQ===q.id?' on':''}" data-q="${q.id}" onclick="switchQ('${q.id}')">${q.label}</div>`
+  ).join('');
+
+  const filtered = eqItems.filter(i => i.quality === activeQ);
+  _ttDbItems = filtered;
+
+  let html = '';
+  for (const slot of EQ_MAIN_SLOTS) {
+    const slotItems = filtered.filter(i => i.slot === slot.id);
+    if (!slotItems.length) continue;
+    slotItems.sort((a,b) => a.reqlvl - b.reqlvl);
+    html += `<div class="art-section-divider">${slot.name}</div><div class="buff-grid">`;
+    slotItems.forEach((item, i) => {
+      html += dbItemCard(item, filtered.indexOf(item));
+    });
+    html += `</div>`;
+  }
+
+  c.innerHTML = `
+    <div class="c-title">Снаряжение: ${clsName}</div>
+    <div class="q-tabs">${qTabs}</div>
+    ${html || '<div class="soon-block">Нет предметов для этого качества</div>'}`;
+}
+
+// ── Runes (from db/enchants.json) ────────────────────────────────────────────
+
+async function renderRunesDb(c) {
+  c.innerHTML = '<div class="c-title" style="color:var(--txt3)">Загрузка…</div>';
+  const runes = await loadDb('enchants');
+  _ttDbItems = runes;
+
+  let html = '';
+  for (const group of RUNE_SLOT_GROUPS) {
+    const groupRunes = runes.filter(r => group.slots.has(r.slot));
+    if (!groupRunes.length) continue;
+    const sorted = sortByQuality(groupRunes);
+    html += `<div class="art-section-divider">${group.label}</div><div class="buff-grid">`;
+    sorted.forEach(r => {
+      const idx = runes.indexOf(r);
+      const frame = QUALITY_FRAME[r.quality] || '';
+      const frameHtml = frame ? `<img class="ico-frame" src="${frame}" alt="">` : '';
+      const mainStat = r.stats ? Object.entries(r.stats)[0] : null;
+      const mainStatStr = mainStat
+        ? `${(DB_STAT_LABELS.find(s=>s.key===mainStat[0])?.label||mainStat[0])}: ${mainStat[1]}`
+        : '';
+      html += `<div class="buff-card" onmouseenter="ttShowDbItem(${idx},event)" onmousemove="ttMove(event)" onmouseleave="ttHide()">
+        <div class="rune-ico">${frameHtml}</div>
+        <div class="buff-text">
+          <div class="buff-name">${r.id.replace(/_/g,' ')}</div>
+          <div class="buff-cls">${mainStatStr}</div>
+        </div>
+      </div>`;
+    });
+    html += `</div>`;
+  }
+
+  c.innerHTML = `<div class="c-title">Руны</div><div class="c-sub">Наложение на экипировку и украшения</div>${html}`;
+}
+
+// ── Battle Bags ──────────────────────────────────────────────────────────────
+
+async function renderBattleBags(c) {
+  c.innerHTML = '<div class="c-title" style="color:var(--txt3)">Загрузка…</div>';
+  const allItems = await loadDb('inventory');
+  const bags = allItems.filter(i => i.category === 'battle_bag' || (i.tags||'').includes('battle_bag'));
+  _ttDbItems = bags;
+
+  if (!bags.length) { renderSoon(c, 'Боевые сумки'); return; }
+
+  const sorted = sortByQuality(bags);
+  let html = `<div class="buff-grid">`;
+  sorted.forEach(item => {
+    const idx = bags.indexOf(item);
+    const frame = QUALITY_FRAME[item.quality] || '';
+    const frameHtml = frame ? `<img class="ico-frame" src="${frame}" alt="">` : '';
+    html += `<div class="buff-card" onmouseenter="ttShowDbItem(${idx},event)" onmousemove="ttMove(event)" onmouseleave="ttHide()">
+      <div class="rune-ico">${frameHtml}</div>
+      <div class="buff-text">
+        <div class="buff-name">${item.id.replace(/_/g,' ')}</div>
+        <div class="buff-cls">Ур. ${item.reqlvl}</div>
+      </div>
+    </div>`;
+  });
+  html += `</div>`;
+
+  c.innerHTML = `<div class="c-title">Боевые сумки</div>${html}`;
+}
+
+// ── Event Buffs (from db/buffs.json) ─────────────────────────────────────────
+
+async function renderEventBuffsDb(c) {
+  c.innerHTML = '<div class="c-title" style="color:var(--txt3)">Загрузка…</div>';
+  const allBuffs = await loadDb('buffs');
+  _ttDbItems = allBuffs;
+
+  function primaryTag(item) {
+    const tags = (item.tags||'').split(',').map(t=>t.trim()).filter(Boolean);
+    for (const t of EVENT_TAG_ORDER) if (tags.includes(t)) return t;
+    return tags[0] || 'useable';
+  }
+
+  const grouped = {};
+  for (const item of allBuffs) {
+    const tag = primaryTag(item);
+    (grouped[tag] = grouped[tag]||[]).push(item);
+  }
+
+  let html = '';
+  for (const tag of EVENT_TAG_ORDER) {
+    if (!grouped[tag]?.length) continue;
+    const label = EVENT_TAG_LABELS[tag] || tag;
+    const sorted = sortByQuality(grouped[tag]);
+    html += `<div class="art-section-divider">${label} (${sorted.length})</div><div class="buff-grid">`;
+    sorted.forEach(item => {
+      const idx = allBuffs.indexOf(item);
+      const frame = QUALITY_FRAME[item.quality] || '';
+      const frameHtml = frame ? `<img class="ico-frame" src="${frame}" alt="">` : '';
+      const mainStat = item.stats ? Object.entries(item.stats).find(([k]) => k !== 'count' && k !== 'duration') : null;
+      const statStr = mainStat
+        ? `${(DB_STAT_LABELS.find(s=>s.key===mainStat[0])?.label||mainStat[0])}: ${mainStat[1]}${mainStat[0].includes('percent')?'%':''}`
+        : '';
+      html += `<div class="buff-card" onmouseenter="ttShowDbItem(${idx},event)" onmousemove="ttMove(event)" onmouseleave="ttHide()">
+        <div class="rune-ico">${frameHtml}</div>
+        <div class="buff-text">
+          <div class="buff-name">${item.id.replace(/_/g,' ')}</div>
+          <div class="buff-cls">${statStr}</div>
+        </div>
+      </div>`;
+    });
+    html += `</div>`;
+  }
+  // any remaining tags not in order
+  for (const [tag, items] of Object.entries(grouped)) {
+    if (EVENT_TAG_ORDER.includes(tag)) continue;
+    const label = EVENT_TAG_LABELS[tag] || tag;
+    const sorted = sortByQuality(items);
+    html += `<div class="art-section-divider">${label} (${sorted.length})</div><div class="buff-grid">`;
+    sorted.forEach(item => {
+      const idx = allBuffs.indexOf(item);
+      const frame = QUALITY_FRAME[item.quality] || '';
+      const frameHtml = frame ? `<img class="ico-frame" src="${frame}" alt="">` : '';
+      html += `<div class="buff-card" onmouseenter="ttShowDbItem(${idx},event)" onmousemove="ttMove(event)" onmouseleave="ttHide()">
+        <div class="rune-ico">${frameHtml}</div>
+        <div class="buff-text"><div class="buff-name">${item.id.replace(/_/g,' ')}</div></div>
+      </div>`;
+    });
+    html += `</div>`;
+  }
+
+  c.innerHTML = `<div class="c-title">Ивентовые бафы</div>${html}`;
 }
 </script>
 </body>
