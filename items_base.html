@@ -313,6 +313,13 @@ a{color:inherit;text-decoration:none}
   .layout{flex-direction:column}
   .content{padding:20px 16px 60px}
 }
+.copy-toast {
+  position:fixed; bottom:32px; left:50%; transform:translateX(-50%) translateY(12px);
+  background:var(--bg2); border:1px solid var(--line); color:var(--txt2);
+  font:12px/1 monospace; padding:7px 14px; border-radius:6px;
+  opacity:0; pointer-events:none; transition:opacity .18s, transform .18s; z-index:9999;
+}
+.copy-toast.vis { opacity:1; transform:translateX(-50%) translateY(0); }
 </style>
 </head>
 <body>
@@ -403,7 +410,11 @@ a{color:inherit;text-decoration:none}
         Остальные предметы <span class="sb-chevron">▶</span>
       </div>
       <div class="sb-items">
-        <div class="sb-item sb-sub" data-view="other_colder" onclick="show(this)">Колдер</div>
+        <div class="sb-item sb-sub" data-view="other_colder"    onclick="show(this)">Колдер</div>
+        <div class="sb-item sb-sub" data-view="other_halloween" onclick="show(this)">Тыквенный фестиваль</div>
+        <div class="sb-item sb-sub" data-view="other_caldron"   onclick="show(this)">Земли мёртвых</div>
+        <div class="sb-item sb-sub" data-view="other_st_patric" onclick="show(this)">Месяц цветущего хмеля</div>
+        <div class="sb-item sb-sub" data-view="other_dragons"   onclick="show(this)">Небесные Драконы</div>
       </div>
     </div>
 
@@ -496,6 +507,10 @@ function render(view) {
   else if (view === 'tech_no_stats')  renderTechNoStats(c);
   else if (view === 'tech_equipment') renderTechEquipment(c);
   else if (view === 'other_colder')       renderOtherSection(c, 'colder');
+  else if (view === 'other_halloween')    renderOtherSection(c, 'halloween');
+  else if (view === 'other_caldron')      renderOtherSection(c, 'caldron');
+  else if (view === 'other_st_patric')    renderOtherSection(c, 'st_patric');
+  else if (view === 'other_dragons')      renderOtherSection(c, 'dragons');
   else if (view === 'archive_equipment')  renderArchiveSection(c, 'Экипировка');
   else if (view === 'archive_profession') renderArchiveSection(c, 'Профессии');
   else if (view === 'archive_conqueror')  renderArchiveSection(c, 'Завоеватель');
@@ -665,6 +680,11 @@ const _tt = document.createElement('div');
 _tt.className = 'eq-tt';
 document.body.appendChild(_tt);
 
+const _copyToast = document.createElement('div');
+_copyToast.id = 'copy-toast';
+_copyToast.className = 'copy-toast';
+document.body.appendChild(_copyToast);
+
 function fmtVal(v, pct) { return (v >= 0 ? '+' : '') + v + (pct ? '%' : ''); }
 
 function ttHead(img, quality, name) {
@@ -765,6 +785,17 @@ function ttMove(e) {
   _tt.style.top  = Math.min(y, window.innerHeight - _tt.offsetHeight - 8) + 'px';
 }
 function ttHide() { _tt.classList.remove('vis'); }
+
+function copyItemId(e, id) {
+  e.stopPropagation();
+  navigator.clipboard.writeText(id).then(() => {
+    const toast = document.getElementById('copy-toast');
+    toast.textContent = id;
+    toast.classList.add('vis');
+    clearTimeout(toast._t);
+    toast._t = setTimeout(() => toast.classList.remove('vis'), 1800);
+  });
+}
 
 function sv(val, suffix='') {
   return val == null
@@ -1012,7 +1043,7 @@ function dbItemCard(item, idx) {
   const imgHtml = src ? `<img class="ico-img" src="${src}" alt="" onerror="iconFallback(this)">` : '';
   const q = QUALITIES.find(q2 => q2.id === item.quality);
   const nameColor = q ? q.color : 'var(--txt2)';
-  return `<div class="eq-card" onmouseenter="ttShowDbItem(${idx},event)" onmousemove="ttMove(event)" onmouseleave="ttHide()">
+  return `<div class="eq-card" onmouseenter="ttShowDbItem(${idx},event)" onmousemove="ttMove(event)" onmouseleave="ttHide()" ondblclick="copyItemId(event,'${item.id}')"  title="Двойной клик — скопировать ID">
     <div class="rune-ico">${imgHtml}${frameHtml}</div>
     <div class="eq-slot-name" style="color:${nameColor}">${name}</div>
   </div>`;
@@ -1225,7 +1256,11 @@ function pocketLabel(n) {
 const ARCHIVE_BAG_IDS = new Set(['battle_bag_default', 'offer_battle_bag_3_4']);
 
 const OTHER_SECTIONS = {
-  colder: new Set(['colder_2025_trinket_daily_quest_part']),
+  colder:    { ids: ['colder_2025_trinket_daily_quest_part'] },
+  halloween: { tags: ['halloween'] },
+  caldron:   { tags: ['caldron'] },
+  st_patric: { tags: ['st_patric'] },
+  dragons:   { tags: ['dragons'] },
 };
 
 const ARCHIVE_QUEST_IDS = new Set([
@@ -1267,8 +1302,14 @@ async function renderBattleBags(c) {
 
 async function renderEventBuffsDb(c) {
   c.innerHTML = '<div class="c-title" style="color:var(--txt3)">Загрузка…</div>';
-  const allOtherIds = new Set(Object.values(OTHER_SECTIONS).flatMap(s => [...s]));
-  const allBuffs = (await loadDb('buffs')).filter(i => !ARCHIVE_QUEST_IDS.has(i.id) && !allOtherIds.has(i.id) && !(i.id.startsWith('cook_') && !i.id.startsWith('cook_recipe_')));
+  const otherIds  = new Set(Object.values(OTHER_SECTIONS).flatMap(s => s.ids  || []));
+  const otherTags = new Set(Object.values(OTHER_SECTIONS).flatMap(s => s.tags || []));
+  const allBuffs = (await loadDb('buffs')).filter(i =>
+    !ARCHIVE_QUEST_IDS.has(i.id) &&
+    !otherIds.has(i.id) &&
+    !(i.id.startsWith('cook_') && !i.id.startsWith('cook_recipe_')) &&
+    !((i.tags||'').split(',').some(t => otherTags.has(t.trim())))
+  );
   _ttDbItems = allBuffs;
 
   function primaryTag(item) {
@@ -1365,12 +1406,23 @@ async function renderTechEquipment(c) {
 }
 
 async function renderOtherSection(c, key) {
-  const TITLES = { colder: 'Колдер' };
+  const TITLES = {
+    colder:    'Колдер',
+    halloween: 'Тыквенный фестиваль',
+    caldron:   'Земли мёртвых',
+    st_patric: 'Месяц цветущего хмеля',
+    dragons:   'Небесные Драконы',
+  };
   const title = TITLES[key] || key;
   c.innerHTML = '<div class="c-title" style="color:var(--txt3)">Загрузка…</div>';
-  const ids = OTHER_SECTIONS[key] || new Set();
+  const section = OTHER_SECTIONS[key] || {};
+  const idSet  = new Set(section.ids  || []);
+  const tagSet = new Set(section.tags || []);
   const [buffs, inv] = await Promise.all([loadDb('buffs'), loadDb('inventory')]);
-  const items = [...buffs, ...inv].filter(i => ids.has(i.id));
+  const items = [...buffs, ...inv].filter(i =>
+    idSet.has(i.id) ||
+    (tagSet.size > 0 && (i.tags||'').split(',').some(t => tagSet.has(t.trim())))
+  );
   items.sort((a, b) => (locName(a.id)||a.id).localeCompare(locName(b.id)||b.id, 'ru'));
   _ttDbItems = items;
   const grid = items.length
