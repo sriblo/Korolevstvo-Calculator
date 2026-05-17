@@ -941,14 +941,10 @@ function dbItemCard(item, idx, slotName) {
   const frame = QUALITY_FRAME[item.quality] || '';
   const frameHtml = frame ? `<img class="ico-frame" src="${frame}" alt="">` : '';
   const variant = itemVariant(item);
-  const title = slotName ? `${slotName} ур. ${item.reqlvl}` : `Ур. ${item.reqlvl}`;
-  const sub = [variant, item.price > 1 ? item.price.toLocaleString('ru') + ' зол.' : null].filter(Boolean).join(' · ');
-  return `<div class="buff-card" onmouseenter="ttShowDbItem(${idx},event)" onmousemove="ttMove(event)" onmouseleave="ttHide()">
+  const nameParts = [slotName, `ур. ${item.reqlvl}`, variant].filter(Boolean);
+  return `<div class="eq-card" onmouseenter="ttShowDbItem(${idx},event)" onmousemove="ttMove(event)" onmouseleave="ttHide()">
     <div class="rune-ico">${frameHtml}</div>
-    <div class="buff-text">
-      <div class="buff-name">${title}</div>
-      <div class="buff-cls">${sub}</div>
-    </div>
+    <div class="eq-slot-name">${nameParts.join(' ')}</div>
   </div>`;
 }
 
@@ -999,7 +995,7 @@ async function renderEquipmentDb(c, cls) {
     const slotItems = filtered.filter(i => i.slot === slot.id);
     if (!slotItems.length) continue;
     slotItems.sort((a,b) => a.reqlvl - b.reqlvl);
-    html += `<div class="art-section-divider">${slot.name}</div><div class="buff-grid">`;
+    html += `<div class="art-section-divider">${slot.name}</div><div class="eq-grid">`;
     slotItems.forEach(item => {
       html += dbItemCard(item, filtered.indexOf(item), slot.name);
     });
