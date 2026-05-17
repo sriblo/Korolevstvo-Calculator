@@ -365,6 +365,7 @@ a{color:inherit;text-decoration:none}
         </div>
         <div class="sb-divider"></div>
         <div class="sb-item sb-sub" data-view="jewelry" onclick="show(this)">Украшения</div>
+        <div class="sb-item sb-sub" data-view="artifacts" onclick="show(this)">Артефакты</div>
         <div class="sb-item sb-sub" data-view="battle_bags" onclick="show(this)">Боевые сумки</div>
         <div class="sb-item sb-sub" data-view="runes" onclick="show(this)">Руны</div>
       </div>
@@ -472,6 +473,7 @@ function show(el) {
 function render(view) {
   const c = document.getElementById('content');
   if (view.startsWith('eq_'))       renderEquipmentDb(c, view.slice(3));
+  else if (view === 'artifacts')     renderArtifactsDb(c);
   else if (view === 'runes')         renderRunesDb(c);
   else if (view === 'jewelry')       renderJewelry(c);
   else if (view === 'battle_bags')   renderBattleBags(c);
@@ -903,10 +905,18 @@ const TOKEN_LABEL = {
 };
 
 const RUNE_SLOT_GROUPS = [
-  { label:'Руны в экипировку', slots:new Set(['weapon1','weapon2','helm','chest','shoulders','pants','gloves','belt','boots']) },
-  { label:'Руны в украшения',  slots:new Set(['amulet','ring1,ring2','bracelet1','medallion','trophy','talisman','accessory1','accessory2']) },
-  { label:'Руны в артефакты',  slots:new Set(['artefact1,artefact2,artefact3,artefact4,artefact5,artefact6,artefact7,artefact8,artefact9']) },
-  { label:'Руны в боевые сумки', slots:new Set(['battle_bag']) },
+  { label:'Руны в оружие',          slots:new Set(['weapon1']) },
+  { label:'Руны в штаны',           slots:new Set(['pants']) },
+  { label:'Руны в пояс',            slots:new Set(['belt']) },
+  { label:'Руны в сапоги',          slots:new Set(['boots']) },
+  { label:'Руны в перчатки',        slots:new Set(['gloves']) },
+  { label:'Руны в наплечники',      slots:new Set(['shoulders']) },
+  { label:'Руны в нагрудник',       slots:new Set(['chest']) },
+  { label:'Руны в шлем',            slots:new Set(['helm']) },
+  { label:'Руны во второе оружие',  slots:new Set(['weapon2']) },
+  { label:'Руны в украшения',       slots:new Set(['amulet','ring1,ring2','bracelet1','medallion','trophy','talisman','accessory1','accessory2']) },
+  { label:'Руны в артефакты',       slots:new Set(['artefact1,artefact2,artefact3,artefact4,artefact5,artefact6,artefact7,artefact8,artefact9']) },
+  { label:'Руны в боевые сумки',    slots:new Set(['battle_bag']) },
 ];
 
 const _dbCache = {};
@@ -966,9 +976,8 @@ const CLASS_SUFFIXES = /_(cleric|mage|warrior|rogue|shooter|paladin|human|elf|or
 function itemIconSrc(item) {
   let v = item.visual;
   if (!v) return null;
-  const isEq = EQ_MAIN_SLOTS.some(s => s.id === item.slot);
+  const isEq = item.category !== 'enchant' && EQ_MAIN_SLOTS.some(s => s.id === item.slot);
   if (isEq) return `icons/${v}_human.jpg`;
-  // Some non-equipment visuals have class suffix that doesn't exist as a file
   v = v.replace(CLASS_SUFFIXES, '');
   return `icons/${v}.jpg`;
 }
@@ -1111,6 +1120,56 @@ async function renderEquipmentDb(c, cls) {
     ${html || '<div class="soon-block">Нет предметов для этого качества</div>'}`;
 }
 
+// ── Artifacts ────────────────────────────────────────────────────────────────
+
+async function renderArtifactsDb(c) {
+  c.innerHTML = '<div class="c-title" style="color:var(--txt3)">Загрузка…</div>';
+  const allItems = await loadDb('equipment_none');
+  const arts = allItems.filter(i => i.slot && i.slot.startsWith('artefact'));
+
+  const presentQuals = new Set(arts.map(i => i.quality));
+  const validQ = QUALITIES.filter(q => presentQuals.has(q.id));
+  if (!validQ.find(q => q.id === activeQ)) activeQ = validQ[validQ.length - 2]?.id || validQ[0]?.id || 'orange';
+
+  const qTabs = validQ.map(q =>
+    `<div class="q-tab${activeQ===q.id?' on':''}" data-q="${q.id}" onclick="switchQ('${q.id}')">${q.label}</div>`
+  ).join('');
+
+  const filtered = arts.filter(i => i.quality === activeQ);
+  filtered.sort((a, b) => a.reqlvl - b.reqlvl);
+  _ttDbItems = filtered;
+
+  const dbHtml = filtered.length
+    ? `<div class="art-section-divider">Ивентовые</div><div class="eq-grid">${filtered.map((item,idx) => dbItemCard(item,idx)).join('')}</div>`
+    : '<div class="soon-block">Нет предметов для этого качества</div>';
+
+  // Камни (старые данные)
+  const idxOf = a => ARTIFACTS.indexOf(a);
+  const stones = ARTIFACTS.filter(a => a.slotId?.startsWith('stone_'));
+  function stoneCard(art) {
+    return `<div class="eq-card" onmouseenter="ttShowArt(${idxOf(art)},event)" onmousemove="ttMove(event)" onmouseleave="ttHide()">
+      <div class="rune-ico"><img class="ico-img" src="${art.img}" alt="" onerror="iconFallback(this)">${QUALITY_FRAME[art.quality] ? `<img class="ico-frame" src="${QUALITY_FRAME[art.quality]}" alt="">` : ''}</div>
+      <div class="eq-slot-name" style="color:${QUALITIES.find(q=>q.id===art.quality)?.color||'var(--txt2)'}">${art.name}</div>
+    </div>`;
+  }
+  const stoneGroups = [...new Set(stones.filter(a=>a.group).map(a=>a.group))];
+  let stonesHtml = stones.filter(a=>!a.group).map(a=>stoneCard(a)).join('');
+  for (const g of stoneGroups) {
+    const grp = sortByQuality(stones.filter(a=>a.group===g));
+    stonesHtml += `<div class="art-section-divider">${g}</div><div class="eq-grid">${grp.map(a=>stoneCard(a)).join('')}</div>`;
+  }
+
+  c.innerHTML = `<div class="c-title">Артефакты</div>
+    <div class="q-tabs">${qTabs}</div>
+    ${dbHtml}
+    <div class="art-section-divider" style="margin-top:20px">Камни</div>
+    <div class="eq-grid">${stones.filter(a=>!a.group).map(a=>stoneCard(a)).join('')}</div>
+    ${stoneGroups.map(g => {
+      const grp = sortByQuality(stones.filter(a=>a.group===g));
+      return `<div class="art-section-divider">${g}</div><div class="eq-grid">${grp.map(a=>stoneCard(a)).join('')}</div>`;
+    }).join('')}`;
+}
+
 // ── Runes (from db/enchants.json) ────────────────────────────────────────────
 
 async function renderRunesDb(c) {
@@ -1145,10 +1204,24 @@ function bagPockets(item) {
   return idm ? parseInt(idm[1]) : 0;
 }
 
+function pocketLabel(n) {
+  if (n === 0) return 'Прочие';
+  const m10 = n % 10, m100 = n % 100;
+  if (m100 >= 11 && m100 <= 14) return `${n} карманов`;
+  if (m10 === 1) return `${n} карман`;
+  if (m10 >= 2 && m10 <= 4) return `${n} кармана`;
+  return `${n} карманов`;
+}
+
+const ARCHIVE_BAG_IDS = new Set(['battle_bag_default', 'offer_battle_bag_3_4']);
+
 async function renderBattleBags(c) {
   c.innerHTML = '<div class="c-title" style="color:var(--txt3)">Загрузка…</div>';
   const allItems = await loadDb('inventory');
-  const bags = allItems.filter(i => i.category === 'battle_bag' || (i.tags||'').includes('battle_bag'));
+  const bags = allItems.filter(i =>
+    (i.category === 'battle_bag' || (i.tags||'').includes('battle_bag'))
+    && !ARCHIVE_BAG_IDS.has(i.id)
+  );
 
   if (!bags.length) { renderSoon(c, 'Боевые сумки'); return; }
 
@@ -1157,8 +1230,7 @@ async function renderBattleBags(c) {
 
   const groups = {};
   for (const item of bags) {
-    const p = bagPockets(item);
-    const key = p > 0 ? `${p} кармана` : 'Прочие';
+    const key = pocketLabel(bagPockets(item));
     (groups[key] = groups[key] || []).push(item);
   }
 
@@ -1295,7 +1367,22 @@ async function renderTechEquipment(c) {
     <div class="c-sub">${sorted.length} предметов</div>${html}`;
 }
 
-function renderArchiveSection(c, title) {
+async function renderArchiveSection(c, title) {
+  if (title === 'Экипировка') {
+    c.innerHTML = '<div class="c-title" style="color:var(--txt3)">Загрузка…</div>';
+    const allItems = await loadDb('inventory');
+    const bags = allItems.filter(i =>
+      (i.category === 'battle_bag' || (i.tags||'').includes('battle_bag'))
+      && ARCHIVE_BAG_IDS.has(i.id)
+    );
+    bags.sort((a, b) => a.reqlvl - b.reqlvl);
+    _ttDbItems = bags;
+    const grid = bags.length
+      ? `<div class="art-section-divider">Боевые сумки</div><div class="eq-grid">${bags.map((item,idx) => dbItemCard(item,idx)).join('')}</div>`
+      : '<div class="soon-block">Пусто</div>';
+    c.innerHTML = `<div class="c-title">Архив: Экипировка</div>${grid}`;
+    return;
+  }
   c.innerHTML = `<div class="c-title">Архив: ${title}</div>
     <div class="soon-block">В разработке</div>`;
 }
