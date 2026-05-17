@@ -391,7 +391,20 @@ a{color:inherit;text-decoration:none}
         <div class="sb-item sb-sub" data-view="tech_stats"      onclick="show(this)">Влияют на статы</div>
         <div class="sb-item sb-sub" data-view="tech_no_stats"   onclick="show(this)">Не влияют на статы</div>
         <div class="sb-item sb-sub" data-view="tech_equipment"  onclick="show(this)">Снаряжение (всё)</div>
-        <div class="sb-item sb-sub" data-view="tech_archive"    onclick="show(this)">Архив</div>
+      </div>
+    </div>
+
+    <div class="sb-divider" style="margin:8px 0"></div>
+
+    <div class="sb-group">
+      <div class="sb-group-header" onclick="toggleGroup(this)">
+        Архив <span class="sb-chevron">▶</span>
+      </div>
+      <div class="sb-items">
+        <div class="sb-item sb-sub" data-view="archive_equipment"  onclick="show(this)">Экипировка</div>
+        <div class="sb-item sb-sub" data-view="archive_profession" onclick="show(this)">Профессии</div>
+        <div class="sb-item sb-sub" data-view="archive_conqueror"  onclick="show(this)">Завоеватель</div>
+        <div class="sb-item sb-sub" data-view="archive_quest"      onclick="show(this)">Квестовые предметы</div>
       </div>
     </div>
 
@@ -468,7 +481,10 @@ function render(view) {
   else if (view === 'tech_stats')     renderTechStats(c);
   else if (view === 'tech_no_stats')  renderTechNoStats(c);
   else if (view === 'tech_equipment') renderTechEquipment(c);
-  else if (view === 'tech_archive')   renderTechArchive(c);
+  else if (view === 'archive_equipment')  renderArchiveSection(c, 'Экипировка');
+  else if (view === 'archive_profession') renderArchiveSection(c, 'Профессии');
+  else if (view === 'archive_conqueror')  renderArchiveSection(c, 'Завоеватель');
+  else if (view === 'archive_quest')      renderArchiveSection(c, 'Квестовые предметы');
 }
 
 function renderEquipment(c) {
@@ -1226,6 +1242,14 @@ async function renderRunesDb(c) {
 
 // ── Battle Bags ──────────────────────────────────────────────────────────────
 
+function bagPockets(item) {
+  const name = locName(item.id) || '';
+  const m = name.match(/(\d+)\s*(карман|отделени|слот)/);
+  if (m) return parseInt(m[1]);
+  const idm = item.id.match(/_(\d+)(?:_\d+)?$/);
+  return idm ? parseInt(idm[1]) : 0;
+}
+
 async function renderBattleBags(c) {
   c.innerHTML = '<div class="c-title" style="color:var(--txt3)">Загрузка…</div>';
   const allItems = await loadDb('inventory');
@@ -1233,23 +1257,24 @@ async function renderBattleBags(c) {
 
   if (!bags.length) { renderSoon(c, 'Боевые сумки'); return; }
 
-  const presentQuals = new Set(bags.map(i => i.quality));
-  const validQ = QUALITIES.filter(q => presentQuals.has(q.id));
-  if (!validQ.find(q => q.id === activeQ)) activeQ = validQ[validQ.length - 2]?.id || validQ[0]?.id || 'red';
+  bags.sort((a, b) => bagPockets(a) - bagPockets(b) || a.reqlvl - b.reqlvl);
+  _ttDbItems = bags;
 
-  const qTabs = validQ.map(q =>
-    `<div class="q-tab${activeQ===q.id?' on':''}" data-q="${q.id}" onclick="switchQ('${q.id}')">${q.label}</div>`
-  ).join('');
+  const groups = {};
+  for (const item of bags) {
+    const p = bagPockets(item);
+    const key = p > 0 ? `${p} кармана` : 'Прочие';
+    (groups[key] = groups[key] || []).push(item);
+  }
 
-  const filtered = bags.filter(i => i.quality === activeQ);
-  filtered.sort((a, b) => a.reqlvl - b.reqlvl);
-  _ttDbItems = filtered;
+  let html = '';
+  for (const [label, items] of Object.entries(groups)) {
+    html += `<div class="art-section-divider">${label}</div><div class="eq-grid">`;
+    items.forEach(item => { html += dbItemCard(item, bags.indexOf(item)); });
+    html += `</div>`;
+  }
 
-  let html = `<div class="eq-grid">`;
-  filtered.forEach((item, idx) => { html += dbItemCard(item, idx); });
-  html += `</div>`;
-
-  c.innerHTML = `<div class="c-title">Боевые сумки</div><div class="q-tabs">${qTabs}</div>${html}`;
+  c.innerHTML = `<div class="c-title">Боевые сумки</div>${html}`;
 }
 
 // ── Event Buffs (from db/buffs.json) ─────────────────────────────────────────
@@ -1375,10 +1400,9 @@ async function renderTechEquipment(c) {
     <div class="c-sub">${sorted.length} предметов</div>${html}`;
 }
 
-function renderTechArchive(c) {
-  c.innerHTML = `<div class="c-title">Архив</div>
-    <div class="c-sub">Предметы, выведенные из эксплуатации</div>
-    <div class="soon-block">Пусто — перетаскивай сюда предметы в процессе сортировки</div>`;
+function renderArchiveSection(c, title) {
+  c.innerHTML = `<div class="c-title">Архив: ${title}</div>
+    <div class="soon-block">В разработке</div>`;
 }
 
 // ── Search ────────────────────────────────────────────────────────────────────
