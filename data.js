@@ -127,11 +127,32 @@ const STAT_LABELS = [
 // ── БАЗОВЫЕ ХАРАКТЕРИСТИКИ (голый персонаж без шмота и бафов) ────────────────
 const BASE_STATS = {
   warrior: { hp:1155, def:13.65, atk:15.75, mana:125, crit_chance:0, crit_dmg:1.5 },
+  rogue:   { hp:1155, def:13.65, atk:15.75, mana:125, crit_chance:0, crit_dmg:1.5 },
 };
 
 // ── СТАТЫ ЭКИПИРОВКИ ──────────────────────────────────────────────────────────
 const STATS = {
   warrior: {
+    white: {
+      weapon: { atk:4.75, def:20.18, hp:220, mana:5,  wind_res:0.40 },
+    },
+    green: {
+      pants:  { atk:8.45, def:12.88, hp:350, mana:24, wind_res:0.50 },
+      belt:   { atk:9.00, def:7.91,  hp:360, mana:30, wind_res:0.50 },
+    },
+    red: {
+      helm:      { atk:40.23, def:3.81,  hp:1662, mana:900, heal_eff:5, hp_regen:60, crit_dmg:6, wind_res:0.80, elem_def:193, atk_eff:22 },
+      shoulders: { atk:21.56, def:3.13,  hp:800,  mana:210, heal_eff:5, hp_regen:60, crit_dmg:6, wind_res:0.80, elem_def:146, atk_eff:2 },
+      chest:     { atk:22.43, def:2.43,  hp:831,  mana:230,  heal_eff:5, hp_regen:60, crit_dmg:6, wind_res:0.80, elem_def:169, atk_eff:2 },
+      gloves:    { atk:20.81, def:4.14,  hp:769,  mana:190,  heal_eff:5, hp_regen:60, crit_dmg:6, wind_res:0.80, elem_def:124, atk_eff:2 },
+      weapon:    { atk:12.72, def:37.85, hp:694,  mana:80,   heal_eff:5, hp_regen:50, crit_dmg:5, wind_res:0.80, elem_def:35,  atk_eff:2 },
+      offhand:   { atk:50.15, def:1.53,  hp:4299, mana:1260, heal_eff:5, hp_regen:90, crit_dmg:6, wind_res:0.80,               atk_eff:7 },
+      pants:     { atk:14.53, def:15.03, hp:713,  mana:120,  heal_eff:5, hp_regen:50, crit_dmg:5, wind_res:0.80, elem_def:53,  atk_eff:2 },
+      belt:      { atk:15.56, def:8.56,  hp:725,  mana:150,  heal_eff:5, hp_regen:50, crit_dmg:5, wind_res:0.80, elem_def:72,  atk_eff:2 },
+      boots:     { atk:20.04, def:5.65,  hp:750,  mana:170,  heal_eff:5, hp_regen:50, crit_dmg:5, wind_res:0.80, elem_def:92,  atk_eff:2 },
+    },
+  },
+  rogue: {
     white: {
       weapon: { atk:4.75, def:20.18, hp:220, mana:5,  wind_res:0.40 },
     },
