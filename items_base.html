@@ -858,6 +858,33 @@ const DB_STAT_LABELS = [
   { key:'duration',                         label:'Длительность',          suffix:'с' },
 ];
 
+// Маппинги db-классов/слотов → ключи в CLASS_ITEM_NAMES / CLASS_SET_NAMES
+const DB_CLS_MAP  = { cleric:'monk', shooter:'archer', warrior:'warrior', paladin:'paladin', mage:'mage', rogue:'rogue' };
+const DB_SLOT_MAP = { weapon1:'weapon', weapon2:'offhand' };
+
+function eqItemName(item) {
+  const cls  = DB_CLS_MAP[item.class] || item.class;
+  const slot = DB_SLOT_MAP[item.slot] || item.slot;
+  const base = CLASS_ITEM_NAMES[cls]?.[slot] || EQ_MAIN_SLOTS.find(s=>s.id===item.slot)?.name || item.slot;
+  const set  = CLASS_SET_NAMES[cls]?.[item.quality] || '';
+  const baseName = set ? `${base} ${set}` : base;
+
+  const id = item.id;
+  if (id.startsWith('reinforced_')) {
+    const prefix = УСИЛ[base] || 'Усиленный';
+    return `${prefix} ${baseName}`;
+  }
+  if (id.includes('fair_equipment'))   return `Ярмарочный ${baseName}`;
+  if (id.includes('_guard'))           return `Гвардейский ${baseName}`;
+  if (id.includes('_offer'))           return `Особый ${baseName}`;
+  if (id.includes('halloween'))        return `Хэллоуин — ${baseName}`;
+  if (id.includes('march_8'))          return `8 марта — ${baseName}`;
+  if (id.includes('new_year'))         return `Новый год — ${baseName}`;
+  if (id.includes('flowers'))          return `Праздник — ${baseName}`;
+  if (id.startsWith('red_equipment_')) return baseName;
+  return baseName;
+}
+
 const EVENT_TAG_LABELS = {
   halloween:'Хэллоуин', caldron:'Котёл', st_patric:'День Святого Патрика',
   dragons:'Чешуя Дракона', colder:'Зимний праздник', flowers:'8 марта',
@@ -937,14 +964,13 @@ function dbStatRows(stats) {
     }).join('');
 }
 
-function dbItemCard(item, idx, slotName) {
+function dbItemCard(item, idx) {
   const frame = QUALITY_FRAME[item.quality] || '';
   const frameHtml = frame ? `<img class="ico-frame" src="${frame}" alt="">` : '';
-  const variant = itemVariant(item);
-  const nameParts = [slotName, `ур. ${item.reqlvl}`, variant].filter(Boolean);
+  const name = EQ_MAIN_SLOTS.find(s => s.id === item.slot) ? eqItemName(item) : item.id.replace(/_/g,' ');
   return `<div class="eq-card" onmouseenter="ttShowDbItem(${idx},event)" onmousemove="ttMove(event)" onmouseleave="ttHide()">
     <div class="rune-ico">${frameHtml}</div>
-    <div class="eq-slot-name">${nameParts.join(' ')}</div>
+    <div class="eq-slot-name">${name}<br><span style="color:var(--txt3);font-size:10px">ур. ${item.reqlvl}</span></div>
   </div>`;
 }
 
@@ -956,8 +982,7 @@ function ttShowDbItem(idx, e) {
   const frame = QUALITY_FRAME[item.quality] || '';
   const frameHtml = frame ? `<img class="ico-frame" src="${frame}" alt="">` : '';
   const ico = `<div class="tt-ico">${frameHtml}</div>`;
-  const slotObj = EQ_MAIN_SLOTS.find(s => s.id === item.slot);
-  const name = slotObj ? `${slotObj.name} ур. ${item.reqlvl}` : (item.id.replace(/_/g,' '));
+  const name = EQ_MAIN_SLOTS.find(s => s.id === item.slot) ? eqItemName(item) : item.id.replace(/_/g,' ');
   let html = `<div class="tt-head">${ico}<div class="tt-name" style="color:${color}">${name}</div></div>`;
   if (item.reqlvl) html += `<div class="tt-row"><span class="tt-key">Требуемый уровень</span><span class="tt-val" style="color:var(--gold-l)">${item.reqlvl}</span></div>`;
   if (item.set)    html += `<div class="tt-row"><span class="tt-key">Сет</span><span class="tt-val">${item.set}</span></div>`;
@@ -997,7 +1022,7 @@ async function renderEquipmentDb(c, cls) {
     slotItems.sort((a,b) => a.reqlvl - b.reqlvl);
     html += `<div class="art-section-divider">${slot.name}</div><div class="eq-grid">`;
     slotItems.forEach(item => {
-      html += dbItemCard(item, filtered.indexOf(item), slot.name);
+      html += dbItemCard(item, filtered.indexOf(item));
     });
     html += `</div>`;
   }
