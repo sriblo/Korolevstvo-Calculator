@@ -727,42 +727,36 @@ function ttShowArt(idx, e) {
   _tt.classList.add('vis');
   ttMove(e);
 }
-function renderFood(c) {
-  const foodBuffs = BUFFS.filter(b => b.cat === 'food');
-  const groups = [...new Set(foodBuffs.map(b => b.group))];
-  let html = `<div class="c-title">Еда</div>`;
-  for (const g of groups) {
-    const items = foodBuffs.filter(b => b.group === g);
-    html += `<div class="art-section-divider">${g}</div><div class="buff-grid">`;
-    html += items.map(b => {
-      const idx = foodBuffs.indexOf(b);
-      return `<div class="buff-card" onmouseenter="ttShowFood(${idx},event)" onmousemove="ttMove(event)" onmouseleave="ttHide()">
-        ${icoHtml(b.icon, b.quality)}
-        <div class="buff-text"><div class="buff-name">${b.name}</div></div>
-      </div>`;
-    }).join('');
+async function renderFood(c) {
+  c.innerHTML = '<div class="c-title" style="color:var(--txt3)">Загрузка…</div>';
+  const allBuffs = await loadDb('buffs');
+  const foods = allBuffs.filter(i => i.id.startsWith('cook_') && !i.id.startsWith('cook_recipe_'));
+
+  const FOOD_LOCATIONS = [
+    { prefix: 'cook_floring_buff_',        label: 'Еда Флоринга' },
+    { prefix: 'cook_kohill_islands_buff_', label: 'Еда Кохилльского архипелага' },
+    { prefix: 'cook_gaina_buff_',          label: 'Еда Гайны' },
+    { prefix: 'cook_spring_shore_buff_',   label: 'Еда Весеннего берега' },
+    { prefix: 'cook_hirn_buff_',           label: 'Еда Хирна' },
+    { prefix: 'cook_south_fyorl_buff_',    label: 'Еда Южного Фьорла' },
+    { prefix: 'cook_north_fyorl_buff_',    label: 'Еда Северного Фьорла' },
+  ];
+
+  let allSorted = [];
+  let html = '';
+
+  for (const loc of FOOD_LOCATIONS) {
+    const items = foods.filter(i => i.id.startsWith(loc.prefix)).sort((a, b) => a.id.localeCompare(b.id));
+    if (!items.length) continue;
+    const base = allSorted.length;
+    allSorted = allSorted.concat(items);
+    html += `<div class="art-section-divider">${loc.label} (${items.length})</div><div class="eq-grid">`;
+    items.forEach((item, i) => { html += dbItemCard(item, base + i); });
     html += `</div>`;
   }
-  c.innerHTML = html;
-}
 
-function ttShowFood(idx, e) {
-  const foodBuffs = BUFFS.filter(b => b.cat === 'food');
-  const b = foodBuffs[idx];
-  let html = ttHead(b.icon, b.quality, b.name);
-  if (b.level != null) {
-    html += `<div class="tt-row"><span class="tt-key" style="color:var(--txt3)">Требуемый уровень</span><span class="tt-val" style="color:var(--gold-l)">${b.level}</span></div>`;
-  }
-  if (b.stats) {
-    html += STAT_LABELS.filter(s => b.stats[s.key] != null)
-      .map(s => `<div class="tt-row"><span class="tt-key">${s.label}</span><span class="tt-val">${fmtVal(b.stats[s.key],s.pct)}</span></div>`)
-      .join('');
-  } else {
-    html += `<div class="tt-empty">Данные не добавлены</div>`;
-  }
-  _tt.innerHTML = html;
-  _tt.classList.add('vis');
-  ttMove(e);
+  _ttDbItems = allSorted;
+  c.innerHTML = `<div class="c-title">Еда</div>${html}`;
 }
 
 function ttMove(e) {
@@ -1274,7 +1268,7 @@ async function renderBattleBags(c) {
 async function renderEventBuffsDb(c) {
   c.innerHTML = '<div class="c-title" style="color:var(--txt3)">Загрузка…</div>';
   const allOtherIds = new Set(Object.values(OTHER_SECTIONS).flatMap(s => [...s]));
-  const allBuffs = (await loadDb('buffs')).filter(i => !ARCHIVE_QUEST_IDS.has(i.id) && !allOtherIds.has(i.id));
+  const allBuffs = (await loadDb('buffs')).filter(i => !ARCHIVE_QUEST_IDS.has(i.id) && !allOtherIds.has(i.id) && !(i.id.startsWith('cook_') && !i.id.startsWith('cook_recipe_')));
   _ttDbItems = allBuffs;
 
   function primaryTag(item) {
