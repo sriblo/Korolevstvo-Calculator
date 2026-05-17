@@ -893,11 +893,10 @@ function fmtGold(copper) {
   const g = Math.floor(copper / 10000);
   const s = Math.floor((copper % 10000) / 100);
   const c = copper % 100;
-  const parts = [];
-  if (g) parts.push(g.toLocaleString('ru') + ' зол.');
-  if (s) parts.push(s + ' сер.');
-  if (c && !g) parts.push(c + ' мед.');
-  return parts.join(' ') || copper + ' мед.';
+  if (g && s) return `${g.toLocaleString('ru')} зол. ${s} сер.`;
+  if (g)      return `${g.toLocaleString('ru')} зол.`;
+  if (s)      return `${s} сер.`;
+  return `${c} мед.`;
 }
 
 // ── DB helpers ───────────────────────────────────────────────────────────────
