@@ -598,32 +598,6 @@ function renderBuffsClass(c) {
     <div class="buff-grid">${cards}${wfCard}</div>`;
 }
 
-function renderArtifacts(c) {
-  function artCard(art, i) {
-    return `<div class="buff-card" onmouseenter="ttShowArt(${i},event)" onmousemove="ttMove(event)" onmouseleave="ttHide()">
-      ${icoHtml(art.img, art.quality)}
-      <div class="buff-text"><div class="buff-name">${art.name}</div></div>
-    </div>`;
-  }
-
-  const GROUP_ORDER = ['Камень Ведьмака','Камень Удачи','Камень Потерянных Земель','Камень Труда','Камень Дружбы','Камень Крови'];
-  const idxOf  = a => ARTIFACTS.indexOf(a);
-  // Только каменные слоты — не смешиваем с кольцами/браслетами/прочим
-  const stones = ARTIFACTS.filter(a => a.slotId?.startsWith('stone_'));
-  const unique = sortByQuality(stones.filter(a => !a.group));
-
-  let html = `<div class="c-title">Артефакты</div><div class="buff-grid">${unique.map(a => artCard(a, idxOf(a))).join('')}</div>`;
-
-  for (const g of GROUP_ORDER) {
-    const items = sortByQuality(stones.filter(a => a.group === g));
-    if (items.length) {
-      html += `<div class="art-section-divider">${g}</div>
-               <div class="buff-grid">${items.map(a => artCard(a, idxOf(a))).join('')}</div>`;
-    }
-  }
-
-  c.innerHTML = html;
-}
 
 const JEWELRY_SLOTS_DB = [
   { id:'ring1,ring2', name:'Кольца' },
@@ -728,21 +702,6 @@ function ttShowWF(e) {
   let html = ttHead(wf.img, wf.quality, wf.name);
   html += wf.effects.map(ef => `<div class="tt-row"><span class="tt-key" style="color:var(--txt2)">${ef}</span></div>`).join('');
   html += `<div class="tt-row" style="margin-top:4px"><span class="tt-key" style="font-style:italic;color:var(--txt3)">${wf.note}</span></div>`;
-  _tt.innerHTML = html;
-  _tt.classList.add('vis');
-  ttMove(e);
-}
-function ttShowArt(idx, e) {
-  const art = ARTIFACTS[idx];
-  let html = ttHead(art.img, art.quality, art.name);
-  if (art.stats) {
-    html += STAT_LABELS
-      .filter(s => art.stats[s.key] != null)
-      .map(s => `<div class="tt-row"><span class="tt-key">${s.label}</span><span class="tt-val">${fmtVal(art.stats[s.key],s.pct)}</span></div>`)
-      .join('');
-  } else {
-    html += `<div class="tt-empty">Данные не добавлены</div>`;
-  }
   _tt.innerHTML = html;
   _tt.classList.add('vis');
   ttMove(e);
@@ -1166,48 +1125,12 @@ async function renderArtifactsDb(c) {
   c.innerHTML = '<div class="c-title" style="color:var(--txt3)">Загрузка…</div>';
   const allItems = await loadDb('equipment_none');
   const arts = allItems.filter(i => i.slot && i.slot.startsWith('artefact'));
-
-  const presentQuals = new Set(arts.map(i => i.quality));
-  const validQ = QUALITIES.filter(q => presentQuals.has(q.id));
-  if (!validQ.find(q => q.id === activeQ)) activeQ = validQ[validQ.length - 2]?.id || validQ[0]?.id || 'orange';
-
-  const qTabs = validQ.map(q =>
-    `<div class="q-tab${activeQ===q.id?' on':''}" data-q="${q.id}" onclick="switchQ('${q.id}')">${q.label}</div>`
-  ).join('');
-
-  const filtered = arts.filter(i => i.quality === activeQ);
-  filtered.sort((a, b) => a.reqlvl - b.reqlvl);
-  _ttDbItems = filtered;
-
-  const dbHtml = filtered.length
-    ? `<div class="art-section-divider">Ивентовые</div><div class="eq-grid">${filtered.map((item,idx) => dbItemCard(item,idx)).join('')}</div>`
-    : '<div class="soon-block">Нет предметов для этого качества</div>';
-
-  // Камни (старые данные)
-  const idxOf = a => ARTIFACTS.indexOf(a);
-  const stones = ARTIFACTS.filter(a => a.slotId?.startsWith('stone_'));
-  function stoneCard(art) {
-    return `<div class="eq-card" onmouseenter="ttShowArt(${idxOf(art)},event)" onmousemove="ttMove(event)" onmouseleave="ttHide()">
-      <div class="rune-ico"><img class="ico-img" src="${art.img}" alt="" onerror="iconFallback(this)">${QUALITY_FRAME[art.quality] ? `<img class="ico-frame" src="${QUALITY_FRAME[art.quality]}" alt="">` : ''}</div>
-      <div class="eq-slot-name" style="color:${QUALITIES.find(q=>q.id===art.quality)?.color||'var(--txt2)'}">${art.name}</div>
-    </div>`;
-  }
-  const stoneGroups = [...new Set(stones.filter(a=>a.group).map(a=>a.group))];
-  let stonesHtml = stones.filter(a=>!a.group).map(a=>stoneCard(a)).join('');
-  for (const g of stoneGroups) {
-    const grp = sortByQuality(stones.filter(a=>a.group===g));
-    stonesHtml += `<div class="art-section-divider">${g}</div><div class="eq-grid">${grp.map(a=>stoneCard(a)).join('')}</div>`;
-  }
-
-  c.innerHTML = `<div class="c-title">Артефакты</div>
-    <div class="q-tabs">${qTabs}</div>
-    ${dbHtml}
-    <div class="art-section-divider" style="margin-top:20px">Камни</div>
-    <div class="eq-grid">${stones.filter(a=>!a.group).map(a=>stoneCard(a)).join('')}</div>
-    ${stoneGroups.map(g => {
-      const grp = sortByQuality(stones.filter(a=>a.group===g));
-      return `<div class="art-section-divider">${g}</div><div class="eq-grid">${grp.map(a=>stoneCard(a)).join('')}</div>`;
-    }).join('')}`;
+  arts.sort((a, b) => a.reqlvl - b.reqlvl);
+  _ttDbItems = arts;
+  const grid = arts.length
+    ? `<div class="eq-grid">${arts.map((item, idx) => dbItemCard(item, idx)).join('')}</div>`
+    : '<div class="soon-block">Нет данных</div>';
+  c.innerHTML = `<div class="c-title">Артефакты</div>${grid}`;
 }
 
 // ── Runes (from db/enchants.json) ────────────────────────────────────────────
