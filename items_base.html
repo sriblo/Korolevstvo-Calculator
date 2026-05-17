@@ -962,12 +962,21 @@ function dbStatRows(stats) {
     }).join('');
 }
 
+function itemIconSrc(item) {
+  const v = item.visual;
+  if (!v) return null;
+  const isEq = EQ_MAIN_SLOTS.some(s => s.id === item.slot);
+  return isEq ? `icons/${v}_human.jpg` : `icons/${v}.jpg`;
+}
+
 function dbItemCard(item, idx) {
   const frame = QUALITY_FRAME[item.quality] || '';
   const frameHtml = frame ? `<img class="ico-frame" src="${frame}" alt="">` : '';
   const name = EQ_MAIN_SLOTS.find(s => s.id === item.slot) ? eqItemName(item) : item.id.replace(/_/g,' ');
+  const src = itemIconSrc(item);
+  const imgHtml = src ? `<img class="ico-img" src="${src}" alt="" onerror="this.style.opacity=0">` : '';
   return `<div class="eq-card" onmouseenter="ttShowDbItem(${idx},event)" onmousemove="ttMove(event)" onmouseleave="ttHide()">
-    <div class="rune-ico">${frameHtml}</div>
+    <div class="rune-ico">${imgHtml}${frameHtml}</div>
     <div class="eq-slot-name">${name}<br><span style="color:var(--txt3);font-size:10px">ур. ${item.reqlvl}</span></div>
   </div>`;
 }
@@ -979,7 +988,9 @@ function ttShowDbItem(idx, e) {
   const color = q ? q.color : 'var(--txt)';
   const frame = QUALITY_FRAME[item.quality] || '';
   const frameHtml = frame ? `<img class="ico-frame" src="${frame}" alt="">` : '';
-  const ico = `<div class="tt-ico">${frameHtml}</div>`;
+  const src = itemIconSrc(item);
+  const imgHtml = src ? `<img class="ico-img" src="${src}" alt="" onerror="this.style.opacity=0">` : '';
+  const ico = `<div class="tt-ico">${imgHtml}${frameHtml}</div>`;
   const name = EQ_MAIN_SLOTS.find(s => s.id === item.slot) ? eqItemName(item) : item.id.replace(/_/g,' ');
   let html = `<div class="tt-head">${ico}<div class="tt-name" style="color:${color}">${name}</div></div>`;
   if (item.reqlvl) html += `<div class="tt-row"><span class="tt-key">Требуемый уровень</span><span class="tt-val" style="color:var(--gold-l)">${item.reqlvl}</span></div>`;
