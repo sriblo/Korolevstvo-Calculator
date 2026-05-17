@@ -1289,52 +1289,29 @@ async function renderEventBuffsDb(c) {
     (grouped[tag] = grouped[tag]||[]).push(item);
   }
 
+  let allSorted = [];
   let html = '';
-  for (const tag of EVENT_TAG_ORDER) {
-    if (!grouped[tag]?.length) continue;
-    const label = EVENT_TAG_LABELS[tag] || tag;
-    const sorted = sortByQuality(grouped[tag]);
-    html += `<div class="art-section-divider">${label} (${sorted.length})</div><div class="buff-grid">`;
-    sorted.forEach(item => {
-      const idx = allBuffs.indexOf(item);
-      const frame = QUALITY_FRAME[item.quality] || '';
-      const frameHtml = frame ? `<img class="ico-frame" src="${frame}" alt="">` : '';
-      const mainStat = item.stats ? Object.entries(item.stats).find(([k]) => k !== 'count' && k !== 'duration') : null;
-      const statStr = mainStat
-        ? `${(DB_STAT_LABELS.find(s=>s.key===mainStat[0])?.label||mainStat[0])}: +${mainStat[1]}${mainStat[0].includes('percent')?'%':''}`
-        : '';
-      const q = QUALITIES.find(q2 => q2.id === item.quality);
-      const qLabel = q ? `<span class="q-badge ${item.quality}">${q.label}</span> ` : '';
-      html += `<div class="buff-card" onmouseenter="ttShowDbItem(${idx},event)" onmousemove="ttMove(event)" onmouseleave="ttHide()">
-        <div class="rune-ico">${frameHtml}</div>
-        <div class="buff-text">
-          <div class="buff-name">${qLabel}Ур. ${item.reqlvl}</div>
-          <div class="buff-cls">${statStr}</div>
-        </div>
-      </div>`;
-    });
-    html += `</div>`;
-  }
-  // any remaining tags not in order
-  for (const [tag, items] of Object.entries(grouped)) {
-    if (EVENT_TAG_ORDER.includes(tag)) continue;
-    const label = EVENT_TAG_LABELS[tag] || tag;
+
+  function renderGroup(label, items) {
     const sorted = sortByQuality(items);
-    html += `<div class="art-section-divider">${label} (${sorted.length})</div><div class="buff-grid">`;
-    sorted.forEach(item => {
-      const idx = allBuffs.indexOf(item);
-      const frame = QUALITY_FRAME[item.quality] || '';
-      const frameHtml = frame ? `<img class="ico-frame" src="${frame}" alt="">` : '';
-      const q2 = QUALITIES.find(q3 => q3.id === item.quality);
-      const qL = q2 ? `<span class="q-badge ${item.quality}">${q2.label}</span> ` : '';
-      html += `<div class="buff-card" onmouseenter="ttShowDbItem(${idx},event)" onmousemove="ttMove(event)" onmouseleave="ttHide()">
-        <div class="rune-ico">${frameHtml}</div>
-        <div class="buff-text"><div class="buff-name">${qL}Ур. ${item.reqlvl}</div></div>
-      </div>`;
-    });
-    html += `</div>`;
+    const base = allSorted.length;
+    allSorted = allSorted.concat(sorted);
+    let g = `<div class="art-section-divider">${label} (${sorted.length})</div><div class="eq-grid">`;
+    sorted.forEach((item, i) => { g += dbItemCard(item, base + i); });
+    g += `</div>`;
+    return g;
   }
 
+  for (const tag of EVENT_TAG_ORDER) {
+    if (!grouped[tag]?.length) continue;
+    html += renderGroup(EVENT_TAG_LABELS[tag] || tag, grouped[tag]);
+  }
+  for (const [tag, items] of Object.entries(grouped)) {
+    if (EVENT_TAG_ORDER.includes(tag)) continue;
+    html += renderGroup(EVENT_TAG_LABELS[tag] || tag, items);
+  }
+
+  _ttDbItems = allSorted;
   c.innerHTML = `<div class="c-title">Ивентовые бафы</div>${html}`;
 }
 
