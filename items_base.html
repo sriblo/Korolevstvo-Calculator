@@ -294,10 +294,7 @@ a{color:inherit;text-decoration:none}
 .tt-price{display:flex;align-items:center;gap:5px;justify-content:space-between;padding:3px 0;font-size:12px}
 .tt-price-key{color:var(--txt2)}
 .tt-price-val{color:var(--txt);display:flex;align-items:center;gap:4px;font-feature-settings:'tnum'}
-.tt-coin{width:14px;height:14px;border-radius:50%;display:inline-block;flex-shrink:0}
-.tt-coin.gold  {background:#e8b84b}
-.tt-coin.ruby  {background:#cc3040}
-.tt-coin.token {background:#6080cc}
+.tt-coin{width:14px;height:14px;display:inline-block;flex-shrink:0;object-fit:contain;vertical-align:middle}
 
 /* technical section label */
 .sb-tech-header{
@@ -348,22 +345,22 @@ a{color:inherit;text-decoration:none}
       </div>
       <div class="sb-items open">
         <div class="sb-item sb-sub" data-view="eq_warrior" onclick="show(this)">
-          <img class="sb-cls-ico" src="stats_calculator/classes/warrior.png" alt="" onerror="this.style.opacity=0">Воин
+          <img class="sb-cls-ico" src="stats_calculator/classes/warrior.png" alt="" onerror="iconFallback(this)">Воин
         </div>
         <div class="sb-item sb-sub" data-view="eq_paladin" onclick="show(this)">
-          <img class="sb-cls-ico" src="stats_calculator/classes/paladin.png" alt="" onerror="this.style.opacity=0">Паладин
+          <img class="sb-cls-ico" src="stats_calculator/classes/paladin.png" alt="" onerror="iconFallback(this)">Паладин
         </div>
         <div class="sb-item sb-sub" data-view="eq_mage" onclick="show(this)">
-          <img class="sb-cls-ico" src="stats_calculator/classes/mage.png" alt="" onerror="this.style.opacity=0">Маг
+          <img class="sb-cls-ico" src="stats_calculator/classes/mage.png" alt="" onerror="iconFallback(this)">Маг
         </div>
         <div class="sb-item sb-sub" data-view="eq_cleric" onclick="show(this)">
-          <img class="sb-cls-ico" src="stats_calculator/classes/cleric.png" alt="" onerror="this.style.opacity=0">Монах
+          <img class="sb-cls-ico" src="stats_calculator/classes/cleric.png" alt="" onerror="iconFallback(this)">Монах
         </div>
         <div class="sb-item sb-sub" data-view="eq_rogue" onclick="show(this)">
-          <img class="sb-cls-ico" src="stats_calculator/classes/rogue.png" alt="" onerror="this.style.opacity=0">Головорез
+          <img class="sb-cls-ico" src="stats_calculator/classes/rogue.png" alt="" onerror="iconFallback(this)">Головорез
         </div>
         <div class="sb-item sb-sub" data-view="eq_shooter" onclick="show(this)">
-          <img class="sb-cls-ico" src="stats_calculator/classes/shooter.png" alt="" onerror="this.style.opacity=0">Лучник
+          <img class="sb-cls-ico" src="stats_calculator/classes/shooter.png" alt="" onerror="iconFallback(this)">Лучник
         </div>
         <div class="sb-divider"></div>
         <div class="sb-item sb-sub" data-view="jewelry" onclick="show(this)">Украшения</div>
@@ -426,7 +423,7 @@ const SLOTS = [
 function icoHtml(img, quality) {
   const frame = QUALITY_FRAME[quality] || '';
   return `<div class="rune-ico">` +
-    `<img class="ico-img" src="${img}" alt="" onerror="this.style.opacity=0">` +
+    `<img class="ico-img" src="${img}" alt="" onerror="iconFallback(this)">` +
     (frame ? `<img class="ico-frame" src="${frame}" alt="">` : '') +
     `</div>`;
 }
@@ -733,7 +730,7 @@ function ttHead(img, quality, name) {
   const frame = QUALITY_FRAME[quality] || '';
   const frameHtml = frame ? `<img class="ico-frame" src="${frame}" alt="">` : '';
   const ico = img
-    ? `<div class="tt-ico"><img class="ico-img" src="${img}" alt="" onerror="this.style.opacity=0">${frameHtml}</div>`
+    ? `<div class="tt-ico"><img class="ico-img" src="${img}" alt="" onerror="iconFallback(this)">${frameHtml}</div>`
     : (frame ? `<div class="tt-ico">${frameHtml}</div>` : '');
   return `<div class="tt-head">${ico}<div class="tt-name" style="color:${color}">${name}</div></div>`;
 }
@@ -990,6 +987,25 @@ const EVENT_TAG_ORDER = [
   'useable','bestsale',
 ];
 
+const TOKEN_ICO = {
+  event_token:        'icons/currency_tailen_event_small.png',
+  goblin_land_token:  'icons/currency_tailen_goblin_land_small.png',
+  expedition_token:   'icons/currency_tailen_expedition_small.png',
+  colder_token:       'icons/currency_tailen_colder_small.png',
+  blue_token:         'icons/currency_tailen_blue_small.png',
+  bronze_token:       'icons/currency_tailen_bronze_small.png',
+  blood_token:        'icons/currency_tailen_blood_small.png',
+};
+const TOKEN_LABEL = {
+  event_token:        'Тайлены (ивент)',
+  goblin_land_token:  'Тайлены Земли гоблинов',
+  expedition_token:   'Тайлены Экспедиции',
+  colder_token:       'Тайлены Зимнего праздника',
+  blue_token:         'Тайлены (синие)',
+  bronze_token:       'Тайлены (бронзовые)',
+  blood_token:        'Тайлены (кровь)',
+};
+
 const RUNE_SLOT_GROUPS = [
   { label:'Руны в экипировку', slots:new Set(['weapon1','weapon2','helm','chest','shoulders','pants','gloves','belt','boots']) },
   { label:'Руны в украшения',  slots:new Set(['amulet','ring1,ring2','bracelet1','medallion','trophy','talisman','accessory1','accessory2']) },
@@ -1055,6 +1071,12 @@ function itemIconSrc(item) {
   const isEq = EQ_MAIN_SLOTS.some(s => s.id === item.slot);
   return isEq ? `icons/${v}_human.jpg` : `icons/${v}.jpg`;
 }
+function iconFallback(el) {
+  // try .png if .jpg failed (and vice versa)
+  const src = el.src;
+  if (src.endsWith('.jpg')) { el.src = src.replace(/\.jpg$/, '.png'); el.onerror = () => { el.style.opacity=0; }; }
+  else { el.style.opacity = 0; }
+}
 
 function itemDisplayName(item) {
   return locName(item.id)
@@ -1066,7 +1088,7 @@ function dbItemCard(item, idx) {
   const frameHtml = frame ? `<img class="ico-frame" src="${frame}" alt="">` : '';
   const name = itemDisplayName(item);
   const src = itemIconSrc(item);
-  const imgHtml = src ? `<img class="ico-img" src="${src}" alt="" onerror="this.style.opacity=0">` : '';
+  const imgHtml = src ? `<img class="ico-img" src="${src}" alt="" onerror="iconFallback(this)">` : '';
   const q = QUALITIES.find(q2 => q2.id === item.quality);
   const nameColor = q ? q.color : 'var(--txt2)';
   return `<div class="eq-card" onmouseenter="ttShowDbItem(${idx},event)" onmousemove="ttMove(event)" onmouseleave="ttHide()">
@@ -1083,7 +1105,7 @@ function ttShowDbItem(idx, e) {
   const frame = QUALITY_FRAME[item.quality] || '';
   const frameHtml = frame ? `<img class="ico-frame" src="${frame}" alt="">` : '';
   const src = itemIconSrc(item);
-  const imgHtml = src ? `<img class="ico-img" src="${src}" alt="" onerror="this.style.opacity=0">` : '';
+  const imgHtml = src ? `<img class="ico-img" src="${src}" alt="" onerror="iconFallback(this)">` : '';
   const ico = `<div class="tt-ico">${imgHtml}${frameHtml}</div>`;
   const name = itemDisplayName(item);
 
@@ -1120,12 +1142,14 @@ function ttShowDbItem(idx, e) {
   if (item.set)
     html += `<div class="tt-price"><span class="tt-price-key">Сет</span><span class="tt-price-val">${item.set}</span></div>`;
   if (goldStr)
-    html += `<div class="tt-price"><span class="tt-price-key">Стоимость</span><span class="tt-price-val"><span class="tt-coin gold"></span>${goldStr}</span></div>`;
+    html += `<div class="tt-price"><span class="tt-price-key">Стоимость</span><span class="tt-price-val"><img class="tt-coin" src="icons/currency_gold_small.png" alt=""> ${goldStr}</span></div>`;
   if (item.ruby_price)
-    html += `<div class="tt-price"><span class="tt-price-key">Рубины</span><span class="tt-price-val"><span class="tt-coin ruby"></span>${item.ruby_price}</span></div>`;
+    html += `<div class="tt-price"><span class="tt-price-key">Рубины</span><span class="tt-price-val"><img class="tt-coin" src="icons/currency_ruby_small.png" alt=""> ${item.ruby_price}</span></div>`;
   if (item.token_price) {
-    const tLabel = item.token_type ? item.token_type.replace(/_/g,' ') : 'Тайлены';
-    html += `<div class="tt-price"><span class="tt-price-key">${tLabel}</span><span class="tt-price-val"><span class="tt-coin token"></span>${item.token_price}</span></div>`;
+    const tType = item.token_type || '';
+    const tIco = TOKEN_ICO[tType] || 'icons/currency_tailen_event_small.png';
+    const tLabel = TOKEN_LABEL[tType] || tType.replace(/_/g,' ') || 'Тайлены';
+    html += `<div class="tt-price"><span class="tt-price-key">${tLabel}</span><span class="tt-price-val"><img class="tt-coin" src="${tIco}" alt=""> ${item.token_price}</span></div>`;
   }
 
   _tt.innerHTML = html;
@@ -1322,27 +1346,27 @@ async function loadAllDb() {
 async function renderTechStats(c) {
   c.innerHTML = '<div class="c-title" style="color:var(--txt3)">Загрузка…</div>';
   const all = await loadAllDb();
-  const items = all.filter(i => i.stats && Object.keys(i.stats).length > 0);
-  _ttDbItems = items;
-  const sorted = sortByQuality(items);
+  const filtered = all.filter(i => i.stats && Object.keys(i.stats).length > 0);
+  const sorted = sortByQuality(filtered);
+  _ttDbItems = sorted;
   let html = `<div class="eq-grid">`;
   sorted.forEach((item, idx) => { html += dbItemCard(item, idx); });
   html += `</div>`;
   c.innerHTML = `<div class="c-title">Влияют на характеристики</div>
-    <div class="c-sub">${items.length} предметов</div>${html}`;
+    <div class="c-sub">${sorted.length} предметов</div>${html}`;
 }
 
 async function renderTechNoStats(c) {
   c.innerHTML = '<div class="c-title" style="color:var(--txt3)">Загрузка…</div>';
   const all = await loadAllDb();
-  const items = all.filter(i => !i.stats || Object.keys(i.stats).length === 0);
-  _ttDbItems = items;
-  const sorted = sortByQuality(items);
+  const filtered = all.filter(i => !i.stats || Object.keys(i.stats).length === 0);
+  const sorted = sortByQuality(filtered);
+  _ttDbItems = sorted;
   let html = `<div class="eq-grid">`;
   sorted.forEach((item, idx) => { html += dbItemCard(item, idx); });
   html += `</div>`;
   c.innerHTML = `<div class="c-title">Не влияют на характеристики</div>
-    <div class="c-sub">${items.length} предметов</div>${html}`;
+    <div class="c-sub">${sorted.length} предметов</div>${html}`;
 }
 
 async function renderTechEquipment(c) {
@@ -1350,14 +1374,13 @@ async function renderTechEquipment(c) {
   const names = ['equipment_warrior','equipment_paladin','equipment_mage',
                   'equipment_cleric','equipment_rogue','equipment_shooter'];
   const arrays = await Promise.all(names.map(n => loadDb(n)));
-  const items = arrays.flat();
-  _ttDbItems = items;
-  const sorted = sortByQuality(items);
+  const sorted = sortByQuality(arrays.flat());
+  _ttDbItems = sorted;
   let html = `<div class="eq-grid">`;
   sorted.forEach((item, idx) => { html += dbItemCard(item, idx); });
   html += `</div>`;
   c.innerHTML = `<div class="c-title">Снаряжение (всё)</div>
-    <div class="c-sub">${items.length} предметов</div>${html}`;
+    <div class="c-sub">${sorted.length} предметов</div>${html}`;
 }
 
 function renderTechArchive(c) {
@@ -1398,18 +1421,18 @@ async function doSearch(query) {
     const name = locName(item.id) || '';
     return name.toLowerCase().includes(q);
   });
-  _ttDbItems = results;
   if (!results.length) {
     c.innerHTML = `<div class="c-title">Поиск: «${query}»</div>
       <div class="soon-block">Ничего не найдено</div>`;
     return;
   }
   const sorted = sortByQuality(results);
+  _ttDbItems = sorted;
   let html = `<div class="eq-grid">`;
   sorted.forEach((item, idx) => { html += dbItemCard(item, idx); });
   html += `</div>`;
   c.innerHTML = `<div class="c-title">Поиск: «${query}»</div>
-    <div class="c-sub">${results.length} результатов</div>${html}`;
+    <div class="c-sub">${sorted.length} результатов</div>${html}`;
 }
 </script>
 </body>
