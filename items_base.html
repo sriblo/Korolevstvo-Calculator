@@ -896,18 +896,34 @@ async function loadDb(name) {
 
 let _ttDbItems = [];
 
-function itemDbName(item) {
+function itemVariant(item) {
   const id = item.id;
-  if (id.startsWith('reinforced_'))      return 'Усиленный';
-  if (id.startsWith('red_equipment_'))   return 'Легендарный';
-  if (id.includes('fair_equipment'))     return 'Ярмарочный';
-  if (id.includes('_guard'))             return 'Гвардейский';
-  if (id.includes('_offer'))             return 'Особый';
-  if (id.includes('halloween'))          return 'Хэллоуин';
-  if (id.includes('march_8'))            return '8 марта';
-  if (id.includes('new_year'))           return 'Новый год';
-  if (id.includes('flowers'))            return 'Цветочный';
-  return 'Стандартный';
+  if (id.startsWith('reinforced_'))    return 'Усиленный';
+  if (id.startsWith('red_equipment_')) return 'Легендарный';
+  if (id.includes('fair_equipment'))   return 'Ярмарочный';
+  if (id.includes('_guard'))           return 'Гвардейский';
+  if (id.includes('_offer'))           return 'Особый';
+  if (id.includes('halloween'))        return 'Хэллоуин';
+  if (id.includes('march_8'))          return '8 марта';
+  if (id.includes('new_year'))         return 'Новый год';
+  if (id.includes('flowers'))          return 'Цветочный';
+  return null;
+}
+
+function runeDisplayName(rune) {
+  const stat = rune.stats ? Object.keys(rune.stats)[0] : null;
+  const statLabel = stat ? (DB_STAT_LABELS.find(s => s.key === stat)?.label || stat) : '';
+  const id = rune.id;
+  if (id.includes('colder'))       return `Зимний · ${statLabel}`;
+  if (id.includes('fair_offer'))   return `Ярмарка · ${statLabel}`;
+  if (id.includes('fair_'))        return `Ярмарка · ${statLabel}`;
+  if (id.includes('pirate'))       return `Пираты · ${statLabel}`;
+  if (id.includes('dragons'))      return `Дракон · ${statLabel}`;
+  if (id.includes('dniwe'))        return `Праздник · ${statLabel}`;
+  if (id.includes('contest'))      return `Конкурс · ${statLabel}`;
+  if (id.includes('clan'))         return `Клан · ${statLabel}`;
+  if (id.includes('exorcist'))     return `Экзорцист · ${statLabel}`;
+  return statLabel || id.replace(/_/g,' ');
 }
 
 function dbStatRows(stats) {
@@ -921,14 +937,17 @@ function dbStatRows(stats) {
     }).join('');
 }
 
-function dbItemCard(item, idx) {
+function dbItemCard(item, idx, slotName) {
   const frame = QUALITY_FRAME[item.quality] || '';
   const frameHtml = frame ? `<img class="ico-frame" src="${frame}" alt="">` : '';
+  const variant = itemVariant(item);
+  const title = slotName ? `${slotName} ур. ${item.reqlvl}` : `Ур. ${item.reqlvl}`;
+  const sub = [variant, item.price > 1 ? item.price.toLocaleString('ru') + ' зол.' : null].filter(Boolean).join(' · ');
   return `<div class="buff-card" onmouseenter="ttShowDbItem(${idx},event)" onmousemove="ttMove(event)" onmouseleave="ttHide()">
     <div class="rune-ico">${frameHtml}</div>
     <div class="buff-text">
-      <div class="buff-name">${itemDbName(item)}</div>
-      <div class="buff-cls">Ур. ${item.reqlvl}${item.price > 1 ? ' · ' + item.price.toLocaleString('ru') + ' зол.' : ''}</div>
+      <div class="buff-name">${title}</div>
+      <div class="buff-cls">${sub}</div>
     </div>
   </div>`;
 }
@@ -941,7 +960,8 @@ function ttShowDbItem(idx, e) {
   const frame = QUALITY_FRAME[item.quality] || '';
   const frameHtml = frame ? `<img class="ico-frame" src="${frame}" alt="">` : '';
   const ico = `<div class="tt-ico">${frameHtml}</div>`;
-  const name = itemDbName(item);
+  const slotObj = EQ_MAIN_SLOTS.find(s => s.id === item.slot);
+  const name = slotObj ? `${slotObj.name} ур. ${item.reqlvl}` : (item.id.replace(/_/g,' '));
   let html = `<div class="tt-head">${ico}<div class="tt-name" style="color:${color}">${name}</div></div>`;
   if (item.reqlvl) html += `<div class="tt-row"><span class="tt-key">Требуемый уровень</span><span class="tt-val" style="color:var(--gold-l)">${item.reqlvl}</span></div>`;
   if (item.set)    html += `<div class="tt-row"><span class="tt-key">Сет</span><span class="tt-val">${item.set}</span></div>`;
@@ -980,8 +1000,8 @@ async function renderEquipmentDb(c, cls) {
     if (!slotItems.length) continue;
     slotItems.sort((a,b) => a.reqlvl - b.reqlvl);
     html += `<div class="art-section-divider">${slot.name}</div><div class="buff-grid">`;
-    slotItems.forEach((item, i) => {
-      html += dbItemCard(item, filtered.indexOf(item));
+    slotItems.forEach(item => {
+      html += dbItemCard(item, filtered.indexOf(item), slot.name);
     });
     html += `</div>`;
   }
@@ -1011,12 +1031,12 @@ async function renderRunesDb(c) {
       const frameHtml = frame ? `<img class="ico-frame" src="${frame}" alt="">` : '';
       const mainStat = r.stats ? Object.entries(r.stats)[0] : null;
       const mainStatStr = mainStat
-        ? `${(DB_STAT_LABELS.find(s=>s.key===mainStat[0])?.label||mainStat[0])}: ${mainStat[1]}`
+        ? `${(DB_STAT_LABELS.find(s=>s.key===mainStat[0])?.label||mainStat[0])}: +${mainStat[1]}`
         : '';
       html += `<div class="buff-card" onmouseenter="ttShowDbItem(${idx},event)" onmousemove="ttMove(event)" onmouseleave="ttHide()">
         <div class="rune-ico">${frameHtml}</div>
         <div class="buff-text">
-          <div class="buff-name">${r.id.replace(/_/g,' ')}</div>
+          <div class="buff-name">${runeDisplayName(r)}</div>
           <div class="buff-cls">${mainStatStr}</div>
         </div>
       </div>`;
@@ -1046,8 +1066,8 @@ async function renderBattleBags(c) {
     html += `<div class="buff-card" onmouseenter="ttShowDbItem(${idx},event)" onmousemove="ttMove(event)" onmouseleave="ttHide()">
       <div class="rune-ico">${frameHtml}</div>
       <div class="buff-text">
-        <div class="buff-name">${item.id.replace(/_/g,' ')}</div>
-        <div class="buff-cls">Ур. ${item.reqlvl}</div>
+        <div class="buff-name">${(()=>{const qb=QUALITIES.find(q=>q.id===item.quality);return qb?`<span class="q-badge ${item.quality}">${qb.label}</span> `:''})()}Боевая сумка</div>
+        <div class="buff-cls">Ур. ${item.reqlvl}${item.price>1?' · '+item.price.toLocaleString('ru')+' зол.':''}</div>
       </div>
     </div>`;
   });
@@ -1087,12 +1107,14 @@ async function renderEventBuffsDb(c) {
       const frameHtml = frame ? `<img class="ico-frame" src="${frame}" alt="">` : '';
       const mainStat = item.stats ? Object.entries(item.stats).find(([k]) => k !== 'count' && k !== 'duration') : null;
       const statStr = mainStat
-        ? `${(DB_STAT_LABELS.find(s=>s.key===mainStat[0])?.label||mainStat[0])}: ${mainStat[1]}${mainStat[0].includes('percent')?'%':''}`
+        ? `${(DB_STAT_LABELS.find(s=>s.key===mainStat[0])?.label||mainStat[0])}: +${mainStat[1]}${mainStat[0].includes('percent')?'%':''}`
         : '';
+      const q = QUALITIES.find(q2 => q2.id === item.quality);
+      const qLabel = q ? `<span class="q-badge ${item.quality}">${q.label}</span> ` : '';
       html += `<div class="buff-card" onmouseenter="ttShowDbItem(${idx},event)" onmousemove="ttMove(event)" onmouseleave="ttHide()">
         <div class="rune-ico">${frameHtml}</div>
         <div class="buff-text">
-          <div class="buff-name">${item.id.replace(/_/g,' ')}</div>
+          <div class="buff-name">${qLabel}Ур. ${item.reqlvl}</div>
           <div class="buff-cls">${statStr}</div>
         </div>
       </div>`;
@@ -1109,9 +1131,11 @@ async function renderEventBuffsDb(c) {
       const idx = allBuffs.indexOf(item);
       const frame = QUALITY_FRAME[item.quality] || '';
       const frameHtml = frame ? `<img class="ico-frame" src="${frame}" alt="">` : '';
+      const q2 = QUALITIES.find(q3 => q3.id === item.quality);
+      const qL = q2 ? `<span class="q-badge ${item.quality}">${q2.label}</span> ` : '';
       html += `<div class="buff-card" onmouseenter="ttShowDbItem(${idx},event)" onmousemove="ttMove(event)" onmouseleave="ttHide()">
         <div class="rune-ico">${frameHtml}</div>
-        <div class="buff-text"><div class="buff-name">${item.id.replace(/_/g,' ')}</div></div>
+        <div class="buff-text"><div class="buff-name">${qL}Ур. ${item.reqlvl}</div></div>
       </div>`;
     });
     html += `</div>`;
