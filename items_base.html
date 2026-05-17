@@ -1125,12 +1125,30 @@ async function renderArtifactsDb(c) {
   c.innerHTML = '<div class="c-title" style="color:var(--txt3)">Загрузка…</div>';
   const allItems = await loadDb('equipment_none');
   const arts = allItems.filter(i => i.slot && i.slot.startsWith('artefact'));
-  arts.sort((a, b) => a.reqlvl - b.reqlvl);
-  _ttDbItems = arts;
-  const grid = arts.length
-    ? `<div class="eq-grid">${arts.map((item, idx) => dbItemCard(item, idx)).join('')}</div>`
-    : '<div class="soon-block">Нет данных</div>';
-  c.innerHTML = `<div class="c-title">Артефакты</div>${grid}`;
+
+  const SLOT_ORDER = [
+    'artefact9', 'artefact2', 'artefact7', 'artefact4',
+    'artefact8', 'artefact6', 'artefact3', 'artefact1', 'artefact5',
+  ];
+  const grouped = {};
+  for (const item of arts) (grouped[item.slot] = grouped[item.slot] || []).push(item);
+  for (const slot of Object.keys(grouped)) grouped[slot].sort((a, b) => a.reqlvl - b.reqlvl);
+
+  let allSorted = [];
+  let html = '';
+  for (const slot of SLOT_ORDER) {
+    const items = grouped[slot];
+    if (!items?.length) continue;
+    const label = locName(items[0].id) || items[0].id;
+    const base = allSorted.length;
+    allSorted = allSorted.concat(items);
+    html += `<div class="art-section-divider">${label}</div><div class="eq-grid">`;
+    items.forEach((item, i) => { html += dbItemCard(item, base + i); });
+    html += `</div>`;
+  }
+
+  _ttDbItems = allSorted;
+  c.innerHTML = `<div class="c-title">Артефакты</div>${html || '<div class="soon-block">Нет данных</div>'}`;
 }
 
 // ── Runes (from db/enchants.json) ────────────────────────────────────────────
