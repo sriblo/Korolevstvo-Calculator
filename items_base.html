@@ -400,6 +400,17 @@ a{color:inherit;text-decoration:none}
 
     <div class="sb-group">
       <div class="sb-group-header" onclick="toggleGroup(this)">
+        Остальные предметы <span class="sb-chevron">▶</span>
+      </div>
+      <div class="sb-items">
+        <div class="sb-item sb-sub" data-view="other_colder" onclick="show(this)">Колдер</div>
+      </div>
+    </div>
+
+    <div class="sb-divider" style="margin:8px 0"></div>
+
+    <div class="sb-group">
+      <div class="sb-group-header" onclick="toggleGroup(this)">
         Архив <span class="sb-chevron">▶</span>
       </div>
       <div class="sb-items">
@@ -484,6 +495,7 @@ function render(view) {
   else if (view === 'tech_stats')     renderTechStats(c);
   else if (view === 'tech_no_stats')  renderTechNoStats(c);
   else if (view === 'tech_equipment') renderTechEquipment(c);
+  else if (view === 'other_colder')       renderOtherSection(c, 'colder');
   else if (view === 'archive_equipment')  renderArchiveSection(c, 'Экипировка');
   else if (view === 'archive_profession') renderArchiveSection(c, 'Профессии');
   else if (view === 'archive_conqueror')  renderArchiveSection(c, 'Завоеватель');
@@ -606,7 +618,7 @@ const JEWELRY_SLOTS_DB = [
   { id:'trophy',      name:'Трофеи' },
   { id:'talisman',    name:'Талисманы' },
   { id:'accessory1',  name:'Аксессуары' },
-  { id:'accessory2',  name:'Аксессуары 2' },
+  { id:'accessory2',  name:'Брелки' },
 ];
 
 async function renderJewelry(c) {
@@ -1218,6 +1230,10 @@ function pocketLabel(n) {
 
 const ARCHIVE_BAG_IDS = new Set(['battle_bag_default', 'offer_battle_bag_3_4']);
 
+const OTHER_SECTIONS = {
+  colder: new Set(['colder_2025_trinket_daily_quest_part']),
+};
+
 const ARCHIVE_QUEST_IDS = new Set([
   'mob_heroic_aoe_direct', 'mob_heroic_aoe_direct_spell', 'war_totem_direct_start',
   'colony_evil_ring', 'colony_ring_lienna', 'st_roger_wedding_ring',
@@ -1257,7 +1273,8 @@ async function renderBattleBags(c) {
 
 async function renderEventBuffsDb(c) {
   c.innerHTML = '<div class="c-title" style="color:var(--txt3)">Загрузка…</div>';
-  const allBuffs = (await loadDb('buffs')).filter(i => !ARCHIVE_QUEST_IDS.has(i.id));
+  const allOtherIds = new Set(Object.values(OTHER_SECTIONS).flatMap(s => [...s]));
+  const allBuffs = (await loadDb('buffs')).filter(i => !ARCHIVE_QUEST_IDS.has(i.id) && !allOtherIds.has(i.id));
   _ttDbItems = allBuffs;
 
   function primaryTag(item) {
@@ -1374,6 +1391,21 @@ async function renderTechEquipment(c) {
   html += `</div>`;
   c.innerHTML = `<div class="c-title">Снаряжение (всё)</div>
     <div class="c-sub">${sorted.length} предметов</div>${html}`;
+}
+
+async function renderOtherSection(c, key) {
+  const TITLES = { colder: 'Колдер' };
+  const title = TITLES[key] || key;
+  c.innerHTML = '<div class="c-title" style="color:var(--txt3)">Загрузка…</div>';
+  const ids = OTHER_SECTIONS[key] || new Set();
+  const [buffs, inv] = await Promise.all([loadDb('buffs'), loadDb('inventory')]);
+  const items = [...buffs, ...inv].filter(i => ids.has(i.id));
+  items.sort((a, b) => (locName(a.id)||a.id).localeCompare(locName(b.id)||b.id, 'ru'));
+  _ttDbItems = items;
+  const grid = items.length
+    ? `<div class="eq-grid">${items.map((item,idx) => dbItemCard(item,idx)).join('')}</div>`
+    : '<div class="soon-block">Пусто</div>';
+  c.innerHTML = `<div class="c-title">Остальные предметы: ${title}</div>${grid}`;
 }
 
 async function renderArchiveSection(c, title) {
