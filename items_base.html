@@ -275,6 +275,37 @@ a{color:inherit;text-decoration:none}
 .tt-val{color:var(--txt);white-space:nowrap;font-feature-settings:'tnum'}
 .tt-empty{color:var(--txt3);font-size:12px;font-style:italic}
 
+/* search field */
+.sb-search{padding:10px 12px 6px}
+.sb-search input{
+  width:100%;padding:6px 10px;border-radius:6px;
+  background:var(--bg4);border:1px solid var(--line2);
+  color:var(--txt);font-size:12px;font-family:var(--sans);
+  outline:none;transition:border-color .15s;
+}
+.sb-search input::placeholder{color:var(--txt3)}
+.sb-search input:focus{border-color:var(--gold-d)}
+
+/* tooltip extended */
+.tt-sep{height:1px;background:var(--line);margin:6px 0}
+.tt-kind{font-size:11px;color:var(--txt3);margin-bottom:4px}
+.tt-desc{font-size:12px;color:var(--txt2);line-height:1.5;margin:4px 0}
+.tt-action{font-size:12px;color:var(--gold-l);line-height:1.5;margin:4px 0}
+.tt-price{display:flex;align-items:center;gap:5px;justify-content:space-between;padding:3px 0;font-size:12px}
+.tt-price-key{color:var(--txt2)}
+.tt-price-val{color:var(--txt);display:flex;align-items:center;gap:4px;font-feature-settings:'tnum'}
+.tt-coin{width:14px;height:14px;border-radius:50%;display:inline-block;flex-shrink:0}
+.tt-coin.gold  {background:#e8b84b}
+.tt-coin.ruby  {background:#cc3040}
+.tt-coin.token {background:#6080cc}
+
+/* technical section label */
+.sb-tech-header{
+  padding:7px 16px 5px;
+  font-size:10px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;
+  color:var(--txt3);opacity:.55;margin-top:4px;
+}
+
 /* ── MOBILE ── */
 @media(max-width:700px){
   .top{padding:0 16px}
@@ -306,6 +337,10 @@ a{color:inherit;text-decoration:none}
 
   <!-- ── SIDEBAR ── -->
   <nav class="sidebar">
+
+    <div class="sb-search">
+      <input type="text" id="sb-search-input" placeholder="Поиск по базе…" oninput="onSearch(this.value)" autocomplete="off">
+    </div>
 
     <div class="sb-group">
       <div class="sb-group-header open" onclick="toggleGroup(this)">
@@ -344,6 +379,21 @@ a{color:inherit;text-decoration:none}
       <div class="sb-items">
         <div class="sb-item sb-sub" data-view="buffs_event" onclick="show(this)">Ивентовые бафы</div>
         <div class="sb-item sb-sub" data-view="buffs_food" onclick="show(this)">Еда</div>
+      </div>
+    </div>
+
+    <div class="sb-divider" style="margin:8px 0"></div>
+    <div class="sb-tech-header">Технические</div>
+
+    <div class="sb-group">
+      <div class="sb-group-header" onclick="toggleGroup(this)">
+        Сортировка <span class="sb-chevron">▶</span>
+      </div>
+      <div class="sb-items">
+        <div class="sb-item sb-sub" data-view="tech_stats"      onclick="show(this)">Влияют на статы</div>
+        <div class="sb-item sb-sub" data-view="tech_no_stats"   onclick="show(this)">Не влияют на статы</div>
+        <div class="sb-item sb-sub" data-view="tech_equipment"  onclick="show(this)">Снаряжение (всё)</div>
+        <div class="sb-item sb-sub" data-view="tech_archive"    onclick="show(this)">Архив</div>
       </div>
     </div>
 
@@ -417,6 +467,10 @@ function render(view) {
   else if (view === 'buffs_class')   renderBuffsClass(c);
   else if (view === 'buffs_event')   renderEventBuffsDb(c);
   else if (view === 'buffs_food')    renderFood(c);
+  else if (view === 'tech_stats')     renderTechStats(c);
+  else if (view === 'tech_no_stats')  renderTechNoStats(c);
+  else if (view === 'tech_equipment') renderTechEquipment(c);
+  else if (view === 'tech_archive')   renderTechArchive(c);
 }
 
 function renderEquipment(c) {
@@ -815,6 +869,39 @@ function sv(val, suffix='') {
     : `<td class="stat-val">${val}${suffix}</td>`;
 }
 
+// ── Locale ───────────────────────────────────────────────────────────────────
+
+let _locale = null;
+(async () => {
+  try {
+    const r = await fetch('db/item_locale_ru.json');
+    _locale = await r.json();
+  } catch(e) {}
+})();
+
+function locName(id)   { return _locale?.[id]?.name        || null; }
+function locKind(id)   { return _locale?.[id]?.kind        || null; }
+function locDesc(id)   { return _locale?.[id]?.description || null; }
+function locAction(id, stats) {
+  let t = _locale?.[id]?.action;
+  if (!t) return null;
+  if (stats) t = t.replace(/#([^#]+)#/g, (m, k) => stats[k] != null ? stats[k] : m);
+  return t.replace(/<br\s*\/?>/gi, '\n');
+}
+
+// Форматирование цены: значение в медных монетах
+function fmtGold(copper) {
+  if (!copper || copper <= 1) return null;
+  const g = Math.floor(copper / 10000);
+  const s = Math.floor((copper % 10000) / 100);
+  const c = copper % 100;
+  const parts = [];
+  if (g) parts.push(g.toLocaleString('ru') + ' зол.');
+  if (s) parts.push(s + ' сер.');
+  if (c && !g) parts.push(c + ' мед.');
+  return parts.join(' ') || copper + ' мед.';
+}
+
 // ── DB helpers ───────────────────────────────────────────────────────────────
 
 const DB_CLASSES = {
@@ -969,15 +1056,22 @@ function itemIconSrc(item) {
   return isEq ? `icons/${v}_human.jpg` : `icons/${v}.jpg`;
 }
 
+function itemDisplayName(item) {
+  return locName(item.id)
+    || (EQ_MAIN_SLOTS.find(s => s.id === item.slot) ? eqItemName(item) : item.id.replace(/_/g,' '));
+}
+
 function dbItemCard(item, idx) {
   const frame = QUALITY_FRAME[item.quality] || '';
   const frameHtml = frame ? `<img class="ico-frame" src="${frame}" alt="">` : '';
-  const name = EQ_MAIN_SLOTS.find(s => s.id === item.slot) ? eqItemName(item) : item.id.replace(/_/g,' ');
+  const name = itemDisplayName(item);
   const src = itemIconSrc(item);
   const imgHtml = src ? `<img class="ico-img" src="${src}" alt="" onerror="this.style.opacity=0">` : '';
+  const q = QUALITIES.find(q2 => q2.id === item.quality);
+  const nameColor = q ? q.color : 'var(--txt2)';
   return `<div class="eq-card" onmouseenter="ttShowDbItem(${idx},event)" onmousemove="ttMove(event)" onmouseleave="ttHide()">
     <div class="rune-ico">${imgHtml}${frameHtml}</div>
-    <div class="eq-slot-name">${name}<br><span style="color:var(--txt3);font-size:10px">ур. ${item.reqlvl}</span></div>
+    <div class="eq-slot-name" style="color:${nameColor}">${name}</div>
   </div>`;
 }
 
@@ -991,13 +1085,49 @@ function ttShowDbItem(idx, e) {
   const src = itemIconSrc(item);
   const imgHtml = src ? `<img class="ico-img" src="${src}" alt="" onerror="this.style.opacity=0">` : '';
   const ico = `<div class="tt-ico">${imgHtml}${frameHtml}</div>`;
-  const name = EQ_MAIN_SLOTS.find(s => s.id === item.slot) ? eqItemName(item) : item.id.replace(/_/g,' ');
+  const name = itemDisplayName(item);
+
   let html = `<div class="tt-head">${ico}<div class="tt-name" style="color:${color}">${name}</div></div>`;
-  if (item.reqlvl) html += `<div class="tt-row"><span class="tt-key">Требуемый уровень</span><span class="tt-val" style="color:var(--gold-l)">${item.reqlvl}</span></div>`;
-  if (item.set)    html += `<div class="tt-row"><span class="tt-key">Сет</span><span class="tt-val">${item.set}</span></div>`;
-  html += dbStatRows(item.stats);
-  if (item.price > 1) html += `<div class="tt-row"><span class="tt-key">Цена</span><span class="tt-val">${item.price.toLocaleString('ru')} зол.</span></div>`;
-  if (item.ruby_price) html += `<div class="tt-row"><span class="tt-key">Рубины</span><span class="tt-val">${item.ruby_price}</span></div>`;
+
+  // Тип предмета
+  const kind = locKind(item.id);
+  if (kind) html += `<div class="tt-kind">Тип: ${kind}</div>`;
+
+  // Описание и действие
+  const desc   = locDesc(item.id);
+  const action = locAction(item.id, item.stats);
+  if (desc || action) {
+    html += `<div class="tt-sep"></div>`;
+    if (desc)   html += `<div class="tt-desc"><b style="color:var(--txt2)">Описание:</b> ${desc}</div>`;
+    if (action) html += `<div class="tt-action"><b>Действие:</b> ${action.replace(/\n/g,'<br>')}</div>`;
+  }
+
+  // Характеристики
+  const statsHtml = dbStatRows(item.stats);
+  if (statsHtml && !statsHtml.includes('tt-empty')) {
+    html += `<div class="tt-sep"></div>` + statsHtml;
+  } else if (!desc && !action) {
+    html += statsHtml;
+  }
+
+  // Мета: уровень, сет, цены
+  const goldStr  = fmtGold(item.price);
+  const hasMeta  = (item.reqlvl > 0) || item.set || goldStr || item.ruby_price || item.token_price;
+  if (hasMeta) html += `<div class="tt-sep"></div>`;
+
+  if (item.reqlvl > 0)
+    html += `<div class="tt-price"><span class="tt-price-key">Требуемый уровень</span><span class="tt-price-val" style="color:var(--gold-l)">${item.reqlvl}</span></div>`;
+  if (item.set)
+    html += `<div class="tt-price"><span class="tt-price-key">Сет</span><span class="tt-price-val">${item.set}</span></div>`;
+  if (goldStr)
+    html += `<div class="tt-price"><span class="tt-price-key">Стоимость</span><span class="tt-price-val"><span class="tt-coin gold"></span>${goldStr}</span></div>`;
+  if (item.ruby_price)
+    html += `<div class="tt-price"><span class="tt-price-key">Рубины</span><span class="tt-price-val"><span class="tt-coin ruby"></span>${item.ruby_price}</span></div>`;
+  if (item.token_price) {
+    const tLabel = item.token_type ? item.token_type.replace(/_/g,' ') : 'Тайлены';
+    html += `<div class="tt-price"><span class="tt-price-key">${tLabel}</span><span class="tt-price-val"><span class="tt-coin token"></span>${item.token_price}</span></div>`;
+  }
+
   _tt.innerHTML = html;
   _tt.classList.add('vis');
   ttMove(e);
@@ -1172,6 +1302,114 @@ async function renderEventBuffsDb(c) {
   }
 
   c.innerHTML = `<div class="c-title">Ивентовые бафы</div>${html}`;
+}
+
+// ── Load all DB files ─────────────────────────────────────────────────────────
+
+let _allItems = null;
+async function loadAllDb() {
+  if (_allItems) return _allItems;
+  const names = ['equipment_warrior','equipment_paladin','equipment_mage',
+                  'equipment_cleric','equipment_rogue','equipment_shooter',
+                  'enchants','buffs','inventory'];
+  const arrays = await Promise.all(names.map(n => loadDb(n)));
+  _allItems = arrays.flat();
+  return _allItems;
+}
+
+// ── Technical sections ────────────────────────────────────────────────────────
+
+async function renderTechStats(c) {
+  c.innerHTML = '<div class="c-title" style="color:var(--txt3)">Загрузка…</div>';
+  const all = await loadAllDb();
+  const items = all.filter(i => i.stats && Object.keys(i.stats).length > 0);
+  _ttDbItems = items;
+  const sorted = sortByQuality(items);
+  let html = `<div class="eq-grid">`;
+  sorted.forEach((item, idx) => { html += dbItemCard(item, idx); });
+  html += `</div>`;
+  c.innerHTML = `<div class="c-title">Влияют на характеристики</div>
+    <div class="c-sub">${items.length} предметов</div>${html}`;
+}
+
+async function renderTechNoStats(c) {
+  c.innerHTML = '<div class="c-title" style="color:var(--txt3)">Загрузка…</div>';
+  const all = await loadAllDb();
+  const items = all.filter(i => !i.stats || Object.keys(i.stats).length === 0);
+  _ttDbItems = items;
+  const sorted = sortByQuality(items);
+  let html = `<div class="eq-grid">`;
+  sorted.forEach((item, idx) => { html += dbItemCard(item, idx); });
+  html += `</div>`;
+  c.innerHTML = `<div class="c-title">Не влияют на характеристики</div>
+    <div class="c-sub">${items.length} предметов</div>${html}`;
+}
+
+async function renderTechEquipment(c) {
+  c.innerHTML = '<div class="c-title" style="color:var(--txt3)">Загрузка…</div>';
+  const names = ['equipment_warrior','equipment_paladin','equipment_mage',
+                  'equipment_cleric','equipment_rogue','equipment_shooter'];
+  const arrays = await Promise.all(names.map(n => loadDb(n)));
+  const items = arrays.flat();
+  _ttDbItems = items;
+  const sorted = sortByQuality(items);
+  let html = `<div class="eq-grid">`;
+  sorted.forEach((item, idx) => { html += dbItemCard(item, idx); });
+  html += `</div>`;
+  c.innerHTML = `<div class="c-title">Снаряжение (всё)</div>
+    <div class="c-sub">${items.length} предметов</div>${html}`;
+}
+
+function renderTechArchive(c) {
+  c.innerHTML = `<div class="c-title">Архив</div>
+    <div class="c-sub">Предметы, выведенные из эксплуатации</div>
+    <div class="soon-block">Пусто — перетаскивай сюда предметы в процессе сортировки</div>`;
+}
+
+// ── Search ────────────────────────────────────────────────────────────────────
+
+let _searchTimeout = null;
+function onSearch(query) {
+  clearTimeout(_searchTimeout);
+  if (!query || query.length < 2) {
+    if (!query) {
+      const c = document.getElementById('content');
+      c.innerHTML = `<div class="empty-state">
+        <svg width="48" height="48" viewBox="0 0 48 48" fill="none"><rect x="8" y="8" width="32" height="32" rx="4" stroke="currentColor" stroke-width="2"/><path d="M16 24h16M24 16v16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        Выбери раздел слева</div>`;
+      clearActive();
+    }
+    return;
+  }
+  _searchTimeout = setTimeout(() => doSearch(query), 250);
+}
+
+async function doSearch(query) {
+  const c = document.getElementById('content');
+  c.innerHTML = '<div class="c-title" style="color:var(--txt3)">Поиск…</div>';
+  clearActive();
+  const all = await loadAllDb();
+  if (!_locale) {
+    c.innerHTML = '<div class="c-title" style="color:var(--txt3)">Загрузка базы имён…</div>';
+    await new Promise(res => setTimeout(res, 500));
+  }
+  const q = query.toLowerCase();
+  const results = all.filter(item => {
+    const name = locName(item.id) || '';
+    return name.toLowerCase().includes(q);
+  });
+  _ttDbItems = results;
+  if (!results.length) {
+    c.innerHTML = `<div class="c-title">Поиск: «${query}»</div>
+      <div class="soon-block">Ничего не найдено</div>`;
+    return;
+  }
+  const sorted = sortByQuality(results);
+  let html = `<div class="eq-grid">`;
+  sorted.forEach((item, idx) => { html += dbItemCard(item, idx); });
+  html += `</div>`;
+  c.innerHTML = `<div class="c-title">Поиск: «${query}»</div>
+    <div class="c-sub">${results.length} результатов</div>${html}`;
 }
 </script>
 </body>
