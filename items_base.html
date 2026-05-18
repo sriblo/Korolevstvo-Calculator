@@ -1998,7 +1998,7 @@ async function loadAllDb() {
 
 async function renderTechStats(c) {
   c.innerHTML = '<div class="c-title" style="color:var(--txt3)">Загрузка…</div>';
-  const all = await loadAllDb();
+  const all = await loadDb('inventory');
   const filtered = all.filter(i => i.stats && Object.keys(i.stats).length > 0);
   const sorted = sortByQuality(filtered);
   _ttDbItems = sorted;
