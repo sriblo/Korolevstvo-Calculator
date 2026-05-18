@@ -410,11 +410,65 @@ a{color:inherit;text-decoration:none}
         Остальные предметы <span class="sb-chevron">▶</span>
       </div>
       <div class="sb-items">
-        <div class="sb-item sb-sub" data-view="other_colder"    onclick="show(this)">Колдер</div>
-        <div class="sb-item sb-sub" data-view="other_halloween" onclick="show(this)">Тыквенный фестиваль</div>
-        <div class="sb-item sb-sub" data-view="other_caldron"   onclick="show(this)">Земли мёртвых</div>
-        <div class="sb-item sb-sub" data-view="other_st_patric" onclick="show(this)">Месяц цветущего хмеля</div>
-        <div class="sb-item sb-sub" data-view="other_dragons"   onclick="show(this)">Небесные Драконы</div>
+        <div class="sb-item sb-sub" data-view="other_costumes"    onclick="show(this)">Костюмы</div>
+        <div class="sb-item sb-sub" data-view="other_colder"      onclick="show(this)">Колдер</div>
+        <div class="sb-item sb-sub" data-view="other_halloween"   onclick="show(this)">Тыквенный фестиваль</div>
+        <div class="sb-item sb-sub" data-view="other_caldron"     onclick="show(this)">Земли мёртвых</div>
+        <div class="sb-item sb-sub" data-view="other_st_patric"   onclick="show(this)">Месяц цветущего хмеля</div>
+        <div class="sb-item sb-sub" data-view="other_dragons"     onclick="show(this)">Небесные Драконы</div>
+        <div class="sb-item sb-sub" data-view="other_dniwe"       onclick="show(this)">Зов глубин</div>
+        <div class="sb-item sb-sub" data-view="other_pirate_day"  onclick="show(this)">День Пирата</div>
+        <div class="sb-item sb-sub" data-view="other_goblin_land" onclick="show(this)">Гоблинский Рай</div>
+        <div class="sb-item sb-sub" data-view="other_expedition"  onclick="show(this)">Экспедиция</div>
+        <div class="sb-item sb-sub" data-view="other_arena"       onclick="show(this)">Арена</div>
+        <div class="sb-item sb-sub" data-view="other_emotions"    onclick="show(this)">Эмоции</div>
+      </div>
+    </div>
+
+    <div class="sb-divider" style="margin:8px 0"></div>
+
+    <div class="sb-group">
+      <div class="sb-group-header" onclick="toggleGroup(this)">
+        Карты <span class="sb-chevron">▶</span>
+      </div>
+      <div class="sb-items">
+        <div class="sb-item sb-sub" data-view="cards_spades"   onclick="show(this)">Пики</div>
+        <div class="sb-item sb-sub" data-view="cards_hearts"   onclick="show(this)">Червы</div>
+        <div class="sb-item sb-sub" data-view="cards_clubs"    onclick="show(this)">Трефы</div>
+        <div class="sb-item sb-sub" data-view="cards_diamonds" onclick="show(this)">Бубны</div>
+        <div class="sb-item sb-sub" data-view="cards_other"    onclick="show(this)">Остальные масти</div>
+        <div class="sb-item sb-sub" data-view="cards_albums"   onclick="show(this)">Альбомы</div>
+      </div>
+    </div>
+
+    <div class="sb-divider" style="margin:8px 0"></div>
+
+    <div class="sb-group">
+      <div class="sb-group-header" onclick="toggleGroup(this)">
+        Профессии <span class="sb-chevron">▶</span>
+      </div>
+      <div class="sb-items">
+        <div class="sb-item sb-sub" data-view="prof_craft"  onclick="show(this)">Ремесленник</div>
+        <div class="sb-item sb-sub" data-view="prof_herb"   onclick="show(this)">Травник</div>
+        <div class="sb-item sb-sub" data-view="prof_mine"   onclick="show(this)">Рудокоп</div>
+        <div class="sb-item sb-sub" data-view="prof_hunt"   onclick="show(this)">Охотник</div>
+        <div class="sb-item sb-sub" data-view="prof_fish"   onclick="show(this)">Рыболов</div>
+        <div class="sb-item sb-sub" data-view="prof_cook"   onclick="show(this)">Повар</div>
+      </div>
+    </div>
+
+    <div class="sb-divider" style="margin:8px 0"></div>
+
+    <div class="sb-group">
+      <div class="sb-group-header" onclick="toggleGroup(this)">
+        Репутации <span class="sb-chevron">▶</span>
+      </div>
+      <div class="sb-items">
+        <div class="sb-item sb-sub" data-view="rep_witcher"    onclick="show(this)">Ведьмак</div>
+        <div class="sb-item sb-sub" data-view="rep_demon"      onclick="show(this)">Охотник на демонов</div>
+        <div class="sb-item sb-sub" data-view="rep_gladiator"  onclick="show(this)">Гладиатор</div>
+        <div class="sb-item sb-sub" data-view="rep_conqueror"  onclick="show(this)">Завоеватель</div>
+        <div class="sb-item sb-sub" data-view="rep_explorer"   onclick="show(this)">Первооткрыватель</div>
       </div>
     </div>
 
@@ -429,6 +483,8 @@ a{color:inherit;text-decoration:none}
         <div class="sb-item sb-sub" data-view="archive_profession" onclick="show(this)">Профессии</div>
         <div class="sb-item sb-sub" data-view="archive_conqueror"  onclick="show(this)">Завоеватель</div>
         <div class="sb-item sb-sub" data-view="archive_quest"      onclick="show(this)">Квестовые предметы</div>
+        <div class="sb-item sb-sub" data-view="archive_rings"      onclick="show(this)">Кольца</div>
+        <div class="sb-item sb-sub" data-view="archive_tournament" onclick="show(this)">Стальной турнир</div>
       </div>
     </div>
 
@@ -506,15 +562,27 @@ function render(view) {
   else if (view === 'tech_stats')     renderTechStats(c);
   else if (view === 'tech_no_stats')  renderTechNoStats(c);
   else if (view === 'tech_equipment') renderTechEquipment(c);
-  else if (view === 'other_colder')       renderOtherSection(c, 'colder');
-  else if (view === 'other_halloween')    renderOtherSection(c, 'halloween');
-  else if (view === 'other_caldron')      renderOtherSection(c, 'caldron');
-  else if (view === 'other_st_patric')    renderOtherSection(c, 'st_patric');
-  else if (view === 'other_dragons')      renderOtherSection(c, 'dragons');
-  else if (view === 'archive_equipment')  renderArchiveSection(c, 'Экипировка');
-  else if (view === 'archive_profession') renderArchiveSection(c, 'Профессии');
-  else if (view === 'archive_conqueror')  renderArchiveSection(c, 'Завоеватель');
-  else if (view === 'archive_quest')      renderArchiveSection(c, 'Квестовые предметы');
+  else if (view === 'other_costumes')      renderCostumes(c);
+  else if (view === 'other_colder')        renderOtherSection(c, 'colder');
+  else if (view === 'other_halloween')     renderOtherSection(c, 'halloween');
+  else if (view === 'other_caldron')       renderOtherSection(c, 'caldron');
+  else if (view === 'other_st_patric')     renderOtherSection(c, 'st_patric');
+  else if (view === 'other_dragons')       renderOtherSection(c, 'dragons');
+  else if (view === 'other_dniwe')         renderOtherSection(c, 'dniwe');
+  else if (view === 'other_pirate_day')    renderOtherSection(c, 'pirate_day');
+  else if (view === 'other_goblin_land')   renderOtherSection(c, 'goblin_land');
+  else if (view === 'other_expedition')    renderOtherSection(c, 'expedition');
+  else if (view === 'other_arena')         renderOtherSection(c, 'arena');
+  else if (view === 'other_emotions')      renderOtherSection(c, 'emotions');
+  else if (view.startsWith('cards_'))      renderCardsSection(c, view.slice(6));
+  else if (view.startsWith('prof_'))       renderProfSection(c, view.slice(5));
+  else if (view.startsWith('rep_'))        renderRepSection(c, view.slice(4));
+  else if (view === 'archive_equipment')   renderArchiveSection(c, 'Экипировка');
+  else if (view === 'archive_profession')  renderArchiveSection(c, 'Профессии');
+  else if (view === 'archive_conqueror')   renderArchiveSection(c, 'Завоеватель');
+  else if (view === 'archive_quest')       renderArchiveSection(c, 'Квестовые предметы');
+  else if (view === 'archive_rings')       renderArchiveRings(c);
+  else if (view === 'archive_tournament')  renderArchiveTournament(c);
 }
 
 function renderEquipment(c) {
@@ -613,33 +681,48 @@ const JEWELRY_SLOTS_DB = [
 async function renderJewelry(c) {
   c.innerHTML = '<div class="c-title" style="color:var(--txt3)">Загрузка…</div>';
   const allItems = await loadDb('equipment_none');
-  const jewelSlotIds = new Set(JEWELRY_SLOTS_DB.map(s => s.id));
-  const items = allItems.filter(i => jewelSlotIds.has(i.slot));
 
-  const presentQuals = new Set(items.map(i => i.quality));
-  const validQ = QUALITIES.filter(q => presentQuals.has(q.id));
-  if (!validQ.find(q => q.id === activeQ)) activeQ = validQ[validQ.length - 2]?.id || validQ[0]?.id || 'purple';
+  // Separate ring handling
+  const allRings = allItems.filter(i => i.slot === 'ring1,ring2');
 
-  const qTabs = validQ.map(q =>
-    `<div class="q-tab${activeQ===q.id?' on':''}" data-q="${q.id}" onclick="switchQ('${q.id}')">${q.label}</div>`
-  ).join('');
+  const FALCON_IDS = new Set(['fair_attack_defense_ring','fair_attack_ring_gift','fair_defense_ring_gift','fair_attack_ring','fair_defense_ring','one_ring_to_rule_them_all']);
+  const SQUIRE_KNIGHT_IDS = new Set(['crafted_ring_10','reinforced_crafted_ring_10','crafted_ring_15','reinforced_crafted_ring_15']);
+  const LORD_BARON_IDS = new Set(['crafted_ring_20','reinforced_crafted_ring_20','crafted_ring_666','reinforced_crafted_ring_666']);
 
-  const filtered = items.filter(i => i.quality === activeQ);
-  _ttDbItems = filtered;
+  const falconRings      = allRings.filter(i => FALCON_IDS.has(i.id));
+  const squireKnightRings = allRings.filter(i => SQUIRE_KNIGHT_IDS.has(i.id));
+  const lordBaronRings   = allRings.filter(i => LORD_BARON_IDS.has(i.id));
+  const otherRings       = allRings.filter(i => !FALCON_IDS.has(i.id) && !SQUIRE_KNIGHT_IDS.has(i.id) && !LORD_BARON_IDS.has(i.id) && !isArchiveRing(i.id));
 
+  otherRings.sort((a,b) => a.reqlvl - b.reqlvl);
+
+  let allSorted = [];
   let html = '';
-  for (const slot of JEWELRY_SLOTS_DB) {
-    const slotItems = filtered.filter(i => i.slot === slot.id);
-    if (!slotItems.length) continue;
-    slotItems.sort((a, b) => a.reqlvl - b.reqlvl);
-    html += `<div class="art-section-divider">${slot.name}</div><div class="eq-grid">`;
-    slotItems.forEach(item => { html += dbItemCard(item, filtered.indexOf(item)); });
+
+  function addGroup(label, items) {
+    if (!items.length) return;
+    const base = allSorted.length;
+    allSorted = allSorted.concat(items);
+    html += `<div class="art-section-divider">${label}</div><div class="eq-grid">`;
+    items.forEach((item, i) => { html += dbItemCard(item, base + i); });
     html += `</div>`;
   }
 
-  c.innerHTML = `<div class="c-title">Украшения</div>
-    <div class="q-tabs">${qTabs}</div>
-    ${html || '<div class="soon-block">Нет предметов для этого качества</div>'}`;
+  addGroup('Кольца Фалькона', sortByQuality(falconRings));
+  addGroup('Кольца Сквайра и Рыцаря', sortByQuality(squireKnightRings));
+  addGroup('Кольца Лорда и Барона', sortByQuality(lordBaronRings));
+  if (otherRings.length) addGroup('Остальные кольца', otherRings);
+
+  // Other jewelry types (non-ring)
+  const JEWELRY_NAMES = {amulet:'Амулеты', bracelet1:'Браслеты', medallion:'Медальоны', trophy:'Трофеи', talisman:'Талисманы', accessory1:'Аксессуары', accessory2:'Брелки'};
+  for (const slot of ['amulet','bracelet1','medallion','trophy','talisman','accessory1','accessory2']) {
+    const slotItems = allItems.filter(i => i.slot === slot);
+    if (!slotItems.length) continue;
+    addGroup(JEWELRY_NAMES[slot] || slot, sortByQuality(slotItems));
+  }
+
+  _ttDbItems = allSorted;
+  c.innerHTML = `<div class="c-title">Украшения</div>${html || '<div class="soon-block">Нет данных</div>'}`;
 }
 
 
@@ -971,6 +1054,9 @@ function dbStatRows(stats) {
 const CLASS_SUFFIXES = /_(cleric|mage|warrior|rogue|shooter|paladin|human|elf|ork)$/;
 
 function itemIconSrc(item) {
+  if (item.slot && item.slot.startsWith('artefact') && !item.visual) {
+    return ARTEFACT_CARD_ICONS[item.id] || ARTEFACT_SLOT_ICONS[item.slot] || null;
+  }
   let v = item.visual;
   if (!v) return null;
   const isEq = item.category !== 'enchant' && EQ_MAIN_SLOTS.some(s => s.id === item.slot);
@@ -1121,25 +1207,53 @@ async function renderEquipmentDb(c, cls) {
 
 // ── Artifacts ────────────────────────────────────────────────────────────────
 
+const ARTEFACT_SLOT_ICONS = {
+  artefact1:'icons/artefact_stone_fire.jpg',  artefact2:'icons/artefact_stone_blood.jpg',
+  artefact3:'icons/artefact_stone_dark.jpg',  artefact4:'icons/artefact_stone_gold.jpg',
+  artefact5:'icons/artefact_stone_light.jpg', artefact6:'icons/artefact_stone_water.jpg',
+  artefact7:'icons/artefact_stone_earth.jpg', artefact8:'icons/artefact_stone_air.jpg',
+  artefact9:'icons/artefact_stone_rubin.jpg',
+};
+const ARTEFACT_CARD_ICONS = {
+  artefact_cards_fair:    'icons/yellow_demonic_card.jpg',
+  artefact_cards_proff:   'icons/red_demonic_card.jpg',
+  artefact_cards_witcher: 'icons/green_demonic_card.jpg',
+  artefact_cards_inst:    'icons/blue_demonic_card.jpg',
+};
+
 async function renderArtifactsDb(c) {
   c.innerHTML = '<div class="c-title" style="color:var(--txt3)">Загрузка…</div>';
   const allItems = await loadDb('equipment_none');
   const arts = allItems.filter(i => i.slot && i.slot.startsWith('artefact'));
 
   const SLOT_ORDER = [
-    'artefact9', 'artefact2', 'artefact7', 'artefact4',
-    'artefact8', 'artefact6', 'artefact3', 'artefact1', 'artefact5',
+    'artefact5','artefact9','artefact2','artefact4','artefact1','artefact7','artefact8','artefact6','artefact3',
   ];
   const grouped = {};
   for (const item of arts) (grouped[item.slot] = grouped[item.slot] || []).push(item);
-  for (const slot of Object.keys(grouped)) grouped[slot].sort((a, b) => a.reqlvl - b.reqlvl);
+  // Sort: non-orange by QUALITY_ORDER first, orange last
+  for (const slot of Object.keys(grouped)) {
+    grouped[slot].sort((a, b) => {
+      const aOrange = a.quality === 'orange' ? 1 : 0;
+      const bOrange = b.quality === 'orange' ? 1 : 0;
+      if (aOrange !== bOrange) return aOrange - bOrange;
+      return QUALITY_ORDER.indexOf(a.quality) - QUALITY_ORDER.indexOf(b.quality);
+    });
+  }
+
+  // Group label: use the stone name for the slot (from first non-orange item or first item)
+  function slotLabel(slot, items) {
+    const nonOrange = items.find(i => i.quality !== 'orange');
+    const ref = nonOrange || items[0];
+    return locName(ref.id) || ref.id;
+  }
 
   let allSorted = [];
   let html = '';
   for (const slot of SLOT_ORDER) {
     const items = grouped[slot];
     if (!items?.length) continue;
-    const label = locName(items[0].id) || items[0].id;
+    const label = slotLabel(slot, items);
     const base = allSorted.length;
     allSorted = allSorted.concat(items);
     html += `<div class="art-section-divider">${label}</div><div class="eq-grid">`;
@@ -1197,12 +1311,23 @@ function pocketLabel(n) {
 const ARCHIVE_BAG_IDS = new Set(['battle_bag_default', 'offer_battle_bag_3_4']);
 
 const OTHER_SECTIONS = {
-  colder:    { ids: ['colder_2025_trinket_daily_quest_part'] },
-  halloween: { tags: ['halloween'] },
-  caldron:   { tags: ['caldron'] },
-  st_patric: { tags: ['st_patric'] },
-  dragons:   { tags: ['dragons'] },
+  colder:      { ids: ['colder_2025_trinket_daily_quest_part'] },
+  halloween:   { tags: ['halloween'] },
+  caldron:     { tags: ['caldron'] },
+  st_patric:   { tags: ['st_patric'] },
+  dragons:     { tags: ['dragons'] },
+  dniwe:       { tags: ['dniwe'] },
+  pirate_day:  { tags: ['pirate_day'] },
+  goblin_land: { tags: ['goblin_land'] },
+  expedition:  { tags: ['expedition'] },
+  arena:       { tags: ['arena_sp_useable'] },
+  emotions:    { tags: ['emotions'], ids: ['birthday_spell_1','birthday_spell_2','birthday_spell_3','birthday_spell_4','birthday_spell_5','birthday_spell_6'] },
 };
+
+function isArchiveRing(id) {
+  return id.startsWith('ring_reward_') || id.startsWith('all_ring_tournament_') ||
+    ['gift_vkontakt_ring','clans_2009_may_10_gold','clans_2009_may_10_silver','clans_2009_may_10_copper'].includes(id);
+}
 
 const ARCHIVE_QUEST_IDS = new Set([
   'mob_heroic_aoe_direct', 'mob_heroic_aoe_direct_spell', 'war_totem_direct_start',
@@ -1245,11 +1370,14 @@ async function renderEventBuffsDb(c) {
   c.innerHTML = '<div class="c-title" style="color:var(--txt3)">Загрузка…</div>';
   const otherIds  = new Set(Object.values(OTHER_SECTIONS).flatMap(s => s.ids  || []));
   const otherTags = new Set(Object.values(OTHER_SECTIONS).flatMap(s => s.tags || []));
+  const repTags   = new Set(['witcher','demon','joust_2x2']);
   const allBuffs = (await loadDb('buffs')).filter(i =>
     !ARCHIVE_QUEST_IDS.has(i.id) &&
     !otherIds.has(i.id) &&
     !(i.id.startsWith('cook_') && !i.id.startsWith('cook_recipe_')) &&
-    !((i.tags||'').split(',').some(t => otherTags.has(t.trim())))
+    !i.id.startsWith('cook_recipe_') &&
+    !(i.id||'').includes('avatar') &&
+    !((i.tags||'').split(',').some(t => otherTags.has(t.trim()) || repTags.has(t.trim()) || t.trim() === 'cards_booster'))
   );
   _ttDbItems = allBuffs;
 
@@ -1348,11 +1476,17 @@ async function renderTechEquipment(c) {
 
 async function renderOtherSection(c, key) {
   const TITLES = {
-    colder:    'Колдер',
-    halloween: 'Тыквенный фестиваль',
-    caldron:   'Земли мёртвых',
-    st_patric: 'Месяц цветущего хмеля',
-    dragons:   'Небесные Драконы',
+    colder:      'Колдер',
+    halloween:   'Тыквенный фестиваль',
+    caldron:     'Земли мёртвых',
+    st_patric:   'Месяц цветущего хмеля',
+    dragons:     'Небесные Драконы',
+    dniwe:       'Зов глубин',
+    pirate_day:  'День Пирата',
+    goblin_land: 'Гоблинский Рай',
+    expedition:  'Экспедиция',
+    arena:       'Арена',
+    emotions:    'Эмоции',
   };
   const title = TITLES[key] || key;
   c.innerHTML = '<div class="c-title" style="color:var(--txt3)">Загрузка…</div>';
@@ -1403,6 +1537,174 @@ async function renderArchiveSection(c, title) {
 
   c.innerHTML = `<div class="c-title">Архив: ${title}</div>
     <div class="soon-block">В разработке</div>`;
+}
+
+// ── Reputation sections ───────────────────────────────────────────────────────
+
+async function renderRepSection(c, key) {
+  const TITLES = {
+    witcher:'Ведьмак', demon:'Охотник на демонов',
+    gladiator:'Гладиатор', conqueror:'Завоеватель', explorer:'Первооткрыватель',
+  };
+  const TAG_MAP = {
+    witcher:'witcher', demon:'demon', gladiator:'gladiator', conqueror:'conqueror', explorer:'ravenhill',
+  };
+  const title = TITLES[key] || key;
+  const tag = TAG_MAP[key] || key;
+  c.innerHTML = '<div class="c-title" style="color:var(--txt3)">Загрузка…</div>';
+  const [buffs, eqNone] = await Promise.all([loadDb('buffs'), loadDb('equipment_none')]);
+  const items = [...buffs, ...eqNone].filter(i =>
+    (i.tags||'').split(',').map(t=>t.trim()).includes(tag)
+  );
+  items.sort((a,b) => (locName(a.id)||a.id).localeCompare(locName(b.id)||b.id,'ru'));
+  _ttDbItems = items;
+  const grid = items.length
+    ? `<div class="eq-grid">${items.map((item,idx) => dbItemCard(item,idx)).join('')}</div>`
+    : '<div class="soon-block">Пусто</div>';
+  c.innerHTML = `<div class="c-title">Репутация: ${title}</div>${grid}`;
+}
+
+// ── Cards sections ────────────────────────────────────────────────────────────
+
+async function renderCardsSection(c, key) {
+  const TITLES = {spades:'Пики', hearts:'Червы', clubs:'Трефы', diamonds:'Бубны', other:'Остальные масти', albums:'Альбомы'};
+  const SUIT_KW = {spades:'пик', hearts:'черв', clubs:'треф', diamonds:'бубн'};
+  const title = TITLES[key] || key;
+  c.innerHTML = '<div class="c-title" style="color:var(--txt3)">Загрузка…</div>';
+  const allBuffs = await loadDb('buffs');
+  const cardItems = allBuffs.filter(i => (i.tags||'').split(',').map(t=>t.trim()).includes('cards_booster'));
+
+  let items;
+  if (key === 'albums') {
+    items = cardItems.filter(i => (locName(i.id)||'').toLowerCase().includes('альбом') || (i.id||'').includes('_box'));
+  } else if (key === 'other') {
+    const suitKws = Object.values(SUIT_KW);
+    items = cardItems.filter(i => {
+      const n = (locName(i.id)||'').toLowerCase();
+      return !suitKws.some(k => n.includes(k)) && !n.includes('альбом') && !(i.id||'').includes('_box');
+    });
+  } else {
+    const kw = SUIT_KW[key];
+    items = cardItems.filter(i => (locName(i.id)||'').toLowerCase().includes(kw));
+  }
+
+  const sorted = sortByQuality(items);
+  _ttDbItems = sorted;
+  const grid = sorted.length
+    ? `<div class="eq-grid">${sorted.map((item,idx) => dbItemCard(item,idx)).join('')}</div>`
+    : '<div class="soon-block">Пусто</div>';
+  c.innerHTML = `<div class="c-title">Карты: ${title}</div>${grid}`;
+}
+
+// ── Profession sections ───────────────────────────────────────────────────────
+
+async function renderProfSection(c, key) {
+  const TITLES = {craft:'Ремесленник', herb:'Травник', mine:'Рудокоп', hunt:'Охотник', fish:'Рыболов', cook:'Повар'};
+  const title = TITLES[key] || key;
+
+  if (key === 'cook') {
+    c.innerHTML = '<div class="c-title" style="color:var(--txt3)">Загрузка…</div>';
+    const allBuffs = await loadDb('buffs');
+    const recipes = allBuffs.filter(i => i.id.startsWith('cook_recipe_'));
+    const COOK_LOCATIONS = [
+      { prefix:'cook_recipe_floring_buff_',        label:'Флоринг' },
+      { prefix:'cook_recipe_kohill_islands_buff_', label:'Кохилльский архипелаг' },
+      { prefix:'cook_recipe_gaina_buff_',          label:'Гайна' },
+      { prefix:'cook_recipe_spring_shore_buff_',   label:'Весенний берег' },
+      { prefix:'cook_recipe_hirn_buff_',           label:'Хирн' },
+      { prefix:'cook_recipe_south_fyorl_buff_',    label:'Южный Фьорл' },
+      { prefix:'cook_recipe_north_fyorl_buff_',    label:'Северный Фьорл' },
+    ];
+    let allSorted = [], html = '';
+    for (const loc of COOK_LOCATIONS) {
+      const items = recipes.filter(i => i.id.startsWith(loc.prefix)).sort((a,b) => a.id.localeCompare(b.id));
+      if (!items.length) continue;
+      const base = allSorted.length;
+      allSorted = allSorted.concat(items);
+      html += `<div class="art-section-divider">${loc.label} (${items.length})</div><div class="eq-grid">`;
+      items.forEach((item, i) => { html += dbItemCard(item, base + i); });
+      html += `</div>`;
+    }
+    _ttDbItems = allSorted;
+    c.innerHTML = `<div class="c-title">Профессии: Повар</div>${html || '<div class="soon-block">Пусто</div>'}`;
+    return;
+  }
+
+  c.innerHTML = `<div class="c-title">Профессии: ${title}</div><div class="soon-block">Данные добавляются</div>`;
+}
+
+// ── Costumes section ──────────────────────────────────────────────────────────
+
+async function renderCostumes(c) {
+  c.innerHTML = '<div class="c-title" style="color:var(--txt3)">Загрузка…</div>';
+  const allBuffs = await loadDb('buffs');
+  const costumes = allBuffs.filter(i => (i.id||'').includes('avatar'));
+
+  const EVENT_LABELS = {
+    halloween:'Тыквенный фестиваль', caldron:'Земли мёртвых', st_patric:'Месяц цветущего хмеля',
+    dragons:'Небесные Драконы', colder:'Колдер', flowers:'8 марта', joust_2x2:'Стальной турнир',
+    goblin_land:'Гоблинский Рай', dniwe:'Зов глубин', useable:'Общие',
+  };
+  const tagged = {}, untagged = [];
+  for (const item of costumes) {
+    const tags = (item.tags||'').split(',').map(t=>t.trim()).filter(Boolean);
+    if (tags.length && tags[0] !== 'None') {
+      const t = tags[0];
+      (tagged[t] = tagged[t]||[]).push(item);
+    } else {
+      untagged.push(item);
+    }
+  }
+
+  let allSorted = [], html = '';
+  const tagOrder = ['halloween','caldron','st_patric','dragons','colder','flowers','joust_2x2','goblin_land','dniwe','useable'];
+
+  function addGroup(label, items) {
+    if (!items.length) return;
+    const sorted = sortByQuality(items);
+    const base = allSorted.length;
+    allSorted = allSorted.concat(sorted);
+    html += `<div class="art-section-divider">${label} (${sorted.length})</div><div class="eq-grid">`;
+    sorted.forEach((item, i) => { html += dbItemCard(item, base + i); });
+    html += `</div>`;
+  }
+
+  for (const tag of tagOrder) {
+    if (tagged[tag]?.length) addGroup(EVENT_LABELS[tag] || tag, tagged[tag]);
+  }
+  for (const [tag, items] of Object.entries(tagged)) {
+    if (!tagOrder.includes(tag)) addGroup(EVENT_LABELS[tag] || tag, items);
+  }
+  if (untagged.length) addGroup('Прочие', untagged);
+
+  _ttDbItems = allSorted;
+  c.innerHTML = `<div class="c-title">Остальные предметы: Костюмы</div>${html || '<div class="soon-block">Пусто</div>'}`;
+}
+
+// ── Archive: Rings & Tournament ───────────────────────────────────────────────
+
+async function renderArchiveRings(c) {
+  c.innerHTML = '<div class="c-title" style="color:var(--txt3)">Загрузка…</div>';
+  const eq = await loadDb('equipment_none');
+  const rings = eq.filter(i => i.slot === 'ring1,ring2' && isArchiveRing(i.id));
+  rings.sort((a,b) => a.reqlvl - b.reqlvl || (locName(a.id)||a.id).localeCompare(locName(b.id)||b.id,'ru'));
+  _ttDbItems = rings;
+  const grid = rings.length
+    ? `<div class="eq-grid">${rings.map((item,idx) => dbItemCard(item,idx)).join('')}</div>`
+    : '<div class="soon-block">Пусто</div>';
+  c.innerHTML = `<div class="c-title">Архив: Кольца</div>${grid}`;
+}
+
+async function renderArchiveTournament(c) {
+  c.innerHTML = '<div class="c-title" style="color:var(--txt3)">Загрузка…</div>';
+  const allBuffs = await loadDb('buffs');
+  const items = allBuffs.filter(i => (i.tags||'').split(',').map(t=>t.trim()).includes('joust_2x2'));
+  items.sort((a,b) => (locName(a.id)||a.id).localeCompare(locName(b.id)||b.id,'ru'));
+  _ttDbItems = items;
+  const grid = items.length
+    ? `<div class="eq-grid">${items.map((item,idx) => dbItemCard(item,idx)).join('')}</div>`
+    : '<div class="soon-block">Пусто</div>';
+  c.innerHTML = `<div class="c-title">Архив: Стальной турнир</div>${grid}`;
 }
 
 // ── Search ────────────────────────────────────────────────────────────────────

@@ -114,6 +114,7 @@ const STAT_LABELS = [
   { key:'dmg_out',           label:'Исходящий урон',                pct:true },
   { key:'dmg_taken_red',     label:'Снижение входящего урона',      pct:true, combat:false },
   { key:'exp_gain',          label:'Получение опыта',                pct:true, combat:false },
+  { key:'change_experience_received_percent', label:'Получение опыта',  pct:true,  combat:false },
   { key:'rep_guard',         label:'Репутация Королевской Гвардии', pct:true, combat:false },
   { key:'rep_gladiator',     label:'Репутация Гладиатора',          pct:true, combat:false },
   { key:'rep_conqueror',     label:'Репутация Завоевателя',         pct:true, combat:false },
