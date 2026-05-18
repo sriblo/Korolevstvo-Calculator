@@ -685,14 +685,19 @@ async function renderJewelry(c) {
   // Separate ring handling
   const allRings = allItems.filter(i => i.slot === 'ring1,ring2');
 
-  const FALCON_IDS = new Set(['fair_attack_defense_ring','fair_attack_ring_gift','fair_defense_ring_gift','fair_attack_ring','fair_defense_ring','one_ring_to_rule_them_all']);
-  const SQUIRE_KNIGHT_IDS = new Set(['crafted_ring_10','reinforced_crafted_ring_10','crafted_ring_15','reinforced_crafted_ring_15']);
-  const LORD_BARON_IDS = new Set(['crafted_ring_20','reinforced_crafted_ring_20','crafted_ring_666','reinforced_crafted_ring_666']);
+  const FALCON_IDS  = new Set(['fair_attack_defense_ring','fair_attack_ring_gift','fair_defense_ring_gift','fair_attack_ring','fair_defense_ring','one_ring_to_rule_them_all']);
+  const SQUIRE_IDS  = new Set(['crafted_ring_10','reinforced_crafted_ring_10']);
+  const KNIGHT_IDS  = new Set(['crafted_ring_15','reinforced_crafted_ring_15']);
+  const LORD_IDS    = new Set(['crafted_ring_20','reinforced_crafted_ring_20']);
+  const BARON_IDS   = new Set(['crafted_ring_666','reinforced_crafted_ring_666']);
+  const CRAFTED_IDS = new Set([...SQUIRE_IDS, ...KNIGHT_IDS, ...LORD_IDS, ...BARON_IDS]);
 
-  const falconRings      = allRings.filter(i => FALCON_IDS.has(i.id));
-  const squireKnightRings = allRings.filter(i => SQUIRE_KNIGHT_IDS.has(i.id));
-  const lordBaronRings   = allRings.filter(i => LORD_BARON_IDS.has(i.id));
-  const otherRings       = allRings.filter(i => !FALCON_IDS.has(i.id) && !SQUIRE_KNIGHT_IDS.has(i.id) && !LORD_BARON_IDS.has(i.id) && !isArchiveRing(i.id));
+  const falconRings = allRings.filter(i => FALCON_IDS.has(i.id));
+  const squireRings = allRings.filter(i => SQUIRE_IDS.has(i.id));
+  const knightRings = allRings.filter(i => KNIGHT_IDS.has(i.id));
+  const lordRings   = allRings.filter(i => LORD_IDS.has(i.id));
+  const baronRings  = allRings.filter(i => BARON_IDS.has(i.id));
+  const otherRings  = allRings.filter(i => !FALCON_IDS.has(i.id) && !CRAFTED_IDS.has(i.id) && !isArchiveRing(i.id));
 
   otherRings.sort((a,b) => a.reqlvl - b.reqlvl);
 
@@ -709,8 +714,10 @@ async function renderJewelry(c) {
   }
 
   addGroup('Кольца Фалькона', sortByQuality(falconRings));
-  addGroup('Кольца Сквайра и Рыцаря', sortByQuality(squireKnightRings));
-  addGroup('Кольца Лорда и Барона', sortByQuality(lordBaronRings));
+  addGroup('Кольцо сквайра', sortByQuality(squireRings));
+  addGroup('Кольцо рыцаря', sortByQuality(knightRings));
+  addGroup('Кольцо лорда', sortByQuality(lordRings));
+  addGroup('Кольцо барона', sortByQuality(baronRings));
   if (otherRings.length) addGroup('Остальные кольца', otherRings);
 
   // Other jewelry types (non-ring)
@@ -1625,6 +1632,29 @@ async function renderRepSection(c, key) {
     (i.tags||'').split(',').map(t=>t.trim()).includes(tag)
   );
   items.sort((a,b) => (locName(a.id)||a.id).localeCompare(locName(b.id)||b.id,'ru'));
+
+  if (key === 'demon') {
+    const getName = i => (locName(i.id)||i.id).toLowerCase();
+    const balsam  = items.filter(i => getName(i).includes('бальзам атаки'));
+    const armor   = items.filter(i => getName(i).includes('доспех охотника'));
+    const rest    = items.filter(i => !getName(i).includes('бальзам атаки') && !getName(i).includes('доспех охотника'));
+    let allSorted = [], html = '';
+    function addGrp(label, arr) {
+      if (!arr.length) return;
+      const base = allSorted.length;
+      allSorted = allSorted.concat(arr);
+      html += `<div class="art-section-divider">${label}</div><div class="eq-grid">`;
+      arr.forEach((item, i) => { html += dbItemCard(item, base + i); });
+      html += `</div>`;
+    }
+    addGrp('Бальзам атаки', sortByQuality(balsam));
+    addGrp('Доспех охотника', armor);
+    addGrp('Остальное', rest);
+    _ttDbItems = allSorted;
+    c.innerHTML = `<div class="c-title">Репутация: ${title}</div>${html || '<div class="soon-block">Пусто</div>'}`;
+    return;
+  }
+
   _ttDbItems = items;
   const grid = items.length
     ? `<div class="eq-grid">${items.map((item,idx) => dbItemCard(item,idx)).join('')}</div>`
