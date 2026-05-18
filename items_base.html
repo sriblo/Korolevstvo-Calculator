@@ -713,27 +713,33 @@ async function renderJewelry(c) {
     html += `</div>`;
   }
 
-  function addGroupInline(label, items) {
-    if (!items.length) return '';
-    const base = allSorted.length;
-    allSorted = allSorted.concat(items);
-    let g = `<div style="flex:1;min-width:0"><div class="art-section-divider" style="margin-top:0">${label}</div><div class="eq-grid">`;
-    items.forEach((item, i) => { g += dbItemCard(item, base + i); });
-    g += `</div></div>`;
-    return g;
+  function addPairedGroups(pairs) {
+    // pairs = [{label, items}, {label, items}]
+    const nonEmpty = pairs.filter(p => p.items.length);
+    if (!nonEmpty.length) return;
+    let row = `<div style="display:flex;gap:40px;align-items:flex-start;margin:24px 0 14px;flex-wrap:wrap">`;
+    for (const {label, items} of nonEmpty) {
+      const base = allSorted.length;
+      allSorted = allSorted.concat(items);
+      row += `<div>`;
+      row += `<div style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:var(--txt3);margin-bottom:10px">${label}</div>`;
+      row += `<div style="display:flex;flex-wrap:wrap;gap:10px">`;
+      items.forEach((item, i) => { row += dbItemCard(item, base + i); });
+      row += `</div></div>`;
+    }
+    row += `</div>`;
+    html += row;
   }
 
   addGroup('Кольца Фалькона', sortByQuality(falconRings));
-
-  // Сквайр и Рыцарь — рядом на одной строке
-  const sqHtml = addGroupInline('Кольцо сквайра', sortByQuality(squireRings));
-  const knHtml = addGroupInline('Кольцо рыцаря', sortByQuality(knightRings));
-  if (sqHtml || knHtml) html += `<div style="display:flex;gap:16px;align-items:flex-start">${sqHtml}${knHtml}</div>`;
-
-  // Лорд и Барон — рядом на одной строке
-  const ldHtml = addGroupInline('Кольцо лорда', sortByQuality(lordRings));
-  const brHtml = addGroupInline('Кольцо барона', sortByQuality(baronRings));
-  if (ldHtml || brHtml) html += `<div style="display:flex;gap:16px;align-items:flex-start">${ldHtml}${brHtml}</div>`;
+  addPairedGroups([
+    { label:'Кольцо сквайра', items: sortByQuality(squireRings) },
+    { label:'Кольцо рыцаря', items: sortByQuality(knightRings) },
+  ]);
+  addPairedGroups([
+    { label:'Кольцо лорда', items: sortByQuality(lordRings) },
+    { label:'Кольцо барона', items: sortByQuality(baronRings) },
+  ]);
 
   if (otherRings.length) addGroup('Остальные кольца', otherRings);
 
