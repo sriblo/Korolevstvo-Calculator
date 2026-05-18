@@ -320,6 +320,114 @@ a{color:inherit;text-decoration:none}
   opacity:0; pointer-events:none; transition:opacity .18s, transform .18s; z-index:9999;
 }
 .copy-toast.vis { opacity:1; transform:translateX(-50%) translateY(0); }
+
+/* ── EDITOR ── */
+.edit-toggle-btn {
+  margin-left:auto; padding:5px 12px; border-radius:6px; border:1px solid var(--line2);
+  background:transparent; color:var(--txt2); font-size:12px; cursor:pointer;
+  display:flex; align-items:center; gap:5px; transition:background .12s, color .12s;
+}
+.edit-toggle-btn:hover { background:var(--bg3); color:var(--txt); }
+.edit-toggle-btn.active { border-color:var(--gold); color:var(--gold-l); background:var(--bg3); }
+.edit-toggle-btn .dot { width:7px; height:7px; border-radius:50%; background:currentColor; }
+
+/* settings panel */
+.settings-overlay {
+  display:none; position:fixed; inset:0; z-index:500; background:rgba(0,0,0,.5);
+}
+.settings-panel {
+  position:fixed; top:64px; right:16px; width:320px; z-index:501;
+  background:var(--bg3); border:1px solid var(--line2); border-radius:10px;
+  padding:16px; display:none; flex-direction:column; gap:12px;
+}
+.settings-panel.open { display:flex; }
+.settings-title { font-size:13px; font-weight:600; color:var(--gold-l); margin-bottom:4px; }
+.settings-row { display:flex; flex-direction:column; gap:6px; }
+.settings-row label { font-size:11px; color:var(--txt2); }
+.settings-row input[type=password], .settings-row input[type=text] {
+  background:var(--bg2); border:1px solid var(--line2); color:var(--txt);
+  border-radius:6px; padding:6px 10px; font-size:12px; outline:none; width:100%;
+}
+.settings-row input:focus { border-color:var(--gold); }
+.settings-btns { display:flex; gap:8px; }
+.s-btn {
+  padding:5px 12px; border-radius:6px; border:1px solid var(--line2);
+  background:transparent; color:var(--txt2); font-size:12px; cursor:pointer;
+}
+.s-btn:hover { background:var(--bg4); color:var(--txt); }
+.s-btn.primary { border-color:var(--gold); color:var(--gold-l); }
+.s-btn.primary:hover { background:var(--bg4); }
+.s-status { font-size:11px; color:var(--txt3); }
+.s-status.ok { color:#6fcf97; }
+.s-status.err { color:#eb5757; }
+
+/* context menu */
+.ctx-menu {
+  position:fixed; z-index:600; background:var(--bg3); border:1px solid var(--line2);
+  border-radius:8px; padding:4px; min-width:200px; box-shadow:0 8px 24px rgba(0,0,0,.5);
+  display:none;
+}
+.ctx-menu.open { display:block; }
+.ctx-item-name {
+  padding:6px 10px 4px; font-size:12px; color:var(--txt3); white-space:nowrap;
+  overflow:hidden; text-overflow:ellipsis; max-width:220px;
+}
+.ctx-sep { height:1px; background:var(--line); margin:3px 0; }
+.ctx-row {
+  padding:7px 10px; font-size:12px; color:var(--txt2); border-radius:5px;
+  cursor:pointer; white-space:nowrap; display:flex; align-items:center; gap:7px;
+}
+.ctx-row:hover { background:var(--bg4); color:var(--txt); }
+.ctx-row.active-flag { color:var(--gold-l); }
+.ctx-submenu-wrap { position:relative; }
+.ctx-submenu {
+  position:absolute; left:100%; top:0; background:var(--bg3);
+  border:1px solid var(--line2); border-radius:8px; padding:4px;
+  min-width:200px; box-shadow:0 8px 24px rgba(0,0,0,.5);
+  display:none;
+}
+.ctx-submenu-wrap:hover .ctx-submenu { display:block; }
+
+/* pending bar */
+.pending-bar {
+  position:fixed; bottom:16px; left:50%; transform:translateX(-50%);
+  background:var(--bg3); border:1px solid var(--gold); border-radius:10px;
+  padding:8px 16px; display:none; align-items:center; gap:12px; z-index:400;
+  box-shadow:0 4px 20px rgba(0,0,0,.6);
+}
+.pending-bar.open { display:flex; }
+.pending-count { font-size:12px; color:var(--txt2); }
+.pending-count strong { color:var(--gold-l); }
+.p-btn {
+  padding:5px 14px; border-radius:6px; font-size:12px; cursor:pointer; border:none;
+}
+.p-btn.save { background:var(--gold); color:#1a1000; font-weight:600; }
+.p-btn.save:hover { background:var(--gold-l); }
+.p-btn.cancel { background:transparent; border:1px solid var(--line2); color:var(--txt2); }
+.p-btn.cancel:hover { color:var(--txt); }
+
+/* badges */
+.badge-tech, .badge-buff {
+  position:absolute; top:2px; right:2px;
+  font-size:9px; font-weight:700; border-radius:3px; padding:1px 4px;
+  pointer-events:none; line-height:1.4;
+}
+.badge-tech { background:rgba(90,90,90,.85); color:#ccc; }
+.badge-buff { background:rgba(111,207,151,.2); color:#6fcf97; }
+.rune-ico { position:relative; }
+
+/* tech section */
+.tech-section { margin-top:16px; }
+.tech-header {
+  display:inline-flex; align-items:center; gap:7px; padding:6px 12px;
+  border:1px solid var(--line); border-radius:7px; cursor:pointer;
+  font-size:12px; color:var(--txt3); margin-bottom:10px;
+  transition:color .12s, border-color .12s;
+}
+.tech-header:hover { color:var(--txt2); border-color:var(--line2); }
+.tech-chev { font-size:10px; transition:transform .15s; }
+.tech-header.open .tech-chev { transform:rotate(90deg); }
+.tech-grid { margin-top:2px; }
 </style>
 </head>
 <body>
@@ -337,7 +445,50 @@ a{color:inherit;text-decoration:none}
     <a>Сообщество</a>
   </nav>
   <a class="h-back" href="index_new.html">На главную</a>
+  <button class="edit-toggle-btn" id="edit-toggle-btn" onclick="toggleEditMode()" title="Режим редактирования">
+    <span class="dot"></span> Редактор
+  </button>
 </header>
+
+<!-- Settings panel -->
+<div class="settings-overlay" id="settings-overlay" onclick="closeSettings()"></div>
+<div class="settings-panel" id="settings-panel">
+  <div class="settings-title">Редактор базы предметов</div>
+  <div class="settings-row">
+    <label>GitHub Personal Access Token</label>
+    <input type="password" id="gh-token-input" placeholder="ghp_..." autocomplete="off">
+    <div id="token-status" class="s-status"></div>
+  </div>
+  <div class="settings-btns">
+    <button class="s-btn primary" onclick="saveToken()">Сохранить токен</button>
+    <button class="s-btn" onclick="testToken()">Проверить</button>
+    <button class="s-btn" onclick="closeSettings()">Закрыть</button>
+  </div>
+</div>
+
+<!-- Context menu -->
+<div class="ctx-menu" id="ctx-menu">
+  <div class="ctx-item-name" id="ctx-item-name">—</div>
+  <div class="ctx-sep"></div>
+  <div class="ctx-row" id="ctx-tech-row" onclick="ctxToggleFlag('tech')">
+    <span>☐</span> Технический предмет
+  </div>
+  <div class="ctx-row" id="ctx-buff-row" onclick="ctxToggleFlag('buff')">
+    <span>☐</span> Баф
+  </div>
+  <div class="ctx-sep"></div>
+  <div class="ctx-submenu-wrap">
+    <div class="ctx-row">Переместить в… ▶</div>
+    <div class="ctx-submenu" id="ctx-move-submenu"></div>
+  </div>
+</div>
+
+<!-- Pending changes bar -->
+<div class="pending-bar" id="pending-bar">
+  <span class="pending-count" id="pending-count">Изменений: <strong>0</strong></span>
+  <button class="p-btn save" onclick="saveChanges()">Сохранить в GitHub</button>
+  <button class="p-btn cancel" onclick="cancelChanges()">Отмена</button>
+</div>
 
 <div class="layout">
 
@@ -1099,7 +1250,8 @@ const _dbCache = {};
 async function loadDb(name) {
   if (!_dbCache[name]) {
     const r = await fetch(`db/${name}.json`);
-    _dbCache[name] = await r.json();
+    const items = await r.json();
+    _dbCache[name] = items.map(i => ({ ...i, _db: name }));
   }
   return _dbCache[name];
 }
@@ -1595,8 +1747,13 @@ function dbItemCard(item, idx) {
   const imgHtml = src ? `<img class="ico-img" src="${src}" alt="" onerror="iconFallback(this)">` : '';
   const q = QUALITIES.find(q2 => q2.id === item.quality);
   const nameColor = q ? q.color : 'var(--txt2)';
-  return `<div class="eq-card" onmouseenter="ttShowDbItem(${idx},event)" onmousemove="ttMove(event)" onmouseleave="ttHide()" ondblclick="copyItemId(event,'${item.id}')"  title="Двойной клик — скопировать ID">
-    <div class="rune-ico">${imgHtml}${frameHtml}</div>
+  const techBadge = item.tech ? `<span class="badge-tech">ТЕХ</span>` : '';
+  const buffBadge = item.buff ? `<span class="badge-buff">БАФ</span>` : '';
+  return `<div class="eq-card" data-idx="${idx}" data-tech="${item.tech ? '1' : ''}" data-buff="${item.buff ? '1' : ''}"
+    onmouseenter="ttShowDbItem(${idx},event)" onmousemove="ttMove(event)" onmouseleave="ttHide()"
+    ondblclick="copyItemId(event,'${item.id}')" oncontextmenu="editorCtxMenu(event,${idx})"
+    title="Двойной клик — скопировать ID">
+    <div class="rune-ico">${imgHtml}${frameHtml}${techBadge}${buffBadge}</div>
     <div class="eq-slot-name" style="color:${nameColor}">${name}</div>
   </div>`;
 }
@@ -2308,6 +2465,347 @@ function onSearch(query) {
     return;
   }
   _searchTimeout = setTimeout(() => doSearch(query), 250);
+}
+
+// ══════════════════════════════════════════════════════════════
+// EDITOR — GitHub API + edit mode + context menu + pending saves
+// ══════════════════════════════════════════════════════════════
+
+const GH_OWNER = 'sriblo';
+const GH_REPO  = 'Korolevstvo-Calculator';
+
+const DB_LABELS = {
+  'inventory':         'Нераспределённые',
+  'buffs':             'Бафы',
+  'enchants':          'Руны',
+  'equipment_warrior':  'Снаряжение / Воин',
+  'equipment_paladin':  'Снаряжение / Паладин',
+  'equipment_mage':     'Снаряжение / Маг',
+  'equipment_cleric':   'Снаряжение / Монах',
+  'equipment_rogue':    'Снаряжение / Головорез',
+  'equipment_shooter':  'Снаряжение / Лучник',
+  'equipment_none':     'Снаряжение / Без класса',
+};
+
+let _editMode = false;
+let _pendingChanges = {};  // { dbName: { itemId: item } }
+let _pendingMoves   = {};  // { itemId: { from, to, item } }
+let _ctxItem = null;
+
+// ── GitHub API ──────────────────────────────────────────────
+function ghHeaders() {
+  const token = localStorage.getItem('gh_token');
+  return {
+    'Authorization': `token ${token}`,
+    'Accept': 'application/vnd.github.v3+json',
+    'Content-Type': 'application/json',
+  };
+}
+
+async function ghGetFile(dbName) {
+  const r = await fetch(
+    `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/db/${dbName}.json`,
+    { headers: ghHeaders() }
+  );
+  if (!r.ok) throw new Error(`GitHub API: ${r.status}`);
+  const data = await r.json();
+  const raw = decodeURIComponent(escape(atob(data.content.replace(/\n/g, ''))));
+  return { items: JSON.parse(raw), sha: data.sha };
+}
+
+async function ghPutFile(dbName, items, sha) {
+  const body = JSON.stringify(items, null, 2);
+  const content = btoa(unescape(encodeURIComponent(body)));
+  const r = await fetch(
+    `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/db/${dbName}.json`,
+    {
+      method: 'PUT',
+      headers: ghHeaders(),
+      body: JSON.stringify({
+        message: `База предметов: обновление через редактор`,
+        content,
+        sha,
+      }),
+    }
+  );
+  if (!r.ok) {
+    const err = await r.json();
+    throw new Error(err.message || r.status);
+  }
+}
+
+// ── Token management ────────────────────────────────────────
+function toggleEditMode() {
+  const hasToken = !!localStorage.getItem('gh_token');
+  if (!hasToken) {
+    openSettings();
+    return;
+  }
+  _editMode = !_editMode;
+  const btn = document.getElementById('edit-toggle-btn');
+  btn.classList.toggle('active', _editMode);
+  btn.querySelector('.dot').style.background = _editMode ? 'var(--gold)' : '';
+  if (!_editMode) closeCtxMenu();
+}
+
+function openSettings() {
+  const panel = document.getElementById('settings-panel');
+  const overlay = document.getElementById('settings-overlay');
+  const input = document.getElementById('gh-token-input');
+  panel.classList.add('open');
+  overlay.style.display = 'block';
+  const saved = localStorage.getItem('gh_token');
+  if (saved) input.value = saved;
+  input.focus();
+}
+
+function closeSettings() {
+  document.getElementById('settings-panel').classList.remove('open');
+  document.getElementById('settings-overlay').style.display = 'none';
+}
+
+function saveToken() {
+  const val = document.getElementById('gh-token-input').value.trim();
+  if (!val) return;
+  localStorage.setItem('gh_token', val);
+  setTokenStatus('Токен сохранён', 'ok');
+}
+
+async function testToken() {
+  setTokenStatus('Проверка…', '');
+  try {
+    const r = await fetch(
+      `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}`,
+      { headers: ghHeaders() }
+    );
+    if (r.ok) setTokenStatus('Соединение успешно ✓', 'ok');
+    else setTokenStatus('Ошибка: ' + r.status, 'err');
+  } catch(e) { setTokenStatus('Ошибка сети', 'err'); }
+}
+
+function setTokenStatus(msg, cls) {
+  const el = document.getElementById('token-status');
+  el.textContent = msg;
+  el.className = 's-status' + (cls ? ' ' + cls : '');
+}
+
+// ── Context menu ────────────────────────────────────────────
+function editorCtxMenu(e, idx) {
+  if (!_editMode) return;
+  e.preventDefault();
+  e.stopPropagation();
+  const item = _ttDbItems[idx];
+  if (!item) return;
+  _ctxItem = item;
+
+  const nameEl  = document.getElementById('ctx-item-name');
+  const techRow = document.getElementById('ctx-tech-row');
+  const buffRow = document.getElementById('ctx-buff-row');
+  const submenu = document.getElementById('ctx-move-submenu');
+  const menu    = document.getElementById('ctx-menu');
+
+  nameEl.textContent = itemDisplayName(item);
+
+  techRow.classList.toggle('active-flag', !!item.tech);
+  techRow.innerHTML = `<span>${item.tech ? '☑' : '☐'}</span> Технический предмет`;
+
+  buffRow.classList.toggle('active-flag', !!item.buff);
+  buffRow.innerHTML = `<span>${item.buff ? '☑' : '☐'}</span> Баф`;
+
+  // Build move submenu
+  submenu.innerHTML = Object.entries(DB_LABELS)
+    .filter(([db]) => db !== item._db)
+    .map(([db, label]) =>
+      `<div class="ctx-row" onclick="ctxMoveTo('${db}')">${label}</div>`
+    ).join('');
+
+  // Position menu
+  menu.style.display = 'none';
+  menu.classList.add('open');
+  const vw = window.innerWidth, vh = window.innerHeight;
+  let x = e.clientX, y = e.clientY;
+  if (x + 220 > vw) x = vw - 230;
+  if (y + 200 > vh) y = vh - 210;
+  menu.style.left = x + 'px';
+  menu.style.top  = y + 'px';
+  menu.style.display = 'block';
+}
+
+function closeCtxMenu() {
+  const m = document.getElementById('ctx-menu');
+  m.classList.remove('open');
+  m.style.display = 'none';
+  _ctxItem = null;
+}
+
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('#ctx-menu')) closeCtxMenu();
+});
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeCtxMenu();
+});
+
+function ctxToggleFlag(flag) {
+  if (!_ctxItem) return;
+  const newVal = !_ctxItem[flag];
+  applyPendingChange(_ctxItem, { [flag]: newVal || undefined });
+  closeCtxMenu();
+}
+
+function ctxMoveTo(targetDb) {
+  if (!_ctxItem) return;
+  const item = _ctxItem;
+  const sourceDb = item._db;
+
+  // Track move
+  if (!_pendingMoves[item.id]) {
+    _pendingMoves[item.id] = { from: sourceDb, to: targetDb, item: { ...item } };
+  } else {
+    _pendingMoves[item.id].to = targetDb;
+  }
+
+  // Update in-memory item so UI reflects change
+  item._db = targetDb;
+  updatePendingBar();
+  closeCtxMenu();
+
+  // Re-render current view to show the change
+  const active = document.querySelector('.sb-item.on');
+  if (active) render(active.dataset.view);
+}
+
+function applyPendingChange(item, changes) {
+  const db = item._db;
+  if (!_pendingChanges[db]) _pendingChanges[db] = {};
+  // Apply changes to live item object
+  Object.assign(item, changes);
+  // Remove undefined keys
+  Object.keys(item).forEach(k => { if (item[k] === undefined) delete item[k]; });
+  // Clone into pending (without _db)
+  const clean = { ...item };
+  delete clean._db;
+  _pendingChanges[db][item.id] = clean;
+  updatePendingBar();
+  // Re-render to show badges
+  const active = document.querySelector('.sb-item.on');
+  if (active) render(active.dataset.view);
+}
+
+function updatePendingBar() {
+  const bar = document.getElementById('pending-bar');
+  const flagCount = Object.values(_pendingChanges).reduce((s, m) => s + Object.keys(m).length, 0);
+  const moveCount = Object.keys(_pendingMoves).length;
+  const total = flagCount + moveCount;
+  if (total === 0) { bar.classList.remove('open'); return; }
+  bar.classList.add('open');
+  document.getElementById('pending-count').innerHTML =
+    `Изменений: <strong>${total}</strong>${moveCount ? ` (${moveCount} перемещений)` : ''}`;
+}
+
+async function saveChanges() {
+  const bar = document.getElementById('pending-bar');
+  bar.querySelector('.p-btn.save').textContent = 'Сохранение…';
+
+  try {
+    const affectedDbs = new Set([
+      ...Object.keys(_pendingChanges),
+      ...Object.values(_pendingMoves).flatMap(m => [m.from, m.to]),
+    ]);
+
+    // Fetch all affected files from GitHub
+    const dbData = {};
+    for (const db of affectedDbs) {
+      dbData[db] = await ghGetFile(db);
+    }
+
+    // Apply flag changes
+    for (const [db, changes] of Object.entries(_pendingChanges)) {
+      for (const [id, changed] of Object.entries(changes)) {
+        const idx = dbData[db].items.findIndex(i => i.id === id);
+        if (idx >= 0) dbData[db].items[idx] = changed;
+      }
+    }
+
+    // Apply moves
+    for (const [id, { from, to, item }] of Object.entries(_pendingMoves)) {
+      dbData[from].items = dbData[from].items.filter(i => i.id !== id);
+      const clean = { ...item };
+      delete clean._db;
+      // Merge any flag changes that may have happened simultaneously
+      const flagChange = (_pendingChanges[item._db] || {})[id];
+      const finalItem = flagChange ? { ...clean, ...flagChange } : clean;
+      dbData[to].items.push(finalItem);
+    }
+
+    // Push to GitHub
+    for (const [db, { items, sha }] of Object.entries(dbData)) {
+      await ghPutFile(db, items, sha);
+    }
+
+    // Clear pending + cache, reload view
+    _pendingChanges = {};
+    _pendingMoves   = {};
+    _dbCache        = {};
+    _allItems       = null;
+    updatePendingBar();
+
+    const active = document.querySelector('.sb-item.on');
+    if (active) render(active.dataset.view);
+
+  } catch (e) {
+    alert('Ошибка сохранения: ' + e.message);
+  } finally {
+    const btn = bar.querySelector('.p-btn.save');
+    if (btn) btn.textContent = 'Сохранить в GitHub';
+  }
+}
+
+function cancelChanges() {
+  _pendingChanges = {};
+  _pendingMoves   = {};
+  _dbCache        = {};
+  _allItems       = null;
+  updatePendingBar();
+  const active = document.querySelector('.sb-item.on');
+  if (active) render(active.dataset.view);
+}
+
+// ── Tech section splitter ───────────────────────────────────
+function splitTechItems(container) {
+  container.querySelectorAll('.eq-grid').forEach(grid => {
+    // skip already-split tech grids
+    if (grid.classList.contains('tech-grid')) return;
+    const techCards = [...grid.querySelectorAll('.eq-card[data-tech="1"]')];
+    if (!techCards.length) return;
+
+    const section = document.createElement('div');
+    section.className = 'tech-section';
+    section.innerHTML = `<div class="tech-header" onclick="toggleTechSection(this)">
+      Технические предметы <span style="color:var(--txt3)">(${techCards.length})</span>
+      <span class="tech-chev">▶</span>
+    </div>
+    <div class="tech-grid eq-grid" style="display:none"></div>`;
+    const techGrid = section.querySelector('.tech-grid');
+    techCards.forEach(card => { grid.removeChild(card); techGrid.appendChild(card); });
+    grid.after(section);
+  });
+}
+
+function toggleTechSection(header) {
+  header.classList.toggle('open');
+  const grid = header.nextElementSibling;
+  grid.style.display = grid.style.display === 'none' ? '' : 'none';
+}
+
+// ── Async render wrapper ────────────────────────────────────
+const _origRender = render;
+async function render(view) {
+  _origRender(view);
+  // Wait a tick for async renders to start, then poll until content is ready
+  await new Promise(r => setTimeout(r, 50));
+  // Re-split after renders settle (async renders set innerHTML after await)
+  await new Promise(r => setTimeout(r, 400));
+  splitTechItems(document.getElementById('content'));
 }
 
 async function doSearch(query) {
