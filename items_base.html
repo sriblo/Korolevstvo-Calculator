@@ -713,11 +713,28 @@ async function renderJewelry(c) {
     html += `</div>`;
   }
 
+  function addGroupInline(label, items) {
+    if (!items.length) return '';
+    const base = allSorted.length;
+    allSorted = allSorted.concat(items);
+    let g = `<div style="flex:1;min-width:0"><div class="art-section-divider" style="margin-top:0">${label}</div><div class="eq-grid">`;
+    items.forEach((item, i) => { g += dbItemCard(item, base + i); });
+    g += `</div></div>`;
+    return g;
+  }
+
   addGroup('Кольца Фалькона', sortByQuality(falconRings));
-  addGroup('Кольцо сквайра', sortByQuality(squireRings));
-  addGroup('Кольцо рыцаря', sortByQuality(knightRings));
-  addGroup('Кольцо лорда', sortByQuality(lordRings));
-  addGroup('Кольцо барона', sortByQuality(baronRings));
+
+  // Сквайр и Рыцарь — рядом на одной строке
+  const sqHtml = addGroupInline('Кольцо сквайра', sortByQuality(squireRings));
+  const knHtml = addGroupInline('Кольцо рыцаря', sortByQuality(knightRings));
+  if (sqHtml || knHtml) html += `<div style="display:flex;gap:16px;align-items:flex-start">${sqHtml}${knHtml}</div>`;
+
+  // Лорд и Барон — рядом на одной строке
+  const ldHtml = addGroupInline('Кольцо лорда', sortByQuality(lordRings));
+  const brHtml = addGroupInline('Кольцо барона', sortByQuality(baronRings));
+  if (ldHtml || brHtml) html += `<div style="display:flex;gap:16px;align-items:flex-start">${ldHtml}${brHtml}</div>`;
+
   if (otherRings.length) addGroup('Остальные кольца', otherRings);
 
   // Other jewelry types (non-ring)
