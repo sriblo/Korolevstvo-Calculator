@@ -193,5 +193,48 @@ const STATS = {
   },
 };
 
+// ── АРТЕФАКТЫ ─────────────────────────────────────────────────────────────────
+const ARTIFACTS = [
+  { slotId:'stone_travel',  name:'Камень Путешествий',                              quality:'red',    img:'stats_calculator/artefacts/artefact_stone_fire.png',  stats:{ def_eff:2, atk_eff:4 } },
+  { slotId:'stone_contest', name:'Камень Состязаний',                               quality:'red',    img:'stats_calculator/artefacts/artefact_stone_light.png', stats:{ atk:2, mana:100, atk_eff:2 } },
+  { slotId:'stone_greed',   name:'Артефакт Алчности',                               quality:'red',    img:'stats_calculator/artefacts/artefact_stone_rubin.png', stats:{ atk:3, mana:100, heal_eff:2, def_eff:3, hp:300, def:1, atk_eff:3, speed:1 } },
+  { slotId:'stone_witch',   group:'Камень Ведьмака',           name:'Камень Ведьмака',                   quality:'red',    img:'stats_calculator/artefacts/artefact_stone_earth.png', stats:{ heal_eff:2, hp:150, def:2 } },
+  { slotId:'stone_witch',   group:'Камень Ведьмака',           name:'Магическая карта Ведьмака',          quality:'orange', img:'stats_calculator/artefacts/green_demonic_card.png',   stats:{ hp:500, def:4, mana:200, def_eff:8, heal_eff:8 } },
+  { slotId:'stone_luck',    group:'Камень Удачи',              name:'Камень Удачи',                       quality:'red',    img:'stats_calculator/artefacts/artefact_stone_gold.png',  stats:{ atk:2, mana:100, heal_eff:1, def_eff:2, hp:100, atk_eff:2, speed:1 } },
+  { slotId:'stone_luck',    group:'Камень Удачи',              name:'Магическая карта Удачи',             quality:'orange', img:'stats_calculator/artefacts/yellow_demonic_card.png',  stats:{ atk:6, hp:400, def:3, mana:200, def_eff:4, atk_eff:5, heal_eff:5, speed:3 } },
+  { slotId:'stone_lost',    group:'Камень Потерянных Земель',  name:'Камень Потерянных Земель',           quality:'green',  img:'stats_calculator/artefacts/artefact_stone_air.png',   stats:{ atk:2, mana:100, def_eff:2, atk_eff:3 } },
+  { slotId:'stone_lost',    group:'Камень Потерянных Земель',  name:'Камень Потерянных Земель',           quality:'blue',   img:'stats_calculator/artefacts/artefact_stone_air.png',   stats:{ atk:3, mana:150, def_eff:3, atk_eff:4, crit_chance:1 } },
+  { slotId:'stone_lost',    group:'Камень Потерянных Земель',  name:'Камень Потерянных Земель',           quality:'purple', img:'stats_calculator/artefacts/artefact_stone_air.png',   stats:{ atk:4, mana:200, def_eff:4, atk_eff:5, crit_chance:2 } },
+  { slotId:'stone_lost',    group:'Камень Потерянных Земель',  name:'Магическая карта Потерянных Земель', quality:'orange', img:'stats_calculator/artefacts/blue_demonic_card.png',    stats:{ atk:10, mana:200, def_eff:6, atk_eff:8, crit_chance:4 } },
+  { slotId:'stone_labor',   group:'Камень Труда',              name:'Камень Труда',                       quality:'green',  img:'stats_calculator/artefacts/artefact_stone_water.png', stats:{ atk:1, heal_eff:1, hp:50,  atk_eff:1 } },
+  { slotId:'stone_labor',   group:'Камень Труда',              name:'Камень Труда',                       quality:'blue',   img:'stats_calculator/artefacts/artefact_stone_water.png', stats:{ atk:2, heal_eff:2, hp:150, def:1, atk_eff:2 } },
+  { slotId:'stone_labor',   group:'Камень Труда',              name:'Камень Труда',                       quality:'purple', img:'stats_calculator/artefacts/artefact_stone_water.png', stats:{ atk:4, heal_eff:3, hp:300, def:2, atk_eff:3, crit_chance:2 } },
+  { slotId:'stone_labor',   group:'Камень Труда',              name:'Магическая карта Труда',             quality:'orange', img:'stats_calculator/artefacts/red_demonic_card.png',     stats:{ atk:10, hp:600, def:4, mana:200, atk_eff:8, crit_chance:4, heal_eff:6 } },
+  { slotId:'stone_friend',  group:'Камень Дружбы',             name:'Камень Дружбы',                      quality:'white',  img:'stats_calculator/artefacts/artefact_stone_dark.png',  stats:{ atk:1,  hp:50,       speed:1 } },
+  { slotId:'stone_friend',  group:'Камень Дружбы',             name:'Камень Дружбы',                      quality:'green',  img:'stats_calculator/artefacts/artefact_stone_dark.png',  stats:{ atk:3,  hp:100, def:1, speed:2 } },
+  { slotId:'stone_friend',  group:'Камень Дружбы',             name:'Камень Дружбы',                      quality:'blue',   img:'stats_calculator/artefacts/artefact_stone_dark.png',  stats:{ atk:5,  hp:200, def:3, speed:3 } },
+  { slotId:'stone_friend',  group:'Камень Дружбы',             name:'Камень Дружбы',                      quality:'purple', img:'stats_calculator/artefacts/artefact_stone_dark.png',  stats:{ atk:7,  hp:300, def:5, speed:3 } },
+  { slotId:'stone_friend',  group:'Камень Дружбы',             name:'Камень Дружбы',                      quality:'red',    img:'stats_calculator/artefacts/artefact_stone_dark.png',  stats:{ atk:10, hp:500, def:7, speed:3 } },
+  { slotId:'stone_friend',  group:'Камень Дружбы',             name:'Камень Дружбы',                      quality:'orange', img:'stats_calculator/artefacts/artefact_stone_dark.png',  stats:{ atk:13, hp:700, def:7, speed:4 } },
+  { slotId:'stone_blood',   group:'Камень Крови',              name:'Камень Крови',                       quality:'green',  img:'stats_calculator/artefacts/artefact_stone_blood.png', stats:{ atk:1, mana:100, heal_eff:1, hp:100 } },
+  { slotId:'stone_blood',   group:'Камень Крови',              name:'Камень Крови',                       quality:'blue',   img:'stats_calculator/artefacts/artefact_stone_blood.png', stats:{ atk:3, mana:200, heal_eff:2, hp:200, crit_chance:1 } },
+];
+
+// ── РУНЫ ─────────────────────────────────────────────────────────────────────
+const RUNES = [
+  { name:'Титанитовая Великая Руна Фальдира',  slot:'Оружие',        slotId:'weapon',    quality:'red',    img:'stats_calculator/rune/rune_weapon.png',              stats:null },
+  { name:'Руна Пяти Камней',                   slot:'Второе оружие', slotId:'offhand',   quality:'red',    img:'stats_calculator/rune/rune_attack_weapon2_1.png',    stats:null },
+  { name:'Титанитовая Великая Руна Гэтана',    slot:'Штаны',         slotId:'pants',     quality:'red',    img:'stats_calculator/rune/rune_pants.png',               stats:null },
+  { name:'Великая Руна Варин',                 slot:'Пояс',          slotId:'belt',      quality:'red',    img:'stats_calculator/rune/rune_belt.png',                stats:null },
+  { name:'Великая Руна Орноса',                slot:'Сапоги',        slotId:'boots',     quality:'red',    img:'stats_calculator/rune/rune_boots.png',               stats:null },
+  { name:'Титанитовая Великая Руна Баннора',   slot:'Перчатки',      slotId:'gloves',    quality:'red',    img:'stats_calculator/rune/rune_gloves.png',              stats:null },
+  { name:'Титанитовая Великая Руна Халиэмы',  slot:'Наплечники',    slotId:'shoulders', quality:'red',    img:'stats_calculator/rune/rune_shoulders.png',           stats:null },
+  { name:'Великая Руна Мехила',                slot:'Нагрудник',     slotId:'chest',     quality:'red',    img:'stats_calculator/rune/rune_chest.png',               stats:null },
+  { name:'Руна Хенгиста',                      slot:'Амулет',        slotId:'amulet',    quality:'purple', img:'stats_calculator/rune/rune_medallion_attack_10.png', stats:null },
+  { name:'Руна Усиленной Защиты Хорлата',      slot:'Шлем',          slotId:'helm',      quality:'blue',   img:'stats_calculator/rune/rune_helm_defense_5.png',      stats:null },
+  { name:'Руна Усиленной Атаки Хорлата',       slot:'Шлем',          slotId:'helm',      quality:'blue',   img:'stats_calculator/rune/rune_helm_attack_5.png',       stats:null },
+  { name:'Руна Усиленного Здоровья Хорлата',   slot:'Шлем',          slotId:'helm',      quality:'blue',   img:'stats_calculator/rune/rune_helm_health_5.png',       stats:null },
+];
+
 // ── БАФЫ ──────────────────────────────────────────────────────────────────────
 
