@@ -897,27 +897,45 @@ const EQ_MAIN_SLOTS = [
 ];
 
 const DB_STAT_LABELS = [
-  { key:'attack',                           label:'Атака' },
-  { key:'defense',                          label:'Защита' },
-  { key:'max_health',                       label:'Запас здоровья' },
-  { key:'mana',                             label:'Запас маны' },
-  { key:'armor',                            label:'Броня' },
-  { key:'change_heal_sent_percent',         label:'Эффект. лечения',      pct:true },
-  { key:'change_health_regeneration_speed', label:'Восст. жизни' },
-  { key:'critical_attack_multiplier',       label:'Сила крита',            pct:true },
-  { key:'chance_critical_attack',           label:'Шанс крита',            pct:true },
-  { key:'resist_to_wind_percent',           label:'Сопр. ветра',           pct:true },
-  { key:'resist_to_fire_percent',           label:'Сопр. огня',            pct:true },
-  { key:'resist_to_light_percent',          label:'Сопр. света',           pct:true },
-  { key:'elem_def',                         label:'Защита стихий' },
-  { key:'atk_eff',                          label:'Эффект. атаки',         pct:true },
-  { key:'change_damage_sent_percent',       label:'Исходящий урон',        pct:true },
-  { key:'change_damage_received_percent',   label:'Снижение урона',        pct:true },
-  { key:'change_absorb_critical',           label:'Защита от крита',       pct:true },
-  { key:'weakness_to_wind_percent',         label:'Уязв. к ветру',         pct:true },
-  { key:'weakness_to_fire_percent',         label:'Уязв. к огню',          pct:true },
-  { key:'weakness_to_light_percent',        label:'Уязв. к свету',         pct:true },
-  { key:'duration',                         label:'Длительность',          suffix:'с' },
+  { key:'attack',                             label:'Атака' },
+  { key:'change_attack',                      label:'Атака' },
+  { key:'defense',                            label:'Защита' },
+  { key:'change_defense',                     label:'Защита' },
+  { key:'max_health',                         label:'Запас здоровья' },
+  { key:'change_max_health',                  label:'Запас здоровья' },
+  { key:'mana',                               label:'Запас маны' },
+  { key:'max_mana',                           label:'Запас маны' },
+  { key:'change_max_mana',                    label:'Запас маны' },
+  { key:'armor',                              label:'Броня' },
+  { key:'magic_defense',                      label:'Маг. защита' },
+  { key:'change_heal_sent_percent',           label:'Эффект. лечения',      pct:true },
+  { key:'change_health_regeneration_speed',   label:'Восст. жизни' },
+  { key:'change_mana_regeneration_speed',     label:'Восст. маны' },
+  { key:'critical_attack_multiplier',         label:'Сила крита',            pct:true },
+  { key:'change_critical_attack_multiplier',  label:'Сила крита',            pct:true },
+  { key:'chance_critical_attack',             label:'Шанс крита',            pct:true },
+  { key:'change_chance_critical_attack',      label:'Шанс крита',            pct:true },
+  { key:'change_absorb_critical',             label:'Защита от крита',       pct:true },
+  { key:'change_chance_absorb_critical',      label:'Защита от крита',       pct:true },
+  { key:'resist_to_wind_percent',             label:'Сопр. ветра',           pct:true },
+  { key:'resist_to_fire_percent',             label:'Сопр. огня',            pct:true },
+  { key:'resist_to_light_percent',            label:'Сопр. света',           pct:true },
+  { key:'elem_def',                           label:'Защита стихий' },
+  { key:'atk_eff',                            label:'Эффект. атаки',         pct:true },
+  { key:'change_damage_sent_percent',         label:'Исходящий урон',        pct:true },
+  { key:'change_damage_received_percent',     label:'Снижение урона',        pct:true },
+  { key:'weakness_to_wind_percent',           label:'Уязв. к ветру',         pct:true },
+  { key:'weakness_to_fire_percent',           label:'Уязв. к огню',          pct:true },
+  { key:'weakness_to_light_percent',          label:'Уязв. к свету',         pct:true },
+  { key:'change_experience_received_percent', label:'Получение опыта',       pct:true },
+  { key:'rep_received_percent',               label:'Репутация',             pct:true },
+  { key:'walk_speed',                         label:'Скорость ходьбы',       pct:true },
+  { key:'change_walk_speed',                  label:'Скорость ходьбы',       pct:true },
+  { key:'run_speed',                          label:'Скорость бега',         pct:true },
+  { key:'change_run_speed',                   label:'Скорость бега',         pct:true },
+  { key:'speed',                              label:'Скорость',              pct:true },
+  { key:'charm',                              label:'Обаяние' },
+  { key:'duration',                           label:'Длительность',          suffix:'с' },
 ];
 
 // Маппинги db-классов/слотов → ключи в CLASS_ITEM_NAMES / CLASS_SET_NAMES
@@ -1040,15 +1058,34 @@ function runeDisplayName(rune) {
   return statLabel || id.replace(/_/g,' ');
 }
 
+const DB_STAT_SKIP = new Set([
+  'skin','avatar','to_location','from_location','arena_5x5',
+  'max_distance_to_target','min_distance_to_target','cooldown',
+  'teleport_realm','teleport_raelm_rus','target_class',
+  'use_in_location','move_speed','type','permanent','reusable',
+  'owner_alive','not_to_openworld','repeat','quest',
+]);
+
 function dbStatRows(stats) {
   if (!stats) return '<div class="tt-empty">Нет статов</div>';
-  return DB_STAT_LABELS
-    .filter(s => stats[s.key] != null)
-    .map(s => {
-      const v = stats[s.key];
-      const disp = s.suffix ? `${v}${s.suffix}` : (s.pct ? `+${v}%` : (v >= 0 ? `+${v}` : v));
-      return `<div class="tt-row"><span class="tt-key">${s.label}</span><span class="tt-val">${disp}</span></div>`;
-    }).join('');
+  const mapped = new Set(DB_STAT_LABELS.map(s => s.key));
+  const rows = [];
+  for (const s of DB_STAT_LABELS) {
+    const v = stats[s.key];
+    if (v == null) continue;
+    const disp = s.suffix ? `${v}${s.suffix}` : (s.pct ? `${v >= 0 ? '+' : ''}${v}%` : (v >= 0 ? `+${v}` : `${v}`));
+    rows.push(`<div class="tt-row"><span class="tt-key">${s.label}</span><span class="tt-val">${disp}</span></div>`);
+  }
+  for (const [k, v] of Object.entries(stats)) {
+    if (mapped.has(k) || DB_STAT_SKIP.has(k) || v == null) continue;
+    const label = k.replace(/_percent$/, '').replace(/_/g, ' ');
+    const isPct = k.endsWith('_percent');
+    const disp = typeof v === 'number'
+      ? (isPct ? `${v >= 0 ? '+' : ''}${v}%` : (v >= 0 ? `+${v}` : `${v}`))
+      : String(v);
+    rows.push(`<div class="tt-row"><span class="tt-key" style="color:var(--txt3)">${label}</span><span class="tt-val">${disp}</span></div>`);
+  }
+  return rows.join('') || '<div class="tt-empty">Нет статов</div>';
 }
 
 const CLASS_SUFFIXES = /_(cleric|mage|warrior|rogue|shooter|paladin|human|elf|ork)$/;
