@@ -2797,16 +2797,15 @@ function toggleTechSection(header) {
   grid.style.display = grid.style.display === 'none' ? '' : 'none';
 }
 
-// ── Async render wrapper ────────────────────────────────────
-const _origRender = render;
-async function render(view) {
-  _origRender(view);
-  // Wait a tick for async renders to start, then poll until content is ready
-  await new Promise(r => setTimeout(r, 50));
-  // Re-split after renders settle (async renders set innerHTML after await)
-  await new Promise(r => setTimeout(r, 400));
-  splitTechItems(document.getElementById('content'));
-}
+// ── Auto-split tech items via MutationObserver ──────────────
+let _techSplitTimer;
+document.addEventListener('DOMContentLoaded', () => {
+  const contentEl = document.getElementById('content');
+  new MutationObserver(() => {
+    clearTimeout(_techSplitTimer);
+    _techSplitTimer = setTimeout(() => splitTechItems(contentEl), 350);
+  }).observe(contentEl, { childList: true });
+});
 
 async function doSearch(query) {
   const c = document.getElementById('content');
