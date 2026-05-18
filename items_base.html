@@ -685,14 +685,24 @@ async function renderJewelry(c) {
   // Separate ring handling
   const allRings = allItems.filter(i => i.slot === 'ring1,ring2');
 
-  const FALCON_IDS = new Set(['fair_attack_defense_ring','fair_attack_ring_gift','fair_defense_ring_gift','fair_attack_ring','fair_defense_ring','one_ring_to_rule_them_all']);
-  const SQUIRE_KNIGHT_IDS = new Set(['crafted_ring_10','reinforced_crafted_ring_10','crafted_ring_15','reinforced_crafted_ring_15']);
-  const LORD_BARON_IDS = new Set(['crafted_ring_20','reinforced_crafted_ring_20','crafted_ring_666','reinforced_crafted_ring_666']);
+  const FALCON_IDS  = new Set(['fair_attack_defense_ring','fair_attack_ring_gift','fair_defense_ring_gift','fair_attack_ring','fair_defense_ring','one_ring_to_rule_them_all']);
+  const SQUIRE_IDS  = new Set(['crafted_ring_10','reinforced_crafted_ring_10']);
+  const KNIGHT_IDS  = new Set(['crafted_ring_15','reinforced_crafted_ring_15']);
+  const LORD_IDS    = new Set(['crafted_ring_20','reinforced_crafted_ring_20']);
+  const BARON_IDS   = new Set(['crafted_ring_666','reinforced_crafted_ring_666']);
+  const CRAFTED_IDS = new Set([...SQUIRE_IDS,...KNIGHT_IDS,...LORD_IDS,...BARON_IDS]);
 
-  const falconRings       = allRings.filter(i => FALCON_IDS.has(i.id));
-  const squireKnightRings = allRings.filter(i => SQUIRE_KNIGHT_IDS.has(i.id));
-  const lordBaronRings    = allRings.filter(i => LORD_BARON_IDS.has(i.id));
-  const otherRings        = allRings.filter(i => !FALCON_IDS.has(i.id) && !SQUIRE_KNIGHT_IDS.has(i.id) && !LORD_BARON_IDS.has(i.id) && !isArchiveRing(i.id));
+  const falconRings = allRings.filter(i => FALCON_IDS.has(i.id));
+  const squireRings = allRings.filter(i => SQUIRE_IDS.has(i.id));
+  const knightRings = allRings.filter(i => KNIGHT_IDS.has(i.id));
+  const lordRings   = allRings.filter(i => LORD_IDS.has(i.id));
+  const baronRings  = allRings.filter(i => BARON_IDS.has(i.id));
+  const otherRings  = allRings.filter(i => !FALCON_IDS.has(i.id) && !CRAFTED_IDS.has(i.id) && !isArchiveRing(i.id));
+
+  // сортировка внутри группы: обычное → усиленное
+  function ringOrder(items) {
+    return [...items].sort((a,b) => (a.id.startsWith('reinforced_') ? 1 : 0) - (b.id.startsWith('reinforced_') ? 1 : 0));
+  }
 
   otherRings.sort((a,b) => a.reqlvl - b.reqlvl);
 
@@ -709,8 +719,10 @@ async function renderJewelry(c) {
   }
 
   addGroup('Кольца Фалькона', sortByQuality(falconRings));
-  addGroup('Кольца Сквайра и Рыцаря', sortByQuality(squireKnightRings));
-  addGroup('Кольца Лорда и Барона', sortByQuality(lordBaronRings));
+  addGroup('Кольцо сквайра', ringOrder(squireRings));
+  addGroup('Кольцо рыцаря', ringOrder(knightRings));
+  addGroup('Кольцо лорда',  ringOrder(lordRings));
+  addGroup('Кольцо барона', ringOrder(baronRings));
   if (otherRings.length) addGroup('Остальные кольца', otherRings);
 
   // Other jewelry types (non-ring)
