@@ -386,6 +386,7 @@ a{color:inherit;text-decoration:none}
       <div class="sb-items">
         <div class="sb-item sb-sub" data-view="buffs_event" onclick="show(this)">Ивентовые бафы</div>
         <div class="sb-item sb-sub" data-view="buffs_food" onclick="show(this)">Еда</div>
+        <div class="sb-item sb-sub" data-view="teleport_scrolls" onclick="show(this)">Свитки телепорта</div>
       </div>
     </div>
 
@@ -559,6 +560,7 @@ function render(view) {
   else if (view === 'buffs_class')   renderBuffsClass(c);
   else if (view === 'buffs_event')   renderEventBuffsDb(c);
   else if (view === 'buffs_food')    renderFood(c);
+  else if (view === 'teleport_scrolls') renderTeleportScrolls(c);
   else if (view === 'tech_stats')     renderTechStats(c);
   else if (view === 'tech_no_stats')  renderTechNoStats(c);
   else if (view === 'tech_equipment') renderTechEquipment(c);
@@ -1027,22 +1029,54 @@ const EVENT_TAG_ORDER = [
 ];
 
 const TOKEN_ICO = {
-  event_token:        'icons/currency_tailen_event_small.png',
-  goblin_land_token:  'icons/currency_tailen_goblin_land_small.png',
-  expedition_token:   'icons/currency_tailen_expedition_small.png',
-  colder_token:       'icons/currency_tailen_colder_small.png',
-  blue_token:         'icons/currency_tailen_blue_small.png',
-  bronze_token:       'icons/currency_tailen_bronze_small.png',
-  blood_token:        'icons/currency_tailen_blood_small.png',
+  // Из официального token-currency.xml
+  event_token:            'icons/currency_tailen_event_small.png',
+  fair_token:             'icons/currency_tailen_red_small.png',
+  contest_token:          'icons/currency_tailen_blue_small.png',
+  clan_token:             'icons/currency_tailen_green_small.png',
+  blood_token:            'icons/currency_tailen_blood_small.png',
+  colony_token:           'icons/currency_tailen_bronze_small.png',
+  offer_token:            'icons/tailen_goldenbutton_small.png',
+  island_robots_token:    'icons/island_robots_tailen_small.png',
+  expedition_token:       'icons/currency_tailen_expedition_small.png',
+  dniwe_token:            'icons/pearl_small.png',
+  // Старые токены
+  goblin_land_token:      'icons/currency_tailen_goblin_land_small.png',
+  colder_token:           'icons/currency_tailen_colder_small.png',
+  frozen_token:           'icons/tailen_colder.png',
+  blue_token:             'icons/currency_tailen_blue_small.png',
+  bronze_token:           'icons/currency_tailen_bronze_small.png',
+  halloween_token:        'icons/currency_tailen_halloween_small.png',
+  dragons_token:          'icons/dragons_token_small.png',
+  st_patric_token:        'icons/lucky_coin.jpg',
+  pirate_day_2013_token:  'icons/pirate_coin_small.png',
+  flowers_2015_token:     'icons/currency_tailen_march_8.png',
+  valentin_token:         'icons/currency_tailen_blue_glass_heart.png',
+  march_8_token:          'icons/currency_tailen_march_8.png',
 };
 const TOKEN_LABEL = {
-  event_token:        'Тайлены (ивент)',
-  goblin_land_token:  'Тайлены Земли гоблинов',
-  expedition_token:   'Тайлены Экспедиции',
-  colder_token:       'Тайлены Зимнего праздника',
-  blue_token:         'Тайлены (синие)',
-  bronze_token:       'Тайлены (бронзовые)',
-  blood_token:        'Тайлены (кровь)',
+  event_token:            'Тайлены (ивент)',
+  fair_token:             'Тайлены Ярмарки',
+  contest_token:          'Тайлены Конкурса',
+  clan_token:             'Клановые тайлены',
+  blood_token:            'Тайлены (кровь)',
+  colony_token:           'Тайлены Колонии',
+  offer_token:            'Тайлены Предложения',
+  island_robots_token:    'Тайлены Острова роботов',
+  expedition_token:       'Тайлены Экспедиции',
+  dniwe_token:            'Жемчужины (Зов Глубин)',
+  goblin_land_token:      'Тайлены Гоблинского Рая',
+  colder_token:           'Тайлены Колдера',
+  frozen_token:           'Тайлены Зимнего испытания',
+  blue_token:             'Тайлены (синие)',
+  bronze_token:           'Тайлены (бронзовые)',
+  halloween_token:        'Тайлены Хэллоуина',
+  dragons_token:          'Тайлены Небесных Драконов',
+  st_patric_token:        'Тайлены Праздника хмеля',
+  pirate_day_2013_token:  'Тайлены Дня Пирата',
+  flowers_2015_token:     'Тайлены Весны',
+  valentin_token:         'Тайлены Дня влюблённых',
+  march_8_token:          'Тайлены 8 марта',
 };
 
 const RUNE_SLOT_GROUPS = [
@@ -1799,6 +1833,61 @@ const OTHER_SECTIONS = {
 function isArchiveRing(id) {
   return id.startsWith('ring_reward_') || id.startsWith('all_ring_tournament_') ||
     ['gift_vkontakt_ring','clans_2009_may_10_gold','clans_2009_may_10_silver','clans_2009_may_10_copper'].includes(id);
+}
+
+async function renderTeleportScrolls(c) {
+  c.innerHTML = '<div class="c-title" style="color:var(--txt3)">Загрузка…</div>';
+  const allItems = await loadDb('inventory');
+  const items = allItems.filter(i => {
+    const id = i.id || '';
+    const tags = i.tags || '';
+    return tags === 'teleport' ||
+      id.startsWith('scroll_teleport_') ||
+      id.startsWith('stone_teleport_') ||
+      id.startsWith('traveler_stone_');
+  });
+
+  const REALM_LABEL = {
+    floring:        'Гальяра',
+    hirn:           'Хирн',
+    gaina:          'Гайна',
+    kohill_islands: 'Холмы острова',
+    spring_shore:   'Весенний берег',
+    graven:         'Гравен',
+    ritaly:         'Риталь',
+    horras:         'Хоррас',
+    silent_bay_human: 'Тихая бухта',
+    silent_bay_elf:   'Тихая бухта',
+    colony_3:       'Колония (3)',
+    colony_5:       'Колония (5)',
+    colony_7:       'Колония (7)',
+    colony_8:       'Колония (8)',
+  };
+
+  // Group by realm
+  const groups = {};
+  for (const item of items) {
+    const realm = item.stats?.teleport_realm || '';
+    const label = REALM_LABEL[realm] || (realm ? realm : 'Без локации');
+    (groups[label] = groups[label] || []).push(item);
+  }
+
+  // Sort each group by reqlvl then quality
+  const ORDER = { white:0, green:1, blue:2, purple:3, red:4, orange:5 };
+  const sortGroup = arr => arr.sort((a,b) =>
+    (a.reqlvl||0) - (b.reqlvl||0) || (ORDER[a.quality]||0) - (ORDER[b.quality]||0)
+  );
+
+  _ttDbItems = items;
+  let html = '';
+  for (const [label, arr] of Object.entries(groups).sort((a,b) => a[0].localeCompare(b[0],'ru'))) {
+    sortGroup(arr);
+    html += `<div class="art-section-divider">${label}</div><div class="eq-grid">`;
+    arr.forEach((item, idx) => { html += dbItemCard(item, items.indexOf(item)); });
+    html += `</div>`;
+  }
+  c.innerHTML = `<div class="c-title">Свитки телепорта</div>
+    <div class="c-sub">${items.length} предметов</div>${html}`;
 }
 
 const ARCHIVE_QUEST_IDS = new Set([
