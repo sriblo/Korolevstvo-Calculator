@@ -1131,7 +1131,8 @@ function dbStatRows(stats) {
   return rows.join('') || '<div class="tt-empty">Нет статов</div>';
 }
 
-const CLASS_SUFFIXES = /_(cleric|mage|warrior|rogue|shooter|paladin|human|elf|ork)$/;
+const CLASS_SUFFIXES    = /_(cleric|mage|warrior|rogue|shooter|paladin|human|elf|ork)$/;
+const CLASS_SUFFIXES_EQ = /_(cleric|mage|warrior|rogue|shooter|paladin)$/;
 
 const VISUAL_ICON_MAP = {
   '2009_trophy': 'drop_horn',
@@ -1532,7 +1533,7 @@ function itemIconSrc(item) {
   v = VISUAL_ICON_MAP[v] || v;
   const isEq = item.category !== 'enchant' && EQ_MAIN_SLOTS.some(s => s.id === item.slot);
   if (isEq) return `icons/${v}_human.jpg`;
-  v = v.replace(CLASS_SUFFIXES, '');
+  v = v.replace(CLASS_SUFFIXES_EQ, '');
   return `icons/${v}.jpg`;
 }
 
