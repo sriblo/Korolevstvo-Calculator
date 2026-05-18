@@ -1652,13 +1652,17 @@ function ttShowDbItem(idx, e) {
   }
 
   // Мета: уровень, сет, цены
-  const hasMeta = (item.reqlvl > 0) || item.set || item.token_price;
+  const hasMeta = (item.reqlvl > 0) || item.set || item.token_price || (item.price > 0) || (item.ruby_price > 0);
   if (hasMeta) html += `<div class="tt-sep"></div>`;
 
   if (item.reqlvl > 0)
     html += `<div class="tt-price"><span class="tt-price-key">Требуемый уровень</span><span class="tt-price-val" style="color:var(--gold-l)">${item.reqlvl}</span></div>`;
   if (item.set)
     html += `<div class="tt-price"><span class="tt-price-key">Сет</span><span class="tt-price-val">${item.set}</span></div>`;
+  if (item.price > 0)
+    html += `<div class="tt-price"><span class="tt-price-key">Цена</span><span class="tt-price-val"><img class="tt-coin" src="icons/currency_gold_small.png" alt=""> ${item.price.toLocaleString('ru')}</span></div>`;
+  if (item.ruby_price > 0)
+    html += `<div class="tt-price"><span class="tt-price-key">Рубины</span><span class="tt-price-val"><img class="tt-coin" src="icons/currency_ruby_small.png" alt=""> ${item.ruby_price}</span></div>`;
   if (item.token_price) {
     const tType = item.token_type || '';
     const tIco = TOKEN_ICO[tType] || 'icons/currency_tailen_event_small.png';
