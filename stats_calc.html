@@ -870,7 +870,8 @@ function dollUrl(cls, slotKey, quality, race, lvlOverride) {
   if (!cfg) return null;
   const part = cfg.parts[slotKey];
   if (!part) return null;
-  const lvl = lvlOverride || QUALITY_LEVEL[quality] || 10;
+  const rawLvl = lvlOverride || QUALITY_LEVEL[quality] || 10;
+  const lvl = rawLvl > 14 ? 14 : rawLvl; // orange(15) → red(14), оверлеев выше 14 нет
   const urlCls = CLASS_URL_KEY[cls] || cls;
   const ClsCap = urlCls[0].toUpperCase() + urlCls.slice(1);
   return `https://m1.kor.ru/media//game/assets/characters/items/${urlCls}/${ClsCap}${part}${lvl}${race}.png`;
