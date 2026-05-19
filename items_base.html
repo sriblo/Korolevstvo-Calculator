@@ -1597,7 +1597,24 @@ const VISUAL_ICON_MAP = {
   'halloween_rambler_amulet': 'green_pumpkin_quest',
   'joust_2x2_battle_bag_7': 'joust_2x2_battle_bag_05',
   'knights_medallion': 'triumf_mark',
-  'march_8_weapon2_melee_warrior': 'warrior_shield_default',
+  'disguise_pumpkin_warrior':  'disguise_pumpkinwarrior',
+  'disguise_pumpkin_paladin':  'disguise_pumpkin',
+  'disguise_pumpkin_rogue':    'disguise_pumpkin',
+  'disguise_pumpkin_cleric':   'disguise_pumpkin',
+  'disguise_pumpkin_mage':     'disguise_pumpkin',
+  'disguise_pumpkin_shooter':  'disguise_pumpkin',
+  'disguise_st_patric_warrior':  'st_patric_hat',
+  'disguise_st_patric_paladin':  'st_patric_hat',
+  'disguise_st_patric_rogue':    'st_patric_hat',
+  'disguise_st_patric_cleric':   'st_patric_hat',
+  'disguise_st_patric_mage':     'st_patric_hat',
+  'disguise_st_patric_shooter':  'st_patric_hat',
+  'march_8_weapon2_melee_warrior': 'march_8_weapon2_melee',
+  'march_8_weapon2_melee_paladin': 'march_8_weapon2_melee',
+  'march_8_weapon2_melee_rogue':   'march_8_weapon2_melee',
+  'march_8_weapon2_melee_cleric':  'march_8_weapon2_melee',
+  'march_8_weapon2_range_mage':    'march_8_weapon2_range',
+  'march_8_weapon2_range_shooter': 'march_8_weapon2_range',
   'medallion_bot_defeat': 'reward_medallion_wooden',
   'medallion_bot_victory': 'reward_medallion_metal',
   'medallion_bravery_3_5': 'bravery_mark',
@@ -1717,7 +1734,11 @@ function itemIconSrc(item) {
     return ARTEFACT_CARD_ICONS[item.id] || ARTEFACT_SLOT_ICONS[item.slot] || null;
   }
   let v = item.visual || item.id;
-  v = VISUAL_ICON_MAP[v] || v;
+  const mapped = VISUAL_ICON_MAP[v];
+  if (mapped !== undefined) {
+    // Явное сопоставление — используем как есть, без _human/_elf
+    return `icons/${mapped}.jpg`;
+  }
   const isEq = item.category !== 'enchant' && EQ_MAIN_SLOTS.some(s => s.id === item.slot);
   if (isEq) return `icons/${v}_human.jpg`;
   v = v.replace(CLASS_SUFFIXES_EQ, '');
@@ -2054,6 +2075,40 @@ const ARCHIVE_QUEST_IDS = new Set([
   'golden_ring_quest', 'truln_ring_quest', 'family_ring_quest',
 ]);
 
+function bagTypeGroup(item) {
+  const id = item.id;
+  if (id.startsWith('arch_battle_bag') || id === 'battle_bag_5_1_archeolog')
+    return 'archaeologist';
+  if (id.startsWith('exorcist_fair_battle_bag'))
+    return 'exorcist_magic';
+  if (id.startsWith('caldron_battle_bag'))
+    return 'exorcist_cursed';
+  if (id.startsWith('exorcist_battle_bag'))
+    return 'exorcist';
+  if (id.startsWith('fair_battle_bag') && id.endsWith('upgrade'))
+    return 'fair_magic';
+  if (id.startsWith('fair_battle_bag'))
+    return 'fair';
+  if (/battle_bag_[0-9]+_[0-9]+_hero/.test(id))
+    return 'crown';
+  return 'other';
+}
+
+const BAG_GROUP_ORDER = [
+  'archaeologist', 'fair', 'fair_magic',
+  'exorcist', 'exorcist_cursed', 'exorcist_magic', 'crown', 'other',
+];
+const BAG_GROUP_LABELS = {
+  archaeologist: 'Боевые сумки Археолога',
+  fair:          'Ярмарочные боевые сумки',
+  fair_magic:    'Ярмарочные волшебные боевые сумки',
+  exorcist:      'Боевые сумки Экзорциста',
+  exorcist_cursed: 'Проклятые боевые сумки Экзорциста',
+  exorcist_magic:  'Волшебные боевые сумки Экзорциста',
+  crown:         'Боевые сумки Ордена Короны',
+  other:         'Прочие',
+};
+
 async function renderBattleBags(c) {
   c.innerHTML = '<div class="c-title" style="color:var(--txt3)">Загрузка…</div>';
   const allItems = await loadDb('inventory');
@@ -2069,13 +2124,15 @@ async function renderBattleBags(c) {
 
   const groups = {};
   for (const item of bags) {
-    const key = pocketLabel(bagPockets(item));
+    const key = bagTypeGroup(item);
     (groups[key] = groups[key] || []).push(item);
   }
 
   let html = '';
-  for (const [label, items] of Object.entries(groups)) {
-    html += `<div class="art-section-divider">${label}</div><div class="eq-grid">`;
+  for (const key of BAG_GROUP_ORDER) {
+    const items = groups[key];
+    if (!items?.length) continue;
+    html += `<div class="art-section-divider">${BAG_GROUP_LABELS[key]}</div><div class="eq-grid">`;
     items.forEach(item => { html += dbItemCard(item, bags.indexOf(item)); });
     html += `</div>`;
   }
