@@ -846,12 +846,20 @@ const CLASS_DOLL = {
 
 const CLASS_URL_KEY  = { paladin:'paladin', warrior:'warrior', rogue:'rogue', mage:'mage', archer:'shooter', monk:'cleric' };
 
-function dollUrl(cls, slotKey, quality, race) {
+// Строит URL иконки предмета из visual-поля DB: 'warrior_belt_13' → WarriorBelt13ElfMale.png
+function visualToImgUrl(visual, cls, race) {
+  if (!visual) return null;
+  const urlCls = CLASS_URL_KEY[cls] || cls;
+  const filename = visual.split('_').map(p => isNaN(p) ? p[0].toUpperCase() + p.slice(1) : p).join('');
+  return `https://m1.kor.ru/media//game/assets/characters/items/${urlCls}/${filename}${race || 'ElfMale'}.png`;
+}
+
+function dollUrl(cls, slotKey, quality, race, lvlOverride) {
   const cfg = CLASS_DOLL[cls];
   if (!cfg) return null;
   const part = cfg.parts[slotKey];
   if (!part) return null;
-  const lvl = QUALITY_LEVEL[quality] || 10;
+  const lvl = lvlOverride || QUALITY_LEVEL[quality] || 10;
   const urlCls = CLASS_URL_KEY[cls] || cls;
   const ClsCap = urlCls[0].toUpperCase() + urlCls.slice(1);
   return `https://m1.kor.ru/media//game/assets/characters/items/${urlCls}/${ClsCap}${part}${lvl}${race}.png`;
@@ -891,7 +899,7 @@ function renderDoll(cid) {
     }
     const eq      = s.equipped[layer];
     const quality = eq ? eq.quality : 'white';
-    const url     = dollUrl(s.cls, layer, quality, s.race);
+    const url     = dollUrl(s.cls, layer, quality, s.race, eq && eq.imgLevel);
     el.style.backgroundImage = url ? `url("${url}")` : '';
     if (url) hasAny = true;
   });
@@ -1783,12 +1791,17 @@ async function dbLoadEquip(calcCls) {
     items.forEach(item => {
       item.slot.split(',').map(s => dbNormSlot(s.trim())).forEach(slot => {
         if (!_dbEquip[calcCls][slot]) _dbEquip[calcCls][slot] = [];
+        // imgLevel из visual-поля: 'warrior_belt_13' → 13
+        const visualParts = (item.visual || '').split('_');
+        const imgLevel = parseInt(visualParts[visualParts.length - 1]) || null;
         _dbEquip[calcCls][slot].push({
-          name:    _dbName(item.id) || item.id,
-          quality: item.quality,
-          img:     getItemImg(calcCls, slot, item.quality),
-          stats:   dbConvertStats(item.stats),
-          reqlvl:  item.reqlvl || 0,
+          name:     _dbName(item.id) || item.id,
+          quality:  item.quality,
+          img:      (item.visual ? visualToImgUrl(item.visual, calcCls) : null)
+                    || getItemImg(calcCls, slot, item.quality),
+          imgLevel: imgLevel,
+          stats:    dbConvertStats(item.stats),
+          reqlvl:   item.reqlvl || 0,
         });
       });
     });
