@@ -1199,10 +1199,6 @@ const _runeMode = { c1: false, c2: false };
 const EQUIPMENT_SLOTS = ['helm','chest','shoulders','pants','belt','boots','weapon','offhand','gloves'];
 
 function getPickerItems(cls, slotId) {
-  // Non-equipment slots with manual data (artifacts, jewelry, etc.)
-  if (SLOT_ITEMS[slotId] && !EQUIPMENT_SLOTS.includes(slotId) && slotId !== 'battle_bag') {
-    return SLOT_ITEMS[slotId];
-  }
   // Battle bags from DB
   if (slotId === 'battle_bag') {
     return _dbBags || SLOT_ITEMS[slotId] || [];
@@ -1210,6 +1206,16 @@ function getPickerItems(cls, slotId) {
   // Equipment slots — use DB items if loaded
   if (EQUIPMENT_SLOTS.includes(slotId) && _dbEquip[cls] && _dbEquip[cls][slotId]) {
     return [...(_dbEquip[cls][slotId]), ...(SLOT_ITEMS[slotId] || [])];
+  }
+  // Non-class equip slots (flask, trinket, rings, etc.) — DB items + any manual SLOT_ITEMS
+  if (NONE_EQUIP_SLOTS.includes(slotId)) {
+    const dbItems  = (_dbNoneEquip && _dbNoneEquip[slotId]) || [];
+    const manItems = SLOT_ITEMS[slotId] || [];
+    if (dbItems.length || manItems.length) return [...dbItems, ...manItems];
+  }
+  // Artifact/stone slots with only manual data
+  if (SLOT_ITEMS[slotId]) {
+    return SLOT_ITEMS[slotId];
   }
   // Fallback: STATS object (sparse manual data)
   const slotName = (CLASS_ITEM_NAMES[cls] && CLASS_ITEM_NAMES[cls][slotId])
@@ -1702,8 +1708,9 @@ async function openPicker(cid, slotId) {
   renderSlotRow(cid, ROW_TOP,   `slotRowTop-${cid}`);
   renderSlotRow(cid, ROW_BOT,   `slotRowBot-${cid}`);
   if (s.activeSlot) {
-    if (EQUIPMENT_SLOTS.includes(s.activeSlot)) await dbLoadEquip(s.cls);
-    if (s.activeSlot === 'battle_bag')           await dbLoadBattleBags();
+    if (EQUIPMENT_SLOTS.includes(s.activeSlot))       await dbLoadEquip(s.cls);
+    if (s.activeSlot === 'battle_bag')                await dbLoadBattleBags();
+    if (NONE_EQUIP_SLOTS.includes(s.activeSlot))      await dbLoadNoneEquip();
   }
   renderPicker(cid);
 }
@@ -1825,7 +1832,7 @@ const DB_STAT_MAP = {
   change_reputation_rep21_received_percent: 'rep_tamer',
 };
 
-const DB_SLOT_NORM     = { weapon1:'weapon', weapon2:'offhand', bracelet1:'bracelet', bracelet2:'bracelet' };
+const DB_SLOT_NORM     = { weapon1:'weapon', weapon2:'offhand', bracelet1:'bracelet', bracelet2:'bracelet', accessory1:'flask', accessory2:'trinket', medallion:'badge' };
 const CALC_TO_DB_CLS   = { monk:'cleric', archer:'shooter' };
 
 function dbNormSlot(s) { return DB_SLOT_NORM[s] || s; }
@@ -1841,9 +1848,12 @@ function dbConvertStats(raw) {
   return Object.keys(out).length ? out : null;
 }
 
-let _dbLocale = null;
-let _dbEquip  = {};
-let _dbBags   = null;
+let _dbLocale    = null;
+let _dbEquip     = {};
+let _dbBags      = null;
+let _dbNoneEquip = null;
+
+const NONE_EQUIP_SLOTS = ['flask','trinket','talisman','amulet','badge','bracelet','ring1','ring2','trophy'];
 
 async function _dbGetLocale() {
   if (!_dbLocale) {
@@ -1904,6 +1914,38 @@ async function dbLoadBattleBags() {
       .map(i => ({ name: _dbName(i.id) || i.id, quality: i.quality, img: null, stats: null, reqlvl: i.reqlvl || 0 }))
       .sort((a, b) => QUALITY_ORDER.indexOf(a.quality) - QUALITY_ORDER.indexOf(b.quality));
   } catch(e) { _dbBags = []; }
+}
+
+async function dbLoadNoneEquip() {
+  if (_dbNoneEquip) return;
+  _dbNoneEquip = {};
+  try {
+    const [items] = await Promise.all([
+      fetch('db/equipment_none.json').then(r => r.json()),
+      _dbGetLocale(),
+    ]);
+    items.forEach(item => {
+      if (!item.slot) return;
+      const stats = dbConvertStats(item.stats);
+      if (!stats) return; // skip items without useful stats
+      item.slot.split(',').map(s => dbNormSlot(s.trim())).forEach(slot => {
+        if (!NONE_EQUIP_SLOTS.includes(slot)) return;
+        if (!_dbNoneEquip[slot]) _dbNoneEquip[slot] = [];
+        _dbNoneEquip[slot].push({
+          name:    _dbName(item.id) || item.id,
+          quality: item.quality,
+          img:     item.visual ? `icons/${item.visual}.jpg` : null,
+          stats:   stats,
+          reqlvl:  item.reqlvl || 0,
+        });
+      });
+    });
+    Object.values(_dbNoneEquip).forEach(arr =>
+      arr.sort((a, b) =>
+        (QUALITY_ORDER.indexOf(a.quality) - QUALITY_ORDER.indexOf(b.quality)) || (a.reqlvl - b.reqlvl)
+      )
+    );
+  } catch(e) { console.warn('dbLoadNoneEquip', e); _dbNoneEquip = {}; }
 }
 
 async function dbLoadRunes() {
