@@ -1160,7 +1160,19 @@ const _runeMode = { c1: false, c2: false };
 const EQUIPMENT_SLOTS = ['helm','chest','shoulders','pants','belt','boots','weapon','offhand','gloves'];
 
 function getPickerItems(cls, slotId) {
-  if (SLOT_ITEMS[slotId] && !EQUIPMENT_SLOTS.includes(slotId)) return SLOT_ITEMS[slotId];
+  // Non-equipment slots with manual data (artifacts, jewelry, etc.)
+  if (SLOT_ITEMS[slotId] && !EQUIPMENT_SLOTS.includes(slotId) && slotId !== 'battle_bag') {
+    return SLOT_ITEMS[slotId];
+  }
+  // Battle bags from DB
+  if (slotId === 'battle_bag') {
+    return _dbBags || SLOT_ITEMS[slotId] || [];
+  }
+  // Equipment slots — use DB items if loaded
+  if (EQUIPMENT_SLOTS.includes(slotId) && _dbEquip[cls] && _dbEquip[cls][slotId]) {
+    return [...(_dbEquip[cls][slotId]), ...(SLOT_ITEMS[slotId] || [])];
+  }
+  // Fallback: STATS object (sparse manual data)
   const slotName = (CLASS_ITEM_NAMES[cls] && CLASS_ITEM_NAMES[cls][slotId])
     || (ALL_SLOTS.find(s => s.id === slotId) || {}).name || slotId;
   const setNames = CLASS_SET_NAMES[cls] || {};
@@ -1172,8 +1184,7 @@ function getPickerItems(cls, slotId) {
       img:   getItemImg(cls, slotId, q.id),
       stats: getStatsForSlot(cls, slotId, q.id),
     }));
-  const eventItems = SLOT_ITEMS[slotId] || [];
-  return [...statsItems, ...eventItems];
+  return [...statsItems, ...(SLOT_ITEMS[slotId] || [])];
 }
 
 function renderPicker(cid) {
@@ -1606,9 +1617,10 @@ function selectClass(cid, cls) {
   s.cls = cls; s.activeSlot = null;
   document.getElementById(`clsDrop-${cid}`).classList.remove('open');
   renderAll(cid);
+  dbLoadEquip(cls);
 }
 
-function openPicker(cid, slotId) {
+async function openPicker(cid, slotId) {
   const s = state[cid];
   s.activeSlot = s.activeSlot === slotId ? null : slotId;
   _runeMode[cid] = false;
@@ -1616,6 +1628,10 @@ function openPicker(cid, slotId) {
   renderSlotCol(cid, COL_RIGHT, `colRight-${cid}`);
   renderSlotRow(cid, ROW_TOP,   `slotRowTop-${cid}`);
   renderSlotRow(cid, ROW_BOT,   `slotRowBot-${cid}`);
+  if (s.activeSlot) {
+    if (EQUIPMENT_SLOTS.includes(s.activeSlot)) await dbLoadEquip(s.cls);
+    if (s.activeSlot === 'battle_bag')           await dbLoadBattleBags();
+  }
   renderPicker(cid);
 }
 
@@ -1697,12 +1713,162 @@ document.querySelectorAll('[id^="ctrls-"]').forEach(function(box) {
 
 
 
+// ── DB INTEGRATION ────────────────────────────────────────────────────────────
+
+const QUALITY_ORDER = ['white','green','blue','purple','red','orange'];
+
+const DB_STAT_MAP = {
+  attack:                            'atk',
+  defense:                           'def',
+  max_health:                        'hp',
+  mana:                              'mana',
+  armor:                             'def',
+  change_heal_sent_percent:          'heal_eff',
+  change_health_regeneration_speed:  'hp_regen',
+  critical_attack_multiplier:        'crit_dmg',
+  chance_critical_attack:            'crit_chance',
+  resist_to_wind_percent:            'wind_res',
+  resist_to_fire_percent:            'fire_res',
+  resist_to_light_percent:           'light_res',
+  elem_def:                          'elem_def',
+  atk_eff:                           'atk_eff',
+  def_eff:                           'def_eff',
+  change_damage_sent_percent:        'dmg_out',
+  change_damage_received_percent:    'dmg_taken_red',
+  run_speed:                         'speed_in',
+  walk_speed:                        'speed_out',
+  change_experience_received_percent:'exp_gain',
+};
+
+const DB_SLOT_NORM     = { weapon1:'weapon', weapon2:'offhand', bracelet1:'bracelet', bracelet2:'bracelet' };
+const CALC_TO_DB_CLS   = { monk:'cleric', archer:'shooter' };
+
+function dbNormSlot(s) { return DB_SLOT_NORM[s] || s; }
+
+function dbConvertStats(raw) {
+  if (!raw) return null;
+  const out = {};
+  Object.entries(raw).forEach(([k, v]) => {
+    const mk = DB_STAT_MAP[k];
+    if (!mk || typeof v !== 'number') return;
+    out[mk] = (out[mk] || 0) + v;
+  });
+  return Object.keys(out).length ? out : null;
+}
+
+let _dbLocale = null;
+let _dbEquip  = {};
+let _dbBags   = null;
+
+async function _dbGetLocale() {
+  if (!_dbLocale) {
+    try { _dbLocale = await fetch('db/item_locale_ru.json').then(r => r.json()); }
+    catch { _dbLocale = {}; }
+  }
+  return _dbLocale;
+}
+
+function _dbName(id) {
+  const e = _dbLocale && _dbLocale[id];
+  return (e && e.name) ? e.name : null;
+}
+
+async function dbLoadEquip(calcCls) {
+  if (_dbEquip[calcCls]) return;
+  _dbEquip[calcCls] = {};
+  const dbCls = CALC_TO_DB_CLS[calcCls] || calcCls;
+  try {
+    const [items] = await Promise.all([
+      fetch(`db/equipment_${dbCls}.json`).then(r => r.json()),
+      _dbGetLocale(),
+    ]);
+    items.forEach(item => {
+      item.slot.split(',').map(s => dbNormSlot(s.trim())).forEach(slot => {
+        if (!_dbEquip[calcCls][slot]) _dbEquip[calcCls][slot] = [];
+        _dbEquip[calcCls][slot].push({
+          name:    _dbName(item.id) || item.id,
+          quality: item.quality,
+          img:     getItemImg(calcCls, slot, item.quality),
+          stats:   dbConvertStats(item.stats),
+          reqlvl:  item.reqlvl || 0,
+        });
+      });
+    });
+    Object.values(_dbEquip[calcCls]).forEach(arr =>
+      arr.sort((a, b) =>
+        (QUALITY_ORDER.indexOf(a.quality) - QUALITY_ORDER.indexOf(b.quality)) || (a.reqlvl - b.reqlvl)
+      )
+    );
+  } catch(e) { console.warn('dbLoadEquip', calcCls, e); }
+}
+
+async function dbLoadBattleBags() {
+  if (_dbBags) return;
+  try {
+    const [items] = await Promise.all([
+      fetch('db/inventory.json').then(r => r.json()),
+      _dbGetLocale(),
+    ]);
+    _dbBags = items
+      .filter(i => i.slot === 'battle_bag')
+      .map(i => ({ name: _dbName(i.id) || i.id, quality: i.quality, img: null, stats: null, reqlvl: i.reqlvl || 0 }))
+      .sort((a, b) => QUALITY_ORDER.indexOf(a.quality) - QUALITY_ORDER.indexOf(b.quality));
+  } catch(e) { _dbBags = []; }
+}
+
+async function dbLoadRunes() {
+  try {
+    const [items] = await Promise.all([
+      fetch('db/enchants.json').then(r => r.json()),
+      _dbGetLocale(),
+    ]);
+    const newRunes = items
+      .filter(i => i.slot && !i.slot.startsWith('artefact') && !i.slot.includes('artefact1'))
+      .map(i => {
+        const slots = i.slot.split(',').map(s => dbNormSlot(s.trim()));
+        return {
+          name:    _dbName(i.id) || i.id,
+          slot:    slots[0],
+          slotId:  slots[0],
+          _slots:  slots,
+          quality: i.quality,
+          img:     null,
+          stats:   dbConvertStats(i.stats),
+        };
+      });
+
+    // Mutate RUNES array in place
+    RUNES.length = 0;
+    newRunes.forEach(r => RUNES.push(r));
+
+    // Rebuild SLOT_RUNES
+    Object.keys(SLOT_RUNES).forEach(k => { delete SLOT_RUNES[k]; });
+    RUNES.forEach(r => {
+      r._slots.forEach(sid => {
+        if (!SLOT_RUNES[sid]) SLOT_RUNES[sid] = [];
+        SLOT_RUNES[sid].push(r);
+      });
+    });
+
+    // Re-render open rune pickers
+    ['c1','c2'].forEach(cid => {
+      if (state[cid].activeSlot && _runeMode[cid]) renderPicker(cid);
+    });
+  } catch(e) { console.warn('dbLoadRunes', e); }
+}
+
 // ── INIT ──────────────────────────────────────────────────────────────────────
 renderAll('c1');
 renderAll('c2');
 applyCharBg('c1');
 applyCharBg('c2');
 renderCompare();
+
+// Preload DB data in background
+dbLoadEquip(state.c1.cls);
+dbLoadEquip(state.c2.cls);
+dbLoadBattleBags();
+dbLoadRunes();
 </script>
 </body>
 </html>
