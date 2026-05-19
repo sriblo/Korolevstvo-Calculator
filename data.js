@@ -238,3 +238,47 @@ const RUNES = [
 
 // ── БАФЫ ──────────────────────────────────────────────────────────────────────
 
+const BUFF_CATS = [
+  { id:'class', name:'Классовые', hint:'групповые баффы класса' },
+  { id:'rep',   name:'Репутации', hint:'награды репутаций' },
+  { id:'food',  name:'Еда',       hint:'эффекты от еды' },
+];
+
+const BUFFS = [
+  // ── Еда Флоринга (ур. 3, white) ─────────────────────────────────────────────
+  { id:'food_floring_breakfast', cat:'food', group:'Еда Флоринга',                level:3, quality:'white',  name:'Завтрак Флоринга',                icon:'stats_calculator/buffs/dishes_buff/Баф1_рыба.png',   stats:{hp:50,  heal_eff:1,   atk:1} },
+  { id:'food_floring_shashlik',  cat:'food', group:'Еда Флоринга',                level:3, quality:'white',  name:'Шашлык Флоринга',                 icon:'stats_calculator/buffs/dishes_buff/Баф2_шашлык.png', stats:{atk:1,  dmg_out:1.5,  crit_chance:2, crit_dmg:2} },
+  { id:'food_floring_uha',       cat:'food', group:'Еда Флоринга',                level:3, quality:'white',  name:'Уха Флоринга',                    icon:'stats_calculator/buffs/dishes_buff/Баф3_уха.png',    stats:{hp:50,  dmg_taken_red:1.5, hp_regen:25} },
+  { id:'food_floring_lunch',     cat:'food', group:'Еда Флоринга',                level:3, quality:'white',  name:'Обед Флоринга',                   icon:'stats_calculator/buffs/dishes_buff/Баф4_обед.png',   stats:{atk:1,  dmg_out:0.5,  dmg_taken_red:0.5, heal_eff:0.5, crit_chance:2, crit_dmg:2} },
+  // ── Еда Кохилльского Архипелага (ур. 4, white) ──────────────────────────────
+  { id:'food_kohill_breakfast',  cat:'food', group:'Еда Кохилльского Архипелага', level:4, quality:'white',  name:'Завтрак Кохилльского Архипелага', icon:'stats_calculator/buffs/dishes_buff/Баф1_рыба.png',   stats:{hp:100, heal_eff:1.5, atk:2} },
+  { id:'food_kohill_shashlik',   cat:'food', group:'Еда Кохилльского Архипелага', level:4, quality:'white',  name:'Шашлык Кохилльского Архипелага', icon:'stats_calculator/buffs/dishes_buff/Баф2_шашлык.png', stats:{atk:2,  dmg_out:2.5,  crit_chance:3, crit_dmg:3} },
+  { id:'food_kohill_uha',        cat:'food', group:'Еда Кохилльского Архипелага', level:4, quality:'white',  name:'Уха Кохилльского Архипелага',    icon:'stats_calculator/buffs/dishes_buff/Баф3_уха.png',    stats:{hp:100, dmg_taken_red:2.5, hp_regen:50} },
+  { id:'food_kohill_lunch',      cat:'food', group:'Еда Кохилльского Архипелага', level:4, quality:'white',  name:'Обед Кохилльского Архипелага',   icon:'stats_calculator/buffs/dishes_buff/Баф4_обед.png',   stats:{atk:2,  dmg_out:1.5,  dmg_taken_red:1.5, heal_eff:1, crit_chance:3, crit_dmg:3} },
+  // ── Еда Гайны (ур. 5, green) ────────────────────────────────────────────────
+  { id:'food_gaina_breakfast',   cat:'food', group:'Еда Гайны',                   level:5, quality:'green',  name:'Завтрак Гайны',                   icon:'stats_calculator/buffs/dishes_buff/Баф1_рыба.png',   stats:{hp:150, heal_eff:2,   atk:3} },
+  { id:'food_gaina_shashlik',    cat:'food', group:'Еда Гайны',                   level:5, quality:'green',  name:'Шашлык Гайны',                    icon:'stats_calculator/buffs/dishes_buff/Баф2_шашлык.png', stats:{atk:3,  dmg_out:3.5,  crit_chance:4, crit_dmg:4} },
+  { id:'food_gaina_uha',         cat:'food', group:'Еда Гайны',                   level:5, quality:'green',  name:'Уха Гайны',                       icon:'stats_calculator/buffs/dishes_buff/Баф3_уха.png',    stats:{hp:150, dmg_taken_red:3.5, hp_regen:75} },
+  { id:'food_gaina_lunch',       cat:'food', group:'Еда Гайны',                   level:5, quality:'green',  name:'Обед Гайны',                      icon:'stats_calculator/buffs/dishes_buff/Баф4_обед.png',   stats:{atk:3,  dmg_out:2.5,  dmg_taken_red:2.5, heal_eff:1.5, crit_chance:4, crit_dmg:4} },
+  // ── Еда Весеннего Берега (ур. 6, blue) ──────────────────────────────────────
+  { id:'food_spring_breakfast',  cat:'food', group:'Еда Весеннего Берега',        level:6, quality:'blue',   name:'Завтрак Весеннего Берега',         icon:'stats_calculator/buffs/dishes_buff/Баф1_рыба.png',   stats:{hp:200, heal_eff:2.5, atk:4} },
+  { id:'food_spring_shashlik',   cat:'food', group:'Еда Весеннего Берега',        level:6, quality:'blue',   name:'Шашлык Весеннего Берега',          icon:'stats_calculator/buffs/dishes_buff/Баф2_шашлык.png', stats:{atk:4,  dmg_out:4.5,  crit_chance:5, crit_dmg:5} },
+  { id:'food_spring_uha',        cat:'food', group:'Еда Весеннего Берега',        level:6, quality:'blue',   name:'Уха Весеннего Берега',             icon:'stats_calculator/buffs/dishes_buff/Баф3_уха.png',    stats:{hp:200, dmg_taken_red:4.5, hp_regen:100} },
+  { id:'food_spring_lunch',      cat:'food', group:'Еда Весеннего Берега',        level:6, quality:'blue',   name:'Обед Весеннего Берега',            icon:'stats_calculator/buffs/dishes_buff/Баф4_обед.png',   stats:{atk:4,  dmg_out:3.5,  dmg_taken_red:3.5, heal_eff:2, crit_chance:5, crit_dmg:5} },
+  // ── Еда Хирна (ур. 7, purple) ───────────────────────────────────────────────
+  { id:'food_hirn_breakfast',    cat:'food', group:'Еда Хирна',                   level:7, quality:'purple', name:'Завтрак Хирна',                    icon:'stats_calculator/buffs/dishes_buff/Баф1_рыба.png',   stats:{hp:250, heal_eff:3,   atk:5} },
+  { id:'food_hirn_shashlik',     cat:'food', group:'Еда Хирна',                   level:7, quality:'purple', name:'Шашлык Хирна',                     icon:'stats_calculator/buffs/dishes_buff/Баф2_шашлык.png', stats:{atk:5,  dmg_out:5.5,  crit_chance:6, crit_dmg:6} },
+  { id:'food_hirn_uha',          cat:'food', group:'Еда Хирна',                   level:7, quality:'purple', name:'Уха Хирна',                        icon:'stats_calculator/buffs/dishes_buff/Баф3_уха.png',    stats:{hp:250, dmg_taken_red:5.5, hp_regen:125} },
+  { id:'food_hirn_lunch',        cat:'food', group:'Еда Хирна',                   level:7, quality:'purple', name:'Обед Хирна',                       icon:'stats_calculator/buffs/dishes_buff/Баф4_обед.png',   stats:{atk:5,  dmg_out:4.5,  dmg_taken_red:4.5, heal_eff:2.5, crit_chance:6, crit_dmg:6} },
+  // ── Еда Южного Фьорла (ур. 8, red) ─────────────────────────────────────────
+  { id:'food_south_breakfast',   cat:'food', group:'Еда Южного Фьорла',           level:8, quality:'red',    name:'Завтрак Южного Фьорла',            icon:'stats_calculator/buffs/dishes_buff/Баф1_рыба.png',   stats:{hp:300, heal_eff:3.5, atk:6} },
+  { id:'food_south_shashlik',    cat:'food', group:'Еда Южного Фьорла',           level:8, quality:'red',    name:'Шашлык Южного Фьорла',             icon:'stats_calculator/buffs/dishes_buff/Баф2_шашлык.png', stats:{atk:6,  dmg_out:6.5,  crit_chance:7, crit_dmg:7} },
+  { id:'food_south_uha',         cat:'food', group:'Еда Южного Фьорла',           level:8, quality:'red',    name:'Уха Южного Фьорла',                icon:'stats_calculator/buffs/dishes_buff/Баф3_уха.png',    stats:{hp:300, dmg_taken_red:6.5, hp_regen:150} },
+  { id:'food_south_lunch',       cat:'food', group:'Еда Южного Фьорла',           level:8, quality:'red',    name:'Обед Южного Фьорла',               icon:'stats_calculator/buffs/dishes_buff/Баф4_обед.png',   stats:{atk:6,  dmg_out:5.5,  dmg_taken_red:5.5, heal_eff:3, crit_chance:7, crit_dmg:7} },
+  // ── Еда Северного Фьорла (ур. 9, orange) ────────────────────────────────────
+  { id:'food_north_breakfast',   cat:'food', group:'Еда Северного Фьорла',        level:9, quality:'orange', name:'Завтрак Северного Фьорла',         icon:'stats_calculator/buffs/dishes_buff/Баф1_рыба.png',   stats:{hp:350, heal_eff:4,   atk:7} },
+  { id:'food_north_shashlik',    cat:'food', group:'Еда Северного Фьорла',        level:9, quality:'orange', name:'Шашлык Северного Фьорла',          icon:'stats_calculator/buffs/dishes_buff/Баф2_шашлык.png', stats:{atk:7,  dmg_out:7.5,  crit_chance:8, crit_dmg:8} },
+  { id:'food_north_uha',         cat:'food', group:'Еда Северного Фьорла',        level:9, quality:'orange', name:'Уха Северного Фьорла',             icon:'stats_calculator/buffs/dishes_buff/Баф3_уха.png',    stats:{hp:350, dmg_taken_red:7.5, hp_regen:175} },
+  { id:'food_north_lunch',       cat:'food', group:'Еда Северного Фьорла',        level:9, quality:'orange', name:'Обед Северного Фьорла',            icon:'stats_calculator/buffs/dishes_buff/Баф4_обед.png',   stats:{atk:7,  dmg_out:6.5,  dmg_taken_red:6.5, heal_eff:3.5, crit_chance:8, crit_dmg:8} },
+];
+
