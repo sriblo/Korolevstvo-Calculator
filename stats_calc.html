@@ -1922,7 +1922,7 @@ async function dbLoadRunes() {
           slotId:  slots[0],
           _slots:  slots,
           quality: i.quality,
-          img:     null,
+          img:     i.visual ? `icons/${i.visual}.jpg` : null,
           stats:   dbConvertStats(i.stats),
         };
       });
