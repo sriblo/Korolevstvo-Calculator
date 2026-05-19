@@ -559,19 +559,29 @@ a{color:inherit;text-decoration:none}
 
     <div class="sb-group">
       <div class="sb-group-header" onclick="toggleGroup(this)">
-        Остальные предметы <span class="sb-chevron">▶</span>
+        Ивенты <span class="sb-chevron">▶</span>
+      </div>
+      <div class="sb-items">
+        <div class="sb-item sb-sub" data-view="event_colder"        onclick="show(this)">Колдер</div>
+        <div class="sb-item sb-sub" data-view="event_expedition"    onclick="show(this)">Экспедиция</div>
+        <div class="sb-item sb-sub" data-view="event_flowers"       onclick="show(this)">Месяц пробуждения цветов</div>
+        <div class="sb-item sb-sub" data-view="event_st_patric"     onclick="show(this)">Месяц цветущего хмеля</div>
+        <div class="sb-item sb-sub" data-view="event_dniwe"         onclick="show(this)">Зов глубин</div>
+        <div class="sb-item sb-sub" data-view="event_pirate_day"    onclick="show(this)">День Пирата</div>
+        <div class="sb-item sb-sub" data-view="event_goblin_land"   onclick="show(this)">Гоблинский Рай</div>
+        <div class="sb-item sb-sub" data-view="event_dragons"       onclick="show(this)">Небесные Драконы</div>
+        <div class="sb-item sb-sub" data-view="event_halloween"     onclick="show(this)">Тыквенный Фестиваль</div>
+        <div class="sb-item sb-sub" data-view="event_birthday"      onclick="show(this)">День Рождения Королевства</div>
+      </div>
+    </div>
+
+    <div class="sb-group">
+      <div class="sb-group-header" onclick="toggleGroup(this)">
+        Прочее <span class="sb-chevron">▶</span>
       </div>
       <div class="sb-items">
         <div class="sb-item sb-sub" data-view="other_costumes"    onclick="show(this)">Костюмы</div>
-        <div class="sb-item sb-sub" data-view="other_colder"      onclick="show(this)">Колдер</div>
-        <div class="sb-item sb-sub" data-view="other_halloween"   onclick="show(this)">Тыквенный фестиваль</div>
         <div class="sb-item sb-sub" data-view="other_caldron"     onclick="show(this)">Земли мёртвых</div>
-        <div class="sb-item sb-sub" data-view="other_st_patric"   onclick="show(this)">Месяц цветущего хмеля</div>
-        <div class="sb-item sb-sub" data-view="other_dragons"     onclick="show(this)">Небесные Драконы</div>
-        <div class="sb-item sb-sub" data-view="other_dniwe"       onclick="show(this)">Зов глубин</div>
-        <div class="sb-item sb-sub" data-view="other_pirate_day"  onclick="show(this)">День Пирата</div>
-        <div class="sb-item sb-sub" data-view="other_goblin_land" onclick="show(this)">Гоблинский Рай</div>
-        <div class="sb-item sb-sub" data-view="other_expedition"  onclick="show(this)">Экспедиция</div>
         <div class="sb-item sb-sub" data-view="other_arena"       onclick="show(this)">Арена</div>
         <div class="sb-item sb-sub" data-view="other_emotions"    onclick="show(this)">Эмоции</div>
       </div>
@@ -727,6 +737,16 @@ function render(view) {
   else if (view === 'other_expedition')    renderOtherSection(c, 'expedition');
   else if (view === 'other_arena')         renderOtherSection(c, 'arena');
   else if (view === 'other_emotions')      renderOtherSection(c, 'emotions');
+  else if (view === 'event_colder')        renderOtherSection(c, 'colder');
+  else if (view === 'event_halloween')     renderOtherSection(c, 'halloween');
+  else if (view === 'event_st_patric')     renderOtherSection(c, 'st_patric');
+  else if (view === 'event_dragons')       renderOtherSection(c, 'dragons');
+  else if (view === 'event_dniwe')         renderOtherSection(c, 'dniwe');
+  else if (view === 'event_pirate_day')    renderOtherSection(c, 'pirate_day');
+  else if (view === 'event_goblin_land')   renderOtherSection(c, 'goblin_land');
+  else if (view === 'event_expedition')    renderOtherSection(c, 'expedition');
+  else if (view === 'event_flowers')       renderOtherSection(c, 'flowers');
+  else if (view === 'event_birthday')      renderOtherSection(c, 'birthday');
   else if (view.startsWith('cards_'))      renderCardsSection(c, view.slice(6));
   else if (view.startsWith('prof_'))       renderProfSection(c, view.slice(5));
   else if (view.startsWith('rep_'))        renderRepSection(c, view.slice(4));
@@ -2005,8 +2025,10 @@ const OTHER_SECTIONS = {
   pirate_day:  { tags: ['pirate_day'] },
   goblin_land: { tags: ['goblin_land'] },
   expedition:  { tags: ['expedition'] },
+  flowers:     { tags: ['flowers'] },
+  birthday:    { idPrefix: 'birthday' },
   arena:       { tags: ['arena_sp_useable'] },
-  emotions:    { tags: ['emotions'], ids: ['birthday_spell_1','birthday_spell_2','birthday_spell_3','birthday_spell_4','birthday_spell_5','birthday_spell_6'] },
+  emotions:    { tags: ['emotions'] },
 };
 
 function isArchiveRing(id) {
@@ -2253,7 +2275,7 @@ async function renderTechEquipment(c) {
 async function renderOtherSection(c, key) {
   const TITLES = {
     colder:      'Колдер',
-    halloween:   'Тыквенный фестиваль',
+    halloween:   'Тыквенный Фестиваль',
     caldron:     'Земли мёртвых',
     st_patric:   'Месяц цветущего хмеля',
     dragons:     'Небесные Драконы',
@@ -2261,25 +2283,35 @@ async function renderOtherSection(c, key) {
     pirate_day:  'День Пирата',
     goblin_land: 'Гоблинский Рай',
     expedition:  'Экспедиция',
+    flowers:     'Месяц пробуждения цветов',
+    birthday:    'День Рождения Королевства',
     arena:       'Арена',
     emotions:    'Эмоции',
+    costumes:    'Костюмы',
   };
+  // Sections that are standalone events (own header) vs misc "other" sections
+  const EVENT_KEYS = new Set(['colder','halloween','caldron','st_patric','dragons','dniwe',
+                               'pirate_day','goblin_land','expedition','flowers','birthday']);
   const title = TITLES[key] || key;
+  const sectionTitle = EVENT_KEYS.has(key) ? title : `Разное: ${title}`;
   c.innerHTML = '<div class="c-title" style="color:var(--txt3)">Загрузка…</div>';
   const section = OTHER_SECTIONS[key] || {};
-  const idSet  = new Set(section.ids  || []);
-  const tagSet = new Set(section.tags || []);
+  const idSet     = new Set(section.ids  || []);
+  const tagSet    = new Set(section.tags || []);
+  const idPrefix  = section.idPrefix || '';
   const [buffs, inv] = await Promise.all([loadDb('buffs'), loadDb('inventory')]);
   const items = [...buffs, ...inv].filter(i =>
     idSet.has(i.id) ||
+    (idPrefix && i.id.startsWith(idPrefix)) ||
     (tagSet.size > 0 && (i.tags||'').split(',').some(t => tagSet.has(t.trim())))
   );
   items.sort((a, b) => (locName(a.id)||a.id).localeCompare(locName(b.id)||b.id, 'ru'));
   _ttDbItems = items;
+  const sub = items.length ? `<div class="c-sub">${items.length} предметов</div>` : '';
   const grid = items.length
     ? `<div class="eq-grid">${items.map((item,idx) => dbItemCard(item,idx)).join('')}</div>`
     : '<div class="soon-block">Пусто</div>';
-  c.innerHTML = `<div class="c-title">Остальные предметы: ${title}</div>${grid}`;
+  c.innerHTML = `<div class="c-title">${sectionTitle}</div>${sub}${grid}`;
 }
 
 async function renderArchiveSection(c, title) {
