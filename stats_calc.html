@@ -977,16 +977,18 @@ function showTt(e, cid, slot) {
     } else {
       allKeys.forEach(function(k) {
         const meta = STAT_LABELS.find(m => m.key === k);
-        if (!meta) return;
-        const fmt = function(v) { return meta.pct
+        const fmtNum = function(v, pct) { return pct
           ? `${v > 0 ? '+' : ''}${Number(v).toFixed(2).replace(/\.00$/,'')}%`
           : (Number.isInteger(v) ? String(v) : Number(v).toFixed(2)); };
+        const label = meta ? meta.label : k;
+        const isPct  = meta ? !!meta.pct : false;
         const itemVal = itemStats[k];
         const runeVal = runeStats[k];
         let valHtml = '';
-        if (itemVal !== undefined) valHtml += `<span>${fmt(itemVal)}</span>`;
-        if (runeVal !== undefined) valHtml += `<span style="color:#7ab8ff;margin-left:3px">${runeVal > 0 ? '+' : ''}${fmt(runeVal)}</span>`;
-        html += `<div class="tt-stat"><span class="tt-stat-k">${meta.label}</span><span class="tt-stat-v">${valHtml}</span></div>`;
+        if (itemVal !== undefined) valHtml += `<span>${fmtNum(itemVal, isPct)}</span>`;
+        if (runeVal !== undefined) valHtml += `<span style="color:#7ab8ff;margin-left:3px">${runeVal > 0 ? '+' : ''}${fmtNum(runeVal, isPct)}</span>`;
+        const keyStyle = meta ? '' : ' style="color:var(--txt3)"';
+        html += `<div class="tt-stat"><span class="tt-stat-k"${keyStyle}>${label}</span><span class="tt-stat-v">${valHtml}</span></div>`;
       });
     }
     if (eq && eq.rune) {
@@ -1407,7 +1409,16 @@ function showBuffTt(e, buffId) {
   if (b.level != null) {
     html += `<div class="tt-stat"><span class="tt-stat-k" style="color:var(--txt3)">Требуемый уровень</span><span class="tt-stat-v" style="color:var(--gold-l)">${b.level}</span></div>`;
   }
-  if (b.effect) {
+  if (b.stats) {
+    Object.entries(b.stats).forEach(function(e) {
+      var k = e[0], v = e[1];
+      const meta = STAT_LABELS.find(function(m) { return m.key === k; });
+      const label = meta ? meta.label : k;
+      const isPct = meta ? !!meta.pct : false;
+      const fmt = v => isPct ? `+${Number(v).toFixed(2).replace(/\.00$/,'')}%` : (Number.isInteger(v) ? `+${v}` : `+${Number(v).toFixed(2)}`);
+      html += `<div class="tt-stat"><span class="tt-stat-k">${label}</span><span class="tt-stat-v">${fmt(v)}</span></div>`;
+    });
+  } else if (b.effect) {
     const meta = STAT_LABELS.find(m => m.key === b.effect);
     const label = meta ? meta.label : (b.effect === 'dmg_taken_red' ? 'Снижение урона' : b.effect);
     const isPct = b.pct || (meta && meta.pct);
@@ -1453,9 +1464,19 @@ function computeTotals(cid) {
   s.buffs.forEach(function(buffId) {
     const b = BUFFS_BY_ID[buffId];
     if (!b) return;
-    if (b.effect === 'dmg_taken_red') { dmgRed += b.value; return; }
-    const bonus = b.pct ? (totals[b.effect] || 0) * b.value / 100 : b.value;
-    buffEffects[b.effect] = (buffEffects[b.effect] || 0) + bonus;
+    if (b.stats) {
+      // Multi-stat format (food, etc.)
+      Object.entries(b.stats).forEach(function(e) {
+        var k = e[0], v = e[1];
+        if (k === 'dmg_taken_red') { dmgRed += v; return; }
+        buffEffects[k] = (buffEffects[k] || 0) + v;
+      });
+    } else if (b.effect) {
+      // Single-effect format (class/rep buffs)
+      if (b.effect === 'dmg_taken_red') { dmgRed += b.value; return; }
+      const bonus = b.pct ? (totals[b.effect] || 0) * b.value / 100 : b.value;
+      buffEffects[b.effect] = (buffEffects[b.effect] || 0) + bonus;
+    }
   });
   Object.entries(buffEffects).forEach(function(entry) {
     totals[entry[0]] = (totals[entry[0]] || 0) + entry[1];
@@ -1495,7 +1516,20 @@ function renderStats(cid) {
     html += `<div class="stat-row"><span class="stat-key">${meta.label}</span><span class="stat-val">${valStr}</span></div>`;
   });
   if (totals.dmg_taken_red) {
-    html += `<div class="stat-row"><span class="stat-key">Снижение урона (бафф)</span><span class="stat-val">−${totals.dmg_taken_red}%</span></div>`;
+    html += `<div class="stat-row"><span class="stat-key">Снижение входящего урона</span><span class="stat-val">−${Number(totals.dmg_taken_red).toFixed(2).replace(/\.00$/,'')}%</span></div>`;
+  }
+  // Non-combat stats (exp, rep, etc.)
+  let ncHtml = '';
+  STAT_LABELS.filter(function(m){ return m.combat === false && m.key !== 'dmg_taken_red' && m.key !== 'change_experience_received_percent'; }).forEach(function(meta) {
+    const total = totals[meta.key] || 0;
+    if (total === 0) return;
+    const valStr = meta.pct
+      ? `+${total.toFixed(2).replace(/\.00$/,'')}%`
+      : (Number.isInteger(total) ? String(total) : total.toFixed(2));
+    ncHtml += `<div class="stat-row"><span class="stat-key">${meta.label}</span><span class="stat-val">${valStr}</span></div>`;
+  });
+  if (ncHtml) {
+    html += `<div class="stat-row" style="grid-column:1/-1;padding:4px 0 2px;margin-top:4px;border-top:1px solid var(--line);font-size:10px;color:var(--txt3);text-transform:uppercase;letter-spacing:.1em">Вне боя</div>${ncHtml}`;
   }
   if (!html) html = `<div class="stat-empty">Нет данных для выбранных слотов</div>`;
   body.innerHTML = html;
@@ -1632,9 +1666,11 @@ function showRuneTt(e, runeIdx) {
     Object.entries(r.stats).forEach(function(entry) {
       var k = entry[0]; var v = entry[1];
       const meta = STAT_LABELS.find(function(m) { return m.key === k; });
-      if (!meta) return;
-      const vStr = meta.pct ? `${v > 0 ? '+' : ''}${Number(v).toFixed(2).replace(/\.00$/,'')}%` : (Number.isInteger(v) ? String(v) : Number(v).toFixed(2));
-      html += `<div class="tt-stat"><span class="tt-stat-k">${meta.label}</span><span class="tt-stat-v">${vStr}</span></div>`;
+      const label = meta ? meta.label : k;
+      const isPct = meta ? !!meta.pct : false;
+      const vStr = isPct ? `${v > 0 ? '+' : ''}${Number(v).toFixed(2).replace(/\.00$/,'')}%` : (Number.isInteger(v) ? String(v) : Number(v).toFixed(2));
+      const keyStyle = meta ? '' : ' style="color:var(--txt3)"';
+      html += `<div class="tt-stat"><span class="tt-stat-k"${keyStyle}>${label}</span><span class="tt-stat-v">${vStr}</span></div>`;
     });
   } else {
     html += `<div class="tt-empty">данные стат скоро</div>`;
@@ -1766,6 +1802,9 @@ const DB_STAT_MAP = {
   resist_to_fire_percent:            'fire_res',
   resist_to_light_percent:           'light_res',
   elem_def:                          'elem_def',
+  weakness_to_fire_percent:          'elem_def',
+  weakness_to_light_percent:         'elem_def',
+  weakness_to_wind_percent:          'elem_def',
   atk_eff:                           'atk_eff',
   def_eff:                           'def_eff',
   change_damage_sent_percent:        'dmg_out',
@@ -1773,6 +1812,17 @@ const DB_STAT_MAP = {
   run_speed:                         'speed_in',
   walk_speed:                        'speed_out',
   change_experience_received_percent:'exp_gain',
+  charm:                             'charisma',
+  killer_chance:                     'crit_fatal',
+  change_absorb_critical:            'crit_def',
+  change_reputation_pve1_received_percent:  'rep_guard',
+  change_reputation_pvp1_received_percent:  'rep_gladiator',
+  change_reputation_pvp2_received_percent:  'rep_conqueror',
+  change_reputation_pvp6_received_percent:  'rep_lord',
+  change_reputation_pve4_received_percent:  'rep_hunter',
+  change_reputation_pve5_received_percent:  'rep_witch',
+  change_reputation_pve2_received_percent:  'rep_archaeologist',
+  change_reputation_rep21_received_percent: 'rep_tamer',
 };
 
 const DB_SLOT_NORM     = { weapon1:'weapon', weapon2:'offhand', bracelet1:'bracelet', bracelet2:'bracelet' };
