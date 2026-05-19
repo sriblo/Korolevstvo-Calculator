@@ -943,7 +943,7 @@ function showTt(e, cid, slot) {
   const q  = eq ? QUALITIES.find(q => q.id === eq.quality) : null;
   let html = '';
   if (eq) {
-    const itemImg = eq.img || getItemImg(s.cls, slot.id, eq.quality);
+    const itemImg = eq.img || getSlotImg(s.cls, slot.id, eq.quality);
     const itemFrame = QUALITY_FRAME[eq.quality] || '';
     html += `<div class="tt-head">
       <span style="position:relative;width:32px;height:32px;flex-shrink:0;display:inline-block">
@@ -1089,9 +1089,22 @@ const ARTEFACT_PH = {
   stone_luck:    _ART_DEFAULT,
 };
 
+// getItemImg для всех классов: сначала локальные файлы (warrior/paladin),
+// затем remote URL через CLASS_DOLL.parts для остальных классов
+function getSlotImg(cls, slotId, quality, race) {
+  const local = getItemImg(cls, slotId, quality);
+  if (local) return local;
+  const cfg = CLASS_DOLL[cls];
+  if (!cfg || !cfg.parts[slotId]) return null;
+  const lvl    = QUALITY_LEVEL[quality] || 10;
+  const urlCls = CLASS_URL_KEY[cls] || cls;
+  const ClsCap = urlCls[0].toUpperCase() + urlCls.slice(1);
+  return `https://m1.kor.ru/media//game/assets/characters/items/${urlCls}/${ClsCap}${cfg.parts[slotId]}${lvl}${race || 'ElfMale'}.png`;
+}
+
 function icoHtml(slotId, eq, cls) {
   if (!eq) {
-    const phSrc = getItemImg(cls, slotId, 'white') || ARTEFACT_PH[slotId];
+    const phSrc = getSlotImg(cls, slotId, 'white') || ARTEFACT_PH[slotId];
     if (phSrc) {
       return `<img src="${phSrc}" alt=""
         style="width:32px;height:32px;object-fit:contain;filter:grayscale(1);opacity:.75"
@@ -1100,7 +1113,7 @@ function icoHtml(slotId, eq, cls) {
     const ph = PH[SLOT_PH[slotId]] || PH.bag;
     return `<span style="opacity:.2;color:var(--txt2);display:flex;align-items:center;justify-content:center">${ph}</span>`;
   }
-  const imgSrc   = eq.img || getItemImg(cls, slotId, eq.quality);
+  const imgSrc   = eq.img || getSlotImg(cls, slotId, eq.quality);
   const frameSrc = QUALITY_FRAME[eq.quality];
   return `
     ${imgSrc   ? `<img src="${imgSrc}" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;z-index:1" onerror="this.style.display='none'">` : ''}
@@ -1185,11 +1198,11 @@ function getPickerItems(cls, slotId) {
     || (ALL_SLOTS.find(s => s.id === slotId) || {}).name || slotId;
   const setNames = CLASS_SET_NAMES[cls] || {};
   const statsItems = QUALITIES
-    .filter(q => getItemImg(cls, slotId, q.id) || getStatsForSlot(cls, slotId, q.id))
+    .filter(q => getSlotImg(cls, slotId, q.id) || getStatsForSlot(cls, slotId, q.id))
     .map(q => ({
       name:  [slotName, setNames[q.id]].filter(Boolean).join(' '),
       quality: q.id,
-      img:   getItemImg(cls, slotId, q.id),
+      img:   getSlotImg(cls, slotId, q.id),
       stats: getStatsForSlot(cls, slotId, q.id),
     }));
   return [...statsItems, ...(SLOT_ITEMS[slotId] || [])];
