@@ -846,12 +846,23 @@ const CLASS_DOLL = {
 
 const CLASS_URL_KEY  = { paladin:'paladin', warrior:'warrior', rogue:'rogue', mage:'mage', archer:'shooter', monk:'cleric' };
 
-// Строит URL иконки предмета из visual-поля DB: 'warrior_belt_13' → WarriorBelt13ElfMale.png
-function visualToImgUrl(visual, cls, race) {
+// level → quality-folder name (первый найденный, без purple_plus)
+const LEVEL_TO_QUALITY = {};
+Object.entries(QUALITY_LEVEL).forEach(([q, l]) => { if (!LEVEL_TO_QUALITY[l]) LEVEL_TO_QUALITY[l] = q; });
+
+// visual-поле DB → локальный путь к картинке
+// 'rogue_belt_13' + calcCls='rogue' → stats_calculator/.../rogue_belt_13_elf.png
+// 'cleric_belt_13' + calcCls='monk' → stats_calculator/.../monk_belt_13_elf.png
+function visualToLocalPath(visual, calcCls) {
   if (!visual) return null;
-  const urlCls = CLASS_URL_KEY[cls] || cls;
-  const filename = visual.split('_').map(p => isNaN(p) ? p[0].toUpperCase() + p.slice(1) : p).join('');
-  return `https://m1.kor.ru/media//game/assets/characters/items/${urlCls}/${filename}${race || 'ElfMale'}.png`;
+  const parts = visual.split('_');
+  const lvl = parseInt(parts[parts.length - 1]);
+  if (isNaN(lvl)) return null;
+  const quality = LEVEL_TO_QUALITY[lvl];
+  if (!quality) return null;
+  const slotFile = parts.slice(1, -1).join('_');
+  if (!slotFile) return null;
+  return `${getClassSetPath(calcCls, quality)}/${calcCls}_${slotFile}_${lvl}_elf.png`;
 }
 
 function dollUrl(cls, slotKey, quality, race, lvlOverride) {
@@ -860,6 +871,14 @@ function dollUrl(cls, slotKey, quality, race, lvlOverride) {
   const part = cfg.parts[slotKey];
   if (!part) return null;
   const lvl = lvlOverride || QUALITY_LEVEL[quality] || 10;
+  // Используем локальные файлы через CLASS_SLOTS + getClassSetPath
+  const slotMap = CLASS_SLOTS[cls];
+  const slotFile = slotMap && slotMap[slotKey];
+  if (slotFile) {
+    const qualName = LEVEL_TO_QUALITY[lvl] || 'white';
+    return `${getClassSetPath(cls, qualName)}/${cls}_${slotFile}_${lvl}_elf.png`;
+  }
+  // Fallback на m1.kor.ru если класс не в CLASS_SLOTS (не должно случаться)
   const urlCls = CLASS_URL_KEY[cls] || cls;
   const ClsCap = urlCls[0].toUpperCase() + urlCls.slice(1);
   return `https://m1.kor.ru/media//game/assets/characters/items/${urlCls}/${ClsCap}${part}${lvl}${race}.png`;
@@ -1810,7 +1829,7 @@ async function dbLoadEquip(calcCls) {
         _dbEquip[calcCls][slot].push({
           name:     _dbName(item.id) || item.id,
           quality:  item.quality,
-          img:      (item.visual ? visualToImgUrl(item.visual, calcCls) : null)
+          img:      visualToLocalPath(item.visual, calcCls)
                     || getItemImg(calcCls, slot, item.quality),
           imgLevel: imgLevel,
           stats:    dbConvertStats(item.stats),
