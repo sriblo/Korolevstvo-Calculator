@@ -2745,7 +2745,7 @@ async function saveChanges() {
     // Clear pending + cache, reload view
     _pendingChanges = {};
     _pendingMoves   = {};
-    _dbCache        = {};
+    Object.keys(_dbCache).forEach(k => delete _dbCache[k]);
     _allItems       = null;
     updatePendingBar();
 
@@ -2763,7 +2763,7 @@ async function saveChanges() {
 function cancelChanges() {
   _pendingChanges = {};
   _pendingMoves   = {};
-  _dbCache        = {};
+  Object.keys(_dbCache).forEach(k => delete _dbCache[k]);
   _allItems       = null;
   updatePendingBar();
   const active = document.querySelector('.sb-item.on');
