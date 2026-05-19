@@ -871,14 +871,6 @@ function dollUrl(cls, slotKey, quality, race, lvlOverride) {
   const part = cfg.parts[slotKey];
   if (!part) return null;
   const lvl = lvlOverride || QUALITY_LEVEL[quality] || 10;
-  // Используем локальные файлы через CLASS_SLOTS + getClassSetPath
-  const slotMap = CLASS_SLOTS[cls];
-  const slotFile = slotMap && slotMap[slotKey];
-  if (slotFile) {
-    const qualName = LEVEL_TO_QUALITY[lvl] || 'white';
-    return `${getClassSetPath(cls, qualName)}/${cls}_${slotFile}_${lvl}_elf.png`;
-  }
-  // Fallback на m1.kor.ru если класс не в CLASS_SLOTS (не должно случаться)
   const urlCls = CLASS_URL_KEY[cls] || cls;
   const ClsCap = urlCls[0].toUpperCase() + urlCls.slice(1);
   return `https://m1.kor.ru/media//game/assets/characters/items/${urlCls}/${ClsCap}${part}${lvl}${race}.png`;
