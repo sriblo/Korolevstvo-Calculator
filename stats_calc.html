@@ -853,16 +853,20 @@ Object.entries(QUALITY_LEVEL).forEach(([q, l]) => { if (!LEVEL_TO_QUALITY[l]) LE
 // visual-поле DB → локальный путь к картинке
 // 'rogue_belt_13' + calcCls='rogue' → stats_calculator/.../rogue_belt_13_elf.png
 // 'cleric_belt_13' + calcCls='monk' → stats_calculator/.../monk_belt_13_elf.png
+// 'deadly_fish_bone'               → stats_calculator/icons/deadly_fish_bone.png
 function visualToLocalPath(visual, calcCls) {
   if (!visual) return null;
   const parts = visual.split('_');
   const lvl = parseInt(parts[parts.length - 1]);
-  if (isNaN(lvl)) return null;
-  const quality = LEVEL_TO_QUALITY[lvl];
-  if (!quality) return null;
-  const slotFile = parts.slice(1, -1).join('_');
-  if (!slotFile) return null;
-  return `${getClassSetPath(calcCls, quality)}/${calcCls}_${slotFile}_${lvl}_elf.png`;
+  if (!isNaN(lvl)) {
+    const quality = LEVEL_TO_QUALITY[lvl];
+    if (quality) {
+      const slotFile = parts.slice(1, -1).join('_');
+      if (slotFile) return `${getClassSetPath(calcCls, quality)}/${calcCls}_${slotFile}_${lvl}_elf.png`;
+    }
+  }
+  // Нестандартный visual (уникальная иконка) → папка icons/
+  return `stats_calculator/icons/${visual}.png`;
 }
 
 function dollUrl(cls, slotKey, quality, race, lvlOverride) {
