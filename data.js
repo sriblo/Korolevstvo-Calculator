@@ -57,8 +57,12 @@ const CLASS_SET_NAMES = {
 
 // Слот → имя файла в пути к картинке
 const CLASS_SLOTS = {
-  warrior: { weapon:'sword',  offhand:'shield', helm:'helm', chest:'chest', shoulders:'shoulders', pants:'pants', gloves:'gloves', belt:'belt', boots:'boots' },
-  paladin: { weapon:'hammer', offhand:'relic',  helm:'helm', chest:'chest', shoulders:'shoulders', pants:'pants', gloves:'gloves', belt:'belt', boots:'boots' },
+  warrior: { weapon:'sword',   offhand:'shield',  helm:'helm', chest:'chest', shoulders:'shoulders', pants:'pants', gloves:'gloves', belt:'belt', boots:'boots' },
+  paladin: { weapon:'hammer',  offhand:'relic',   helm:'helm', chest:'chest', shoulders:'shoulders', pants:'pants', gloves:'gloves', belt:'belt', boots:'boots' },
+  rogue:   { weapon:'daggers', offhand:'knife',   helm:'helm', chest:'chest', shoulders:'shoulders', pants:'pants', gloves:'gloves', belt:'belt', boots:'boots' },
+  monk:    { weapon:'censer',  offhand:'book',    helm:'helm', chest:'chest', shoulders:'shoulders', pants:'pants', gloves:'gloves', belt:'belt', boots:'boots' },
+  mage:    { weapon:'staff',   offhand:'ball',    helm:'helm', chest:'chest', shoulders:'shoulders', pants:'pants', gloves:'gloves', belt:'belt', boots:'boots' },
+  archer:  { weapon:'bow',     offhand:'quiver',  helm:'helm', chest:'chest', shoulders:'shoulders', pants:'pants', gloves:'gloves', belt:'belt', boots:'boots' },
 };
 
 // Отображаемое название предмета по классу и слоту
