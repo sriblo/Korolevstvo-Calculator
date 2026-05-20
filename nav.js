@@ -101,7 +101,7 @@
         '<span class="dd-item soon">Экспедиция. Сбор припасов</span>' +
         '<span class="dd-item soon">Месяц пробуждения цветов</span>' +
         '<a class="dd-item ready' + (isHmeli  ? ' on' : '') + '" href="' + _base + 'leprecon/hmeli_calc.html">Месяц цветущего хмеля</a>' +
-        '<a class="dd-item ready' + (isGlubin ? ' on' : '') + '" href="' + _base + 'zov_glubin/glubin_calc.html">Зов Глубин</a>' +
+        '<a class="dd-item ready' + (isGlubin ? ' on' : '') + '" href="' + _base + 'zov_glubin/glubin_calc_v2.html">Зов Глубин</a>' +
         '<span class="dd-item soon">День Пирата</span>' +
         '<span class="dd-item soon">Экспедиция. Ледяные Острова</span>' +
         '<span class="dd-item soon">Гоблинский Рай</span>' +
