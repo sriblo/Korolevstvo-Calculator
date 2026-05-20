@@ -1000,33 +1000,20 @@ const Q_FRAME = {
   red:'../frames/border_exclusive.png', orange:'../frames/border_special.png',
 };
 
-// Фолбэк для предметов которых нет в базе (Скрипящие кости, Жетон капитана)
-const ITEM_TT_FB = {
-  bones: {
-    1: { q:'purple', kind:'Аксессуар', desc:'Получены в ивенте «Зов Глубин». Вечные — не теряют качество со временем. Ранг 1.' },
-    2: { q:'red',    kind:'Аксессуар', desc:'Апгрейд с помощью жемчужин и Сердца Костяного Галеона. Ранг 2.' },
-    3: { q:'orange', kind:'Аксессуар', desc:'Апгрейд с помощью жемчужин и Сердца Костяного Галеона. Ранг 3.' },
-  },
-  token: {
-    1: { q:'blue',   kind:'Аксессуар', desc:'Получен в ивенте «Зов Глубин». Теряет качество на одну ступень через год. Ранг 1.' },
-    2: { q:'purple', kind:'Аксессуар', desc:'Апгрейд за жемчужины. Теряет качество на одну ступень через год. Ранг 2.' },
-    3: { q:'red',    kind:'Аксессуар', desc:'Апгрейд за жемчужины. Теряет качество на одну ступень через год. Ранг 3.' },
-  },
-};
-
-// Данные из базы предметов (item_locale_ru.json + buffs.json)
+// Данные из базы предметов
 let _locale = null;
-let _buffsById = null;
+let _itemsById = null;
 (async () => {
   try {
-    const [locR, bufsR] = await Promise.all([
+    const [locR, bufsR, equipR] = await Promise.all([
       fetch('../db/item_locale_ru.json'),
       fetch('../db/buffs.json'),
+      fetch('../db/equipment_none.json'),
     ]);
     _locale = await locR.json();
-    const bufsArr = await bufsR.json();
-    _buffsById = {};
-    bufsArr.forEach(b => { _buffsById[b.id] = b; });
+    _itemsById = {};
+    (await bufsR.json()).forEach(b => { _itemsById[b.id] = b; });
+    (await equipR.json()).forEach(b => { _itemsById[b.id] = b; });
   } catch(e) {}
 })();
 
@@ -1040,31 +1027,22 @@ function ttShowGlubin(cfgId, lv, e) {
   if (lv === 0) return;
   const cfg = ITEMS.find(c => c.id === cfgId);
   if (!cfg) return;
+  const gameId = cfg.gameIds && cfg.gameIds[lv];
+  if (!gameId) return;
+  const dbItem = _itemsById && _itemsById[gameId];
+  const loc    = _locale    && _locale[gameId];
+  if (!dbItem && !loc) return;
 
-  const gameId = cfg.gameId;
-  const dbItem = gameId && _buffsById && _buffsById[gameId];
-  const loc    = gameId && _locale    && _locale[gameId];
-  const fb     = ITEM_TT_FB[cfgId]   && ITEM_TT_FB[cfgId][lv];
+  const quality = (dbItem && dbItem.quality) || 'white';
+  const name    = (loc && loc.name) || cfg.name;
+  const kind    = loc && loc.kind;
+  const rawDesc = loc && loc.description;
+  const desc    = rawDesc && rawDesc !== name ? rawDesc : null;
+  const action  = resolveAction(loc && loc.action, dbItem && dbItem.stats);
 
-  let quality, name, kind, desc, action;
-  if (dbItem) {
-    quality = dbItem.quality;
-    name    = (loc && loc.name) || cfg.name;
-    kind    = loc && loc.kind;
-    const rawDesc = loc && loc.description;
-    desc    = rawDesc && rawDesc !== name ? rawDesc : null;
-    action  = resolveAction(loc && loc.action, dbItem.stats);
-  } else if (fb) {
-    quality = fb.q;
-    name    = cfg.name;
-    kind    = fb.kind;
-    desc    = fb.desc;
-    action  = null;
-  } else return;
-
-  const color  = Q_COLOR[quality] || 'var(--txt)';
-  const frSrc  = Q_FRAME[quality] || (cfg.frames[lv] ? `../frames/${cfg.frames[lv]}.png` : '');
-  const frHtml = frSrc ? `<img class="tt-fr" src="${frSrc}" alt="">` : '';
+  const color   = Q_COLOR[quality] || 'var(--txt)';
+  const frSrc   = Q_FRAME[quality] || '';
+  const frHtml  = frSrc ? `<img class="tt-fr" src="${frSrc}" alt="">` : '';
   const imgHtml = cfg.img ? `<img class="tt-base" src="${cfg.img}" alt="">` : '';
   const ico = `<div class="tt-ico">${imgHtml}${frHtml}</div>`;
 
@@ -1132,32 +1110,34 @@ const ITEMS = [
   { id: 'bones',   name: 'Скрипящие кости',        note: 'вечные',
     img: '../icons/creaking_bones.jpg',
     levels: ['Нет', 'Фиолетовые', 'Красные', 'Оранжевые'],
-    frames: [null, 'border_high', 'border_exclusive', 'border_special'] },
+    frames: [null, 'border_high', 'border_exclusive', 'border_special'],
+    gameIds: [null, 'dniwe_every_month_buff_8', 'dniwe_every_month_buff_9', 'dniwe_every_month_buff_10'] },
   { id: 'token',   name: 'Жетон капитана',          note: 'теряет качество через год',
     img: '../icons/numbered_token.jpg',
     levels: ['Нет', 'Синий', 'Фиолетовый', 'Красный'],
-    frames: [null, 'border_medium', 'border_high', 'border_exclusive'] },
+    frames: [null, 'border_medium', 'border_high', 'border_exclusive'],
+    gameIds: [null, 'dniwe_medallion_14', 'dniwe_medallion_15', 'dniwe_medallion_16'] },
   { id: 'stone',   name: 'Камень путешествий',      note: '',
     img: '../icons/artefact_stone_fire.jpg',
     levels: ['Нет', 'Красный (1 жемч.)'],
     frames: [null, 'border_exclusive'], noHave: true,
-    gameId: 'artefact_events_global_1' },
+    gameIds: [null, 'artefact_events_global_1'] },
   { id: 'costume', name: 'Костюм',                  note: 'Механический рабочий · до следующего года',
     img: '../icons/mask.jpg',
     levels: ['Нет', 'Механический рабочий'],
     frames: [null, 'border_exclusive'], noHave: true,
-    gameId: 'disguise_dniwe_cargo_bot' },
+    gameIds: [null, 'disguise_dniwe_cargo_bot'] },
   { id: 'cerato',  name: 'Цератос',                 note: 'питомец, только за рубины',
     img: '../icons/pet_ceratos.jpg',
     levels: ['Нет', 'Цератос'],
     frames: [null, 'border_exclusive'], noHave: true,
-    gameId: 'dniwe_2013_minipet_achievement_box' },
+    gameIds: [null, 'dniwe_2013_minipet_achievement_box'] },
 ];
 
 function gico(cfg, lv) {
   const baseImg = cfg.imgs ? cfg.imgs[lv] : cfg.img;
   const bw = lv === 0 ? ' bw' : '';
-  const hasTt = lv > 0 && cfg.id && (cfg.gameId || (ITEM_TT_FB[cfg.id] && ITEM_TT_FB[cfg.id][lv]));
+  const hasTt = lv > 0 && cfg.id && cfg.gameIds && cfg.gameIds[lv];
   const ttEvt = hasTt
     ? ` onmouseenter="ttShowGlubin('${cfg.id}',${lv},event)" onmousemove="ttMove(event)" onmouseleave="ttHide()"`
     : '';
