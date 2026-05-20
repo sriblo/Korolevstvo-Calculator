@@ -1110,18 +1110,13 @@ function resolveAction(t, stats) {
   return t.replace(/<br\s*\/?>/gi, '\n').trim();
 }
 
-function ttShowGlubin(cfgId, lv, e) {
-  if (lv === 0) return;
-  const cfg = ITEMS.find(c => c.id === cfgId);
-  if (!cfg) return;
-  const gameId = cfg.gameIds && cfg.gameIds[lv];
-  if (!gameId) return;
+function ttShowByGameId(gameId, imgSrc, e) {
   const dbItem = _itemsById && _itemsById[gameId];
   const loc    = _locale    && _locale[gameId];
   if (!dbItem && !loc) return;
 
   const quality = (dbItem && dbItem.quality) || 'white';
-  const name    = (loc && loc.name) || cfg.name;
+  const name    = (loc && loc.name) || gameId;
   const kind    = loc && loc.kind;
   const rawDesc = loc && loc.description;
   const desc    = rawDesc && rawDesc !== name ? rawDesc : null;
@@ -1130,7 +1125,7 @@ function ttShowGlubin(cfgId, lv, e) {
   const color   = Q_COLOR[quality] || 'var(--txt)';
   const frSrc   = Q_FRAME[quality] || '';
   const frHtml  = frSrc ? `<img class="tt-fr" src="${frSrc}" alt="">` : '';
-  const imgHtml = cfg.img ? `<img class="tt-base" src="${cfg.img}" alt="">` : '';
+  const imgHtml = imgSrc ? `<img class="tt-base" src="${imgSrc}" alt="">` : '';
   const ico = `<div class="tt-ico">${imgHtml}${frHtml}</div>`;
 
   let html = `<div class="tt-head">${ico}<div class="tt-name" style="color:${color}">${name}</div></div>`;
@@ -1159,6 +1154,12 @@ function ttShowGlubin(cfgId, lv, e) {
   _tt.innerHTML = html;
   _tt.classList.add('vis');
   ttMove(e);
+}
+function ttShowGlubin(cfgId, lv, e) {
+  const cfg = ITEMS.find(c => c.id === cfgId);
+  if (!cfg) return;
+  const gameId = cfg.gameIds && cfg.gameIds[lv];
+  if (gameId) ttShowByGameId(gameId, cfg.img, e);
 }
 function ttMove(e) {
   const x = e.clientX + 14, y = e.clientY + 14;
@@ -1240,9 +1241,9 @@ const ITEMS = [
 function gico(cfg, lv) {
   const baseImg = cfg.imgs ? cfg.imgs[lv] : cfg.img;
   const bw = lv === 0 ? ' bw' : '';
-  const hasTt = lv > 0 && cfg.id && cfg.gameIds && cfg.gameIds[lv];
-  const ttEvt = hasTt
-    ? ` onmouseenter="ttShowGlubin('${cfg.id}',${lv},event)" onmousemove="ttMove(event)" onmouseleave="ttHide()"`
+  const ttGameId = lv > 0 && ((cfg.gameIds && cfg.gameIds[lv]) || cfg.gameId);
+  const ttEvt = ttGameId
+    ? ` onmouseenter="ttShowByGameId('${ttGameId}','${baseImg||''}',event)" onmousemove="ttMove(event)" onmouseleave="ttHide()"`
     : '';
   if (!baseImg) {
     const fr = lv > 0 ? cfg.frames[lv] : null;
@@ -1520,8 +1521,8 @@ function calc() {
 function renderItemsGuide() {
   const el = document.getElementById('items-guide');
 
-  function ingrIco(img, frame, name) {
-    return { ico: gico({ img, frames:[null, frame] }, 1), name };
+  function ingrIco(img, frame, name, gameId) {
+    return { ico: gico({ img, frames:[null, frame], gameId }, 1), name };
   }
 
   function costLabel(t, r) {
@@ -1533,14 +1534,14 @@ function renderItemsGuide() {
     { name:'Скрипящие кости', note:'вечные', cfg: ITEMS.find(c=>c.id==='bones'),
       steps:[
         { lv:1, label:'Фиолетовые', cost:1600, costR:0,  rank:1, ingr:null },
-        { lv:2, label:'Красные',    cost:2000, costR:0,  rank:2, ingr:ingrIco('../icons/black_heart.jpg','border_exclusive','Сердце Костяного Галеона') },
-        { lv:3, label:'Оранжевые',  cost:2400, costR:0,  rank:3, ingr:ingrIco('../icons/black_heart.jpg','border_special',  'Сердце Костяного Галеона') },
+        { lv:2, label:'Красные',    cost:2000, costR:0,  rank:2, ingr:ingrIco('../icons/black_heart.jpg','border_exclusive','Сердце Костяного Галеона','dniwe_every_month_buff_upgrade_8') },
+        { lv:3, label:'Оранжевые',  cost:2400, costR:0,  rank:3, ingr:ingrIco('../icons/black_heart.jpg','border_special',  'Сердце Костяного Галеона','dniwe_every_month_buff_upgrade_9') },
       ]},
     { name:'Жетон капитана', note:'теряет качество через год', cfg: ITEMS.find(c=>c.id==='token'),
       steps:[
         { lv:1, label:'Синий',       cost:1600, costR:0,  rank:1, ingr:null },
-        { lv:2, label:'Фиолетовый',  cost:2000, costR:0,  rank:2, ingr:ingrIco('../icons/numbered_token.jpg','border_high',     'Удостоверение (фиол.)') },
-        { lv:3, label:'Красный',     cost:2400, costR:0,  rank:3, ingr:ingrIco('../icons/numbered_token.jpg','border_special',   'Удостоверение (оранж.)') },
+        { lv:2, label:'Фиолетовый',  cost:2000, costR:0,  rank:2, ingr:ingrIco('../icons/numbered_token.jpg','border_high',   'Удостоверение (фиол.)','dniwe_medallion_14_upgrade') },
+        { lv:3, label:'Красный',     cost:2400, costR:0,  rank:3, ingr:ingrIco('../icons/numbered_token.jpg','border_special', 'Удостоверение (оранж.)','dniwe_medallion_15_upgrade') },
       ]},
     { name:'Камень путешествий', note:'', cfg: ITEMS.find(c=>c.id==='stone'),
       steps:[
