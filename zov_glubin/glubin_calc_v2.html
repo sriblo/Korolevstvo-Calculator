@@ -676,11 +676,18 @@ select.on {
 .guide-link .tag{font-family:var(--sans);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-d);font-weight:700}
 .guide-link .arr{color:var(--gold-d);font-size:18px;flex-shrink:0;transition:transform .15s,color .15s}
 .guide-link:hover .arr{transform:translateX(3px);color:var(--gold-l)}
-.guide-link .guide-ico{width:108px;height:108px;flex-shrink:0;border-radius:6px;image-rendering:pixelated}
-.guide-link .guide-logo{
-  width:52px;height:52px;flex-shrink:0;
-  opacity:.14;filter:drop-shadow(0 0 10px rgba(212,168,67,.25));
+.guide-link{position:relative;overflow:hidden}
+.guide-link::after{
+  content:'';position:absolute;
+  top:-60px;right:-60px;width:280px;height:340px;
+  background:url('../kor_logo.svg') no-repeat center/contain;
+  opacity:.09;pointer-events:none;z-index:0;
+  transform:rotate(-8deg);
+  -webkit-mask-image:linear-gradient(to top, transparent 0%, rgba(0,0,0,.15) 30%, rgba(0,0,0,.5) 55%, black 80%);
+          mask-image:linear-gradient(to top, transparent 0%, rgba(0,0,0,.15) 30%, rgba(0,0,0,.5) 55%, black 80%);
 }
+.guide-link > *{position:relative;z-index:1}
+.guide-link .guide-ico{width:108px;height:108px;flex-shrink:0;border-radius:6px;image-rendering:pixelated}
 
 /* ── ITEM TOOLTIP ───────────────────────────────────────── */
 .eq-tt{
@@ -971,7 +978,6 @@ select.on {
       <div class="dsc">Маршрут по подводной локации, тактики против боссов, оптимизация фарма жемчужин.</div>
       <div class="tag">В разработке</div>
     </div>
-    <img class="guide-logo" src="../kor_logo.svg" alt="">
     <span class="arr">→</span>
   </a>
 
