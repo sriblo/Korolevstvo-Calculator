@@ -1124,7 +1124,7 @@ function ttShowGlubin(cfgId, lv, e) {
   const name    = (loc && loc.name) || cfg.name;
   const kind    = loc && loc.kind;
   const rawDesc = loc && loc.description;
-  const desc    = rawDesc && rawDesc !== name && rawDesc !== kind ? rawDesc : null;
+  const desc    = rawDesc && rawDesc !== name ? rawDesc : null;
   const action  = resolveAction(loc && loc.action, dbItem && dbItem.stats);
 
   const color   = Q_COLOR[quality] || 'var(--txt)';
