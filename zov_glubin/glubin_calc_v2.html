@@ -620,18 +620,18 @@ select.on {
 @media (max-width: 640px) {
   /* Hero */
   .hero-i  { padding: 36px 20px 28px; }
-  .hero-name { font-size: 38px; gap: 10px; }
+  .hero-name { font-size: 36px; gap: 10px; }
   .hero-meta { font-size: 14px; margin-top: 12px; }
 
   /* Page */
-  .page { padding: 14px 12px; gap: 12px; }
+  .page { padding: 14px 10px; gap: 12px; }
 
   /* Input rows */
   .irow { grid-template-columns: 26px 1fr 12px 68px auto; gap: 6px; padding: 8px 12px; }
   .ilbl { font-size: 13px; }
 
   /* Result number */
-  .rnum { font-size: 44px; }
+  .rnum { font-size: 42px; }
 
   /* Stats grid → single column */
   .res-stats { grid-template-columns: 1fr; }
@@ -639,25 +639,39 @@ select.on {
   .st:nth-child(3), .st:nth-child(4) { border-bottom: 1px solid var(--line); }
   .st:last-child { border-bottom: none; }
 
-  /* Verdict rows — wrap key+value */
+  /* Verdict rows */
   .vrow { flex-wrap: wrap; gap: 2px; }
-  .vkey { font-size: 13.5px; }
-  .vval { font-size: 13.5px; }
+  .vkey { font-size: 13px; }
+  .vval { font-size: 13px; }
 
-  /* Items table — 2-row layout */
+  /* Items table — 2-row grid: name on top, selects below */
   .i-head { display: none; }
   .irow2 {
     display: grid;
-    grid-template-columns: 1fr auto auto auto;
+    grid-template-columns: 1fr 22px 1fr 38px;
     grid-template-rows: auto auto;
-    grid-template-areas: "name name name name" "have arr  wcell wico";
-    row-gap: 8px; gap: 8px; padding: 12px 12px;
+    grid-template-areas:
+      "name name name name"
+      "have arr  wcell wico";
+    align-items: center;
+    row-gap: 10px;
+    column-gap: 6px;
+    padding: 14px 12px;
   }
-  .irow2 > *:nth-child(1) { grid-area: name; }
-  .irow2 > *:nth-child(2) { grid-area: have; min-width: 0; }
-  .irow2 > *:nth-child(3) { grid-area: arr;  }
+  .irow2 > *:nth-child(1) { grid-area: name; align-self: start; }
+  .irow2 > *:nth-child(2) { grid-area: have; }
+  .irow2 > *:nth-child(3) { grid-area: arr; text-align: center; }
   .irow2 > *:nth-child(4) { grid-area: wcell; }
-  .irow2 > *:nth-child(5) { grid-area: wico; }
+  .irow2 > *:nth-child(5) { grid-area: wico; justify-content: center; }
+
+  /* Cost hint: inline below the want select, не абсолютный */
+  .chint {
+    position: static;
+    white-space: normal;
+    font-size: 11px;
+    margin-top: 4px;
+  }
+  .wcell { display: flex; flex-direction: column; }
 
   /* Upgrade chain — horizontal scroll */
   .iup-chain { overflow-x: auto; padding-bottom: 6px; flex-wrap: nowrap; }
@@ -676,14 +690,17 @@ select.on {
 
 /* ── SMALL PHONE ────────────────────────────────────────── */
 @media (max-width: 420px) {
-  .hero-i   { padding: 28px 16px 22px; }
-  .hero-name { font-size: 30px; }
+  .hero-i   { padding: 28px 14px 22px; }
+  .hero-name { font-size: 28px; }
   .hero-meta { font-size: 13px; }
-  .page { padding: 10px; gap: 10px; }
-  .guide-link .guide-ico { display: none; }
-  .rnum { font-size: 38px; }
+  .page { padding: 10px 8px; gap: 10px; }
+  .irow2 { padding: 12px 10px; column-gap: 4px; row-gap: 8px; }
+  .irow2 { grid-template-columns: 1fr 18px 1fr 34px; }
+  .rnum { font-size: 36px; }
   .irow { grid-template-columns: 24px 1fr 10px 62px auto; gap: 4px; padding: 7px 10px; }
   input[type=number] { width: 62px; font-size: 14px; padding: 4px 6px; }
+  .guide-link .guide-ico { display: none; }
+  select { font-size: 12px; padding: 5px 6px; }
 }
 
 
