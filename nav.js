@@ -18,10 +18,10 @@
       '.nav-dd{position:relative;display:flex;align-items:center}',
       '.dd-trigger{display:flex;align-items:center;gap:6px;padding:6px 11px;border-radius:6px;',
         'font-size:13px;color:var(--txt2);font-weight:500;cursor:pointer;user-select:none;',
-        'border:1px solid var(--line2);transition:background .12s,color .12s,border-color .12s}',
+        'transition:background .12s,color .12s}',
       '.dd-trigger:hover{color:var(--txt);background:var(--bg2)}',
       '.dd-trigger.on{color:var(--gold-l);background:var(--bg3)}',
-      '.nav-dd.open .dd-trigger{color:var(--gold-l);background:var(--bg3);border-color:rgba(var(--gold-tint),.3)}',
+      '.nav-dd.open .dd-trigger{color:var(--gold-l);background:var(--bg3)}',
       '.dd-arrow{width:16px;height:16px;transition:transform .18s;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}',
       '.nav-dd.open .dd-arrow{transform:rotate(180deg)}',
       '.dd-menu{display:none;position:absolute;top:calc(100% + 8px);left:0;min-width:260px;',
@@ -80,7 +80,7 @@
   if (logo) {
     logo.innerHTML =
       '<img src="kor_logo.svg" alt="">' +
-      '<div><div class="logo-n">Korolevstvo: База знаний</div></div>';
+      '<div><div class="logo-n">Королевство: База знаний</div></div>';
   }
 
   var nav = document.getElementById('site-nav');
