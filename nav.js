@@ -79,7 +79,7 @@
     logo.innerHTML =
       '<img src="kor_logo.svg" alt="">' +
       '<div><div class="logo-n">Korolevstvo</div>' +
-      '<div class="logo-s">База знаний игроков · kor.ru</div></div>';
+      '<div class="logo-s">База знаний</div></div>';
   }
 
   var nav = document.getElementById('site-nav');
