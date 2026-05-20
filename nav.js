@@ -10,11 +10,12 @@
   var isCalc  = calcPages.indexOf(page) !== -1;
   var isItems = page === 'items_base.html';
 
-  // Inject dropdown + count CSS once
+  // ── CSS ────────────────────────────────────────────────────────────────────
   if (!document.getElementById('nav-shared-css')) {
     var s = document.createElement('style');
     s.id = 'nav-shared-css';
     s.textContent = [
+      // dropdown nav
       '.nav-dd{position:relative;display:flex;align-items:center}',
       '.dd-trigger{display:flex;align-items:center;gap:6px;padding:6px 11px;border-radius:6px;',
         'font-size:13px;color:var(--txt2);font-weight:500;cursor:pointer;user-select:none;',
@@ -22,7 +23,8 @@
       '.dd-trigger:hover{color:var(--txt);background:var(--bg2)}',
       '.dd-trigger.on{color:var(--gold-l);background:var(--bg3)}',
       '.nav-dd.open .dd-trigger{color:var(--gold-l);background:var(--bg3)}',
-      '.dd-arrow{width:16px;height:16px;transition:transform .18s;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}',
+      '.dd-arrow{width:16px;height:16px;transition:transform .18s;display:inline-flex;',
+        'align-items:center;justify-content:center;flex-shrink:0}',
       '.nav-dd.open .dd-arrow{transform:rotate(180deg)}',
       '.dd-menu{display:none;position:absolute;top:calc(100% + 8px);left:0;min-width:260px;',
         'background:var(--bg2);border:1px solid var(--line2);border-radius:10px;padding:6px;',
@@ -37,10 +39,32 @@
       '.dd-item.soon{color:var(--txt3);cursor:default;pointer-events:none}',
       '.dd-sep{height:1px;background:var(--line);margin:4px 6px}',
       '.nav .count{font-size:10px;color:var(--txt3);margin-left:4px}',
+      // search
+      '.site-search{margin-left:auto;position:relative}',
+      '.site-search input{background:var(--bg2);border:1px solid var(--line);border-radius:6px;',
+        'padding:7px 12px 7px 32px;font-size:12px;color:var(--txt2);width:200px;',
+        'font-family:inherit;outline:none;',
+        'background-image:url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' ',
+        'width=\'12\' height=\'12\' viewBox=\'0 0 12 12\' fill=\'none\' stroke=\'%237a6a50\' stroke-width=\'1.5\'%3E',
+        '%3Ccircle cx=\'5\' cy=\'5\' r=\'3.5\'/%3E%3Cpath d=\'M8 8l3 3\'/%3E%3C/svg%3E");',
+        'background-repeat:no-repeat;background-position:12px center;transition:border-color .15s}',
+      '.site-search input:focus{border-color:var(--line2);color:var(--txt)}',
+      '.site-search input::placeholder{color:var(--txt3)}',
+      '.sr{display:none;position:absolute;top:calc(100% + 6px);right:0;min-width:280px;',
+        'background:var(--bg2);border:1px solid var(--line2);border-radius:10px;',
+        'padding:6px;z-index:300;box-shadow:0 16px 40px rgba(0,0,0,.6)}',
+      '.sr.open{display:block}',
+      '.sr-item{display:block;padding:8px 12px;border-radius:6px;text-decoration:none;',
+        'transition:background .1s}',
+      '.sr-item:hover{background:var(--bg3)}',
+      '.sr-title{font-size:13px;color:var(--txt);font-weight:500}',
+      '.sr-desc{font-size:11px;color:var(--txt3);margin-top:2px}',
+      '.sr-empty{padding:12px;text-align:center;font-size:13px;color:var(--txt3)}',
     ].join('');
     document.head.appendChild(s);
   }
 
+  // ── Nav ────────────────────────────────────────────────────────────────────
   function a(href, label, active) {
     return '<a' + (active ? ' class="on"' : '') + ' href="' + href + '">' + label + '</a>';
   }
@@ -75,7 +99,6 @@
     '<a>Гайды<span class="count">скоро</span></a>' +
     '<a>Сообщество</a>';
 
-  // Fill logo
   var logo = document.getElementById('site-logo');
   if (logo) {
     logo.innerHTML =
@@ -95,10 +118,54 @@
     e.stopPropagation();
     dd.classList.toggle('open');
   });
-  menu.addEventListener('click', function (e) {
-    e.stopPropagation();
+  menu.addEventListener('click', function (e) { e.stopPropagation(); });
+  document.addEventListener('click', function () { dd.classList.remove('open'); });
+
+  // ── Search ─────────────────────────────────────────────────────────────────
+  var INDEX = [
+    { title: 'База предметов', desc: 'Оружие, броня, аксессуары, руны, ивентовые предметы', url: 'items_base.html', tags: 'предметы оружие броня экипировка руны аксессуары артефакты амулеты кольца' },
+    { title: 'Калькулятор характеристик', desc: 'Расчёт характеристик, брони и урона персонажа', url: 'stats_calc.html', tags: 'статы характеристики броня урон атака защита резисты' },
+    { title: 'Зов Глубин', desc: 'Ивент май 2026 — жемчужины, репутация, апгрейды', url: 'zov_glubin/glubin_calc.html', tags: 'зов глубин ивент жемчужины репутация апгрейд май' },
+    { title: 'Месяц цветущего хмеля', desc: 'Ивент — хмель, золотой клевер, монеты леприкона', url: 'leprecon/hmeli_calc.html', tags: 'хмель леприкон клевер ивент монеты' },
+    { title: 'Загруженность копий', desc: 'Оптимальные копии локаций для фарма', url: 'location_calc/loc_calc.html', tags: 'локации копии загруженность фарм подземелья' },
+    { title: 'Прокачка репутаций', desc: 'Калькулятор репутаций всех фракций Королевства', url: 'reputation_calc/rep_calc.html', tags: 'репутации фракции прокачка гвардия гладиатор орден завоеватель' },
+  ];
+
+  var header = nav.closest('header') || nav.parentNode;
+
+  var sw = document.createElement('div');
+  sw.className = 'site-search';
+  sw.innerHTML = '<input placeholder="Поиск по базе…" autocomplete="off" spellcheck="false"><div class="sr" id="site-sr"></div>';
+  header.appendChild(sw);
+
+  var inp  = sw.querySelector('input');
+  var drop = sw.querySelector('.sr');
+
+  function find(q) {
+    q = q.toLowerCase();
+    return INDEX.filter(function (item) {
+      return (item.title + ' ' + item.desc + ' ' + item.tags).toLowerCase().indexOf(q) !== -1;
+    });
+  }
+
+  inp.addEventListener('input', function () {
+    var q = inp.value.trim();
+    if (q.length < 2) { drop.classList.remove('open'); return; }
+    var hits = find(q);
+    drop.innerHTML = hits.length
+      ? hits.map(function (h) {
+          return '<a class="sr-item" href="' + h.url + '"><div class="sr-title">' + h.title +
+            '</div><div class="sr-desc">' + h.desc + '</div></a>';
+        }).join('')
+      : '<div class="sr-empty">Ничего не найдено</div>';
+    drop.classList.add('open');
   });
-  document.addEventListener('click', function () {
-    dd.classList.remove('open');
+
+  inp.addEventListener('focus', function () {
+    if (inp.value.trim().length >= 2) drop.classList.add('open');
+  });
+
+  document.addEventListener('click', function (e) {
+    if (!sw.contains(e.target)) drop.classList.remove('open');
   });
 })();
