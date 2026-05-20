@@ -354,39 +354,9 @@
 <body>
 
 <header class="top">
-  <a class="logo" href="index.html">
-    <img src="kor_logo.svg" alt="">
-    <div>
-      <div class="logo-n">Korolevstvo</div>
-      <div class="logo-s">База знаний игроков · kor.ru</div>
-    </div>
-  </a>
-  <nav class="nav">
-    <a href="index_new.html">Главная</a>
-    <div class="nav-dd">
-      <div class="dd-trigger on">Калькуляторы <span class="dd-arrow"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 4L6 8L10 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
-      <div class="dd-menu">
-        <span class="dd-item soon">Новый год. Колдер</span>
-        <span class="dd-item soon">Экспедиция. Сбор припасов</span>
-        <span class="dd-item soon">Месяц пробуждения цветов</span>
-        <a class="dd-item ready" href="leprecon/hmeli_calc.html">Месяц цветущего хмеля</a>
-        <a class="dd-item ready" href="zov_glubin/glubin_calc.html">Зов Глубин</a>
-        <span class="dd-item soon">День Пирата</span>
-        <span class="dd-item soon">Экспедиция. Ледяные Острова</span>
-        <span class="dd-item soon">Гоблинский Рай</span>
-        <span class="dd-item soon">Небесные Драконы</span>
-        <span class="dd-item soon">Тыквенный Фестиваль</span>
-        <div class="dd-sep"></div>
-        <a class="dd-item ready" href="location_calc/loc_calc.html">Загруженность копий</a>
-        <a class="dd-item ready" href="reputation_calc/rep_calc.html">Прокачка репутаций</a>
-        <a class="dd-item ready" href="stats_calc.html">Характеристики</a>
-      </div>
-    </div>
-    <a href="items_base.html">База предметов</a>
-    <a>Гайды<span class="count">скоро</span></a>
-    <a>Сообщество</a>
-
-  </nav>
+  <a class="logo" id="site-logo" href="index_new.html"></a>
+  <nav class="nav" id="site-nav"></nav>
+  <script src="nav.js"></script>
   <div class="top-r">
     <input class="search" placeholder="Поиск по базе…">
   </div>
@@ -497,6 +467,11 @@
     </div>
   </div>
   <div class="tools" style="margin-bottom:16px">
+    <a class="tool" data-t="players" href="players.html">
+      <div class="tool-h"><div class="tool-name">Поиск игроков</div></div>
+      <div class="tool-d">Найди любого игрока по части ника — поиск по всей базе Королевства.</div>
+      <div class="tool-l">Открыть</div>
+    </a>
     <a class="tool" data-t="items" href="items_base.html">
       <div class="tool-h"><div class="tool-name">База предметов</div></div>
       <div class="tool-d">Все игровые предметы в одном месте: основная экипировка, ивентовая, руны, бижутерия, артефакты, бафы и многое другое.</div>
@@ -569,22 +544,6 @@
     const diff = Math.ceil((end - now) / 86400000);
     const d = Math.max(0, diff);
     document.getElementById('days-left2').textContent = d;
-  })();
-
-  // Dropdown: click to open, click outside to close
-  (function() {
-    const dd = document.querySelector('.nav-dd');
-    const trigger = dd.querySelector('.dd-trigger');
-    trigger.addEventListener('click', function(e) {
-      e.stopPropagation();
-      dd.classList.toggle('open');
-    });
-    document.addEventListener('click', function() {
-      dd.classList.remove('open');
-    });
-    dd.querySelector('.dd-menu').addEventListener('click', function(e) {
-      e.stopPropagation();
-    });
   })();
 </script>
 
