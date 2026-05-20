@@ -697,7 +697,15 @@ select.on {
 .tt-name{font-family:var(--serif);font-size:14px;font-weight:500;color:var(--txt)}
 .tt-kind{font-size:11px;color:var(--txt3);margin-bottom:4px}
 .tt-sep{height:1px;background:var(--line);margin:6px 0}
-.tt-desc{font-size:12px;color:var(--txt2);line-height:1.55;max-width:296px;word-wrap:break-word}
+.tt-desc,.tt-action{font-size:12px;color:var(--txt2);line-height:1.55;max-width:296px;word-wrap:break-word;white-space:pre-wrap}
+.tt-row{display:flex;justify-content:space-between;gap:16px;padding:3px 0;font-size:12px;border-bottom:1px solid var(--line)}
+.tt-row:last-child{border-bottom:none}
+.tt-key{color:var(--txt2)}.tt-val{color:var(--txt);white-space:nowrap;font-feature-settings:'tnum'}
+.tt-empty{color:var(--txt3);font-size:12px;font-style:italic}
+.tt-price{display:flex;align-items:center;gap:5px;justify-content:space-between;padding:3px 0;font-size:12px}
+.tt-price-key{color:var(--txt2)}.tt-price-val{color:var(--txt);display:flex;align-items:center;gap:4px;font-feature-settings:'tnum'}
+.tt-coin{width:14px;height:14px;display:inline-block;flex-shrink:0;object-fit:contain;vertical-align:middle}
+.tt-id{font-size:10px;color:var(--line2);margin-top:8px;font-family:monospace;word-break:break-all}
 </style>
 </head>
 <body>
@@ -981,6 +989,97 @@ const _tt = document.createElement('div');
 _tt.className = 'eq-tt';
 document.body.appendChild(_tt);
 
+const DB_STAT_LABELS = [
+  { key:'attack',                                      label:'Атака' },
+  { key:'defense',                                     label:'Защита' },
+  { key:'max_health',                                  label:'Запас здоровья' },
+  { key:'mana',                                        label:'Запас маны' },
+  { key:'max_mana',                                    label:'Запас маны' },
+  { key:'hp',                                          label:'Запас здоровья' },
+  { key:'hp_inc',                                      label:'Запас здоровья' },
+  { key:'mana_inc',                                    label:'Запас маны' },
+  { key:'armor',                                       label:'Броня' },
+  { key:'armor_absorb',                                label:'Поглощение урона',       pct:true },
+  { key:'block',                                       label:'Толщина щита' },
+  { key:'block_chance',                                label:'Шанс блока',             pct:true },
+  { key:'dodge_chance',                                label:'Шанс увернуться',        pct:true },
+  { key:'hit_chance',                                  label:'Шанс попасть',           pct:true },
+  { key:'attack_spell',                                label:'Маг. атака' },
+  { key:'magic_resist',                                label:'Защита от магии',        pct:true },
+  { key:'change_heal_sent_percent',                    label:'Эффективность лечения',  pct:true },
+  { key:'change_health_regeneration_speed',            label:'Восстановление жизни вне боя' },
+  { key:'mana_conservation',                           label:'Уменьш. расхода маны',   pct:true },
+  { key:'critical_attack_multiplier',                  label:'Сила крит. урона',       pct:true },
+  { key:'chance_critical_attack',                      label:'Шанс крит. удара',       pct:true },
+  { key:'crit_chance',                                 label:'Шанс крит. урона',       pct:true },
+  { key:'crit_chance_magic',                           label:'Шанс крит. урона магией',pct:true },
+  { key:'change_absorb_critical',                      label:'Защита от крит. удара',  pct:true },
+  { key:'resist_to_fire_percent',                      label:'Сопр. магии огня',       pct:true },
+  { key:'resist_to_wind_percent',                      label:'Сопр. магии ветра',      pct:true },
+  { key:'resist_to_light_percent',                     label:'Сопр. магии света',      pct:true },
+  { key:'change_damage_sent_percent',                  label:'Эффективность атаки',    pct:true },
+  { key:'change_damage_received_percent',              label:'Эффективность защиты',   pct:true },
+  { key:'boost_damage',                                label:'Усиление урона',         pct:true },
+  { key:'change_damage_feedback_percent',              label:'Вампиризм',              pct:true },
+  { key:'spell_penetration',                           label:'Уменьш. сопротивления цели к магии', pct:true },
+  { key:'threat_decrease',                             label:'Уменьшение ненависти',   pct:true },
+  { key:'run_speed',                                   label:'Скорость в бою',         pct:true },
+  { key:'walk_speed',                                  label:'Скорость вне боя',       pct:true },
+  { key:'change_experience_received_percent',          label:'Получение опыта',        pct:true },
+  { key:'change_experience_for_mobs_received_percent', label:'Получение опыта с монстров', pct:true },
+  { key:'charm',                                       label:'Харизма' },
+  { key:'karma',                                       label:'Карма' },
+  { key:'gifts_karma',                                 label:'Праздничное настроение' },
+  { key:'killer_chance',                               label:'Шанс нанести смертельный удар', pct:true },
+  { key:'strength',                                    label:'Сила' },
+  { key:'intellect',                                   label:'Интеллект' },
+  { key:'agility',                                     label:'Ловкость' },
+  { key:'spirit',                                      label:'Дух' },
+  { key:'stamina',                                     label:'Выносливость' },
+  { key:'change_reputation_rep31_received_percent',    label:'Репутация Глубинного воителя', pct:true },
+  { key:'change_reputation_rep14_received_percent',    label:'Получение славы на аренах', pct:true },
+  { key:'change_reputation_pvp2_received_percent',     label:'Репутация Гладиатора',   pct:true },
+  { key:'change_reputation_pvp1_received_percent',     label:'Репутация Завоевателя',  pct:true },
+];
+const DB_STAT_SKIP = new Set([
+  'skin','avatar','to_location','from_location','arena_5x5',
+  'max_distance_to_target','min_distance_to_target','cooldown',
+  'teleport_realm','teleport_raelm_rus','target_class',
+  'use_in_location','move_speed','type','permanent','reusable',
+  'owner_alive','not_to_openworld','repeat','quest','text',
+]);
+function dbStatRows(stats) {
+  if (!stats) return '';
+  const mapped = new Set(DB_STAT_LABELS.map(s => s.key));
+  const rows = [];
+  for (const s of DB_STAT_LABELS) {
+    const v = stats[s.key];
+    if (v == null) continue;
+    const disp = s.pct ? `${v >= 0 ? '+' : ''}${v}%` : (v >= 0 ? `+${v}` : `${v}`);
+    rows.push(`<div class="tt-row"><span class="tt-key">${s.label}</span><span class="tt-val">${disp}</span></div>`);
+  }
+  for (const [k, v] of Object.entries(stats)) {
+    if (mapped.has(k) || DB_STAT_SKIP.has(k) || v == null) continue;
+    const label = k.replace(/_percent$/, '').replace(/_/g, ' ');
+    const isPct = k.endsWith('_percent');
+    const disp = typeof v === 'number'
+      ? (isPct ? `${v >= 0 ? '+' : ''}${v}%` : (v >= 0 ? `+${v}` : `${v}`))
+      : String(v);
+    rows.push(`<div class="tt-row"><span class="tt-key" style="color:var(--txt3)">${label}</span><span class="tt-val">${disp}</span></div>`);
+  }
+  return rows.join('');
+}
+const TOKEN_ICO = {
+  dniwe_token:   '../icons/pearl_small.png',
+  event_token:   '../icons/currency_tailen_event_small.png',
+  st_patric_token: '../icons/lucky_coin.jpg',
+};
+const TOKEN_LABEL = {
+  dniwe_token:   'Жемчужина',
+  event_token:   'Праздничный тайлен',
+  st_patric_token: 'Монета Лепреконов',
+};
+
 const Q_COLOR = { white:'#bbb', green:'#8acc60', blue:'#78aae0', purple:'#b888ee', red:'#ee5050', orange:'#f0a040' };
 const Q_FRAME = {
   white:'../frames/border_none.png', green:'../frames/border_low.png',
@@ -1038,9 +1137,25 @@ function ttShowGlubin(cfgId, lv, e) {
   if (kind) html += `<div class="tt-kind">Тип: ${kind}</div>`;
   if (desc || action) {
     html += `<div class="tt-sep"></div>`;
-    if (desc)   html += `<div class="tt-desc">${desc}</div>`;
-    if (action) html += `<div class="tt-desc" style="margin-top:4px"><b style="color:var(--txt2)">Действие:</b> ${action.replace(/\n/g,'<br>')}</div>`;
+    if (desc)   html += `<div class="tt-desc"><b style="color:var(--txt2)">Описание:</b> ${desc}</div>`;
+    if (action) html += `<div class="tt-action" style="margin-top:4px"><b>Действие:</b> ${action.replace(/\n/g,'<br>')}</div>`;
   }
+  const statsHtml = dbItem ? dbStatRows(dbItem.stats) : '';
+  if (statsHtml) html += `<div class="tt-sep"></div>` + statsHtml;
+
+  const hasMeta = dbItem && ((dbItem.reqlvl > 0) || dbItem.token_price);
+  if (hasMeta) {
+    html += `<div class="tt-sep"></div>`;
+    if (dbItem.reqlvl > 0)
+      html += `<div class="tt-price"><span class="tt-price-key">Требуемый уровень</span><span class="tt-price-val" style="color:var(--gold-l)">${dbItem.reqlvl}</span></div>`;
+    if (dbItem.token_price) {
+      const tType = dbItem.token_type || '';
+      const tIco   = TOKEN_ICO[tType]   || '../icons/currency_tailen_event_small.png';
+      const tLabel = TOKEN_LABEL[tType] || tType.replace(/_/g,' ') || 'Тайлены';
+      html += `<div class="tt-price"><span class="tt-price-key">${tLabel}</span><span class="tt-price-val"><img class="tt-coin" src="${tIco}" alt=""> ${dbItem.token_price}</span></div>`;
+    }
+  }
+  html += `<div class="tt-id">${gameId}</div>`;
   _tt.innerHTML = html;
   _tt.classList.add('vis');
   ttMove(e);
