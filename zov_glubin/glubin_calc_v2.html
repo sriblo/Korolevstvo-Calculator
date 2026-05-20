@@ -681,6 +681,23 @@ select.on {
 .guide-link .tag{font-family:var(--sans);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-d);font-weight:700}
 .guide-link .arr{color:var(--gold-d);font-size:18px;flex-shrink:0;transition:transform .15s,color .15s}
 .guide-link:hover .arr{transform:translateX(3px);color:var(--gold-l)}
+
+/* ── ITEM TOOLTIP ───────────────────────────────────────── */
+.eq-tt{
+  position:fixed;z-index:300;pointer-events:none;display:none;
+  background:var(--bg3);border:1px solid var(--line2);border-radius:8px;
+  padding:12px 14px;min-width:210px;max-width:320px;width:max-content;
+  box-shadow:0 8px 28px rgba(0,0,0,.5);
+}
+.eq-tt.vis{display:block}
+.tt-head{display:flex;align-items:center;gap:10px;margin-bottom:9px}
+.tt-ico{width:40px;height:40px;flex-shrink:0;border-radius:4px;background:var(--bg2);position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.tt-ico img.tt-base{position:absolute;width:32px;height:32px;image-rendering:pixelated;top:4px;left:4px}
+.tt-ico img.tt-fr{position:absolute;inset:0;width:40px;height:40px}
+.tt-name{font-family:var(--serif);font-size:14px;font-weight:500;color:var(--txt)}
+.tt-kind{font-size:11px;color:var(--txt3);margin-bottom:4px}
+.tt-sep{height:1px;background:var(--line);margin:6px 0}
+.tt-desc{font-size:12px;color:var(--txt2);line-height:1.55;max-width:296px;word-wrap:break-word}
 </style>
 </head>
 <body>
@@ -958,6 +975,59 @@ select.on {
 </div>
 
 <script>
+// ── TOOLTIP ──────────────────────────────────────────────────────────────────
+const _tt = document.createElement('div');
+_tt.className = 'eq-tt';
+document.body.appendChild(_tt);
+
+const Q_COLOR = { blue:'#6ab0f5', purple:'#b888ee', red:'#ee5050', orange:'#f0a040' };
+
+const ITEM_TT = {
+  bones: {
+    1: { q:'purple', kind:'Аксессуар', desc:'Получены в ивенте «Зов Глубин». Вечные — не теряют качество со временем. Ранг 1.' },
+    2: { q:'red',    kind:'Аксессуар', desc:'Апгрейд с помощью жемчужин и Сердца Костяного Галеона. Ранг 2.' },
+    3: { q:'orange', kind:'Аксессуар', desc:'Апгрейд с помощью жемчужин и Сердца Костяного Галеона. Ранг 3.' },
+  },
+  token: {
+    1: { q:'blue',   kind:'Аксессуар', desc:'Получен в ивенте «Зов Глубин». Теряет качество на одну ступень через год. Ранг 1.' },
+    2: { q:'purple', kind:'Аксессуар', desc:'Апгрейд за жемчужины. Теряет качество на одну ступень через год. Ранг 2.' },
+    3: { q:'red',    kind:'Аксессуар', desc:'Апгрейд за жемчужины. Теряет качество на одну ступень через год. Ранг 3.' },
+  },
+  stone: {
+    1: { q:'red', kind:'Артефакт', desc:'Позволяет перемещаться к Камням путешествий в любой точке мира. Покупается за 1 жемчужину.' },
+  },
+  costume: {
+    1: { q:'red', kind:'Свиток превращения', desc:'Превращает персонажа в Механического рабочего на 1 час. +1% к шансу критической атаки. Действует до следующего ивента «Зов Глубин».' },
+  },
+  cerato: {
+    1: { q:'red', kind:'Питомец', desc:'Прирученный механический цератос из глубин. Приобретается только за рубины (12 руб.).' },
+  },
+};
+
+function ttShowGlubin(cfgId, lv, e) {
+  if (lv === 0) return;
+  const cfg = ITEMS.find(c => c.id === cfgId);
+  const tt = ITEM_TT[cfgId] && ITEM_TT[cfgId][lv];
+  if (!cfg || !tt) return;
+  const color = Q_COLOR[tt.q] || 'var(--txt)';
+  const fr = cfg.frames[lv];
+  const frHtml = fr ? `<img class="tt-fr" src="../frames/${fr}.png" alt="">` : '';
+  const imgHtml = cfg.img ? `<img class="tt-base" src="${cfg.img}" alt="">` : '';
+  const ico = `<div class="tt-ico">${imgHtml}${frHtml}</div>`;
+  let html = `<div class="tt-head">${ico}<div class="tt-name" style="color:${color}">${cfg.name}</div></div>`;
+  if (tt.kind) html += `<div class="tt-kind">Тип: ${tt.kind}</div>`;
+  html += `<div class="tt-sep"></div><div class="tt-desc">${tt.desc}</div>`;
+  _tt.innerHTML = html;
+  _tt.classList.add('vis');
+  ttMove(e);
+}
+function ttMove(e) {
+  const x = e.clientX + 14, y = e.clientY + 14;
+  _tt.style.left = Math.min(x, window.innerWidth  - _tt.offsetWidth  - 8) + 'px';
+  _tt.style.top  = Math.min(y, window.innerHeight - _tt.offsetHeight - 8) + 'px';
+}
+function ttHide() { _tt.classList.remove('vis'); }
+
 // ── КОНСТАНТЫ ИВЕНТА ──
 const DAILY    = 800;
 const MAX_DAYS = 15;
@@ -1026,13 +1096,16 @@ const ITEMS = [
 function gico(cfg, lv) {
   const baseImg = cfg.imgs ? cfg.imgs[lv] : cfg.img;
   const bw = lv === 0 ? ' bw' : '';
+  const ttEvt = (lv > 0 && cfg.id && ITEM_TT[cfg.id] && ITEM_TT[cfg.id][lv])
+    ? ` onmouseenter="ttShowGlubin('${cfg.id}',${lv},event)" onmousemove="ttMove(event)" onmouseleave="ttHide()"`
+    : '';
   if (!baseImg) {
     const fr = lv > 0 ? cfg.frames[lv] : null;
     if (!fr) return `<div class="gempty${bw}"></div>`;
-    return `<div class="gico${bw}" data-q="${lv}" style="background:rgba(0,0,0,.55);border-radius:5px;border:1px solid rgba(255,255,255,.06)"><img class="fr" src="../frames/${fr}.png"></div>`;
+    return `<div class="gico${bw}" data-q="${lv}"${ttEvt} style="background:rgba(0,0,0,.55);border-radius:5px;border:1px solid rgba(255,255,255,.06)"><img class="fr" src="../frames/${fr}.png"></div>`;
   }
   const fr = cfg.frames[lv];
-  return `<div class="gico${bw}"${lv>0?` data-q="${lv}"`:''}><img class="base" src="${baseImg}">${fr?`<img class="fr" src="../frames/${fr}.png">`:''}
+  return `<div class="gico${bw}"${lv>0?` data-q="${lv}"`:''}${ttEvt}><img class="base" src="${baseImg}">${fr?`<img class="fr" src="../frames/${fr}.png">`:''}
   </div>`;
 }
 
