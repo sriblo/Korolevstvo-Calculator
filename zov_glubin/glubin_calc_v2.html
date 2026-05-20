@@ -343,15 +343,21 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; }
 .th-h { color: var(--blue); }
 .th-w { color: var(--gold); }
 
-.irow2{display:grid;grid-template-columns:180px 1fr 28px 1fr 36px;align-items:center;padding:14px 16px;gap:10px;border-bottom:1px solid var(--line);overflow:visible;position:relative;transition:background .12s;}
+.irow2{display:flex;align-items:center;gap:10px;padding:14px 16px;border-bottom:1px solid var(--line);overflow:visible;position:relative;transition:background .12s;}
 .irow2:last-child { border-bottom: none; }
 .irow2:hover { background: rgba(var(--gold-tint),.02); }
 
 .iname-c {
+  flex: 0 0 180px;
   display: flex; align-items: center; gap: 10px;
-  min-width: 0; width: 100%; overflow: hidden;
+  min-width: 0; overflow: hidden;
 }
 .iname-c > div:last-child { min-width: 0; }
+.irow2-ctrl { flex: 1; display: flex; align-items: center; gap: 10px; min-width: 0; }
+.irow2-ctrl > select { flex: 1; min-width: 0; }
+.irow2-ctrl > .arr { flex: 0 0 auto; }
+.irow2-ctrl > .wcell { flex: 1; min-width: 0; }
+.irow2-ctrl > .wico { flex: 0 0 auto; }
 .inn {
   font-family: var(--serif);
   font-size: 14.5px; font-weight: 500; color: var(--txt);
@@ -607,7 +613,10 @@ select.on {
 @media (max-width: 980px) {
   .page { grid-template-columns: 1fr; padding-left: 16px; padding-right: 16px; }
   .top  { padding-left: 16px; padding-right: 16px; }
-  .i-head, .irow2 { grid-template-columns: 110px 1fr 22px 1fr 30px; gap: 6px; }
+  .i-head { grid-template-columns: 110px 1fr 22px 1fr 30px; gap: 6px; }
+  .iname-c { flex: 0 0 110px; }
+  .irow2 { gap: 6px; }
+  .irow2-ctrl { gap: 6px; }
   .chint { white-space: normal; max-width: 100%; }
   .res-top { grid-template-columns: 1fr; }
   .res-main { border-right: none; border-bottom: 1px solid var(--line); }
@@ -644,33 +653,12 @@ select.on {
   .vkey { font-size: 13px; }
   .vval { font-size: 13px; }
 
-  /* Items table — 2-row grid: name on top, selects below */
+  /* Items table — name сверху, контролы снизу */
   .i-head { display: none; }
-  .irow2 {
-    display: grid;
-    grid-template-columns: 1fr 22px 1fr 38px;
-    grid-template-rows: auto auto;
-    grid-template-areas:
-      "name name name name"
-      "have arr  wcell wico";
-    align-items: center;
-    row-gap: 10px;
-    column-gap: 6px;
-    padding: 14px 12px;
-  }
-  .irow2 > *:nth-child(1) { grid-area: name; align-self: start; }
-  .irow2 > *:nth-child(2) { grid-area: have; }
-  .irow2 > *:nth-child(3) { grid-area: arr; text-align: center; }
-  .irow2 > *:nth-child(4) { grid-area: wcell; }
-  .irow2 > *:nth-child(5) { grid-area: wico; justify-content: center; }
-
-  /* Cost hint: inline below the want select, не абсолютный */
-  .chint {
-    position: static;
-    white-space: normal;
-    font-size: 11px;
-    margin-top: 4px;
-  }
+  .irow2 { flex-direction: column; align-items: stretch; gap: 10px; padding: 14px 12px; }
+  .iname-c { flex: none; overflow: visible; }
+  .irow2-ctrl { gap: 6px; }
+  .chint { position: static; white-space: normal; font-size: 11px; margin-top: 4px; }
   .wcell { display: flex; flex-direction: column; }
 
   /* Upgrade chain — horizontal scroll */
@@ -1361,17 +1349,19 @@ function renderItems() {
         <div id="gi-have-${cfg.id}">${gico(cfg, 0)}</div>
         <div><div class="inn">${cfg.name}</div>${cfg.note?`<div class="inote">${cfg.note}</div>`:''}</div>
       </div>
-      <select id="have-${cfg.id}" style="min-width:0" onchange="syncBoth('${cfg.id}');calc()"${cfg.noHave?' disabled':''}>
-        ${cfg.noHave ? '<option value="0">Нет</option>' : cfg.levels.map((l,i)=>`<option value="${i}">${l}</option>`).join('')}
-      </select>
-      <div class="arr">›</div>
-      <div class="wcell">
-        <select id="want-${cfg.id}" onchange="syncBoth('${cfg.id}');calc()">
-          ${cfg.levels.map((l,i)=>`<option value="${i}">${l}</option>`).join('')}
+      <div class="irow2-ctrl">
+        <select id="have-${cfg.id}" onchange="syncBoth('${cfg.id}');calc()"${cfg.noHave?' disabled':''}>
+          ${cfg.noHave ? '<option value="0">Нет</option>' : cfg.levels.map((l,i)=>`<option value="${i}">${l}</option>`).join('')}
         </select>
-        <div class="chint" id="hint-${cfg.id}"></div>
+        <div class="arr">›</div>
+        <div class="wcell">
+          <select id="want-${cfg.id}" onchange="syncBoth('${cfg.id}');calc()">
+            ${cfg.levels.map((l,i)=>`<option value="${i}">${l}</option>`).join('')}
+          </select>
+          <div class="chint" id="hint-${cfg.id}"></div>
+        </div>
+        <div class="wico" id="gi-want-${cfg.id}">${gico(cfg,0)}</div>
       </div>
-      <div class="wico" id="gi-want-${cfg.id}">${gico(cfg,0)}</div>
     </div>`).join('');
 }
 
