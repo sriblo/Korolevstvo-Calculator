@@ -670,25 +670,16 @@ select.on {
   transition:border-color .15s,background .15s;
 }
 .guide-link:hover{border-color:var(--line2);background:var(--bg3)}
-.guide-link .num{
-  font-family:var(--serif);font-style:normal;font-size:13px;color:var(--gold-d);
-  padding-right:18px;border-right:1px solid var(--line);
-  align-self:stretch;display:flex;align-items:center;letter-spacing:.04em;
-}
 .guide-link .body{flex:1;min-width:0}
 .guide-link .ttl{font-family:var(--serif);font-size:17px;font-weight:500;letter-spacing:-.005em;color:var(--txt);margin-bottom:4px}
 .guide-link .dsc{font-family:var(--serif);font-size:13.5px;color:var(--txt2);line-height:1.5;margin-bottom:10px}
 .guide-link .tag{font-family:var(--sans);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-d);font-weight:700}
 .guide-link .arr{color:var(--gold-d);font-size:18px;flex-shrink:0;transition:transform .15s,color .15s}
 .guide-link:hover .arr{transform:translateX(3px);color:var(--gold-l)}
-.guide-preview{
-  position:relative;width:130px;height:78px;flex-shrink:0;
-  border-radius:6px;overflow:hidden;border:1px solid var(--line);
-}
-.guide-preview img.gp-img{width:100%;height:100%;object-fit:cover;display:block}
-.guide-preview img.gp-logo{
-  position:absolute;right:6px;bottom:6px;width:36px;height:36px;
-  opacity:.18;filter:drop-shadow(0 0 8px rgba(212,168,67,.3));
+.guide-link .guide-ico{width:108px;height:108px;flex-shrink:0;border-radius:6px;image-rendering:pixelated}
+.guide-link .guide-logo{
+  width:52px;height:52px;flex-shrink:0;
+  opacity:.14;filter:drop-shadow(0 0 10px rgba(212,168,67,.25));
 }
 
 /* ── ITEM TOOLTIP ───────────────────────────────────────── */
@@ -966,16 +957,13 @@ select.on {
 
   <!-- GUIDE LINK -->
   <a class="guide-link" href="#">
-    <div class="num">§ II</div>
+    <img class="guide-ico" src="267.png" alt="">
     <div class="body">
       <div class="ttl">Гайд: Зов глубин</div>
       <div class="dsc">Маршрут по подводной локации, тактики против боссов, оптимизация фарма жемчужин.</div>
       <div class="tag">В разработке</div>
     </div>
-    <div class="guide-preview">
-      <img class="gp-img" src="267.png" alt="">
-      <img class="gp-logo" src="../kor_logo.svg" alt="">
-    </div>
+    <img class="guide-logo" src="../kor_logo.svg" alt="">
     <span class="arr">→</span>
   </a>
 
@@ -1037,7 +1025,7 @@ function ttShowGlubin(cfgId, lv, e) {
   const name    = (loc && loc.name) || cfg.name;
   const kind    = loc && loc.kind;
   const rawDesc = loc && loc.description;
-  const desc    = rawDesc && rawDesc !== name ? rawDesc : null;
+  const desc    = rawDesc && rawDesc !== name && rawDesc !== kind ? rawDesc : null;
   const action  = resolveAction(loc && loc.action, dbItem && dbItem.stats);
 
   const color   = Q_COLOR[quality] || 'var(--txt)';
