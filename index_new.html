@@ -65,35 +65,6 @@
   .nav a .count{font-size:10px;color:var(--txt3);margin-left:6px;font-feature-settings:'tnum'}
   .nav a.on .count{color:var(--gold-d)}
 
-  /* ── dropdown nav ── */
-  .nav-dd{position:relative;display:flex;align-items:center}
-  .dd-trigger{
-    display:flex;align-items:center;gap:6px;
-    padding:6px 11px;border-radius:6px;font-size:13px;color:var(--txt2);font-weight:500;
-    cursor:pointer;transition:background .12s,color .12s,border-color .12s;user-select:none;
-    border:1px solid var(--line2);
-  }
-  .dd-trigger:hover{color:var(--txt);background:var(--bg2)}
-  .nav-dd.open .dd-trigger{color:var(--gold-l);background:var(--bg3);border-color:rgba(var(--gold-tint),.3)}
-  .dd-arrow{width:16px;height:16px;opacity:1;transition:transform .18s;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
-  .nav-dd.open .dd-arrow{transform:rotate(180deg)}
-  .dd-menu{
-    display:none;position:absolute;top:calc(100% + 8px);left:0;
-    background:var(--bg2);border:1px solid var(--line2);border-radius:10px;
-    padding:6px;min-width:260px;z-index:200;
-    box-shadow:0 16px 40px rgba(0,0,0,.6);
-  }
-  .nav-dd.open .dd-menu{display:block}
-  .dd-item{
-    display:block;padding:8px 12px;border-radius:6px;
-    font-size:13px;color:var(--txt2);font-weight:500;
-    transition:background .1s,color .1s;white-space:nowrap;
-  }
-  .dd-item:hover{background:var(--bg3);color:var(--txt)}
-  .dd-item.ready{color:var(--gold-l)}
-  .dd-item.ready:hover{background:rgba(212,168,67,.08)}
-  .dd-item.soon{color:var(--txt3);cursor:default;pointer-events:none}
-  .dd-sep{height:1px;background:var(--line);margin:4px 6px}
   .top-r{margin-left:auto;display:flex;align-items:center;gap:12px}
   .search{
     background:var(--bg2);border:1px solid var(--line);border-radius:6px;padding:7px 12px 7px 32px;
