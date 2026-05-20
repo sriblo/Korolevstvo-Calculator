@@ -1,0 +1,1599 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Месяц цветущего хмеля — Калькуляторы Королевства</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Inter:wght@400;500;600;700&display=swap');
+
+:root{
+  /* ── Палитра — из index_new.html ─────────────────────────── */
+  --gold:      #d4a843;
+  --gold-l:    #f5d878;
+  --gold-d:    #a07d2b;
+  --gold-tint: 212,168,67;
+
+  --bg:    #0b0907;
+  --bg2:   #120e09;
+  --bg3:   #1a160f;
+  --inp:   #0a0805;
+
+  --line:  rgba(var(--gold-tint),.09);
+  --line2: rgba(var(--gold-tint),.18);
+
+  --txt:   #ece4cf;
+  --txt2:  #a99775;
+  --txt3:  #6c5d44;
+
+  --green: #8ab860;
+  --green-d: #5a7a3a;
+  --blue:  #80aad8;
+  --blue-d:#4870a8;
+  --red:   #c86040;
+
+  /* Совместимость со старыми именами цветов из исходника */
+  --amber:  var(--gold-d);
+  --goldl:  var(--gold-l);
+  --sage:   var(--green-d);
+  --sagel:  var(--green);
+  --ember:  #8b3a2a;
+  --emberl: var(--red);
+  --bluel:  var(--blue);
+  --text:   var(--txt);
+  --text2:  var(--txt2);
+  --text3:  var(--txt3);
+
+  --glass:  rgba(18,14,9,.7);
+  --glass2: rgba(11,9,7,.85);
+  --gb:     var(--line2);
+  --sep:    var(--line);
+
+  --serif: 'Fraunces', Georgia, serif;
+  --sans:  'Inter', system-ui, sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { min-height: 100%; }
+
+body {
+  min-height: 100vh; color: var(--txt);
+  font-family: var(--sans);
+  font-size: 14px; line-height: 1.5;
+  background:
+    radial-gradient(ellipse 80% 50% at 20% -10%, rgba(var(--gold-tint),.14), transparent 60%),
+    radial-gradient(ellipse 50% 40% at 100% 5%, rgba(80,30,15,.18), transparent 60%),
+    var(--bg);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+a { color: inherit; text-decoration: none; }
+
+/* ── HEADER ─────────────────────────────────────────────── */
+header {
+  position: sticky; top: 0; z-index: 50;
+  padding: 0 32px;
+  background: rgba(11,9,7,.78);
+  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--line);
+}
+.h-inner {
+  max-width: 1180px; margin: 0 auto; padding: 14px 0;
+  display: flex; align-items: center; gap: 14px;
+}
+.h-back {
+  font-size: 12px; color: var(--txt2); text-decoration: none;
+  letter-spacing: .02em; display: flex; align-items: center; gap: 6px;
+  padding: 5px 10px; border-radius: 5px;
+  transition: color .15s, background .15s;
+  white-space: nowrap;
+}
+.h-back:hover { color: var(--gold-l); background: var(--bg2); }
+.h-back::before { content: '←'; font-size: 14px; }
+.h-sep { color: var(--txt3); }
+.h-ico { font-size: 22px; filter: drop-shadow(0 0 10px rgba(var(--gold-tint),.35)); flex-shrink: 0; }
+.h-title {
+  font-family: var(--serif);
+  font-size: 19px; font-weight: 500; letter-spacing: -.005em;
+  color: var(--txt); line-height: 1.1;
+}
+.h-title span {
+  font-family: var(--sans) !important;
+  font-size: 10px !important; font-weight: 700 !important;
+  letter-spacing: .14em !important; text-transform: uppercase;
+  color: var(--gold) !important;
+  background: rgba(var(--gold-tint),.08) !important;
+  border: 1px solid var(--line2) !important;
+  padding: 2px 7px !important; border-radius: 3px !important;
+  margin-left: 8px !important; vertical-align: 2px !important;
+}
+.h-sub {
+  font-family: var(--serif); font-style: italic;
+  font-size: 12.5px; color: var(--txt3); margin-top: 2px;
+}
+.h-right-orn {
+  margin-left: auto; display: flex; align-items: center; gap: 8px; flex-shrink: 0;
+  font-size: 11px; color: var(--txt3); letter-spacing: .04em;
+}
+.h-orn-line { width: 50px; height: 1px; background: linear-gradient(90deg, transparent, var(--line2)); }
+.h-orn-diamond { width: 5px; height: 5px; background: var(--gold-d); transform: rotate(45deg); }
+
+/* ── PAGE LAYOUT ─────────────────────────────────────────── */
+.page {
+  position: relative; z-index: 5;
+  max-width: 1180px; margin: 0 auto;
+  padding: 20px 32px 60px;
+  display: grid; grid-template-columns: 360px 1fr; gap: 16px; align-items: start;
+}
+
+/* ── CARD ───────────────────────────────────────────────── */
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  overflow: visible; position: relative;
+}
+.card::before, .card::after { content: none !important; }
+
+.card-title{
+  padding:10px 16px;
+  border-bottom:1px solid var(--line);
+  border-radius:10px 10px 0 0;
+  background:rgba(0,0,0,.18);
+  display:flex;align-items:center;gap:10px;
+  font-family:var(--sans);
+  font-size:10.5px;font-weight:700;color:var(--txt3);
+  letter-spacing:.18em;text-transform:uppercase;
+}
+.card-title .tip{margin-left:auto}
+.card-title-ornament {
+  width: 12px; height: 12px; position: relative; flex-shrink: 0;
+}
+.card-title-ornament::before, .card-title-ornament::after {
+  content: ''; position: absolute; background: var(--gold-d);
+}
+.card-title-ornament::before { width: 12px; height: 1px; top: 5px; left: 0; }
+.card-title-ornament::after  { width: 1px; height: 12px; left: 5px; top: 0; }
+
+/* ── TOOLTIP ────────────────────────────────────────────── */
+.tip {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 15px; height: 15px; border-radius: 50%;
+  background: rgba(var(--gold-tint),.1);
+  border: 1px solid var(--line2);
+  font-family: var(--sans);
+  font-size: 9px; font-weight: 700; color: var(--gold);
+  cursor: help; position: relative; flex-shrink: 0; line-height: 1;
+  transition: background .12s, border-color .12s, color .12s;
+}
+.tip:hover { background: rgba(var(--gold-tint),.2); border-color: var(--gold); color: var(--gold-l); z-index: 1000; }
+.tip::after {
+  content: attr(data-tip); position: absolute; bottom: calc(100% + 8px); left: 50%;
+  transform: translateX(-50%);
+  background: var(--bg2);
+  border: 1px solid var(--line2); border-radius: 6px;
+  padding: 9px 12px; font-size: 12px; line-height: 1.55; color: var(--txt);
+  white-space: pre-wrap; min-width: 210px; max-width: 270px;
+  pointer-events: none; opacity: 0; transition: opacity .15s; z-index: 200;
+  box-shadow: 0 10px 30px rgba(0,0,0,.6);
+  font-family: var(--serif);
+}
+.tip:hover::after { opacity: 1; }
+
+/* ── INPUT ROWS ─────────────────────────────────────────── */
+.irow{
+  display:grid;grid-template-columns:32px 1fr 16px 88px 60px;
+  align-items:center;gap:10px;
+  padding:11px 16px;border-bottom:1px solid var(--line);
+  transition:background .12s;
+}
+.irow:last-child { border-bottom: none; }
+.irow:hover { background: rgba(var(--gold-tint),.025); }
+.irow.irow-rep { grid-template-columns: 32px 1fr auto; }
+
+.rep-ctrl { display: flex; align-items: center; gap: 8px; }
+
+.ico-pill {
+  width: 32px; height: 32px;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(0,0,0,.35);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+}
+.ico-pill img { width: 18px; height: 18px; image-rendering: pixelated; }
+.ico-pill.em { font-size: 15px; filter: grayscale(.15); }
+
+.ilbl {
+  font-family: var(--serif);
+  font-size: 14px; font-weight: 500; color: var(--txt); line-height: 1.25;
+}
+.ilbl small {
+  display: block; font-family: var(--serif);
+  font-size: 11.5px; color: var(--txt3); font-style: italic;
+  font-weight: 400; margin-top: 1px;
+}
+
+.nf { display: contents; }
+input[type=number] {
+  width: 84px;
+  background: var(--inp);
+  border: 1px solid var(--line2);
+  border-radius: 5px;
+  color: var(--gold-l);
+  padding: 6px 10px;
+  font-family: var(--sans);
+  font-size: 16px; font-weight: 600;
+  text-align: right; outline: none;
+  -moz-appearance: textfield;
+  font-feature-settings: 'tnum'; font-variant-numeric: tabular-nums;
+  transition: border-color .15s, box-shadow .15s;
+}
+input[type=number]:focus {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 2px rgba(var(--gold-tint),.12);
+}
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; }
+.unit{
+  font-family:var(--serif);font-style:italic;
+  font-size:12.5px;color:var(--txt3);white-space:nowrap;
+}
+
+.rank-sel {
+  width: 150px;
+  background: var(--inp); border: 1px solid var(--line2);
+  border-radius: 5px; color: var(--txt);
+  padding: 6px 10px; font-size: 12.5px; font-family: var(--sans);
+  outline: none; cursor: pointer;
+  transition: border-color .15s;
+}
+.rank-sel:focus { border-color: var(--gold); }
+
+.lcol, .rcol { display: flex; flex-direction: column; gap: 14px; }
+
+/* ── RANK LEGEND ────────────────────────────────────────── */
+.rank-legend {
+  padding: 10px 16px; display: flex; flex-direction: column; gap: 5px;
+  background: rgba(0,0,0,.15);
+}
+.rank-row {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 12.5px;
+}
+.rank-badge {
+  font-family: var(--sans); font-size: 9px; font-weight: 700;
+  padding: 2px 6px; border-radius: 3px; flex-shrink: 0;
+  letter-spacing: .04em; text-transform: uppercase;
+  font-feature-settings: 'tnum';
+}
+.rb0 { background: rgba(255,255,255,.06); color: var(--txt2); }
+.rb1 { background: rgba(138,184,96,.12); color: var(--green); border: 1px solid rgba(138,184,96,.25); }
+.rb2 { background: rgba(128,170,216,.12); color: var(--blue); border: 1px solid rgba(128,170,216,.25); }
+.rb3 { background: rgba(var(--gold-tint),.14); color: var(--gold-l); border: 1px solid var(--line2); }
+.rank-name { font-family: var(--serif); color: var(--txt); font-weight: 500; }
+.rank-pts{
+  color:var(--txt3);margin-left:auto;
+  font-family:var(--serif);font-size:13px;
+  font-feature-settings:'tnum';font-variant-numeric:tabular-nums;
+}
+
+/* ── TABS ───────────────────────────────────────────────── */
+.tab-bar {
+  display: flex; border-bottom: 1px solid var(--line);
+  background: rgba(0,0,0,.2);
+}
+.tab-btn {
+  flex: 1; text-align: center;
+  padding: 10px 16px;
+  font-family: var(--sans); font-size: 11px; font-weight: 700;
+  letter-spacing: .18em; text-transform: uppercase; color: var(--txt3);
+  background: none; border: none; cursor: pointer;
+  border-bottom: 2px solid transparent; margin-bottom: -1px;
+  transition: color .15s, border-color .15s;
+}
+.tab-btn:hover { color: var(--txt2); }
+.tab-btn.active { color: var(--gold-l); border-bottom-color: var(--gold); }
+.tab-pane { display: none; }
+.tab-pane.active { display: block; }
+.ref-section-title {
+  padding: 10px 16px 8px;
+  font-family: var(--sans); font-size: 10px; font-weight: 700;
+  letter-spacing: .16em; text-transform: uppercase; color: var(--txt3);
+  border-bottom: 1px solid var(--line);
+}
+
+/* ── CODEX CHAPTER ──────────────────────────────────────── */
+.codex-chapter {
+  display: flex; align-items: center; gap: 12px;
+  padding: 11px 16px; border-bottom: 1px solid var(--line);
+  background: rgba(var(--gold-tint),.04);
+}
+.codex-chapter-icon {
+  width: 22px; height: 22px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  border: 1px solid var(--line2); border-radius: 50%;
+  background: rgba(var(--gold-tint),.08);
+  font-family: var(--serif); font-style: italic;
+  font-size: 11px; font-weight: 500; color: var(--gold);
+}
+.codex-chapter-title {
+  font-family: var(--serif); font-style: italic;
+  font-size: 14px; font-weight: 500; color: var(--gold);
+  letter-spacing: .005em;
+}
+.codex-chapter-rule {
+  flex: 1; height: 1px;
+  background: linear-gradient(90deg, var(--line2), transparent);
+}
+
+/* ── GUIDE SECTION ──────────────────────────────────────── */
+.guide-section { grid-column: 1 / -1; margin-top: 6px; display: flex; flex-direction: column; gap: 14px; }
+.guide-card {
+  background: var(--bg2);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  overflow: visible;
+}
+.guide-card-title {
+  padding: 10px 16px;
+  background: rgba(0,0,0,.18);
+  border-bottom: 1px solid var(--line);
+  font-family: var(--sans); font-size: 10.5px; font-weight: 700;
+  letter-spacing: .18em; text-transform: uppercase; color: var(--txt3);
+  display: flex; align-items: center; gap: 10px;
+}
+.guide-body {
+  padding: 14px 18px; display: flex; flex-direction: column; gap: 10px;
+}
+.guide-step {
+  display: flex; gap: 12px;
+  font-family: var(--serif); font-size: 14.5px; line-height: 1.55;
+  color: var(--txt2);
+}
+.guide-num {
+  flex-shrink: 0; width: 22px; height: 22px;
+  display: flex; align-items: center; justify-content: center;
+  border: 1px solid var(--line2); border-radius: 50%;
+  background: rgba(var(--gold-tint),.07);
+  font-family: var(--sans); font-size: 10px; font-weight: 700; color: var(--gold);
+  margin-top: 1px;
+}
+.guide-step-text { font-family: var(--serif); color: var(--txt2); }
+.guide-step-text b { color: var(--txt); font-weight: 600; }
+
+/* ── QUEST TABLE ────────────────────────────────────────── */
+.qtable { width: 100%; border-collapse: collapse; font-size: 14px; }
+.qtable th {
+  text-align: left; padding: 9px 14px;
+  font-family: var(--sans); font-size: 10px; font-weight: 700;
+  letter-spacing: .16em; text-transform: uppercase; color: var(--txt3);
+  border-bottom: 1px solid var(--line); background: rgba(0,0,0,.12);
+}
+.qtable td {
+  padding: 9px 14px; border-bottom: 1px solid var(--line);
+  color: var(--txt2); vertical-align: top;
+  font-family: var(--serif);
+}
+.qtable tr:last-child td { border-bottom: none; }
+.qtable tr:hover td { background: rgba(var(--gold-tint),.02); }
+.qtable .qname { color: var(--txt); font-weight: 600; }
+.qtable .qtag {
+  display: inline-block; font-family: var(--sans);
+  font-size: 9px; font-weight: 700; letter-spacing: .06em;
+  padding: 1px 6px; border-radius: 3px; margin-left: 6px; vertical-align: middle;
+}
+.qtag-once { background: rgba(var(--gold-tint),.12); color: var(--gold-l); border: 1px solid var(--line2); }
+.qtag-day  { background: rgba(138,184,96,.1); color: var(--green); border: 1px solid rgba(138,184,96,.25); }
+.qtable .qrew{
+  color:var(--green);font-weight:600;white-space:nowrap;
+  font-family:var(--serif);font-size:14px;
+  font-feature-settings:'tnum';font-variant-numeric:tabular-nums;
+}
+.qtable .qtotal{
+  color:var(--gold-l);font-weight:600;
+  font-family:var(--serif);font-size:14px;
+  font-feature-settings:'tnum';font-variant-numeric:tabular-nums;
+}
+.qtable .qtask{
+  font-family:var(--serif);font-size:13px;color:var(--txt3);
+}
+.qtable tr.qtotal-row td { background: rgba(var(--gold-tint),.04); }
+
+/* ── ITEMS TABLE ────────────────────────────────────────── */
+.i-head {
+  display: grid; grid-template-columns: 180px 1fr 28px 1fr 36px;
+  padding: 9px 16px; gap: 10px;
+  background: rgba(0,0,0,.2); border-bottom: 1px solid var(--line);
+}
+.i-head span {
+  font-family: var(--sans); font-size: 9.5px; font-weight: 700;
+  letter-spacing: .2em; text-transform: uppercase;
+}
+.th-p { color: var(--txt3); }
+.th-h { color: var(--blue); }
+.th-w { color: var(--gold); }
+
+.irow2{
+  display:grid;grid-template-columns:180px 1fr 28px 1fr 36px;
+  align-items:center;padding:14px 16px;gap:10px;
+  border-bottom:1px solid var(--line);
+  overflow:visible;position:relative;
+  transition:background .12s;
+}
+.irow2:last-child { border-bottom: none; }
+.irow2:hover { background: rgba(var(--gold-tint),.02); }
+
+.iname-c {
+  display: flex; align-items: center; gap: 10px;
+  min-width: 0; width: 100%; overflow: hidden;
+}
+.iname-c > div:last-child { min-width: 0; }
+.inn {
+  font-family: var(--serif);
+  font-size: 14.5px; font-weight: 500; color: var(--txt);
+  line-height: 1.2;
+}
+.inote {
+  font-family: var(--serif); font-style: italic;
+  font-size: 11.5px; color: var(--txt3); margin-top: 2px; line-height: 1.4;
+}
+
+/* ── GAME ICONS — 32×32 стандарт ────────────────────────── */
+.gico { position: relative; width: 32px; height: 32px; flex-shrink: 0; }
+.gico img.base { position: absolute; inset: 0; width: 32px; height: 32px; image-rendering: pixelated; }
+.gico img.fr   { position: absolute; inset: 0; width: 32px; height: 32px; }
+.gico[data-q="1"] { filter: drop-shadow(0 0 4px rgba(184,136,238,.45)); }
+.gico[data-q="2"] { filter: drop-shadow(0 0 5px rgba(238,80,80,.45)); }
+.gico[data-q="3"] { filter: drop-shadow(0 0 6px rgba(240,160,64,.55)); }
+.gico.bw img, .gempty.bw { filter: grayscale(1) opacity(.3); }
+.gempty {
+  width: 32px; height: 32px; flex-shrink: 0;
+  background: rgba(0,0,0,.4);
+  border: 1px solid var(--line); border-radius: 5px;
+}
+
+select {
+  width: 100%; background: var(--inp);
+  border: 1px solid var(--line);
+  border-radius: 5px; color: var(--txt);
+  padding: 6px 10px;
+  font-size: 12.5px; font-family: var(--sans);
+  outline: none; cursor: pointer;
+  transition: border-color .12s, color .12s, background .12s;
+}
+select:focus { border-color: var(--line2); }
+select.on {
+  border-color: var(--gold);
+  background: rgba(var(--gold-tint),.06);
+  color: var(--gold-l);
+}
+
+.arr { text-align: center; color: var(--txt3); font-size: 18px; font-family: var(--serif); }
+.wcell { min-width: 0; position: relative; }
+.wico { display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+
+.chint {
+  position: absolute; top: 100%; left: 0; margin-top: 6px;
+  font-family: var(--serif); font-style: italic;
+  font-size: 11.5px; color: var(--gold);
+  line-height: 1.3; pointer-events: none;
+  white-space: nowrap;
+}
+
+/* ── RESULT CARD ────────────────────────────────────────── */
+.res-card {
+  background: var(--bg2);
+  border: 1px solid var(--line2);
+  border-radius: 10px;
+  overflow: visible; position: relative;
+}
+.res-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold-d) 25%, var(--gold) 50%, var(--gold-l) 70%, var(--gold-d) 85%, transparent 100%);
+  pointer-events: none; z-index: 2;
+}
+.res-card::after { content: none !important; }
+
+.res-top {
+  display: grid; grid-template-columns: 220px 1fr;
+}
+.res-main {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 22px 14px; gap: 6px;
+  border-right: 1px solid var(--line);
+  background: radial-gradient(ellipse at 50% 100%, rgba(var(--gold-tint),.06), transparent 70%);
+}
+.rlbl {
+  font-family: var(--sans);
+  font-size: 10.5px; letter-spacing: .22em;
+  text-transform: uppercase; color: var(--txt2); font-weight: 700;
+  margin-bottom: 4px;
+}
+.ramt { display: flex; align-items: center; gap: 12px; }
+.ramt img { width: 32px; height: 32px; image-rendering: pixelated; }
+
+.rnum {
+  font-family: var(--serif);
+  font-weight: 300; font-size: 56px; line-height: .95;
+  letter-spacing: -.025em;
+  font-feature-settings: 'tnum'; font-variant-numeric: tabular-nums;
+}
+.rnum.free {
+  color: var(--green);
+}
+.rnum.paid {
+  background: linear-gradient(180deg, var(--gold-l) 10%, var(--gold) 55%, var(--gold-d) 95%);
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent; color: transparent;
+}
+.rtag {
+  font-family: var(--serif); font-style: italic;
+  font-size: 12.5px; color: var(--txt3);
+}
+
+/* ── STATS 2×2 ──────────────────────────────────────────── */
+.res-stats { display: grid; grid-template-columns: 1fr 1fr; }
+.st {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--line); border-right: 1px solid var(--line);
+}
+.st:nth-child(2n) { border-right: none; }
+.st:nth-child(3), .st:nth-child(4) { border-bottom: none; }
+.slbl {
+  font-family: var(--sans);
+  font-size: 10px; color: var(--txt3); margin-bottom: 4px;
+  letter-spacing: .12em; text-transform: uppercase; font-weight: 700;
+}
+.sval{
+  font-family:var(--serif);
+  font-size:18px;font-weight:500;color:var(--txt);
+  letter-spacing:-.005em;
+  display:flex;align-items:center;gap:5px;
+  font-feature-settings:'tnum';font-variant-numeric:tabular-nums;
+}
+.sval img { width: 14px; height: 14px; image-rendering: pixelated; }
+.sval.g { color: var(--green); }
+.sval.r { color: var(--red); }
+.sval.o { color: var(--gold-l); }
+
+/* ── VERDICT GRID ───────────────────────────────────────── */
+.verdict-block {
+  padding: 14px 18px; border-top: 1px solid var(--line);
+  display: flex; flex-direction: column; gap: 7px;
+}
+.vrow {
+  display: flex; justify-content: space-between; align-items: baseline; gap: 14px;
+}
+.vkey {
+  font-family: var(--serif);
+  font-size: 14.5px; color: var(--txt2); flex-shrink: 0;
+}
+.vval{
+  font-family:var(--serif);
+  font-size:15px;font-weight:500;color:var(--txt);text-align:right;
+  font-feature-settings:'tnum';font-variant-numeric:tabular-nums;
+}
+.vval.g { color: var(--green); }
+.vval.r { color: var(--red); }
+.vval.o { color: var(--gold-l); }
+.vval.b { color: var(--blue); }
+.vsep {
+  height: 1px; background: var(--line); margin: 4px 0;
+  position: relative;
+}
+.vsep::before {
+  content: '◆'; position: absolute; left: 50%; top: 50%;
+  transform: translate(-50%,-50%);
+  font-size: 7px; color: var(--gold-d);
+  background: var(--bg2); padding: 0 4px;
+}
+
+/* ── STRATEGY BLOCK ─────────────────────────────────────── */
+.strat-block {
+  border-top: 1px solid var(--line2);
+  background: rgba(0,0,0,.18);
+  padding: 14px 18px;
+}
+.strat-title {
+  font-family: var(--serif); font-style: italic;
+  font-size: 14px; font-weight: 500; color: var(--gold);
+  margin-bottom: 10px;
+  display: flex; align-items: center; gap: 10px;
+  letter-spacing: 0; text-transform: none;
+}
+.strat-title::before {
+  content: ''; display: block; width: 3px; height: 13px;
+  background: var(--gold); border-radius: 2px;
+}
+.sline {
+  font-family: var(--serif);
+  font-size: 14px; color: var(--txt); line-height: 1.55;
+  padding: 8px 0; border-bottom: 1px solid var(--line);
+  display: flex; gap: 12px; align-items: flex-start;
+}
+.sline:last-child { border-bottom: none; padding-bottom: 0; }
+.sline-ico {
+  width: 32px; height: 32px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  margin-top: 1px;
+}
+.sline-ico img { width: 32px; height: 32px; image-rendering: pixelated; }
+.sline-ico.emoji { font-size: 18px; width: 32px; height: 32px; filter: grayscale(.1); }
+.sline-body { flex: 1; padding-top: 2px; }
+.sn { color: var(--gold-l); font-weight: 600; }
+.sg { color: var(--green); font-weight: 600; }
+.sr { color: var(--red); font-weight: 600; }
+
+.idle-msg {
+  padding: 20px 18px;
+  font-family: var(--serif); font-style: italic;
+  font-size: 14px; color: var(--txt3);
+  border-top: 1px solid var(--line);
+}
+
+/* ── ITEMS GUIDE TAB ────────────────────────────────────── */
+.iup-row {
+  padding: 14px 18px; border-bottom: 1px solid var(--line);
+}
+.iup-row:last-child { border-bottom: none; }
+.iup-row-header {
+  display: flex; align-items: baseline; gap: 8px; margin-bottom: 12px;
+}
+.iup-name {
+  font-family: var(--serif);
+  font-size: 14px; font-weight: 600; color: var(--txt);
+  letter-spacing: .005em;
+}
+.iup-note {
+  font-family: var(--serif); font-style: italic;
+  font-size: 11.5px; color: var(--txt3);
+}
+.iup-chain {
+  display: flex; align-items: flex-start; flex-wrap: nowrap; width: 100%;
+}
+.iup-step { display: flex; flex-direction: column; align-items: center; gap: 5px; flex: 2; min-width: 0; }
+.iup-step-ico { height: 32px; display: flex; align-items: center; justify-content: center; }
+.iup-step-name{
+  font-family:var(--serif);font-size:12.5px;color:var(--txt2);
+  text-align:center;line-height:1.3;
+}
+.iup-step-cost{
+  font-family:var(--serif);font-size:12px;color:var(--green);font-weight:500;
+  text-align:center;line-height:1.3;
+  font-feature-settings:'tnum';font-variant-numeric:tabular-nums;
+}
+.iup-step-rank { margin-top: 2px; }
+.iup-ingr-step { display: flex; flex-direction: column; align-items: center; gap: 5px; flex: 1; min-width: 0; }
+.iup-ingr-step-ico { height: 32px; display: flex; align-items: center; justify-content: center; }
+.iup-ingr-name{
+  font-family:var(--serif);font-size:11.5px;color:var(--txt3);font-style:italic;
+  text-align:center;line-height:1.3;
+}
+.iup-arrow-sep {
+  flex-shrink: 0; height: 32px; display: flex; align-items: center;
+  padding: 0 6px; font-size: 16px; color: var(--txt3); font-family: var(--serif);
+}
+
+/* ── CHECKER ────────────────────────────────────────────── */
+.chk-wrap { display: flex; align-items: center; gap: 6px; cursor: pointer; flex-shrink: 0; }
+.chk-wrap input[type=checkbox] { width: 14px; height: 14px; accent-color: var(--green); cursor: pointer; }
+.chk-lbl { font-size: 11px; color: var(--txt2); font-family: var(--sans); }
+
+/* ── PAGE FOOTER ────────────────────────────────────────── */
+.page-footer {
+  position: relative; z-index: 5;
+  max-width: 1180px; margin: 0 auto;
+  padding: 0 32px 50px;
+  text-align: center;
+  border-top: 1px solid var(--line);
+}
+.page-footer { padding-top: 24px; }
+.footer-text {
+  font-family: var(--serif); font-style: italic;
+  font-size: 12.5px; color: var(--txt3);
+}
+.footer-link {
+  color: var(--gold-d);
+  transition: color .15s;
+}
+.footer-link:hover { color: var(--gold-l); }
+
+/* ── RESPONSIVE ─────────────────────────────────────────── */
+@media (max-width: 980px) {
+  .page { grid-template-columns: 1fr; padding-left: 16px; padding-right: 16px; }
+  header { padding-left: 16px; padding-right: 16px; }
+  .h-inner { gap: 6px 10px; flex-wrap: wrap; }
+  .h-sep { display: none; }
+  .h-right-orn { display: none; }
+  .h-title { font-size: 16px; }
+  .h-sub { font-size: 11px; }
+  .i-head, .irow2 { grid-template-columns: 110px 1fr 22px 1fr 30px; gap: 6px; }
+  .chint { white-space: normal; max-width: 100%; }
+  .res-top { grid-template-columns: 1fr; }
+  .res-main { border-right: none; border-bottom: 1px solid var(--line); }
+  .irow { grid-template-columns: 28px 1fr 14px 72px auto; gap: 8px; padding: 8px 12px; }
+  .ico-pill { width: 28px; height: 28px; }
+  input[type=number] { width: 80px; font-size: 15px; padding: 5px 8px; }
+}
+
+
+/* ════════════════════════════ TOP BAR — 1-в-1 с index_new.html ════════════════════════════ */
+.top{
+  padding:14px 32px;border-bottom:1px solid var(--line);
+  background:rgba(11,9,7,.78);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  position:sticky;top:0;z-index:50;
+  display:flex;align-items:center;gap:16px;
+}
+.top .logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit}
+.top .logo img{width:26px;height:26px;filter:drop-shadow(0 0 8px rgba(var(--gold-tint),.35))}
+.top .logo-n{font-family:var(--serif);font-size:15px;font-weight:600;letter-spacing:-.01em;line-height:1;color:var(--txt)}
+.top .nav{margin-left:20px;display:flex;gap:2px;align-items:center}
+.top .nav a{padding:6px 11px;border-radius:5px;font-size:12.5px;color:var(--txt2);font-weight:500;transition:background .12s,color .12s;cursor:pointer;display:inline-flex;align-items:center;gap:6px;text-decoration:none}
+.top .nav a:hover{color:var(--txt);background:var(--bg2)}
+.top .nav a.on{color:var(--gold-l);background:var(--bg3)}
+.top .nav a .count{font-size:10px;color:var(--txt3);margin-left:2px}
+.top .nav-dd{position:relative;display:flex;align-items:center}
+.top .dd-trigger{display:flex;align-items:center;gap:6px;padding:6px 11px;border-radius:5px;font-size:12.5px;color:var(--txt2);font-weight:500;cursor:pointer;user-select:none;transition:background .12s,color .12s}
+.top .dd-trigger:hover{color:var(--txt);background:var(--bg2)}
+.top .nav-dd.open .dd-trigger,.top .dd-trigger.on{color:var(--gold-l);background:var(--bg3)}
+.top .dd-arrow{width:14px;height:14px;display:inline-flex;align-items:center;justify-content:center;transition:transform .18s}
+.top .nav-dd.open .dd-arrow{transform:rotate(180deg)}
+.top .dd-menu{display:none;position:absolute;top:calc(100% + 8px);left:0;min-width:260px;background:var(--bg2);border:1px solid var(--line2);border-radius:8px;padding:6px;z-index:200;box-shadow:0 16px 40px rgba(0,0,0,.55)}
+.top .nav-dd.open .dd-menu{display:block}
+.top .dd-item{display:block;padding:8px 12px;border-radius:5px;font-size:12.5px;color:var(--txt2);font-weight:500;transition:background .1s,color .1s;white-space:nowrap;text-decoration:none}
+.top .dd-item:hover{background:var(--bg3);color:var(--txt)}
+.top .dd-item.ready{color:var(--gold-l)}
+.top .dd-item.ready:hover{background:rgba(var(--gold-tint),.08)}
+.top .dd-item.ready.on{color:var(--gold-l);background:rgba(var(--gold-tint),.1)}
+.top .dd-item.soon{color:var(--txt3);cursor:default;pointer-events:none}
+.top .dd-sep{height:1px;background:var(--line);margin:4px 6px}
+.top .site-search{margin-left:auto;position:relative}
+.top .site-search input{
+  background:var(--bg2);border:1px solid var(--line);border-radius:5px;
+  padding:6px 12px 6px 30px;font-size:12px;color:var(--txt2);width:200px;
+  font-family:var(--sans);outline:none;transition:border-color .15s;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12' fill='none' stroke='%237a6a50' stroke-width='1.5'%3E%3Ccircle cx='5' cy='5' r='3.5'/%3E%3Cpath d='M8 8l3 3'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:10px center;
+}
+.top .site-search input:focus{border-color:var(--line2);color:var(--txt)}
+.top .site-search input::placeholder{color:var(--txt3)}
+
+/* ════════════════════════════ HERO ════════════════════════════ */
+.hero{
+  position:relative;overflow:hidden;border-bottom:1px solid var(--line);
+  background:
+    linear-gradient(180deg, rgba(11,9,7,0) 0%, rgba(11,9,7,.45) 70%, var(--bg) 100%),
+    linear-gradient(90deg, rgba(11,9,7,.85) 0%, rgba(11,9,7,.55) 45%, rgba(11,9,7,.15) 100%),
+    url('../events/hop.jpg') center 30%/cover no-repeat,
+    var(--bg);
+}
+.hero::before{
+  content:'';position:absolute;inset:0;pointer-events:none;opacity:.45;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='.05'/%3E%3C/svg%3E");
+}
+.hero-i{
+  position:relative;z-index:2;
+  max-width:1180px;margin:0 auto;padding:54px 32px 44px;
+}
+.hero-crumb{
+  font-family:var(--sans);font-size:10.5px;font-weight:700;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--gold);
+  display:flex;align-items:center;gap:10px;margin-bottom:18px;
+}
+.hero-crumb a{color:var(--txt2);text-decoration:none;transition:color .12s}
+.hero-crumb a:hover{color:var(--gold-l)}
+.hero-crumb .dot{color:var(--txt3)}
+.hero-crumb::before{
+  content:'';width:24px;height:1px;background:var(--gold);
+}
+.hero-name{
+  font-family:var(--serif);font-size:56px;font-weight:400;letter-spacing:-.025em;line-height:1;color:var(--txt);
+  text-shadow:0 4px 24px rgba(0,0,0,.6);
+  display:inline-flex;align-items:baseline;gap:14px;flex-wrap:wrap;max-width:780px;
+}
+.beta{
+  font-family:var(--sans);font-size:10.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--gold-l);background:rgba(0,0,0,.55);
+  border:1px solid var(--line2);padding:4px 10px;border-radius:4px;
+  vertical-align:6px;backdrop-filter:blur(8px);
+}
+.hero-meta{
+  margin-top:18px;
+  font-family:var(--serif);font-style:italic;font-size:16px;color:var(--txt);
+  opacity:.85;text-shadow:0 2px 10px rgba(0,0,0,.7);
+}
+
+/* ── GUIDE LINK ────────────────────────────────────────── */
+.guide-link{
+  grid-column:1/-1;
+  margin-top:6px;
+  display:flex;align-items:center;gap:18px;
+  padding:18px 22px;
+  border:1px solid var(--line);background:var(--bg2);border-radius:10px;
+  text-decoration:none;color:inherit;
+  transition:border-color .15s,background .15s;
+}
+.guide-link:hover{border-color:var(--line2);background:var(--bg3)}
+.guide-link .num{
+  font-family:var(--serif);font-style:italic;font-size:13px;color:var(--gold-d);
+  padding-right:18px;border-right:1px solid var(--line);
+  align-self:stretch;display:flex;align-items:center;
+  letter-spacing:.04em;
+}
+.guide-link .body{flex:1;min-width:0}
+.guide-link .ttl{
+  font-family:var(--serif);font-size:17px;font-weight:500;letter-spacing:-.005em;
+  color:var(--txt);margin-bottom:4px;
+}
+.guide-link .dsc{
+  font-family:var(--serif);font-size:13.5px;color:var(--txt2);line-height:1.5;
+  margin-bottom:10px;
+}
+.guide-link .tag{
+  font-family:var(--sans);font-size:10px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--gold-d);font-weight:700;
+}
+.guide-link .arr{
+  color:var(--gold-d);font-size:18px;flex-shrink:0;
+  transition:transform .15s,color .15s;
+}
+.guide-link:hover .arr{transform:translateX(3px);color:var(--gold-l)}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <a class="logo" href="../index_new.html">
+    <img src="../kor_logo.svg" alt="">
+    <div class="logo-n">Королевство: База знаний</div>
+  </a>
+  <nav class="nav">
+    <a href="../index_new.html">Главная</a>
+    <div class="nav-dd" id="nav-dd">
+      <div class="dd-trigger on" id="nav-trigger">Калькуляторы <span class="dd-arrow"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 4L6 8L10 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
+      <div class="dd-menu" id="nav-menu">
+        <span class="dd-item soon">Новый год. Колдер</span>
+        <span class="dd-item soon">Экспедиция. Сбор припасов</span>
+        <span class="dd-item soon">Месяц пробуждения цветов</span>
+        <a class="dd-item ready on" href="hmeli_calc.html">Месяц цветущего хмеля</a>
+        <a class="dd-item ready" href="../zov_glubin/glubin_calc.html">Зов Глубин</a>
+        <span class="dd-item soon">День Пирата</span>
+        <span class="dd-item soon">Экспедиция. Ледяные Острова</span>
+        <span class="dd-item soon">Гоблинский Рай</span>
+        <span class="dd-item soon">Небесные Драконы</span>
+        <span class="dd-item soon">Тыквенный Фестиваль</span>
+        <div class="dd-sep"></div>
+        <a class="dd-item ready" href="../location_calc/loc_calc.html">Загруженность копий</a>
+        <a class="dd-item ready" href="../reputation_calc/rep_calc.html">Прокачка репутаций</a>
+        <a class="dd-item ready" href="../stats_calc.html">Характеристики</a>
+      </div>
+    </div>
+    <a href="../items_base.html">База предметов</a>
+    <a>Гайды<span class="count">скоро</span></a>
+    <a>Сообщество</a>
+  </nav>
+  <div class="site-search">
+    <input placeholder="Поиск по базе…" autocomplete="off" spellcheck="false">
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero-i">
+    <div class="hero-crumb">
+      <a href="../index_new.html">Калькуляторы</a>
+      <span class="dot">·</span>
+      <span style="color:var(--txt)">Апрель</span>
+    </div>
+    <h1 class="hero-name">Месяц цветущего хмеля <span class="beta">бета</span></h1>
+    <div class="hero-meta">12–26 апреля 2026 · Калькулятор тайленов и рубинов</div>
+  </div>
+</section>
+
+<script>
+(function(){
+  var dd = document.getElementById('nav-dd');
+  var tr = document.getElementById('nav-trigger');
+  var mn = document.getElementById('nav-menu');
+  tr.addEventListener('click', function(e){ e.stopPropagation(); dd.classList.toggle('open'); });
+  mn.addEventListener('click', function(e){ e.stopPropagation(); });
+  document.addEventListener('click', function(){ dd.classList.remove('open'); });
+})();
+</script>
+
+<div class="page">
+
+  <!-- LEFT COLUMN -->
+  <div class="lcol">
+
+    <!-- Мои данные -->
+    <div class="card">
+      <div class="card-title">
+        Исходные данные
+      </div>
+
+      <div class="irow">
+        <div class="ico-pill em">📅</div>
+        <div class="ilbl">
+          Дней до конца ивента
+        </div>
+        <span class="tip" data-tip="Посчитай сколько дней осталось до конца ивента.&#10;&#10;Если сегодня ещё не выполнял квесты — считай&#10;включительно с сегодняшним днём.&#10;&#10;Если уже выполнил — сначала выполни все&#10;квесты за сегодня, потом вводи данные&#10;и считай без сегодняшнего дня.">?</span>
+        <div class="nf">
+          <input type="number" id="days" value="15" min="0" max="15" oninput="calc()">
+          <span class="unit">дней</span>
+        </div>
+      </div>
+
+      <div class="irow">
+        <div class="ico-pill"><img src="../currency/leprecon_taylen.png" style="width:13px;height:13px;image-rendering:pixelated"></div>
+        <div class="ilbl">Тайленов сейчас</div>
+        <span class="tip" data-tip="Сколько тайленов лепреконов сейчас&#10;в твоём кошельке в игре.&#10;&#10;Именно столько — не считая то что&#10;ещё заработаешь за оставшиеся дни.">?</span>
+        <div class="nf">
+          <input type="number" id="have-t" value="0" min="0" oninput="calc()">
+          <span class="unit">тайленов</span>
+        </div>
+      </div>
+
+      <div class="irow">
+        <div class="ico-pill em">⏳</div>
+        <div class="ilbl">Упущенные тайлены</div>
+        <span class="tip" data-tip="Если знаешь что пропустишь часть дней&#10;или квестов — впиши количество тайленов&#10;которые не заработаешь.&#10;Например: 2 пропущенных дня = 1 520 тайл.">?</span>
+        <div class="nf">
+          <input type="number" id="miss" value="0" min="0" oninput="calc()">
+          <span class="unit">тайленов</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Репутация -->
+    <div class="card">
+      <div class="card-title">
+        Прогресс репутации
+        <span class="tip" data-tip="Укажи свой текущий ранг репутации&#10;и сколько очков набрал сверх него.&#10;Это учитывается при расчёте донатa на репутацию.">?</span>
+      </div>
+
+      <div class="irow irow-rep">
+        <div class="ico-pill em">🏆</div>
+        <div class="ilbl">Текущий ранг</div>
+        <select class="rank-sel" id="have-rank" onchange="calc()">
+          <option value="0">Празднующий</option>
+          <option value="1">Помощник Патрика</option>
+          <option value="2">Имбирный Забияка</option>
+          <option value="3">Гроза Лепреконов</option>
+        </select>
+      </div>
+
+      <div class="irow irow-rep">
+        <div class="ico-pill em">⭐</div>
+        <div class="ilbl">Очков репутации</div>
+        <div class="rep-ctrl">
+          <span class="tip" data-tip="Сколько очков ты набрал&#10;в своём текущем ранге.&#10;Например: ранг 1, и ещё 5 000 очков → итого 25 000.">?</span>
+          <input type="number" id="have-rep-extra" value="0" min="0" oninput="calc()">
+        </div>
+      </div>
+
+      <!-- Rank legend -->
+      <div class="rank-legend">
+        <div class="rank-row">
+          <span class="rank-badge rb0">Ранг 0</span>
+          <span class="rank-name">Празднующий</span>
+          <span class="rank-pts">20 000</span>
+        </div>
+        <div class="rank-row">
+          <span class="rank-badge rb1">Ранг 1</span>
+          <span class="rank-name">Помощник Патрика</span>
+          <span class="rank-pts">30 000</span>
+        </div>
+        <div class="rank-row">
+          <span class="rank-badge rb2">Ранг 2</span>
+          <span class="rank-name">Имбирный забияка</span>
+          <span class="rank-pts">50 000</span>
+        </div>
+        <div class="rank-row">
+          <span class="rank-badge rb3">Ранг 3</span>
+          <span class="rank-name">Гроза Лепреконов</span>
+          <span class="rank-pts">MAX</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- RIGHT COLUMN -->
+  <div class="rcol">
+
+    <!-- Items table -->
+    <div class="card">
+      <div class="i-head">
+        <span class="th-p">Предмет</span>
+        <span class="th-h">Есть сейчас</span>
+        <span></span>
+        <span class="th-w">Хочу получить</span>
+        <span></span>
+      </div>
+      <div id="items-list"></div>
+    </div>
+
+    <!-- Result card -->
+    <div class="res-card">
+      <div class="res-top">
+        <div class="res-main">
+          <div class="rlbl">Нужно рубинов</div>
+          <div class="ramt">
+            <img id="res-ruby-ico" src="../currency/ruby_dealer_trnsp.png">
+            <div class="rnum free" id="res-num">0</div>
+          </div>
+        </div>
+        <div class="res-stats">
+          <div class="st">
+            <div class="slbl">Заработаю тайленов</div>
+            <div class="sval g"><img src="../currency/leprecon_taylen.png"><span id="sv-earn">—</span></div>
+          </div>
+          <div class="st">
+            <div class="slbl">Итого тайленов</div>
+            <div class="sval o"><img src="../currency/leprecon_taylen.png"><span id="sv-total">—</span></div>
+          </div>
+          <div class="st">
+            <div class="slbl">Уйдёт на предметы</div>
+            <div class="sval"><img src="../currency/leprecon_taylen.png"><span id="sv-items">—</span></div>
+          </div>
+          <div class="st">
+            <div class="slbl">Нужно купить репутации</div>
+            <div class="sval r"><span id="sv-repgap">—</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div id="verdict-block" class="idle-msg">Выбери предметы которые хочешь получить →</div>
+      <div id="strat-block" style="display:none"></div>
+    </div>
+
+  </div>
+
+  <!-- GUIDE TABS -->
+  <div class="guide-section">
+    <div class="guide-card">
+
+      <div class="tab-bar">
+        <button class="tab-btn active" id="tab-instr-btn" onclick="switchTab('instr',this)">Инструкция</button>
+        <button class="tab-btn" id="tab-quests-btn" onclick="switchTab('quests',this)">Квесты</button>
+        <button class="tab-btn" id="tab-items-btn" onclick="switchTab('items',this)">Предметы</button>
+      </div>
+
+      <!-- Инструкция -->
+      <div id="tab-instr" class="tab-pane active">
+        <div style="display:flex;align-items:flex-start;gap:10px;margin:14px 18px 18px;padding:12px 14px;background:rgba(184,134,11,.08);border:1px solid rgba(184,134,11,.25);border-radius:8px;">
+          <span style="font-size:16px;flex-shrink:0;line-height:1.4">⚠️</span>
+          <div style="font-family:'Inter',sans-serif;font-size:12px;line-height:1.6;color:var(--text2)">
+            <b style="color:var(--goldl)">Калькулятор находится на бета-тестировании.</b> Возможны погрешности в расчётах. Рекомендуется проводить собственную проверку перед принятием решений.
+          </div>
+        </div>
+        <div class="codex-chapter">
+          <div class="codex-chapter-icon">I</div>
+          <div class="codex-chapter-title">Как пользоваться калькулятором</div>
+          <div class="codex-chapter-rule"></div>
+        </div>
+        <div class="guide-body">
+          <div class="guide-step">
+            <div class="guide-num">1</div>
+            <div class="guide-step-text">Укажи <b>сколько дней осталось</b> до конца ивента.</div>
+          </div>
+          <div class="guide-step">
+            <div class="guide-num">2</div>
+            <div class="guide-step-text">Укажи <b>сколько тайленов у тебя есть сейчас</b>.</div>
+          </div>
+          <div class="guide-step">
+            <div class="guide-num">3</div>
+            <div class="guide-step-text">Укажи свой <b>текущий ранг репутации</b> и сколько очков набрал в нём. Это позволяет точно рассчитать донат на репутацию.</div>
+          </div>
+          <div class="guide-step">
+            <div class="guide-num">4</div>
+            <div class="guide-step-text">В таблице справа выбери <b>что хочешь получить</b> — укажи, какие предметы и какого качества у тебя есть сейчас и до какого уровня хочешь их прокачать.</div>
+          </div>
+          <div class="guide-step">
+            <div class="guide-num">5</div>
+            <div class="guide-step-text">Калькулятор покажет <b>минимальный расход рубинов</b> с оптимальным использованием тайленов — сначала тайлены, рубины только на остаток.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Квесты -->
+      <div id="tab-quests" class="tab-pane">
+        <div class="codex-chapter">
+          <div class="codex-chapter-icon">II</div>
+          <div class="codex-chapter-title">Квесты и награды за них</div>
+          <div class="codex-chapter-rule"></div>
+        </div>
+        <table class="qtable">
+          <thead>
+            <tr><th>Квест</th><th>Задание</th><th>Награда</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><span class="qname">Праздничный подарок</span><span class="qtag qtag-once">Разовый</span></td><td class="qtask">—</td><td class="qrew">1 501 тайлен</td></tr>
+            <tr><td><span class="qname">Враг хмеля</span><span class="qtag qtag-day">Ежедневный</span></td><td class="qtask">Убить 1 Мотра</td><td class="qrew">150 тайленов</td></tr>
+            <tr><td><span class="qname">Ларвафобия</span><span class="qtag qtag-day">Ежедневный</span></td><td class="qtask">Убить 10 Ларва</td><td class="qrew">80 тайленов</td></tr>
+            <tr><td><span class="qname">Вождь безумцев</span><span class="qtag qtag-day">Ежедневный</span></td><td class="qtask">Убить 1 Пивной Лепрекон</td><td class="qrew">150 тайленов</td></tr>
+            <tr><td><span class="qname">Безумие лепреконов</span><span class="qtag qtag-day">Ежедневный</span></td><td class="qtask">Убить 5 Лепрекон Двайер, 5 Лепрекон Хили, 5 Лепрекон Доннел</td><td class="qrew">80 тайленов</td></tr>
+            <tr><td><span class="qname">Уцелевшие бочки</span><span class="qtag qtag-day">Ежедневный</span></td><td class="qtask">Собрать 10 бочек</td><td class="qrew">80 тайленов</td></tr>
+            <tr><td><span class="qname">Сложности упаковки</span><span class="qtag qtag-day">Ежедневный</span></td><td class="qtask">Собрать 10 ремней</td><td class="qrew">220 тайленов</td></tr>
+            <tr class="qtotal-row"><td colspan="2" style="color:var(--text3);font-size:12px;padding:9px 12px;font-style:italic">Итого ежедневно (6 квестов)</td><td class="qtotal">760 тайленов/день</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Предметы -->
+      <div id="tab-items" class="tab-pane">
+        <div class="codex-chapter">
+          <div class="codex-chapter-icon">III</div>
+          <div class="codex-chapter-title">Атлас артефактов</div>
+          <div class="codex-chapter-rule"></div>
+        </div>
+        <div id="items-guide"></div>
+      </div>
+
+    </div>
+  </div>
+
+
+
+  <!-- GUIDE LINK -->
+  <a class="guide-link" href="#">
+    <div class="num">§ I</div>
+    <div class="body">
+      <div class="ttl">Гайд: Месяц цветущего хмеля</div>
+      <div class="dsc">Где фармить лепреконов, как быстрее всего закрыть ежедневные квесты, что брать в первую очередь.</div>
+      <div class="tag">В разработке</div>
+    </div>
+    <span class="arr">→</span>
+  </a>
+
+</div>
+
+<div class="page-footer">
+  <div class="footer-text">
+    Разработано <a href="https://xkasperx.kor.ru/" class="footer-link">x KASPER x</a>, за расчёты спасибо <a href="https://merciless.kor.ru/" class="footer-link">Merciless</a>
+  </div>
+</div>
+
+<script>
+const REP        = [0, 20000, 50000, 100000];
+const RANK_NAMES = ['Празднующий', 'Помощник Патрика', 'Имбирный Забияка', 'Гроза Лепреконов'];
+const RANK_BADGES = ['rb0','rb1','rb2','rb3'];
+
+const CUM = {
+  lep:   [0,  800, 1800, 3800],
+  hops:  [0, 1400, 3000, 5000],
+  flask: [0,  300,  800, 1500],
+  tal:   [0,  300,  800, 1500],
+  stone: [0,    1],
+};
+// Цены в рубинах (накопительные) — конкретные цены из игры
+const CUM_R = {
+  lep:   [0,   8,  18,  38],
+  hops:  [0,  14,  30,  50],
+  flask: [0,   3,   8,  15],
+  tal:   [0,   3,   8,  15],
+  stone: [0,   0],
+};
+const COS_R = [0, 3, 9];
+const REQ_RANK = { lep:[0,1,2,3], hops:[0,1,2,3], flask:[0,1,2,3], tal:[0,1,2,3], stone:[0,3] };
+
+const ITEMS = [
+  { id:'lep',   name:'Лепрекон',          note:'вечный',        img:'leprecon_coin.png',
+    levels:['Нет','Злобный (фиол.)','Хитрый (красн.)','Сильный (оранж.)'],
+    frames:[null,'border_high','border_exclusive','border_special'] },
+  { id:'hops',  name:'Медовый хмель',     note:'вечный',        img:'elixir_attackmagic_11.png',
+    levels:['Нет','Фиолетовый','Красный','Оранжевый'],
+    frames:[null,'border_high','border_exclusive','border_special'] },
+  { id:'flask', name:'Фляжка Патрика',    note:'до 1 июня',     img:'flask_icon_clover.png',
+    levels:['Нет','Зелёная','Синяя','Фляжка Клевера'],
+    frames:[null,'border_low','border_medium','border_high'] },
+  { id:'tal',   name:'Талисман клевера',  note:'до 1 июня',     img:'golden_clover_quest.png',
+    levels:['Нет','Талисман Сквайра','Талисман Рыцаря','Талисман Лорда'],
+    frames:[null,'border_medium','border_high','border_exclusive'] },
+  { id:'stone', name:'Камень путешествий',note:'',              img:'../other%20items/artefact_stone_fire.png',
+    levels:['Нет','Красный (1 тайл.)'],
+    frames:[null,'border_exclusive'], noHave:true },
+];
+
+const _cosCfg = { imgs:[null,'clover_girl_2.png','clover_girl_3.png'], frames:[null,'border_high','border_exclusive'] };
+
+function gico(cfg, lv) {
+  const baseImg = cfg.imgs ? cfg.imgs[lv] : cfg.img;
+  const bw = lv === 0 ? ' bw' : '';
+  if (!baseImg) {
+    const fr = lv > 0 ? cfg.frames[lv] : null;
+    if (!fr) return `<div class="gempty${bw}"></div>`;
+    return `<div class="gico${bw}" data-q="${lv}" style="background:rgba(0,0,0,.55);border-radius:5px;border:1px solid rgba(255,255,255,.06)"><img class="fr" src="../frames/${fr}.png"></div>`;
+  }
+  const fr = cfg.frames[lv];
+  return `<div class="gico${bw}"${lv>0?` data-q="${lv}"`:''}><img class="base" src="${baseImg}">${fr?`<img class="fr" src="../frames/${fr}.png">`:''}
+  </div>`;
+}
+
+function renderItems() {
+  const el = document.getElementById('items-list');
+  const rows = ITEMS.map(cfg => `
+    <div class="irow2">
+      <div class="iname-c">
+        <div id="gi-have-${cfg.id}">${gico(cfg, 0)}</div>
+        <div><div class="inn">${cfg.name}</div>${cfg.note?`<div class="inote">${cfg.note}</div>`:''}</div>
+      </div>
+      <select id="have-${cfg.id}" style="min-width:0" onchange="syncBoth('${cfg.id}');calc()"${cfg.noHave?' disabled':''}>
+        ${cfg.noHave ? '<option value="0">Нет</option>' : cfg.levels.map((l,i)=>`<option value="${i}">${l}</option>`).join('')}
+      </select>
+      <div class="arr">›</div>
+      <div class="wcell">
+        <select id="want-${cfg.id}" onchange="syncBoth('${cfg.id}');calc()">
+          ${cfg.levels.map((l,i)=>`<option value="${i}">${l}</option>`).join('')}
+        </select>
+        <div class="chint" id="hint-${cfg.id}"></div>
+      </div>
+      <div class="wico" id="gi-want-${cfg.id}">${gico(cfg,0)}</div>
+    </div>`).join('');
+
+  const cosRow = `
+    <div class="irow2">
+      <div class="iname-c">
+        <div id="gi-have-cos">${gico({img:'mask.png', frames:[null,'border_high','border_exclusive']}, 0)}</div>
+        <div><div class="inn">Костюм</div><div class="inote">обычный до 1 июня / прочный на год</div></div>
+      </div>
+      <select id="have-cos" style="min-width:0" onchange="syncCos();calc()" disabled>
+        <option value="0">Нет</option>
+      </select>
+      <div class="arr">›</div>
+      <div class="wcell">
+        <select id="want-cos" onchange="syncCos();calc()">
+          <option value="0">Не нужен</option>
+          <option value="1">Обычный — 300 тайл.</option>
+          <option value="2">Прочный — 900 тайл.</option>
+        </select>
+        <div class="chint" id="hint-cos"></div>
+      </div>
+      <div class="wico" id="gi-want-cos">${gico(_maskCfg,0)}</div>
+    </div>`;
+
+  el.innerHTML = rows + cosRow;
+}
+
+function syncBoth(id) {
+  const cfg = ITEMS.find(c=>c.id===id);
+  const hv = parseInt(document.getElementById('have-'+id).value);
+  const wv = parseInt(document.getElementById('want-'+id).value);
+  document.getElementById('gi-have-'+id).innerHTML = gico(cfg, hv);
+  document.getElementById('gi-want-'+id).innerHTML = gico(cfg, wv);
+}
+const _maskCfg = {img:'mask.png', frames:[null,'border_high','border_exclusive']};
+function syncCos() {
+  const hv = parseInt(document.getElementById('have-cos').value);
+  const wv = parseInt(document.getElementById('want-cos').value);
+  document.getElementById('gi-have-cos').innerHTML = gico(_maskCfg, hv);
+  document.getElementById('gi-want-cos').innerHTML = wv === 0 ? gico(_maskCfg, 0) : gico(_cosCfg, wv);
+}
+
+function fmt(n)  { return Math.round(n).toLocaleString('ru-RU'); }
+function fmtR(n) { return (Math.round(n*10)/10).toLocaleString('ru-RU'); }
+function set(id,v) { document.getElementById(id).textContent = v; }
+
+function optRubies(gap) {
+  if (gap <= 0) return { r:0, nPrem:0, nReg:0 };
+  const nA = Math.ceil(gap/5000), rA = nA*3;
+  const nB = Math.floor(gap/5000), rem = gap - nB*5000;
+  const nR = rem > 0 ? Math.ceil(rem/500) : 0;
+  const rB = nB*3 + nR*0.5;
+  if (rA < rB) return { r:rA, nPrem:nA, nReg:0 };
+  return { r:rB, nPrem:nB, nReg:nR };
+}
+
+function rankBadge(r) {
+  return `<span class="rank-badge ${RANK_BADGES[r]}" style="font-size:10px">Ранг ${r}${r>0?' «'+RANK_NAMES[r]+'»':''}</span>`;
+}
+
+function calc() {
+  const days      = Math.max(0, parseInt(document.getElementById('days').value)||0);
+  const haveT     = Math.max(0, parseInt(document.getElementById('have-t').value)||0);
+  const miss      = Math.max(0, parseInt(document.getElementById('miss').value)||0);
+  const haveRank  = parseInt(document.getElementById('have-rank').value)||0;
+  const haveRepX  = Math.max(0, parseInt(document.getElementById('have-rep-extra').value)||0);
+
+  const earned  = days * 760;
+  const total   = earned + haveT - miss;
+  const haveRep = REP[haveRank] + haveRepX;
+
+  let itemCost = 0, maxRank = 0, anyWant = false;
+  const wantedNames = [];
+  const allSteps = []; // {t, r} — каждый шаг апгрейда
+
+  ITEMS.forEach(cfg => {
+    const h = parseInt(document.getElementById('have-'+cfg.id).value);
+    const w = parseInt(document.getElementById('want-'+cfg.id).value);
+    const cost = w > h ? CUM[cfg.id][w] - CUM[cfg.id][h] : 0;
+    if (w > h) {
+      itemCost += cost;
+      maxRank = Math.max(maxRank, REQ_RANK[cfg.id][w]);
+      anyWant = true;
+      wantedNames.push(cfg.levels[w]);
+      for (let i = h; i < w; i++) {
+        allSteps.push({ t: CUM[cfg.id][i+1]-CUM[cfg.id][i], r: CUM_R[cfg.id][i+1]-CUM_R[cfg.id][i] });
+      }
+    }
+    document.getElementById('want-'+cfg.id).classList.toggle('on', w > h);
+    const hintEl = document.getElementById('hint-'+cfg.id);
+    if (hintEl) {
+      if (w > h) {
+        const steps = [];
+        for (let i = h; i < w; i++) steps.push(CUM[cfg.id][i+1]-CUM[cfg.id][i]);
+        const bd = steps.length > 1 ? ` (${steps.map(fmt).join(' + ')})` : '';
+        hintEl.textContent = `Итого: ${fmt(cost)} тайленов${bd}`;
+      } else { hintEl.textContent = ''; }
+    }
+  });
+
+  const hCos = parseInt(document.getElementById('have-cos').value);
+  const wCos = parseInt(document.getElementById('want-cos').value);
+  const cosCosts = [0,300,900];
+  const cosCost = wCos > hCos ? cosCosts[wCos]-cosCosts[hCos] : 0;
+  if (wCos > hCos) {
+    itemCost += cosCost; anyWant = true; wantedNames.push(['Обычный костюм','Прочный костюм'][wCos-1]);
+    allSteps.push({ t: cosCost, r: COS_R[wCos]-COS_R[hCos] });
+  }
+  document.getElementById('want-cos').classList.toggle('on', wCos > hCos);
+  const cosHint = document.getElementById('hint-cos');
+  if (cosHint) cosHint.textContent = wCos > hCos ? `Стоимость: ${fmt(cosCost)} тайленов` : '';
+
+  // Жадный алгоритм: сортируем шаги по цене тайленов (дешёвые сначала),
+  // покупаем за тайлены пока хватает, остальное — за рубины по конкретной цене
+  allSteps.sort((a, b) => a.t - b.t);
+  let remT = total;
+  let rubDef = 0, rubStepTCost = 0;
+  for (const step of allSteps) {
+    if (remT >= step.t) { remT -= step.t; }
+    else { rubDef += step.r; rubStepTCost += step.t; }
+  }
+  const tItemSpent = total - remT;
+  const afterItems = remT; // тайлены оставшиеся после покупки предметов
+  const shortfall  = rubStepTCost > 0 ? rubStepTCost - remT : 0; // реальная нехватка тайленов
+  const forRep     = afterItems;
+
+  const targetRep  = REP[maxRank];
+  const repNeeded  = Math.max(0, targetRep - haveRep);
+  const freeKr     = Math.floor(forRep/50);
+  const freeRep    = Math.min(freeKr*500, repNeeded);
+  const tUsedRep   = Math.ceil(freeRep/500)*50;
+  const repGap     = repNeeded - freeRep;
+  const rc         = optRubies(repGap);
+  const totalRub   = rubDef + rc.r;
+  // Корректируем: если рубиновые кружки дают overshoot — снижаем тайлены на эту разницу
+  const repFromRubies = rc.nPrem*5000 + rc.nReg*500;
+  const overshoot  = Math.max(0, freeRep + repFromRubies - repNeeded);
+  const adjFreeRep = freeRep - overshoot;
+  const adjTUsed   = adjFreeRep > 0 ? Math.ceil(adjFreeRep/500)*50 : 0;
+  const leftover   = forRep - adjTUsed;
+
+  // Stats
+  set('sv-earn',  fmt(earned));
+  set('sv-total', fmt(Math.max(0,total)));
+  set('sv-items', itemCost > 0 ? '−'+fmt(itemCost) : '—');
+  set('sv-repgap', repGap > 0 ? fmt(repGap)+' очков' : repNeeded===0&&anyWant ? 'Достигнута ✓' : '—');
+
+  // Big number
+  const numEl = document.getElementById('res-num');
+  const icoEl = document.getElementById('res-ruby-ico');
+  numEl.textContent = fmtR(totalRub);
+  numEl.className = 'rnum '+(totalRub===0?'free':'paid');
+  icoEl.style.opacity = totalRub > 0 ? '1' : '0.25';
+
+  const vb = document.getElementById('verdict-block');
+  const sb = document.getElementById('strat-block');
+
+  if (!anyWant) {
+    vb.className = 'idle-msg';
+    vb.innerHTML = 'Выбери предметы которые хочешь получить →';
+    sb.style.display = 'none';
+    return;
+  }
+
+  // ── VERDICT GRID ──
+  const rows = [];
+
+  // Rep status
+  rows.push(`<div class="vrow">
+    <span class="vkey">Репутация сейчас</span>
+    <span class="vval b">Ранг ${haveRank} «${RANK_NAMES[haveRank]}» — ${fmt(haveRep)} очков</span>
+  </div>`);
+
+  if (maxRank > 0) {
+    rows.push(`<div class="vrow">
+      <span class="vkey">Нужен ранг для желаемых предметов</span>
+      <span class="vval ${haveRep>=targetRep?'g':'o'}">Ранг ${maxRank} «${RANK_NAMES[maxRank]}» — ${fmt(targetRep)} очков</span>
+    </div>`);
+  }
+
+  rows.push('<div class="vsep"></div>');
+
+  if (itemCost > 0) {
+    rows.push(`<div class="vrow">
+      <span class="vkey">Тайленов на предметы</span>
+      <span class="vval ${rubDef>0?'r':''}">${rubDef>0?'−':''}${fmt(itemCost)} тайленов ${rubDef>0?`<span style="font-weight:400;font-size:11px">(не хватает ${fmt(shortfall)} тайленов)</span>`:''}</span>
+    </div>`);
+  }
+
+  if (haveRep < targetRep) {
+    rows.push(`<div class="vrow">
+      <span class="vkey">Осталось набрать репутации</span>
+      <span class="vval r">${fmt(repNeeded)} очков</span>
+    </div>`);
+    if (adjFreeRep > 0) {
+      rows.push(`<div class="vrow">
+        <span class="vkey">Бесплатно тайленами</span>
+        <span class="vval g">${fmt(adjFreeRep)} очков (${fmt(adjTUsed)} тайленов)</span>
+      </div>`);
+    }
+    if (rc.r > 0) {
+      rows.push(`<div class="vrow">
+        <span class="vkey">Докупить репутацию</span>
+        <span class="vval r">${fmt(repNeeded - adjFreeRep)} очков → ${fmtR(rc.r)} рубинов</span>
+      </div>`);
+    }
+  } else if (anyWant) {
+    rows.push(`<div class="vrow">
+      <span class="vkey">Репутация</span>
+      <span class="vval g">Уже достигнута ✓</span>
+    </div>`);
+  }
+
+  if (rubDef > 0) {
+    rows.push('<div class="vsep"></div>');
+    rows.push(`<div class="vrow">
+      <span class="vkey">Не хватает тайленов на предметы</span>
+      <span class="vval r">не хватает ${fmt(shortfall)} тайленов → ${fmtR(rubDef)} рубинов</span>
+    </div>`);
+  }
+
+  vb.className = 'verdict-block';
+  vb.innerHTML = rows.join('');
+
+  // ── STRATEGY BLOCK ──
+  const lines = [];
+
+  const icoMug     = `<div class="sline-ico"><div class="gico"><img class="base" src="good_beer_10.png"><img class="fr" src="../frames/border_none.png"></div></div>`;
+  const icoMugPrem = `<div class="sline-ico"><div class="gico"><img class="base" src="good_beer_10.png"><img class="fr" src="../frames/border_low.png"></div></div>`;
+  const icoTaylen  = `<div class="sline-ico"><img src="../currency/leprecon_taylen.png" style="width:13px;height:13px;margin:auto"></div>`;
+  const icoRuby    = `<div class="sline-ico"><img src="../currency/ruby_dealer_trnsp.png" style="width:13px;height:13px;margin:auto"></div>`;
+  const icoOk      = `<div class="sline-ico emoji">✅</div>`;
+
+  if (totalRub === 0) {
+    lines.push(`<div class="sline">
+      ${icoOk}
+      <div class="sline-body">Донат не нужен — тайленов хватает на все предметы и репутацию.</div>
+    </div>`);
+    if (leftover > 0) {
+      lines.push(`<div class="sline">
+        ${icoTaylen}
+        <div class="sline-body">Останется <span class="sg">${fmt(leftover)} свободных тайленов</span>.</div>
+      </div>`);
+    }
+  } else {
+    if (rubDef > 0) {
+      lines.push(`<div class="sline">
+        ${icoRuby}
+        <div class="sline-body">Докупи недостающие предметы напрямую за рубины: не хватает <span class="sr">${fmt(shortfall)} тайленов</span> → <span class="sr">${fmtR(rubDef)} рубинов</span>.</div>
+      </div>`);
+    }
+    if (adjFreeRep > 0 && adjTUsed > 0) {
+      lines.push(`<div class="sline">
+        ${icoMug}
+        <div class="sline-body">Потрать <span class="sn">${fmt(adjTUsed)} тайленов</span> на <b>Пивную кружку</b> — получишь <span class="sg">+${fmt(adjFreeRep)} очков</span> репутации бесплатно.</div>
+      </div>`);
+    }
+    if (rc.nPrem > 0) {
+      lines.push(`<div class="sline">
+        ${icoMugPrem}
+        <div class="sline-body">Купи <span class="sn">${rc.nPrem} × Пивная кружка (скидка 40%)</span> — по <span class="sn">3 рубина/шт</span> = <span class="sr">${rc.nPrem*3} рубинов</span> → <span class="sg">+${fmt(rc.nPrem*5000)} очков</span> репутации.</div>
+      </div>`);
+    }
+    if (rc.nReg > 0) {
+      lines.push(`<div class="sline">
+        ${icoMug}
+        <div class="sline-body">Купи <span class="sn">${rc.nReg} × Пивная кружка</span> — по <span class="sn">0.5 рубина/шт</span> = <span class="sr">${fmtR(rc.nReg*0.5)} рубинов</span> → <span class="sg">+${fmt(rc.nReg*500)} очков</span> репутации.</div>
+      </div>`);
+    }
+    if (leftover > 0) {
+      lines.push(`<div class="sline">
+        ${icoTaylen}
+        <div class="sline-body">Останется <span class="sg">${fmt(leftover)} свободных тайленов</span>.</div>
+      </div>`);
+    }
+  }
+
+  sb.style.display = 'block';
+  sb.innerHTML = `<div class="strat-block">
+    <div class="strat-title">Что купить</div>
+    ${lines.join('')}
+  </div>`;
+}
+
+function renderItemsGuide() {
+  function ingrIco(img, frame, name) {
+    const c = { img, frames:[null, frame] };
+    return { ico: gico(c, 1), name };
+  }
+
+  const GUIDE_ITEMS = [
+    { name:'Лепрекон', note:'вечный', cfg: ITEMS[0],
+      steps:[
+        { lv:1, label:'Злобный лепрекон',  cost:800,  rank:1, ingr:null },
+        { lv:2, label:'Хитрый лепрекон',   cost:1000, rank:2, ingr:ingrIco('leprecon_coin.png','border_exclusive','Волшебная монетка Лепреконов') },
+        { lv:3, label:'Сильный лепрекон',  cost:2000, rank:3, ingr:ingrIco('gold_pot.png','border_special','Волшебное золото Лепреконов') },
+      ]},
+    { name:'Медовый хмель', note:'вечный', cfg: ITEMS[1],
+      steps:[
+        { lv:1, label:'Медовый хмель (фиол.)', cost:1400, rank:1, ingr:null },
+        { lv:2, label:'Медовый хмель (красн.)', cost:1600, rank:2, ingr:ingrIco('rainbow_bottle.png','border_exclusive','Концентрат лепреконской магии') },
+        { lv:3, label:'Медовый хмель (оранж.)', cost:2000, rank:3, ingr:ingrIco('rainbow_bottle.png','border_special','Концентрат лепреконской магии') },
+      ]},
+    { name:'Фляжка Патрика', note:'до 1 июня', cfg: ITEMS[2],
+      steps:[
+        { lv:1, label:'Фляжка Патрика (зел.)',  cost:300, rank:1, ingr:null },
+        { lv:2, label:'Фляжка Патрика (синяя)', cost:500, rank:2, ingr:ingrIco('hop_silver.png','border_medium','Серебряный хмель') },
+        { lv:3, label:'Фляжка Клевера',         cost:700, rank:3, ingr:ingrIco('hop_golden.png','border_high','Золотой хмель') },
+      ]},
+    { name:'Талисман клевера', note:'до 1 июня', cfg: ITEMS[3],
+      steps:[
+        { lv:1, label:'Талисман Сквайра клевера', cost:300, rank:1, ingr:null },
+        { lv:2, label:'Талисман Рыцаря клевера',  cost:500, rank:2, ingr:ingrIco('clover_talisman_pattern.png','border_high','Сияющий клевер') },
+        { lv:3, label:'Талисман Лорда клевера',   cost:700, rank:3, ingr:ingrIco('clover_talisman_pattern.png','border_exclusive','Сияющий клевер') },
+      ]},
+  ];
+
+  const html = GUIDE_ITEMS.map(({name, note, cfg, steps}) => {
+    const parts = [];
+    steps.forEach((s, i) => {
+      // Arrow before each step (except first)
+      if (i > 0) parts.push(`<div class="iup-arrow-sep">›</div>`);
+      // Ingredient before this step (if any)
+      if (s.ingr) {
+        parts.push(`<div class="iup-ingr-step">
+          <div class="iup-ingr-step-ico">${s.ingr.ico}</div>
+          <div class="iup-ingr-name">${s.ingr.name}</div>
+        </div>`);
+        parts.push(`<div class="iup-arrow-sep">›</div>`);
+      }
+      // Result step
+      const rankHtml = s.rank != null
+        ? `<span class="iup-step-rank rank-badge ${RANK_BADGES[s.rank]}" style="font-size:9px">Ранг ${s.rank}</span>` : '';
+      parts.push(`<div class="iup-step">
+        <div class="iup-step-ico">${gico(cfg, s.lv)}</div>
+        <div class="iup-step-name">${s.label}</div>
+        <div class="iup-step-cost">Стоимость ${fmt(s.cost)} тайленов</div>
+        ${rankHtml}
+      </div>`);
+    });
+    const chain = parts.join('');
+
+    return `<div class="iup-row">
+      <div class="iup-row-header">
+        <span class="iup-name">${name}</span>
+        ${note ? `<span class="iup-note">${note}</span>` : ''}
+      </div>
+      <div class="iup-chain">${chain}</div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('items-guide').innerHTML = html;
+}
+
+function switchTab(id, btn) {
+  document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  btn.classList.add('active');
+}
+
+renderItems();
+renderItemsGuide();
+calc();
+</script>
+</body>
+</html>

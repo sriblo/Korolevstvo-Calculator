@@ -1,9 +1,15 @@
 (function () {
+  var _s = document.currentScript || (function () {
+    var ss = document.getElementsByTagName('script');
+    return ss[ss.length - 1];
+  })();
+  var _base = (_s.getAttribute('src') || '').replace(/nav\.js$/, '');
+
   var page = window.location.pathname.split('/').pop() || 'index_new.html';
 
   var calcPages = [
-    'stats_calc.html', 'hmeli_calc.html', 'hmeli_calc3.html',
-    'glubin_calc.html', 'loc_calc.html', 'rep_calc.html',
+    'stats_calc.html', 'hmeli_calc.html', 'hmeli_calc3.html', 'hmeli_calc_v2.html',
+    'glubin_calc.html', 'glubin_calc_v2.html', 'loc_calc.html', 'rep_calc.html',
   ];
 
   var isHome  = page === 'index_new.html' || page === 'index.html' || page === '';
@@ -15,6 +21,15 @@
     var s = document.createElement('style');
     s.id = 'nav-shared-css';
     s.textContent = [
+      // header
+      '.top{padding:18px 40px;border-bottom:1px solid var(--line);background:rgba(11,9,7,.78);backdrop-filter:blur(20px);position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:18px}',
+      '.logo{display:flex;align-items:center;gap:12px}',
+      '.logo img{width:30px;height:30px;filter:drop-shadow(0 0 10px rgba(var(--gold-tint),.4))}',
+      '.logo-n{font-family:var(--serif);font-size:17px;font-weight:600;letter-spacing:-.01em;line-height:1}',
+      '.nav{margin-left:28px;display:flex;gap:4px}',
+      '.nav a{padding:7px 12px;border-radius:6px;font-size:13px;color:var(--txt2);font-weight:500;transition:background .12s,color .12s}',
+      '.nav a:hover{color:var(--txt);background:var(--bg2)}',
+      '.nav a.on{color:var(--gold-l);background:var(--bg3)}',
       // dropdown nav
       '.nav-dd{position:relative;display:flex;align-items:center}',
       '.dd-trigger{display:flex;align-items:center;gap:6px;padding:6px 11px;border-radius:6px;',
@@ -69,8 +84,11 @@
     return '<a' + (active ? ' class="on"' : '') + ' href="' + href + '">' + label + '</a>';
   }
 
+  var isHmeli  = page === 'hmeli_calc.html'  || page === 'hmeli_calc_v2.html';
+  var isGlubin = page === 'glubin_calc.html' || page === 'glubin_calc_v2.html';
+
   var navHTML =
-    a('index_new.html', 'Главная', isHome) +
+    a(_base + 'index_new.html', 'Главная', isHome) +
     '<div class="nav-dd" id="site-nav-dd">' +
       '<div class="dd-trigger' + (isCalc ? ' on' : '') + '" id="site-nav-trigger">' +
         'Калькуляторы ' +
@@ -82,27 +100,27 @@
         '<span class="dd-item soon">Новый год. Колдер</span>' +
         '<span class="dd-item soon">Экспедиция. Сбор припасов</span>' +
         '<span class="dd-item soon">Месяц пробуждения цветов</span>' +
-        '<a class="dd-item ready' + (page === 'hmeli_calc.html' ? ' on' : '') + '" href="leprecon/hmeli_calc.html">Месяц цветущего хмеля</a>' +
-        '<a class="dd-item ready' + (page === 'glubin_calc.html' ? ' on' : '') + '" href="zov_glubin/glubin_calc.html">Зов Глубин</a>' +
+        '<a class="dd-item ready' + (isHmeli  ? ' on' : '') + '" href="' + _base + 'leprecon/hmeli_calc.html">Месяц цветущего хмеля</a>' +
+        '<a class="dd-item ready' + (isGlubin ? ' on' : '') + '" href="' + _base + 'zov_glubin/glubin_calc.html">Зов Глубин</a>' +
         '<span class="dd-item soon">День Пирата</span>' +
         '<span class="dd-item soon">Экспедиция. Ледяные Острова</span>' +
         '<span class="dd-item soon">Гоблинский Рай</span>' +
         '<span class="dd-item soon">Небесные Драконы</span>' +
         '<span class="dd-item soon">Тыквенный Фестиваль</span>' +
         '<div class="dd-sep"></div>' +
-        '<a class="dd-item ready' + (page === 'loc_calc.html' ? ' on' : '') + '" href="location_calc/loc_calc.html">Загруженность копий</a>' +
-        '<a class="dd-item ready' + (page === 'rep_calc.html' ? ' on' : '') + '" href="reputation_calc/rep_calc.html">Прокачка репутаций</a>' +
-        '<a class="dd-item ready' + (page === 'stats_calc.html' ? ' on' : '') + '" href="stats_calc.html">Характеристики</a>' +
+        '<a class="dd-item ready' + (page === 'loc_calc.html' ? ' on' : '') + '" href="' + _base + 'location_calc/loc_calc.html">Загруженность копий</a>' +
+        '<a class="dd-item ready' + (page === 'rep_calc.html' ? ' on' : '') + '" href="' + _base + 'reputation_calc/rep_calc.html">Прокачка репутаций</a>' +
+        '<a class="dd-item ready' + (page === 'stats_calc.html' ? ' on' : '') + '" href="' + _base + 'stats_calc.html">Характеристики</a>' +
       '</div>' +
     '</div>' +
-    a('items_base.html', 'База предметов', isItems) +
+    a(_base + 'items_base.html', 'База предметов', isItems) +
     '<a>Гайды<span class="count">скоро</span></a>' +
     '<a>Сообщество</a>';
 
   var logo = document.getElementById('site-logo');
   if (logo) {
     logo.innerHTML =
-      '<img src="kor_logo.svg" alt="">' +
+      '<img src="' + _base + 'kor_logo.svg" alt="">' +
       '<div><div class="logo-n">Королевство: База знаний</div></div>';
   }
 
@@ -154,7 +172,7 @@
     var hits = find(q);
     drop.innerHTML = hits.length
       ? hits.map(function (h) {
-          return '<a class="sr-item" href="' + h.url + '"><div class="sr-title">' + h.title +
+          return '<a class="sr-item" href="' + _base + h.url + '"><div class="sr-title">' + h.title +
             '</div><div class="sr-desc">' + h.desc + '</div></a>';
         }).join('')
       : '<div class="sr-empty">Ничего не найдено</div>';
