@@ -6,10 +6,9 @@
     'glubin_calc.html', 'loc_calc.html', 'rep_calc.html',
   ];
 
-  var isHome    = page === 'index_new.html' || page === 'index.html' || page === '';
-  var isCalc    = calcPages.indexOf(page) !== -1;
-  var isItems   = page === 'items_base.html';
-  var isPlayers = page === 'players.html';
+  var isHome  = page === 'index_new.html' || page === 'index.html' || page === '';
+  var isCalc  = calcPages.indexOf(page) !== -1;
+  var isItems = page === 'items_base.html';
 
   // Inject dropdown + count CSS once
   if (!document.getElementById('nav-shared-css')) {
@@ -71,7 +70,6 @@
       '</div>' +
     '</div>' +
     a('items_base.html', 'База предметов', isItems) +
-    a('players.html', 'Игроки', isPlayers) +
     '<a>Гайды<span class="count">скоро</span></a>' +
     '<a>Сообщество</a>';
 
