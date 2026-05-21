@@ -611,7 +611,7 @@ select.on {
 /* ── RESPONSIVE ─────────────────────────────────────────── */
 /* ── TABLET ─────────────────────────────────────────────── */
 @media (max-width: 980px) {
-  .page { grid-template-columns: 1fr; padding-left: 16px; padding-right: 16px; }
+  .page { grid-template-columns: minmax(0, 1fr); padding-left: 16px; padding-right: 16px; }
   .top  { padding-left: 16px; padding-right: 16px; }
   .i-head { grid-template-columns: 110px 1fr 22px 1fr 30px; gap: 6px; }
   .iname-c { flex: 0 0 110px; }
@@ -662,6 +662,7 @@ select.on {
   .wcell { display: flex; flex-direction: column; }
 
   /* Upgrade chain — horizontal scroll */
+  .guide-section { min-width: 0; }
   .guide-card { min-width: 0; }
   .iup-row { overflow-x: auto; -webkit-overflow-scrolling: touch; }
   .iup-chain { width: max-content; flex-wrap: nowrap; }
