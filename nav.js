@@ -138,7 +138,7 @@
   if (logo) {
     logo.innerHTML =
       '<img src="' + _base + 'kor_logo.svg" alt="">' +
-      '<div><div class="logo-n">Королевство: База знаний</div></div>';
+      '<div><div class="logo-n">Королевство: База знаний</div></div>';
   }
 
   var nav = document.getElementById('site-nav');
