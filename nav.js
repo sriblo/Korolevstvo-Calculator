@@ -54,6 +54,9 @@
       '.dd-item.soon{color:var(--txt3);cursor:default;pointer-events:none}',
       '.dd-sep{height:1px;background:var(--line);margin:4px 6px}',
       '.nav .count{font-size:10px;color:var(--txt3);margin-left:4px}',
+      // responsive top padding (must be after base .top rule to win cascade)
+      '@media(max-width:980px){.top{padding-left:16px;padding-right:16px}}',
+      '@media(max-width:640px){.top{padding-left:12px;padding-right:12px}}',
       // hamburger
       '.nav-mb-btn{display:none;margin-left:auto;background:none;border:none;color:var(--txt2);cursor:pointer;padding:6px;line-height:1;flex-shrink:0}',
       '.nav-mb-btn:hover{color:var(--txt)}',
