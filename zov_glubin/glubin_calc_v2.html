@@ -661,8 +661,9 @@ select.on {
   .chint { position: static; white-space: normal; font-size: 11px; margin-top: 4px; }
   .wcell { display: flex; flex-direction: column; }
 
-  /* Upgrade chain — horizontal scroll */
-  .iup-chain { overflow-x: auto; -webkit-overflow-scrolling: touch; padding-bottom: 6px; flex-wrap: nowrap; }
+  /* Upgrade chain — horizontal scroll on the row */
+  .iup-row { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .iup-chain { width: auto; min-width: min-content; overflow: visible; flex-wrap: nowrap; }
   .iup-step  { flex: 0 0 auto; min-width: 70px; }
   .iup-ingr-step { flex: 0 0 auto; min-width: 60px; }
 
