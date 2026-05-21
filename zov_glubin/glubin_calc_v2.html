@@ -54,7 +54,7 @@
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
-html { min-height: 100%; overflow-x: hidden; }
+html { min-height: 100%; overflow-x: clip; }
 
 body {
   min-height: 100vh; color: var(--txt);
@@ -662,7 +662,7 @@ select.on {
   .wcell { display: flex; flex-direction: column; }
 
   /* Upgrade chain — horizontal scroll */
-  .iup-chain { overflow-x: auto; padding-bottom: 6px; flex-wrap: nowrap; }
+  .iup-chain { overflow-x: auto; -webkit-overflow-scrolling: touch; padding-bottom: 6px; flex-wrap: nowrap; }
   .iup-step  { flex: 0 0 auto; min-width: 70px; }
   .iup-ingr-step { flex: 0 0 auto; min-width: 60px; }
 
@@ -683,7 +683,6 @@ select.on {
   .hero-meta { font-size: 13px; }
   .page { padding: 10px 8px; gap: 10px; }
   .irow2 { padding: 12px 10px; column-gap: 4px; row-gap: 8px; }
-  .irow2 { grid-template-columns: 1fr 18px 1fr 34px; }
   .rnum { font-size: 36px; }
   .irow { grid-template-columns: 24px 1fr 10px 62px auto; gap: 4px; padding: 7px 10px; }
   input[type=number] { width: 62px; font-size: 14px; padding: 4px 6px; }
