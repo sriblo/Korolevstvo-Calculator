@@ -54,6 +54,20 @@
       '.dd-item.soon{color:var(--txt3);cursor:default;pointer-events:none}',
       '.dd-sep{height:1px;background:var(--line);margin:4px 6px}',
       '.nav .count{font-size:10px;color:var(--txt3);margin-left:4px}',
+      // hamburger
+      '.nav-mb-btn{display:none;margin-left:auto;background:none;border:none;color:var(--txt2);cursor:pointer;padding:6px;line-height:1;flex-shrink:0}',
+      '.nav-mb-btn:hover{color:var(--txt)}',
+      '.nav-mb-overlay{display:none;position:fixed;inset:0;z-index:99;background:rgba(11,9,7,.95);flex-direction:column;padding:0}',
+      '.nav-mb-overlay.open{display:flex}',
+      '.nav-mb-head{display:flex;align-items:center;gap:12px;padding:16px 20px;border-bottom:1px solid var(--line)}',
+      '.nav-mb-close{margin-left:auto;background:none;border:none;color:var(--txt2);cursor:pointer;font-size:22px;line-height:1;padding:4px}',
+      '.nav-mb-links{display:flex;flex-direction:column;padding:8px 12px;overflow-y:auto;flex:1}',
+      '.nav-mb-link{display:block;padding:12px 12px;border-radius:8px;font-size:15px;color:var(--txt2);font-weight:500;border-bottom:1px solid var(--line)}',
+      '.nav-mb-link:last-child{border-bottom:none}',
+      '.nav-mb-link:hover,.nav-mb-link.on{color:var(--gold-l);background:rgba(var(--gold-tint),.06)}',
+      '.nav-mb-link.soon{color:var(--txt3);pointer-events:none}',
+      '.nav-mb-sec{padding:10px 12px 4px;font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--txt3)}',
+      '@media(max-width:640px){.nav{display:none}.site-search{display:none}.nav-mb-btn{display:flex;align-items:center}}',
       // search
       '.site-search{margin-left:auto;position:relative}',
       '.site-search input{background:var(--bg2);border:1px solid var(--line);border-radius:6px;',
@@ -139,6 +153,46 @@
   menu.addEventListener('click', function (e) { e.stopPropagation(); });
   document.addEventListener('click', function () { dd.classList.remove('open'); });
 
+  // ── Hamburger (mobile) ─────────────────────────────────────────────────────
+  var header = nav.closest('header') || nav.parentNode;
+
+  var mbBtn = document.createElement('button');
+  mbBtn.className = 'nav-mb-btn';
+  mbBtn.setAttribute('aria-label', 'Меню');
+  mbBtn.innerHTML = '<svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M3 6h16M3 11h16M3 16h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>';
+  header.appendChild(mbBtn);
+
+  function mbLinkClass(active, soon) {
+    return 'nav-mb-link' + (active ? ' on' : '') + (soon ? ' soon' : '');
+  }
+
+  var mbOverlay = document.createElement('div');
+  mbOverlay.className = 'nav-mb-overlay';
+  mbOverlay.innerHTML =
+    '<div class="nav-mb-head">' +
+      '<img src="' + _base + 'kor_logo.svg" alt="" style="width:24px;height:24px;filter:drop-shadow(0 0 8px rgba(212,168,67,.4))">' +
+      '<span style="font-family:var(--serif);font-size:16px;font-weight:600;color:var(--txt)">Королевство: База знаний</span>' +
+      '<button class="nav-mb-close" id="nav-mb-close">✕</button>' +
+    '</div>' +
+    '<div class="nav-mb-links">' +
+      '<a class="' + mbLinkClass(isHome, false) + '" href="' + _base + 'index_new.html">Главная</a>' +
+      '<a class="' + mbLinkClass(isItems, false) + '" href="' + _base + 'items_base.html">База предметов</a>' +
+      '<div class="nav-mb-sec">Калькуляторы</div>' +
+      '<a class="' + mbLinkClass(isHmeli, false) + '" href="' + _base + 'leprecon/hmeli_calc.html">Месяц цветущего хмеля</a>' +
+      '<a class="' + mbLinkClass(isGlubin, false) + '" href="' + _base + 'zov_glubin/glubin_calc_v2.html">Зов Глубин</a>' +
+      '<a class="' + mbLinkClass(page === 'loc_calc.html', false) + '" href="' + _base + 'location_calc/loc_calc.html">Загруженность копий</a>' +
+      '<a class="' + mbLinkClass(page === 'rep_calc.html', false) + '" href="' + _base + 'reputation_calc/rep_calc.html">Прокачка репутаций</a>' +
+      '<a class="' + mbLinkClass(page === 'stats_calc.html', false) + '" href="' + _base + 'stats_calc.html">Характеристики</a>' +
+      '<div class="nav-mb-sec">Скоро</div>' +
+      '<span class="nav-mb-link soon">Гайды</span>' +
+      '<span class="nav-mb-link soon">Сообщество</span>' +
+    '</div>';
+  document.body.appendChild(mbOverlay);
+
+  mbBtn.addEventListener('click', function () { mbOverlay.classList.add('open'); });
+  document.getElementById('nav-mb-close').addEventListener('click', function () { mbOverlay.classList.remove('open'); });
+  mbOverlay.addEventListener('click', function (e) { if (e.target === mbOverlay) mbOverlay.classList.remove('open'); });
+
   // ── Search ─────────────────────────────────────────────────────────────────
   var INDEX = [
     { title: 'База предметов', desc: 'Оружие, броня, аксессуары, руны, ивентовые предметы', url: 'items_base.html', tags: 'предметы оружие броня экипировка руны аксессуары артефакты амулеты кольца' },
@@ -148,8 +202,6 @@
     { title: 'Загруженность копий', desc: 'Оптимальные копии локаций для фарма', url: 'location_calc/loc_calc.html', tags: 'локации копии загруженность фарм подземелья' },
     { title: 'Прокачка репутаций', desc: 'Калькулятор репутаций всех фракций Королевства', url: 'reputation_calc/rep_calc.html', tags: 'репутации фракции прокачка гвардия гладиатор орден завоеватель' },
   ];
-
-  var header = nav.closest('header') || nav.parentNode;
 
   var sw = document.createElement('div');
   sw.className = 'site-search';
