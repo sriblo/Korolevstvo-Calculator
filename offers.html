@@ -3,28 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>История Акций — Королевство</title>
+<title>Акции и источники — Королевство</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&display=swap');
 
 :root {
-  --amber:  #b8860b;
-  --gold:   #d4a843;
-  --goldl:  #f0cc6a;
-  --sage:   #5a7a3a;
-  --sagel:  #8ab860;
-  --ember:  #8b3a2a;
-  --emberl: #c86040;
-  --ruby:   #c0392b;
-  --rubyl:  #e74c3c;
-  --text:   #ede5cc;
-  --txt2:   #b8a882;
-  --txt3:   #7a6a50;
-  --bg:     #0a0704;
-  --glass:  rgba(18,12,6,.78);
-  --glass2: rgba(10,7,3,.88);
-  --gb:     rgba(184,134,11,.28);
-  --sep:    rgba(184,134,11,.18);
+  --amber:  #b8860b; --gold: #d4a843; --goldl: #f0cc6a;
+  --sage:   #5a7a3a; --sagel: #8ab860;
+  --ruby:   #c0392b; --rubyl: #e74c3c;
+  --text:   #ede5cc; --txt2: #b8a882; --txt3: #7a6a50;
+  --bg:     #0a0704; --glass: rgba(18,12,6,.78);
+  --gb:     rgba(184,134,11,.28); --sep: rgba(184,134,11,.18);
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body {
@@ -35,16 +24,10 @@ body {
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E"),
     radial-gradient(ellipse 80% 60% at 0% 0%, rgba(120,70,10,.6) 0%, transparent 55%),
     radial-gradient(ellipse 60% 70% at 100% 100%, rgba(90,30,20,.5) 0%, transparent 50%),
-    radial-gradient(ellipse 90% 45% at 50% 5%, rgba(40,75,22,.3) 0%, transparent 50%),
-    radial-gradient(ellipse 40% 40% at 50% 50%, rgba(10,6,2,0) 0%, rgba(10,6,2,.55) 100%);
+    radial-gradient(ellipse 90% 45% at 50% 5%, rgba(40,75,22,.3) 0%, transparent 50%);
   overflow-x: hidden;
 }
 body::before {
-  content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 0;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
-  opacity: .5;
-}
-body::after {
   content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 0;
   background: radial-gradient(ellipse 120% 100% at 50% 50%, transparent 40%, rgba(5,3,1,.8) 100%);
 }
@@ -57,7 +40,7 @@ header {
 }
 header::after {
   content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
-  background: linear-gradient(90deg, transparent 0%, rgba(184,134,11,.35) 20%, var(--gold) 50%, rgba(184,134,11,.35) 80%, transparent 100%);
+  background: linear-gradient(90deg, transparent, rgba(184,134,11,.35) 20%, var(--gold) 50%, rgba(184,134,11,.35) 80%, transparent);
 }
 .h-inner {
   max-width: 1100px; margin: 0 auto; padding: 16px 0;
@@ -67,45 +50,46 @@ header::after {
   text-decoration: none; color: var(--txt2);
   font-family: 'Cinzel', serif; font-size: 13px; letter-spacing: .05em;
   padding: 6px 12px; border: 1px solid rgba(184,134,11,.2); border-radius: 6px;
-  transition: color .2s, border-color .2s;
+  transition: color .2s, border-color .2s; flex-shrink: 0;
 }
 .h-back:hover { color: var(--gold); border-color: rgba(184,134,11,.5); }
-.h-title {
-  font-family: 'Cinzel', serif; font-size: 18px; font-weight: 700;
-  color: var(--gold); letter-spacing: .08em;
-  text-shadow: 0 0 30px rgba(184,134,11,.4);
-}
+.h-title { font-family: 'Cinzel', serif; font-size: 18px; font-weight: 700; color: var(--gold); letter-spacing: .08em; }
 .h-sub { font-size: 13px; color: var(--txt2); font-style: italic; }
 
 /* ── PAGE ── */
-.page {
-  position: relative; z-index: 5;
-  max-width: 1100px; margin: 0 auto; padding: 32px 40px 80px;
-}
+.page { position: relative; z-index: 5; max-width: 1100px; margin: 0 auto; padding: 28px 40px 80px; }
 
-/* ── CONTROLS ── */
-.controls {
-  display: flex; flex-wrap: wrap; align-items: center; gap: 12px;
-  margin-bottom: 28px;
+/* ── TABS ── */
+.page-tabs {
+  display: flex; gap: 4px; margin-bottom: 28px;
+  border-bottom: 1px solid rgba(184,134,11,.15);
+  padding-bottom: 0;
 }
-.search-wrap {
-  position: relative; flex: 1; min-width: 220px;
+.ptab {
+  padding: 9px 20px 10px; cursor: pointer; user-select: none;
+  font-family: 'Cinzel', serif; font-size: 12px; letter-spacing: .06em;
+  color: var(--txt3); border-bottom: 2px solid transparent;
+  transition: color .2s, border-color .2s; margin-bottom: -1px;
 }
-.search-wrap svg {
-  position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
-  color: var(--txt3); pointer-events: none;
-}
+.ptab:hover { color: var(--txt2); }
+.ptab.active { color: var(--goldl); border-bottom-color: var(--gold); }
+
+/* ── HISTORY VIEW ── */
+#view-history { display: block; }
+#view-sources { display: none; }
+
+/* controls */
+.controls { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-bottom: 24px; }
+.search-wrap { position: relative; flex: 1; min-width: 220px; }
+.search-wrap svg { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--txt3); pointer-events: none; }
 #search {
   width: 100%; padding: 9px 12px 9px 36px;
   background: rgba(10,7,3,.8); border: 1px solid rgba(184,134,11,.25); border-radius: 8px;
-  color: var(--text); font-family: inherit; font-size: 15px;
-  outline: none; transition: border-color .2s;
+  color: var(--text); font-family: inherit; font-size: 15px; outline: none; transition: border-color .2s;
 }
 #search:focus { border-color: rgba(184,134,11,.55); }
 #search::placeholder { color: var(--txt3); }
-.year-tabs {
-  display: flex; flex-wrap: wrap; gap: 6px;
-}
+.year-tabs { display: flex; flex-wrap: wrap; gap: 6px; }
 .ytab {
   padding: 6px 12px; border-radius: 6px; cursor: pointer;
   font-family: 'Cinzel', serif; font-size: 12px; letter-spacing: .05em;
@@ -113,124 +97,137 @@ header::after {
   color: var(--txt2); transition: all .2s; user-select: none;
 }
 .ytab:hover { border-color: rgba(184,134,11,.45); color: var(--text); }
-.ytab.active {
-  background: rgba(184,134,11,.2); border-color: rgba(184,134,11,.6);
-  color: var(--goldl);
-}
-
-/* ── STATS BAR ── */
-.stats-bar {
-  font-size: 13px; color: var(--txt3); margin-bottom: 20px; font-style: italic;
-}
+.ytab.active { background: rgba(184,134,11,.2); border-color: rgba(184,134,11,.6); color: var(--goldl); }
+.stats-bar { font-size: 13px; color: var(--txt3); margin-bottom: 16px; font-style: italic; }
 .stats-bar span { color: var(--txt2); }
 
-/* ── TIMELINE ── */
-.timeline { display: flex; flex-direction: column; gap: 4px; }
-
-/* year separator */
-.year-sep {
-  display: flex; align-items: center; gap: 14px;
-  padding: 18px 0 8px;
-}
-.year-sep-text {
-  font-family: 'Cinzel', serif; font-size: 11px; font-weight: 700;
-  letter-spacing: 4px; color: rgba(212,168,67,.6); text-transform: uppercase;
-  flex-shrink: 0;
-}
-.year-sep-line { flex: 1; height: 1px; background: linear-gradient(90deg, rgba(184,134,11,.25), transparent); }
-
 /* offer card */
-.offer-card {
-  display: flex; gap: 0; border-radius: 10px; overflow: hidden;
-  background: rgba(10,7,3,.7);
-  border: 1px solid rgba(184,134,11,.12);
-  transition: border-color .2s, background .2s;
-  cursor: default;
-}
-.offer-card:hover {
-  background: rgba(18,12,6,.85);
-  border-color: rgba(184,134,11,.28);
-}
-
-/* left col: date + price */
-.offer-left {
-  flex-shrink: 0; width: 120px;
-  padding: 14px 12px 14px 16px;
-  display: flex; flex-direction: column; gap: 8px; align-items: flex-start;
-  border-right: 1px solid rgba(184,134,11,.1);
-  background: rgba(184,134,11,.04);
-}
-.offer-id {
-  font-family: 'Cinzel', serif; font-size: 10px; letter-spacing: .06em;
-  color: var(--txt3);
-}
-.offer-dates {
-  font-size: 13px; color: var(--txt2); line-height: 1.35;
-}
+.timeline { display: flex; flex-direction: column; gap: 4px; }
+.year-sep { display: flex; align-items: center; gap: 14px; padding: 18px 0 8px; }
+.year-sep-text { font-family: 'Cinzel', serif; font-size: 11px; font-weight: 700; letter-spacing: 4px; color: rgba(212,168,67,.6); flex-shrink: 0; }
+.year-sep-line { flex: 1; height: 1px; background: linear-gradient(90deg, rgba(184,134,11,.25), transparent); }
+.offer-card { display: flex; border-radius: 10px; overflow: hidden; background: rgba(10,7,3,.7); border: 1px solid rgba(184,134,11,.12); transition: border-color .2s, background .2s; }
+.offer-card:hover { background: rgba(18,12,6,.85); border-color: rgba(184,134,11,.28); }
+.offer-left { flex-shrink: 0; width: 120px; padding: 14px 12px 14px 16px; display: flex; flex-direction: column; gap: 8px; border-right: 1px solid rgba(184,134,11,.1); background: rgba(184,134,11,.04); }
+.offer-id { font-family: 'Cinzel', serif; font-size: 10px; letter-spacing: .06em; color: var(--txt3); }
+.offer-dates { font-size: 13px; color: var(--txt2); line-height: 1.35; }
 .offer-dates .day { font-size: 15px; font-weight: 600; color: var(--text); }
 .offer-dates .month-year { font-size: 11px; color: var(--txt3); }
-.offer-price {
-  display: inline-flex; align-items: center; gap: 5px;
-  padding: 3px 8px; border-radius: 12px;
-  background: rgba(192,57,43,.15); border: 1px solid rgba(192,57,43,.3);
-  font-family: 'Cinzel', serif; font-size: 13px; font-weight: 700;
-  color: #e57060; letter-spacing: .02em;
-}
-.ruby-gem {
-  width: 10px; height: 10px; position: relative; display: inline-block; flex-shrink: 0;
-}
-.ruby-gem::before {
-  content: '◆'; font-size: 11px; color: #e05545;
-  text-shadow: 0 0 6px rgba(220,60,45,.6);
-}
-
-/* right col: content */
-.offer-body {
-  flex: 1; padding: 14px 18px;
-  display: flex; flex-direction: column; gap: 6px;
-}
-.offer-items {
-  display: flex; flex-wrap: wrap; gap: 6px;
-}
-.offer-item-tag {
-  font-size: 13px; color: var(--text);
-  padding: 2px 8px; border-radius: 4px;
-  background: rgba(184,134,11,.08); border: 1px solid rgba(184,134,11,.15);
-  line-height: 1.4;
-}
+.offer-price { display: inline-flex; align-items: center; gap: 5px; padding: 3px 8px; border-radius: 12px; background: rgba(192,57,43,.15); border: 1px solid rgba(192,57,43,.3); font-family: 'Cinzel', serif; font-size: 13px; font-weight: 700; color: #e57060; }
+.ruby-gem::before { content: '◆'; font-size: 11px; color: #e05545; text-shadow: 0 0 6px rgba(220,60,45,.6); }
+.offer-body { flex: 1; padding: 14px 18px; display: flex; flex-direction: column; gap: 6px; }
+.offer-items { display: flex; flex-wrap: wrap; gap: 6px; }
+.offer-item-tag { font-size: 13px; color: var(--text); padding: 2px 8px; border-radius: 4px; background: rgba(184,134,11,.08); border: 1px solid rgba(184,134,11,.15); line-height: 1.4; }
 .offer-item-tag.unnamed { color: var(--txt3); font-style: italic; font-size: 12px; }
-.offer-desc {
-  font-size: 13px; color: var(--txt3); line-height: 1.5;
-  overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
-}
+.offer-desc { font-size: 13px; color: var(--txt3); line-height: 1.5; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
 .offer-desc.expanded { -webkit-line-clamp: unset; }
-.offer-more {
-  font-size: 12px; color: var(--amber); cursor: pointer;
-  align-self: flex-start; background: none; border: none;
-  font-family: inherit; padding: 0; line-height: 1;
-}
+.offer-more { font-size: 12px; color: var(--amber); cursor: pointer; align-self: flex-start; background: none; border: none; font-family: inherit; padding: 0; }
 .offer-more:hover { color: var(--goldl); }
+.empty { text-align: center; padding: 80px 20px; color: var(--txt3); font-style: italic; font-size: 16px; }
 
-/* empty state */
-.empty {
-  text-align: center; padding: 80px 20px;
-  color: var(--txt3); font-style: italic; font-size: 16px;
+/* ── SOURCES VIEW ── */
+.src-intro { font-size: 15px; color: var(--txt2); line-height: 1.65; margin-bottom: 32px; font-style: italic; }
+.src-intro strong { color: var(--text); font-style: normal; }
+
+.src-grid { display: flex; flex-direction: column; gap: 16px; }
+
+.src-card {
+  border-radius: 12px; overflow: hidden;
+  background: rgba(10,7,3,.75); border: 1px solid rgba(184,134,11,.14);
+  transition: border-color .2s;
 }
+.src-card:hover { border-color: rgba(184,134,11,.28); }
+
+.src-header {
+  display: flex; align-items: center; gap: 14px;
+  padding: 14px 20px;
+  background: rgba(184,134,11,.05);
+  border-bottom: 1px solid rgba(184,134,11,.1);
+}
+.src-slot-name {
+  font-family: 'Cinzel', serif; font-size: 14px; font-weight: 700;
+  color: var(--goldl); letter-spacing: .06em; flex: 1;
+}
+.src-slot-hint { font-size: 12px; color: var(--txt3); font-style: italic; }
+
+.src-body { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+@media (max-width: 700px) { .src-body { grid-template-columns: 1fr; } }
+
+.src-col { padding: 16px 20px; }
+.src-col + .src-col { border-left: 1px solid rgba(184,134,11,.08); }
+@media (max-width: 700px) { .src-col + .src-col { border-left: none; border-top: 1px solid rgba(184,134,11,.08); } }
+
+.src-col-label {
+  font-family: 'Cinzel', serif; font-size: 10px; font-weight: 600; letter-spacing: 3px;
+  text-transform: uppercase; color: rgba(212,168,67,.5); margin-bottom: 12px;
+}
+
+/* event source items */
+.src-events { display: flex; flex-direction: column; gap: 8px; }
+.src-event-row { display: flex; align-items: flex-start; gap: 10px; }
+.src-event-ico { font-size: 18px; line-height: 1; flex-shrink: 0; margin-top: 1px; }
+.src-event-info { flex: 1; }
+.src-event-name { font-size: 14px; color: var(--text); font-weight: 600; line-height: 1.2; }
+.src-event-when { font-size: 12px; color: var(--txt3); margin-top: 2px; }
+.src-event-items { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 5px; }
+.src-item-badge {
+  font-size: 11px; padding: 1px 7px; border-radius: 10px; line-height: 1.6;
+  border: 1px solid; display: inline-block;
+}
+.src-item-badge.q-green   { color: #8acd5a; border-color: rgba(138,205,90,.3); background: rgba(138,205,90,.07); }
+.src-item-badge.q-blue    { color: #5ab4e0; border-color: rgba(90,180,224,.3); background: rgba(90,180,224,.07); }
+.src-item-badge.q-purple  { color: #b87ae0; border-color: rgba(184,122,224,.3); background: rgba(184,122,224,.07); }
+.src-item-badge.q-red     { color: #e05555; border-color: rgba(224,85,85,.3); background: rgba(224,85,85,.07); }
+.src-item-badge.q-orange  { color: #e0a030; border-color: rgba(224,160,48,.3); background: rgba(224,160,48,.07); }
+.src-no-event { font-size: 13px; color: var(--txt3); font-style: italic; padding: 4px 0; }
+
+/* rune source */
+.src-rune-block { display: flex; flex-direction: column; gap: 10px; }
+.src-rune-name { font-size: 15px; color: var(--text); font-weight: 600; }
+.src-rune-stats { font-size: 13px; color: var(--txt2); line-height: 1.55; }
+.src-rune-stats strong { color: var(--text); }
+
+/* timeline bar */
+.src-rune-bar-wrap { margin-top: 4px; }
+.src-rune-bar-label { font-size: 11px; color: var(--txt3); margin-bottom: 4px; }
+.src-rune-bar { height: 6px; background: rgba(184,134,11,.12); border-radius: 3px; overflow: visible; position: relative; }
+.src-rune-bar-fill { height: 100%; border-radius: 3px; background: linear-gradient(90deg, rgba(184,134,11,.4), rgba(212,168,67,.7)); transition: width .5s; }
+.src-rune-bar-marker {
+  position: absolute; top: -3px; width: 12px; height: 12px; border-radius: 50%;
+  background: var(--gold); border: 2px solid var(--bg);
+  box-shadow: 0 0 6px rgba(212,168,67,.6); transform: translateX(-50%);
+}
+.src-rune-bar-marker.today { background: #5ab4e0; box-shadow: 0 0 6px rgba(90,180,224,.7); }
+
+.src-rune-next { display: inline-flex; align-items: center; gap: 8px; margin-top: 8px; }
+.src-rune-next-badge {
+  font-size: 12px; padding: 3px 10px; border-radius: 12px; font-weight: 600;
+  font-family: 'Cinzel', serif; letter-spacing: .03em;
+}
+.src-rune-next-badge.soon { background: rgba(90,122,58,.2); border: 1px solid rgba(138,184,96,.4); color: #b0e080; }
+.src-rune-next-badge.future { background: rgba(184,134,11,.1); border: 1px solid rgba(184,134,11,.3); color: var(--gold); }
+.src-rune-next-badge.overdue { background: rgba(139,58,42,.2); border: 1px solid rgba(200,96,64,.4); color: #e08060; }
+.src-rune-next-text { font-size: 12px; color: var(--txt3); }
+.src-no-rune { font-size: 13px; color: var(--txt3); font-style: italic; }
+
+/* month badges in event */
+.month-chips { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
+.month-chip {
+  font-size: 11px; padding: 2px 8px; border-radius: 10px;
+  background: rgba(184,134,11,.1); border: 1px solid rgba(184,134,11,.2);
+  color: var(--txt2); font-family: 'Cinzel', serif; letter-spacing: .03em;
+}
+.month-chip.current { background: rgba(90,122,58,.2); border-color: rgba(138,184,96,.4); color: #b0e080; }
 
 /* ── RESPONSIVE ── */
 @media (max-width: 680px) {
   header { padding: 0 16px; }
   .page { padding: 20px 16px 60px; }
   .offer-left { width: 100px; }
-  .offer-body { padding: 12px 14px; }
 }
 @media (max-width: 480px) {
   .offer-card { flex-direction: column; }
-  .offer-left {
-    flex-direction: row; width: 100%; align-items: center; gap: 12px;
-    border-right: none; border-bottom: 1px solid rgba(184,134,11,.1);
-    padding: 10px 14px;
-  }
+  .offer-left { flex-direction: row; width: 100%; align-items: center; gap: 12px; border-right: none; border-bottom: 1px solid rgba(184,134,11,.1); padding: 10px 14px; }
   .offer-id { display: none; }
 }
 </style>
@@ -241,7 +238,7 @@ header::after {
   <div class="h-inner">
     <a href="index.html" class="h-back">← Назад</a>
     <div>
-      <div class="h-title">История Акций</div>
+      <div class="h-title">Акции и источники</div>
       <div class="h-sub">Рубиновый магазин · 2011–2026</div>
     </div>
   </div>
@@ -249,24 +246,131 @@ header::after {
 
 <div class="page">
 
-  <div class="controls">
-    <div class="search-wrap">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
-      </svg>
-      <input id="search" type="text" placeholder="Поиск: руна, сундук, эликсир…" autocomplete="off">
-    </div>
-    <div class="year-tabs" id="yearTabs"></div>
+  <div class="page-tabs">
+    <div class="ptab active" data-tab="history">История акций</div>
+    <div class="ptab" data-tab="sources">Откуда брать предметы</div>
   </div>
 
-  <div class="stats-bar" id="statsBar"></div>
-  <div class="timeline" id="timeline"></div>
+  <!-- ══ TAB: HISTORY ══ -->
+  <div id="view-history">
+    <div class="controls">
+      <div class="search-wrap">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+        </svg>
+        <input id="search" type="text" placeholder="Поиск: руна, сундук, эликсир…" autocomplete="off">
+      </div>
+      <div class="year-tabs" id="yearTabs"></div>
+    </div>
+    <div class="stats-bar" id="statsBar"></div>
+    <div class="timeline" id="timeline"></div>
+  </div>
+
+  <!-- ══ TAB: SOURCES ══ -->
+  <div id="view-sources">
+    <p class="src-intro">
+      Многие предметы доступны из <strong>нескольких источников одновременно</strong>: ивент-локация даёт саму экипировку,
+      рубиновый магазин — руну для её улучшения. Зная оба окна, можно планировать наперёд.
+    </p>
+    <div class="src-grid" id="srcGrid"></div>
+  </div>
 
 </div>
 
 <script>
+// ══════════════════════════════════════════════
+//  STATIC KNOWLEDGE BASE
+// ══════════════════════════════════════════════
+const MONTHS_RU_SHORT = ['янв','фев','мар','апр','май','июн','июл','авг','сен','окт','ноя','дек'];
+const MONTHS_RU_FULL  = ['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
+const MONTHS_RU_NOM   = ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
+
+const Q_CLASS = { green:'q-green', blue:'q-blue', purple:'q-purple', red:'q-red', orange:'q-orange' };
+const Q_NAME  = { green:'Редк.', blue:'Элитн.', purple:'Героич.', red:'Леген.', orange:'Эпич.' };
+
+// Event → month mapping
+const EVENTS_BY_TAG = {
+  pirate_day:  { name:'День Пирата',             ico:'⚓', months:[6] },
+  st_patric:   { name:'Месяц цветущего хмеля',   ico:'🍺', months:[4] },
+  dragons:     { name:'Небесные Драконы',         ico:'🐉', months:[9] },
+  colder:      { name:'Новый год. Колдер',        ico:'❄️', months:[12,1] },
+  halloween:   { name:'Тыквенный Фестиваль',      ico:'🎃', months:[10] },
+  caldron:     { name:'Тыквенный Фестиваль',      ico:'🎃', months:[10] },
+  goblin_land: { name:'Гоблинский Рай',           ico:'👺', months:[8] },
+  expedition:  { name:'Экспедиция',               ico:'🎒', months:[2,7] },
+  flowers:     { name:'Месяц пробуждения цветов', ico:'🌸', months:[3] },
+  dniwe:       { name:'Земли мёртвых',            ico:'💀', months:[] },
+  birthday:    { name:'День Рождения Королевства',ico:'🎂', months:[] },
+  zov_glubin:  { name:'Зов глубин',               ico:'🌊', months:[5] },
+};
+
+// Rune offers per slot (pre-computed from 490 offers, 2022-2026)
+const SLOT_RUNE = {
+  flask:      { rune:'Руна рома Двух Морей',      count:9,  avg_days:176, last:'21-04-2026', next:'13.10.2026', days_until:143 },
+  amulet:     { rune:'Руна Хенгиста',             count:8,  avg_days:192, last:'02-12-2025', next:'12.06.2026', days_until:20  },
+  talisman:   { rune:'Руна "Превосходство Аргира"',count:8, avg_days:197, last:'20-01-2026', next:'04.08.2026', days_until:73  },
+  helm:       { rune:'Руна Анст',                 count:6,  avg_days:220, last:'13-11-2025', next:'20.06.2026', days_until:28  },
+  battle_bag: { rune:'Руна Эльты',                count:5,  avg_days:270, last:'25-09-2025', next:'22.06.2026', days_until:30  },
+  trinket:    { rune:'Руна драконьей ярости',     count:3,  avg_days:184, last:'15-02-2025', next:'17.08.2025', days_until:-279, overdue:true },
+  ring:       { rune:'Руна Тэмми',                count:2,  avg_days:474, last:'10-12-2023', next:'28.03.2025', days_until:-421, overdue:true },
+};
+
+// Event items per slot (from equipment_none.json + tags)
+const SLOT_EVENT_ITEMS = {
+  flask: [
+    { event:'pirate_day', items:[
+      { name:'Пиратская Фляжка', q:'blue' },
+      { name:'Пиратская Фляжка', q:'purple' },
+    ]},
+    { event:'st_patric', items:[
+      { name:'Фляжка Патрика', q:'green' },
+      { name:'Фляжка Патрика', q:'blue' },
+      { name:'Фляжка Патрика', q:'purple' },
+    ]},
+  ],
+  trinket: [
+    { event:'dragons', items:[
+      { name:'Гранионовый Чешуйчатый брелок', q:'blue' },
+      { name:'Гранионовый Чешуйчатый брелок', q:'purple' },
+      { name:'Гранионовый Чешуйчатый брелок', q:'red' },
+      { name:'Гранионовый Чешуйчатый брелок', q:'orange' },
+    ]},
+    { event:'colder', items:[
+      { name:'Брелок Снежинка', q:'orange' },
+    ]},
+  ],
+  talisman: [
+    { event:'st_patric', items:[
+      { name:'Талисман Сквайра клевера', q:'blue' },
+      { name:'Талисман Рыцаря клевера', q:'purple' },
+      { name:'Талисман Лорда клевера',  q:'red' },
+    ]},
+  ],
+  badge: [
+    { event:'dniwe', items:[
+      { name:'Номерной жетон капитана', q:'green' },
+      { name:'Номерной жетон капитана', q:'blue' },
+    ]},
+  ],
+};
+
+// Slot display meta
+const SLOT_META = {
+  flask:      { label:'Фляжка',         hint:'accessory1 — левый карман' },
+  trinket:    { label:'Брелок',         hint:'accessory2 — правый карман' },
+  talisman:   { label:'Талисман',       hint:'особый слот' },
+  amulet:     { label:'Амулет',         hint:'украшение на шее' },
+  helm:       { label:'Шлем',           hint:'голова' },
+  battle_bag: { label:'Боевая сумка',   hint:'слот инвентаря' },
+  ring:       { label:'Кольцо',         hint:'ring1 / ring2' },
+  badge:      { label:'Жетон (значок)', hint:'medallion / badge' },
+};
+const SLOT_ORDER = ['flask','trinket','talisman','amulet','helm','battle_bag','ring','badge'];
+
+// ══════════════════════════════════════════════
+//  HISTORY TAB
+// ══════════════════════════════════════════════
 const MONTHS_RU = ['янв','фев','мар','апр','май','июн','июл','авг','сен','окт','ноя','дек'];
-const MONTHS_FULL = ['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
 
 let offers = [];
 let activeYear = 'all';
@@ -274,71 +378,52 @@ let searchQ = '';
 
 function fmtDate(dd_mm_yyyy) {
   const p = dd_mm_yyyy.split('-');
-  if (p.length < 3) return dd_mm_yyyy;
+  if (p.length < 3) return {};
   const d = parseInt(p[0]), m = parseInt(p[1]) - 1, y = p[2];
-  return { d, m, y, short: `${d} ${MONTHS_RU[m]}`, full: `${d} ${MONTHS_FULL[m]} ${y}` };
+  return { d, m, y, short:`${d} ${MONTHS_RU[m]}`, full:`${d} ${MONTHS_RU_FULL[m]} ${y}` };
 }
 
 function dateRange(start, end) {
-  const s = fmtDate(start);
-  const e = fmtDate(end);
-  if (!s || !e) return start;
+  const s = fmtDate(start), e = fmtDate(end);
+  if (!s.y) return start;
   if (s.y !== e.y) return `${s.full} — ${e.full}`;
   if (s.m !== e.m) return `${s.short} — ${e.short} ${e.y}`;
-  if (s.d !== e.d) return `${s.d}–${e.d} ${MONTHS_FULL[s.m]} ${s.y}`;
-  return `${s.full}`;
+  if (s.d !== e.d) return `${s.d}–${e.d} ${MONTHS_RU_FULL[s.m]} ${s.y}`;
+  return s.full;
 }
 
-function priceLabel(p) {
-  if (p === Math.floor(p)) return String(Math.floor(p));
-  return String(p);
-}
-
-function getYear(o) {
-  return o.sort_date ? o.sort_date.substring(0,4) : '?';
-}
+function priceLabel(p) { return p === Math.floor(p) ? String(Math.floor(p)) : String(p); }
+function getYear(o) { return o.sort_date ? o.sort_date.substring(0,4) : '?'; }
 
 function matchSearch(o, q) {
   if (!q) return true;
-  const hay = [
-    o.chest_desc,
-    ...o.items_names,
-    ...(o.items || []),
-    String(o.price),
-    o.start, o.end,
-  ].join(' ').toLowerCase();
+  const hay = [o.chest_desc, ...o.items_names, ...(o.items||[]), String(o.price), o.start, o.end].join(' ').toLowerCase();
   return q.split(' ').every(w => hay.includes(w));
 }
 
 function filtered() {
   return offers.filter(o => {
     if (activeYear !== 'all' && getYear(o) !== activeYear) return false;
-    if (!matchSearch(o, searchQ)) return false;
-    return true;
+    return matchSearch(o, searchQ);
   });
 }
 
-function buildCard(o) {
+function buildOfferCard(o) {
   const s = fmtDate(o.start);
-  const range = dateRange(o.start, o.end);
   const price = priceLabel(o.price);
-
-  const itemsHtml = o.items_names.map((name, i) => {
-    const raw = o.items[i] || '';
+  const itemsHtml = (o.items_names || []).map((name,i) => {
+    const raw = (o.items||[])[i] || '';
     const display = name || raw;
-    const cls = name ? '' : ' unnamed';
-    return `<span class="offer-item-tag${cls}">${display}</span>`;
+    return `<span class="offer-item-tag${name ? '' : ' unnamed'}">${display}</span>`;
   }).join('');
-
   const desc = o.chest_desc;
   const descId = `desc-${o.id}`;
-  const longDesc = desc && desc.length > 160;
+  const long = desc && desc.length > 160;
   const descHtml = desc
-    ? `<div class="offer-desc" id="${descId}">${desc}</div>${longDesc ? `<button class="offer-more" onclick="toggleDesc('${descId}',this)">Показать полностью ▾</button>` : ''}`
+    ? `<div class="offer-desc" id="${descId}">${desc}</div>${long ? `<button class="offer-more" onclick="toggleDesc('${descId}',this)">Показать полностью ▾</button>` : ''}`
     : '';
-
   return `
-  <div class="offer-card" data-id="${o.id}">
+  <div class="offer-card">
     <div class="offer-left">
       <div class="offer-id">#${o.id}</div>
       <div class="offer-dates">
@@ -362,28 +447,17 @@ function toggleDesc(id, btn) {
 }
 window.toggleDesc = toggleDesc;
 
-function render() {
+function renderHistory() {
   const list = filtered();
   const tl = document.getElementById('timeline');
   const sb = document.getElementById('statsBar');
-
-  if (!list.length) {
-    tl.innerHTML = '<div class="empty">Ничего не найдено</div>';
-    sb.textContent = '';
-    return;
-  }
-
+  if (!list.length) { tl.innerHTML = '<div class="empty">Ничего не найдено</div>'; sb.textContent = ''; return; }
   sb.innerHTML = `Найдено <span>${list.length}</span> из ${offers.length} акций`;
-
-  let html = '';
-  let lastYear = null;
+  let html = '', lastYear = null;
   list.forEach(o => {
     const y = getYear(o);
-    if (y !== lastYear) {
-      html += `<div class="year-sep"><span class="year-sep-text">${y}</span><span class="year-sep-line"></span></div>`;
-      lastYear = y;
-    }
-    html += buildCard(o);
+    if (y !== lastYear) { html += `<div class="year-sep"><span class="year-sep-text">${y}</span><span class="year-sep-line"></span></div>`; lastYear = y; }
+    html += buildOfferCard(o);
   });
   tl.innerHTML = html;
 }
@@ -393,40 +467,152 @@ function buildYearTabs() {
   const container = document.getElementById('yearTabs');
   const all = document.createElement('div');
   all.className = 'ytab active'; all.textContent = 'Все';
-  all.onclick = () => setYear('all', all);
+  all.onclick = () => { activeYear = 'all'; document.querySelectorAll('.ytab').forEach(t=>t.classList.remove('active')); all.classList.add('active'); renderHistory(); };
   container.appendChild(all);
-
   years.forEach(y => {
     const t = document.createElement('div');
     t.className = 'ytab'; t.textContent = y;
-    t.onclick = () => setYear(y, t);
+    t.onclick = () => { activeYear = y; document.querySelectorAll('.ytab').forEach(x=>x.classList.remove('active')); t.classList.add('active'); renderHistory(); };
     container.appendChild(t);
   });
 }
 
-function setYear(y, el) {
-  activeYear = y;
-  document.querySelectorAll('.ytab').forEach(t => t.classList.remove('active'));
-  el.classList.add('active');
-  render();
-}
-
 document.getElementById('search').addEventListener('input', function() {
-  searchQ = this.value.trim().toLowerCase();
-  render();
+  searchQ = this.value.trim().toLowerCase(); renderHistory();
 });
 
-// Load data
+// ══════════════════════════════════════════════
+//  SOURCES TAB
+// ══════════════════════════════════════════════
+const curMonth = new Date().getMonth() + 1; // 1-12
+
+function monthChips(months) {
+  if (!months || !months.length) return '<span style="color:var(--txt3);font-size:12px;font-style:italic">Без фиксированного месяца</span>';
+  return `<div class="month-chips">${months.map(m => {
+    const active = m === curMonth;
+    return `<span class="month-chip${active?' current':''}">${MONTHS_RU_NOM[m-1]}${active?' ◂':''}</span>`;
+  }).join('')}</div>`;
+}
+
+function buildRuneSection(slotId) {
+  const r = SLOT_RUNE[slotId];
+  if (!r) return `<div class="src-no-rune">Данных об улучшении через акции нет</div>`;
+
+  const avgMonths = (r.avg_days / 30).toFixed(1);
+  const lastParts = r.last.split('-');
+  const lastFmt = `${parseInt(lastParts[0])} ${MONTHS_RU_FULL[parseInt(lastParts[1])-1]} ${lastParts[2]}`;
+
+  let badgeClass, badgeText;
+  if (r.overdue || r.days_until < 0) {
+    badgeClass = 'overdue';
+    badgeText = `Просрочена на ${Math.abs(r.days_until)} дн`;
+  } else if (r.days_until <= 30) {
+    badgeClass = 'soon';
+    badgeText = `~${r.next} (через ${r.days_until} дн)`;
+  } else {
+    badgeClass = 'future';
+    badgeText = `~${r.next}`;
+  }
+
+  // Timeline bar: show position in cycle
+  const cyclePct = r.overdue ? 100 : Math.min(100, Math.round((1 - r.days_until / r.avg_days) * 100));
+  const todayPct = r.overdue ? 100 : cyclePct;
+
+  return `
+  <div class="src-rune-block">
+    <div class="src-rune-name">${r.rune}</div>
+    <div class="src-rune-stats">
+      Появлялась <strong>${r.count}×</strong> за 2022–2026 · раз в <strong>~${avgMonths} мес</strong><br>
+      Последний раз: ${lastFmt}
+    </div>
+    <div class="src-rune-bar-wrap">
+      <div class="src-rune-bar-label">Прогресс цикла</div>
+      <div class="src-rune-bar">
+        <div class="src-rune-bar-fill" style="width:${cyclePct}%"></div>
+        <div class="src-rune-bar-marker today" style="left:${Math.min(todayPct,100)}%"></div>
+      </div>
+    </div>
+    <div class="src-rune-next">
+      <span class="src-rune-next-badge ${badgeClass}">${badgeText}</span>
+    </div>
+  </div>`;
+}
+
+function buildEventSection(slotId) {
+  const evItems = SLOT_EVENT_ITEMS[slotId];
+  if (!evItems || !evItems.length) {
+    return `<div class="src-no-event">Не выдаётся на ивентах — только в магазине или постоянно</div>`;
+  }
+
+  return `<div class="src-events">` + evItems.map(ei => {
+    const ev = EVENTS_BY_TAG[ei.event];
+    if (!ev) return '';
+    const itemBadges = ei.items.map(item =>
+      `<span class="src-item-badge ${Q_CLASS[item.q] || ''}">${item.name} (${Q_NAME[item.q] || item.q})</span>`
+    ).join('');
+    return `
+    <div class="src-event-row">
+      <div class="src-event-ico">${ev.ico}</div>
+      <div class="src-event-info">
+        <div class="src-event-name">${ev.name}</div>
+        ${monthChips(ev.months)}
+        <div class="src-event-items">${itemBadges}</div>
+      </div>
+    </div>`;
+  }).join('') + '</div>';
+}
+
+function renderSources() {
+  const grid = document.getElementById('srcGrid');
+  grid.innerHTML = SLOT_ORDER.map(slotId => {
+    const meta = SLOT_META[slotId];
+    if (!meta) return '';
+    return `
+    <div class="src-card">
+      <div class="src-header">
+        <div class="src-slot-name">${meta.label}</div>
+        <div class="src-slot-hint">${meta.hint}</div>
+      </div>
+      <div class="src-body">
+        <div class="src-col">
+          <div class="src-col-label">Ивент-локации</div>
+          ${buildEventSection(slotId)}
+        </div>
+        <div class="src-col">
+          <div class="src-col-label">Руна из рубинового магазина</div>
+          ${buildRuneSection(slotId)}
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ══════════════════════════════════════════════
+//  TAB SWITCHING
+// ══════════════════════════════════════════════
+document.querySelectorAll('.ptab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.ptab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    const v = tab.dataset.tab;
+    document.getElementById('view-history').style.display = v === 'history' ? 'block' : 'none';
+    document.getElementById('view-sources').style.display = v === 'sources' ? 'block' : 'none';
+  });
+});
+
+// ══════════════════════════════════════════════
+//  INIT
+// ══════════════════════════════════════════════
 fetch('db/offers.json')
   .then(r => r.json())
   .then(data => {
     offers = data;
     buildYearTabs();
-    render();
+    renderHistory();
+    renderSources();
   })
   .catch(err => {
-    document.getElementById('timeline').innerHTML =
-      '<div class="empty">Не удалось загрузить данные об акциях</div>';
+    document.getElementById('timeline').innerHTML = '<div class="empty">Не удалось загрузить данные</div>';
     console.error(err);
   });
 </script>
