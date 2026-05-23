@@ -878,7 +878,7 @@ select.on { border-color: var(--gold); background: rgba(var(--gold-tint),.06); c
 
   <!-- GUIDE LINK -->
   <a class="guide-link" href="#">
-    <img class="guide-ico" src="clover_girl_2.png" alt="">
+    <img class="guide-ico" src="../icons/clover_girl_1.jpg" alt="">
     <div class="body">
       <div class="ttl">Гайд: Месяц цветущего хмеля</div>
       <div class="dsc">Маршрут по лепреконской локации, тактики фарма тайленов и очков репутации.</div>
@@ -1055,30 +1055,36 @@ const REQ_RANK = {
 
 const ITEMS = [
   { id:'lep',     name:'Лепрекон',           note:'вечный',
-    img:'leprecon_coin.png',
+    img:'../icons/leprecon_coin.jpg',
     levels:['Нет','Злобный (фиол.)','Хитрый (красн.)','Сильный (оранж.)'],
-    frames:[null,'border_high','border_exclusive','border_special'] },
+    frames:[null,'border_high','border_exclusive','border_special'],
+    gameIds:[null,'st_patric_leprecon_pet_beer','st_patric_leprecon_pet_beer_2','st_patric_leprecon_pet_beer_3'] },
   { id:'hops',    name:'Медовый хмель',      note:'вечный',
-    img:'elixir_attackmagic_11.png',
+    img:'../icons/hop_golden.jpg',
     levels:['Нет','Фиолетовый','Красный','Оранжевый'],
-    frames:[null,'border_high','border_exclusive','border_special'] },
+    frames:[null,'border_high','border_exclusive','border_special'],
+    gameIds:[null,'st_patrick_every_month_buff_8','st_patrick_every_month_buff_9','st_patrick_every_month_buff_10'] },
   { id:'flask',   name:'Фляжка Патрика',     note:'до 1 июня',
-    img:'flask_icon_clover.png',
+    img:'../icons/flask_icon_clover.jpg',
     levels:['Нет','Зелёная','Синяя','Фляжка Клевера'],
-    frames:[null,'border_low','border_medium','border_high'] },
+    frames:[null,'border_low','border_medium','border_high'],
+    gameIds:[null,'st_patrick_2015_flask_1','st_patrick_2015_flask_2','st_patrick_2015_flask_3'] },
   { id:'tal',     name:'Талисман клевера',   note:'до 1 июня',
-    img:'golden_clover_quest.png',
+    img:'../icons/clover_talisman_pattern.png',
     levels:['Нет','Талисман Сквайра','Талисман Рыцаря','Талисман Лорда'],
-    frames:[null,'border_medium','border_high','border_exclusive'] },
+    frames:[null,'border_medium','border_high','border_exclusive'],
+    gameIds:[null,'st_patric_talisman_1','st_patric_talisman_2','st_patric_talisman_3'] },
   { id:'stone',   name:'Камень путешествий', note:'',
-    img:'../other%20items/artefact_stone_fire.png',
+    img:'../icons/artefact_stone_fire.jpg',
     levels:['Нет','Красный (1 тайлен)'],
-    frames:[null,'border_exclusive'], noHave:true },
+    frames:[null,'border_exclusive'], noHave:true,
+    gameIds:[null,'artefact_events_global_1'] },
   { id:'costume', name:'Костюм',             note:'обычный до 1 июня / прочный на год',
-    imgs:[null,'clover_girl_2.png','clover_girl_3.png'],
+    imgs:[null,'../icons/clover_girl_2.jpg','../icons/clover_girl_3.jpg'],
     frames:[null,'border_high','border_exclusive'],
     levels:['Нет','Обычный — 300 тайл.','Прочный — 900 тайл.'],
-    noHave:true },
+    noHave:true,
+    gameIds:[null,'st_patric_disguise_leprecon_1','st_patrick_2016_disguise_female_1'] },
 ];
 
 function gico(cfg, lv) {
@@ -1259,8 +1265,8 @@ function calc() {
   vb.innerHTML = rows.join('');
 
   const lines = [];
-  const icoMug  = `<div class="sline-ico"><div class="gico"><img class="base" src="good_beer_10.png"></div></div>`;
-  const icoMugP = `<div class="sline-ico"><div class="gico"><img class="base" src="good_beer_10.png"><img class="fr" src="../frames/border_low.png"></div></div>`;
+  const icoMug  = `<div class="sline-ico"><div class="gico"><img class="base" src="../icons/good_beer_10.jpg"></div></div>`;
+  const icoMugP = `<div class="sline-ico"><div class="gico"><img class="base" src="../icons/good_beer_10.jpg"><img class="fr" src="../frames/border_low.png"></div></div>`;
   const icoTayl = `<div class="sline-ico"><img src="../currency/leprecon_taylen.png" style="width:20px;height:20px;margin:auto;image-rendering:pixelated"></div>`;
   const icoRuby = `<div class="sline-ico"><img src="../currency/ruby_dealer_trnsp.png" style="width:20px;height:20px;margin:auto;image-rendering:pixelated"></div>`;
   const icoOk   = `<div class="sline-ico emoji">✅</div>`;
@@ -1299,26 +1305,26 @@ function renderItemsGuide() {
     { name:'Лепрекон', note:'вечный', cfg:ITEMS.find(c=>c.id==='lep'),
       steps:[
         { lv:1, label:'Злобный лепрекон', cost:800,  costR:8,  rank:1, ingr:null },
-        { lv:2, label:'Хитрый лепрекон',  cost:1000, costR:10, rank:2, ingr:ingrIco('leprecon_coin.png','border_exclusive','Волшебная монетка Лепреконов') },
-        { lv:3, label:'Сильный лепрекон', cost:2000, costR:20, rank:3, ingr:ingrIco('gold_pot.png','border_special','Волшебное золото Лепреконов') },
+        { lv:2, label:'Хитрый лепрекон',  cost:1000, costR:10, rank:2, ingr:ingrIco('../icons/leprecon_coin.jpg','border_exclusive','Волшебная монетка Лепреконов') },
+        { lv:3, label:'Сильный лепрекон', cost:2000, costR:20, rank:3, ingr:ingrIco('../icons/gold_pot.jpg','border_special','Волшебное золото Лепреконов') },
       ]},
     { name:'Медовый хмель', note:'вечный', cfg:ITEMS.find(c=>c.id==='hops'),
       steps:[
         { lv:1, label:'Фиолетовый',  cost:1400, costR:14, rank:1, ingr:null },
-        { lv:2, label:'Красный',     cost:1600, costR:16, rank:2, ingr:ingrIco('rainbow_bottle.png','border_exclusive','Концентрат лепреконской магии') },
-        { lv:3, label:'Оранжевый',   cost:2000, costR:20, rank:3, ingr:ingrIco('rainbow_bottle.png','border_special','Концентрат лепреконской магии') },
+        { lv:2, label:'Красный',     cost:1600, costR:16, rank:2, ingr:ingrIco('../icons/rainbow_bottle.jpg','border_exclusive','Концентрат лепреконской магии') },
+        { lv:3, label:'Оранжевый',   cost:2000, costR:20, rank:3, ingr:ingrIco('../icons/rainbow_bottle.jpg','border_special','Концентрат лепреконской магии') },
       ]},
     { name:'Фляжка Патрика', note:'до 1 июня', cfg:ITEMS.find(c=>c.id==='flask'),
       steps:[
         { lv:1, label:'Зелёная',          cost:300, costR:3, rank:1, ingr:null },
-        { lv:2, label:'Синяя',            cost:500, costR:5, rank:2, ingr:ingrIco('hop_silver.png','border_medium','Серебряный хмель') },
-        { lv:3, label:'Фляжка Клевера',   cost:700, costR:7, rank:3, ingr:ingrIco('hop_golden.png','border_high','Золотой хмель') },
+        { lv:2, label:'Синяя',            cost:500, costR:5, rank:2, ingr:ingrIco('../icons/hop_silver.jpg','border_medium','Серебряный хмель') },
+        { lv:3, label:'Фляжка Клевера',   cost:700, costR:7, rank:3, ingr:ingrIco('../icons/hop_golden.jpg','border_high','Золотой хмель') },
       ]},
     { name:'Талисман клевера', note:'до 1 июня', cfg:ITEMS.find(c=>c.id==='tal'),
       steps:[
         { lv:1, label:'Талисман Сквайра', cost:300, costR:3, rank:1, ingr:null },
-        { lv:2, label:'Талисман Рыцаря',  cost:500, costR:5, rank:2, ingr:ingrIco('clover_talisman_pattern.png','border_high','Сияющий клевер') },
-        { lv:3, label:'Талисман Лорда',   cost:700, costR:7, rank:3, ingr:ingrIco('clover_talisman_pattern.png','border_exclusive','Сияющий клевер') },
+        { lv:2, label:'Талисман Рыцаря',  cost:500, costR:5, rank:2, ingr:ingrIco('../icons/clover_talisman_pattern.png','border_high','Сияющий клевер') },
+        { lv:3, label:'Талисман Лорда',   cost:700, costR:7, rank:3, ingr:ingrIco('../icons/clover_talisman_pattern.png','border_exclusive','Сияющий клевер') },
       ]},
   ];
 
