@@ -1294,8 +1294,8 @@ function calc() {
 }
 
 function renderItemsGuide() {
-  function ingrIco(img, frame, name) {
-    return { ico: gico({ img, frames:[null, frame] }, 1), name };
+  function ingrIco(img, frame, name, gameId) {
+    return { ico: gico({ img, frames:[null, frame], gameId }, 1), name };
   }
   function costLabel(t, r) {
     return t > 0 ? `${fmt(t)} тайленов` : `${fmtR(r)} рубинов`;
