@@ -209,7 +209,7 @@ header {
 .detail-duration.approx { color: var(--txt3); font-style: italic; }
 
 /* ── YEAR SELECTOR ── */
-.year-nav { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
+.year-nav { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; align-items: center; }
 .ytab {
   padding: 5px 11px; border-radius: 6px; cursor: pointer;
   font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: .05em;
@@ -218,6 +218,31 @@ header {
 }
 .ytab:hover { border-color: rgba(184,134,11,.4); color: var(--txt2); }
 .ytab.active { background: rgba(184,134,11,.18); border-color: rgba(184,134,11,.55); color: var(--goldl); }
+.ytab.forecast-year { border-style: dashed; color: #9b7ec8; border-color: #9b7ec844; }
+.ytab.forecast-year:hover { border-color: #9b7ec8aa; color: #b89de0; }
+.ytab.forecast-year.active { background: #9b7ec822; border-color: #9b7ec899; color: #c8aaee; }
+
+/* ── FORECAST TOGGLE ── */
+.forecast-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 5px 13px; border-radius: 6px; cursor: pointer; user-select: none;
+  font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: .05em;
+  border: 1px dashed #9b7ec866; background: rgba(10,7,3,.6);
+  color: #9b7ec8; transition: all .15s; margin-left: auto;
+}
+.forecast-btn:hover { border-color: #9b7ec8aa; background: #9b7ec810; }
+.forecast-btn.on { background: #9b7ec820; border-color: #9b7ec899; color: #c8aaee; }
+.forecast-btn .fc-dot {
+  width: 7px; height: 7px; border-radius: 50%; background: #9b7ec8;
+  transition: transform .2s;
+}
+.forecast-btn.on .fc-dot { transform: scale(1.4); }
+
+/* ── FORECAST EVENT BAR ── */
+.ev-bar.ev-forecast {
+  border-style: dashed;
+  opacity: 0.72;
+}
 
 /* ── RESPONSIVE ── */
 @media (max-width: 700px) {
@@ -244,8 +269,12 @@ header {
   <!-- Фильтры -->
   <div class="filters" id="filtersRow"></div>
 
-  <!-- Выбор года -->
-  <div class="year-nav" id="yearNav"></div>
+  <!-- Выбор года + кнопка прогноза -->
+  <div class="year-nav" id="yearNav">
+    <button class="forecast-btn" id="forecastBtn">
+      <span class="fc-dot"></span>Прогноз
+    </button>
+  </div>
 
   <!-- Выбор месяца -->
   <div class="cal-nav">
@@ -324,9 +353,78 @@ let allNews = [];
 let curYear = TODAY.getFullYear();
 let curMonth= TODAY.getMonth(); // 0-based
 let selectedDay = null;
+let forecastMode = false;
 const filterState = {};  // group.id → bool
 
 FILTER_GROUPS.forEach(g => { filterState[g.id] = g.on; });
+
+// Прогнозные события начинаются с 1-го следующего месяца
+const FORECAST_START = isoDate(new Date(TODAY.getFullYear(), TODAY.getMonth() + 1, 1));
+
+// ══════════════════════════════════════════
+//  SEASONAL FORECAST TEMPLATES
+//  На основе статистики 2008–2026
+// ══════════════════════════════════════════
+const SEASONAL = [
+  // { title, cat, month (1-12), day, dur (дней) }
+  { title:'Месяц пробуждения цветов', cat:'event',   month:2,  day:10, dur:40 },
+  { title:'Месяц цветущего хмеля',    cat:'event',   month:3,  day:20, dur:35 },
+  { title:'Зов глубин',               cat:'event',   month:5,  day:12, dur:15 },
+  { title:'День Пирата',              cat:'event',   month:6,  day:12, dur:40 },
+  { title:'Небесные Драконы',         cat:'event',   month:8,  day:20, dur:45 },
+  { title:'Тыквенный фестиваль',      cat:'event',   month:10, day:10, dur:25 },
+  { title:'День Рождения Королевства',cat:'event',   month:11, day:27, dur:12 },
+  { title:'Новый год (Колдер)',        cat:'event',   month:12, day:17, dur:30 },
+  // Праздники
+  { title:'23 февраля',               cat:'holiday', month:2,  day:23, dur:1  },
+  { title:'8 марта',                  cat:'holiday', month:3,  day:8,  dur:1  },
+  { title:'1 апреля',                 cat:'holiday', month:4,  day:1,  dur:1  },
+  { title:'9 мая',                    cat:'holiday', month:5,  day:9,  dur:1  },
+];
+
+let _forecastCache = null;
+
+function buildForecastEvents() {
+  if (_forecastCache) return _forecastCache;
+  const result = [];
+  let fid = -1;
+  const YEARS = [TODAY.getFullYear(), TODAY.getFullYear()+1, TODAY.getFullYear()+2];
+
+  for (const yr of YEARS) {
+    // Ярмарки: каждый месяц 27-го, 13 дней
+    for (let m = 1; m <= 12; m++) {
+      const d = `${yr}-${String(m).padStart(2,'0')}-27`;
+      const eDate = new Date(yr, m-1, 27 + 12);
+      result.push({ id: fid--, d, e: isoDate(eDate), t:'Ярмарка месяца', c:'fair', approx:true, forecast:true });
+    }
+    // Сезонные ивенты и праздники
+    for (const s of SEASONAL) {
+      const d = `${yr}-${String(s.month).padStart(2,'0')}-${String(s.day).padStart(2,'0')}`;
+      const eDate = new Date(yr, s.month-1, s.day + s.dur - 1);
+      result.push({ id: fid--, d, e: isoDate(eDate), t: s.title, c: s.cat, approx:true, forecast:true });
+    }
+  }
+
+  _forecastCache = result;
+  return result;
+}
+
+// Возвращает совмещённый массив: реальные новости + прогноз (без дублей)
+// Дубль = прогнозное событие чья дата уже покрыта реальным событием той же категории
+function getNewsWithForecast() {
+  if (!forecastMode) return allNews;
+  const forecast = buildForecastEvents().filter(f => f.d >= FORECAST_START);
+
+  // Строим набор "реальных" (год+месяц+cat) чтобы не дублировать
+  const covered = new Set();
+  allNews.forEach(n => {
+    const ym = n.d.substring(0,7); // "2026-05"
+    covered.add(`${ym}:${n.c}`);
+  });
+
+  const filtered = forecast.filter(f => !covered.has(`${f.d.substring(0,7)}:${f.c}`));
+  return [...allNews, ...filtered];
+}
 
 // ══════════════════════════════════════════
 //  HELPERS
@@ -367,15 +465,25 @@ function buildFilters() {
 //  BUILD YEAR TABS
 // ══════════════════════════════════════════
 function buildYearNav() {
-  const years = [...new Set(allNews.map(n => n.d.substring(0,4)))].sort().reverse();
+  const realYears = [...new Set(allNews.map(n => n.d.substring(0,4)))].map(Number);
+  const thisYear = TODAY.getFullYear();
+  const futureYears = forecastMode ? [thisYear+1, thisYear+2] : [];
+  const allYears = [...new Set([...realYears, ...futureYears])].sort().reverse();
+
   const nav = document.getElementById('yearNav');
+  // Сохраняем кнопку прогноза
+  const fcBtn = document.getElementById('forecastBtn');
   nav.innerHTML = '';
-  years.forEach(y => {
+
+  allYears.forEach(y => {
+    const isFuture = !realYears.includes(y);
     const el = document.createElement('div');
-    el.className = 'ytab' + (String(curYear) === y ? ' active' : '');
+    el.className = 'ytab' +
+      (curYear === y     ? ' active'        : '') +
+      (isFuture          ? ' forecast-year' : '');
     el.textContent = y;
     el.addEventListener('click', () => {
-      curYear = parseInt(y);
+      curYear = y;
       document.querySelectorAll('.ytab').forEach(t => t.classList.remove('active'));
       el.classList.add('active');
       buildMonthTabs();
@@ -383,6 +491,8 @@ function buildYearNav() {
     });
     nav.appendChild(el);
   });
+
+  nav.appendChild(fcBtn);
 }
 
 // ══════════════════════════════════════════
@@ -514,7 +624,8 @@ function renderCalendar() {
 
   // Get all visible events active in the displayed range
   const rangeStart = allDates[0], rangeEnd = allDates[allDates.length - 1];
-  const monthEvents = allNews.filter(ev => {
+  const source = getNewsWithForecast();
+  const monthEvents = source.filter(ev => {
     if (!isVisible(ev.c)) return false;
     const evEnd = ev.e || ev.d;
     return ev.d <= rangeEnd && evEnd >= rangeStart;
@@ -558,8 +669,9 @@ function renderCalendar() {
         const color = catColor(ev.c);
         const bar = document.createElement('div');
         bar.className = 'ev-bar' +
-          (!startsHere ? ' ev-cont' : '') +
-          (!endsHere   ? ' ev-goes' : '');
+          (!startsHere    ? ' ev-cont'     : '') +
+          (!endsHere      ? ' ev-goes'     : '') +
+          (ev.forecast    ? ' ev-forecast' : '');
         bar.style.gridColumn = gridCol;
         bar.style.gridRow = row + 1;
         bar.style.setProperty('--color', color);
@@ -599,17 +711,19 @@ function detailItemHtml(n) {
   const meta = CAT_META[n.c] || CAT_META.other;
   const color = catColor(n.c);
   const durInfo = n.e ? formatDuration(n.d, n.e, n.approx) : null;
-  const link = `<a href="${newsUrl(n.id)}" target="_blank" rel="noopener" class="detail-link">Новость →</a>`;
+  const linkOrForecast = n.forecast
+    ? `<span style="font-size:11px;color:#9b7ec8;border:1px dashed #9b7ec866;border-radius:4px;padding:2px 8px;">~ прогноз</span>`
+    : `<a href="${newsUrl(n.id)}" target="_blank" rel="noopener" class="detail-link">Новость →</a>`;
   const durHtml = durInfo
     ? `<div class="detail-duration${durInfo.approx?' approx':''}">${durInfo.range} · ${durInfo.dur}</div>`
     : '';
-  return `<div class="detail-item">
+  return `<div class="detail-item"${n.forecast ? ' style="opacity:.85"' : ''}>
     <div class="detail-ico">${meta.ico}</div>
     <div class="detail-info" style="flex:1;min-width:0">
       <div class="detail-title">${n.t}</div>
       <div class="detail-meta" style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:4px">
         <span class="detail-cat-badge" style="color:${color};border-color:${color}44;background:${color}12">${meta.label}</span>
-        ${link}
+        ${linkOrForecast}
       </div>
       ${durHtml}
     </div>
@@ -674,6 +788,14 @@ function navigate(delta) {
 document.getElementById('btnPrev').addEventListener('click', () => navigate(-1));
 document.getElementById('btnNext').addEventListener('click', () => navigate(+1));
 document.getElementById('detailClose').addEventListener('click', closeDetail);
+document.getElementById('forecastBtn').addEventListener('click', () => {
+  forecastMode = !forecastMode;
+  _forecastCache = null; // сбрасываем кэш
+  document.getElementById('forecastBtn').classList.toggle('on', forecastMode);
+  buildYearNav();
+  buildMonthTabs();
+  renderCalendar();
+});
 
 // ══════════════════════════════════════════
 //  NEWS URL
