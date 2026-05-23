@@ -100,40 +100,67 @@ header {
 
 /* ── CALENDAR GRID ── */
 .cal-wrap { background: rgba(10,7,3,.6); border: 1px solid rgba(184,134,11,.12); border-radius: 10px; overflow: hidden; }
-.cal-dow { display: grid; grid-template-columns: repeat(7, 1fr); background: rgba(184,134,11,.05); border-bottom: 1px solid rgba(184,134,11,.1); }
-.cal-dow > div { padding: 8px 0; text-align: center; font-family: 'Cinzel', serif; font-size: 10px; letter-spacing: 2px; color: var(--txt3); text-transform: uppercase; }
-.cal-days { display: grid; grid-template-columns: repeat(7, 1fr); }
+.cal-dow { display: grid; grid-template-columns: repeat(7, 1fr); background: rgba(184,134,11,.05); border-bottom: 1px solid rgba(184,134,11,.12); }
+.cal-dow > div { padding: 9px 0; text-align: center; font-family: 'Cinzel', serif; font-size: 10px; letter-spacing: 2px; color: var(--txt3); text-transform: uppercase; }
 
-.day-cell {
-  min-height: 90px; padding: 6px 7px;
-  border-right: 1px solid rgba(184,134,11,.07);
-  border-bottom: 1px solid rgba(184,134,11,.07);
-  vertical-align: top; position: relative;
-  transition: background .12s;
-}
-.day-cell:nth-child(7n) { border-right: none; }
-.day-cell.other-month { opacity: .2; pointer-events: none; }
-.day-cell.clickable { cursor: pointer; }
-.day-cell.clickable:hover { background: rgba(184,134,11,.06); }
-.day-cell.today .day-num {
-  background: rgba(212,168,67,.25); border-radius: 50%;
-  width: 22px; height: 22px; display: flex; align-items: center; justify-content: center;
-  color: var(--goldl); font-weight: 700;
-}
-.day-cell.selected { background: rgba(184,134,11,.1) !important; outline: 1px solid rgba(184,134,11,.3); }
-.day-cell.future { opacity: .65; }
+/* Week row */
+.week { border-bottom: 1px solid rgba(184,134,11,.08); }
+.week:last-child { border-bottom: none; }
 
-.day-num { font-family: 'Cinzel', serif; font-size: 12px; color: var(--txt3); margin-bottom: 4px; line-height: 1; }
-
-.day-events { display: flex; flex-direction: column; gap: 2px; }
-.ev-chip {
-  display: flex; align-items: center; gap: 4px;
-  font-size: 11px; line-height: 1.3; color: var(--txt2);
-  overflow: hidden;
+/* Day numbers row */
+.week-days { display: grid; grid-template-columns: repeat(7, 1fr); }
+.wday {
+  padding: 6px 8px 4px; min-height: 34px; position: relative;
+  border-right: 1px solid rgba(184,134,11,.06);
+  cursor: pointer; transition: background .12s; user-select: none;
 }
-.ev-dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
-.ev-text { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; max-width: 100%; }
-.ev-more { font-size: 10px; color: var(--txt3); padding-left: 9px; font-style: italic; }
+.wday:last-child { border-right: none; }
+.wday:hover { background: rgba(184,134,11,.05); }
+.wday.other-month { opacity: .18; pointer-events: none; }
+.wday.future { opacity: .55; }
+.wday.selected { background: rgba(184,134,11,.12); }
+.wday-num {
+  font-family: 'Cinzel', serif; font-size: 12px; color: var(--txt3);
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 22px; height: 22px; border-radius: 50%;
+}
+.wday.today .wday-num { background: rgba(212,168,67,.22); color: var(--goldl); font-weight: 700; }
+
+/* Event bars area */
+.week-events {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-auto-rows: 22px;
+  padding: 2px 0 5px;
+}
+.ev-bar {
+  height: 20px; margin: 1px 2px;
+  border-radius: 3px;
+  font-size: 11px; line-height: 20px;
+  padding: 0 7px;
+  overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
+  cursor: pointer;
+  background: color-mix(in srgb, var(--color) 22%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color) 50%, transparent);
+  color: var(--color);
+  transition: filter .12s;
+}
+/* Fallback for browsers without color-mix */
+@supports not (background: color-mix(in srgb, red 50%, transparent)) {
+  .ev-bar { background: rgba(0,0,0,.3); border-color: rgba(255,255,255,.2); }
+}
+.ev-bar:hover { filter: brightness(1.25); }
+/* Continuation from previous week — no left border, no left radius */
+.ev-bar.ev-cont { border-left: none; border-radius: 0 3px 3px 0; padding-left: 4px; }
+/* Continues to next week — no right border, no right radius */
+.ev-bar.ev-goes { border-right: none; border-radius: 3px 0 0 3px; }
+/* Both: continuation and continues */
+.ev-bar.ev-cont.ev-goes { border-radius: 0; }
+
+.ev-more-row {
+  grid-column: 1 / 8; font-size: 11px; color: var(--txt3);
+  padding: 0 8px; line-height: 20px; font-style: italic;
+}
 
 /* ── DETAIL PANEL ── */
 .detail {
@@ -180,11 +207,6 @@ header {
   font-size: 12px; color: var(--txt2); margin-top: 4px;
 }
 .detail-duration.approx { color: var(--txt3); font-style: italic; }
-/* Continuation indicator in day cells */
-.ev-cont {
-  height: 4px; border-radius: 2px; margin-top: 1px;
-  opacity: 0.5;
-}
 
 /* ── YEAR SELECTOR ── */
 .year-nav { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
@@ -201,10 +223,7 @@ header {
 @media (max-width: 700px) {
   header { padding: 0 16px; }
   .page { padding: 16px 12px 60px; }
-  .day-cell { min-height: 64px; padding: 4px 4px; }
-  .ev-text { display: none; }
-  .ev-dot { width: 7px; height: 7px; }
-  .day-events { flex-direction: row; flex-wrap: wrap; gap: 3px; margin-top: 2px; }
+  .ev-bar { font-size: 10px; padding: 0 3px; }
 }
 </style>
 </head>
@@ -241,7 +260,7 @@ header {
     <div class="cal-dow">
       <div>Пн</div><div>Вт</div><div>Ср</div><div>Чт</div><div>Пт</div><div>Сб</div><div>Вс</div>
     </div>
-    <div class="cal-days" id="calDays"></div>
+    <div id="calBody"></div>
   </div>
 
   <!-- Детали дня -->
@@ -302,7 +321,6 @@ const GROUP_COLOR = {
 //  STATE
 // ══════════════════════════════════════════
 let allNews = [];
-let dayMap  = {};      // 'YYYY-MM-DD' → [news items]
 let curYear = TODAY.getFullYear();
 let curMonth= TODAY.getMonth(); // 0-based
 let selectedDay = null;
@@ -400,102 +418,176 @@ function buildMonthTabs() {
 }
 
 // ══════════════════════════════════════════
+//  CAT COLORS (hex for CSS var())
+// ══════════════════════════════════════════
+const CAT_COLORS = {
+  offer:'#d4a843', bonus:'#f0c040',
+  tournament:'#5ab4e0', tournament_end:'#5ab4e0',
+  event:'#7acc50', fair:'#e09030',
+  holiday:'#e060a0', season:'#8ab860',
+  maintenance:'#808070', update:'#808070',
+  auction:'#a07850', other:'#605040',
+};
+
+function catColor(c) { return CAT_COLORS[c] || '#706050'; }
+
+// ══════════════════════════════════════════
+//  WEEK LAYOUT ALGORITHM
+// ══════════════════════════════════════════
+function layoutWeek(weekDates, events) {
+  // weekDates: 7 ISO date strings (Mon–Sun)
+  const w0 = weekDates[0], w6 = weekDates[6];
+
+  // Collect events active this week, deduplicated by id
+  const seen = new Set();
+  const active = [];
+  for (const ev of events) {
+    if (seen.has(ev.id)) continue;
+    const evEnd = ev.e || ev.d;
+    if (ev.d <= w6 && evEnd >= w0) { seen.add(ev.id); active.push(ev); }
+  }
+
+  // Sort: earlier start first, then longer duration first
+  active.sort((a, b) => {
+    if (a.d !== b.d) return a.d < b.d ? -1 : 1;
+    return ((b.e||b.d) < (a.e||a.d)) ? -1 : 1;
+  });
+
+  const MAX_ROWS = 3;
+  const rowTail = Array(MAX_ROWS).fill(-1); // last col used per row
+  const placed = [];
+  let overflow = 0;
+
+  for (const ev of active) {
+    const clampStart = ev.d < w0 ? w0 : ev.d;
+    const clampEnd   = (ev.e && ev.e > w6) ? w6 : (ev.e || ev.d);
+    const c1 = weekDates.indexOf(clampStart);
+    const c2 = weekDates.indexOf(clampEnd);
+    if (c1 === -1 || c2 === -1) continue; // shouldn't happen
+
+    let row = -1;
+    for (let r = 0; r < MAX_ROWS; r++) {
+      if (rowTail[r] < c1) { row = r; break; }
+    }
+    if (row === -1) { overflow++; continue; }
+    rowTail[row] = c2;
+
+    placed.push({
+      ev, row,
+      gridCol: `${c1+1} / ${c2+2}`,
+      startsHere: ev.d >= w0,
+      endsHere:   !ev.e || ev.e <= w6,
+    });
+  }
+
+  return { placed, overflow };
+}
+
+// ══════════════════════════════════════════
 //  RENDER CALENDAR
 // ══════════════════════════════════════════
 function renderCalendar() {
-  const grid = document.getElementById('calDays');
   document.getElementById('navCur').textContent = `${MONTHS_NOM[curMonth]} ${curYear}`;
+  document.querySelectorAll('.mtab').forEach((t, i) => t.classList.toggle('active', i === curMonth));
 
-  // Update month tab active state
-  document.querySelectorAll('.mtab').forEach((t, idx) => {
-    t.classList.toggle('active', idx === curMonth);
+  const body = document.getElementById('calBody');
+  body.innerHTML = '';
+
+  // Build week date arrays
+  const firstDate = new Date(curYear, curMonth, 1);
+  let startDow = firstDate.getDay();
+  startDow = startDow === 0 ? 6 : startDow - 1; // Mon=0
+  const daysInMonth = new Date(curYear, curMonth + 1, 0).getDate();
+
+  const allDates = [];
+  // Prev month overflow
+  const prevDays = new Date(curYear, curMonth, 0).getDate();
+  for (let i = startDow - 1; i >= 0; i--) {
+    allDates.push(isoDate(new Date(curYear, curMonth - 1, prevDays - i)));
+  }
+  for (let d = 1; d <= daysInMonth; d++) {
+    allDates.push(isoDate(new Date(curYear, curMonth, d)));
+  }
+  // Next month overflow to fill last week
+  let nd = 1;
+  while (allDates.length % 7) allDates.push(isoDate(new Date(curYear, curMonth + 1, nd++)));
+
+  // Get all visible events active in the displayed range
+  const rangeStart = allDates[0], rangeEnd = allDates[allDates.length - 1];
+  const monthEvents = allNews.filter(ev => {
+    if (!isVisible(ev.c)) return false;
+    const evEnd = ev.e || ev.d;
+    return ev.d <= rangeEnd && evEnd >= rangeStart;
   });
 
-  // First day of month (0=Sun → convert to Mon-based)
-  const firstDate = new Date(curYear, curMonth, 1);
-  let startDow = firstDate.getDay(); // 0=Sun
-  startDow = startDow === 0 ? 6 : startDow - 1; // convert to Mon=0
+  // Split into weeks and render
+  for (let w = 0; w < allDates.length; w += 7) {
+    const weekDates = allDates.slice(w, w + 7);
+    const weekEl = document.createElement('div');
+    weekEl.className = 'week';
 
-  const daysInMonth = new Date(curYear, curMonth + 1, 0).getDate();
-  const daysInPrev  = new Date(curYear, curMonth, 0).getDate();
-  const totalCells  = Math.ceil((startDow + daysInMonth) / 7) * 7;
+    // ── Day numbers row ──
+    const daysRow = document.createElement('div');
+    daysRow.className = 'week-days';
+    weekDates.forEach(dateStr => {
+      const d = parseIso(dateStr);
+      const isThis = d.getMonth() === curMonth;
+      const el = document.createElement('div');
+      el.className = 'wday' +
+        (!isThis              ? ' other-month' : '') +
+        (dateStr === TODAY_STR ? ' today'       : '') +
+        (dateStr > TODAY_STR && isThis ? ' future' : '') +
+        (dateStr === selectedDay ? ' selected'  : '');
+      el.dataset.date = dateStr;
+      el.innerHTML = `<span class="wday-num">${d.getDate()}</span>`;
+      if (isThis) el.addEventListener('click', () => showDetail(dateStr));
+      daysRow.appendChild(el);
+    });
+    weekEl.appendChild(daysRow);
 
-  // Build day map for this month (± overflow days)
-  const prefix = isoDate(new Date(curYear, curMonth, 1)).substring(0, 7); // YYYY-MM
+    // ── Event bars ──
+    const { placed, overflow } = layoutWeek(weekDates, monthEvents);
+    if (placed.length || overflow) {
+      const evArea = document.createElement('div');
+      evArea.className = 'week-events';
 
-  let html = '';
-  for (let cell = 0; cell < totalCells; cell++) {
-    const dayOffset = cell - startDow + 1;
-    let d, m, y, isOther = false;
-    if (dayOffset < 1) {
-      d = daysInPrev + dayOffset; m = curMonth - 1; y = curYear;
-      if (m < 0) { m = 11; y--; }
-      isOther = true;
-    } else if (dayOffset > daysInMonth) {
-      d = dayOffset - daysInMonth; m = curMonth + 1; y = curYear;
-      if (m > 11) { m = 0; y++; }
-      isOther = true;
-    } else {
-      d = dayOffset; m = curMonth; y = curYear;
-    }
+      // Find max row
+      const maxRow = placed.length ? Math.max(...placed.map(p => p.row)) + 1 : 0;
 
-    const dateStr = `${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-    const isToday = dateStr === TODAY_STR;
-    const isFuture = dateStr > TODAY_STR;
-    const isSelected = dateStr === selectedDay;
-    const items = (dayMap[dateStr] || []).filter(n => isVisible(n.c));
-
-    let cls = 'day-cell';
-    if (isOther)    cls += ' other-month';
-    if (isToday)    cls += ' today';
-    if (isFuture)   cls += ' future';
-    if (isSelected) cls += ' selected';
-    if (items.length && !isOther) cls += ' clickable';
-
-    let evHtml = '';
-    if (!isOther && items.length) {
-      // Separate starts from continuations
-      const starts = items.filter(n => n._span === 'start');
-      const conts  = items.filter(n => n._span !== 'start');
-
-      // Show start items as chips (max 3)
-      const showStarts = starts.slice(0, 3);
-      showStarts.forEach(n => {
-        const meta = CAT_META[n.c] || CAT_META.other;
-        const short = n.t.replace(/^Акция!\s*/i,'').replace(/^Завершение\s+/i,'↩ ').substring(0, 28);
-        evHtml += `<div class="ev-chip"><span class="ev-dot" style="background:${meta.color}"></span><span class="ev-text">${short}</span></div>`;
+      placed.forEach(({ ev, row, gridCol, startsHere, endsHere }) => {
+        const color = catColor(ev.c);
+        const bar = document.createElement('div');
+        bar.className = 'ev-bar' +
+          (!startsHere ? ' ev-cont' : '') +
+          (!endsHere   ? ' ev-goes' : '');
+        bar.style.gridColumn = gridCol;
+        bar.style.gridRow = row + 1;
+        bar.style.setProperty('--color', color);
+        const label = ev.t.replace(/^Акция!\s*/i,'').replace(/^Завершение\s+/i,'↩ ');
+        bar.textContent = startsHere ? label : '';
+        bar.title = ev.t;
+        bar.addEventListener('click', e => { e.stopPropagation(); showEventDetail(ev); });
+        evArea.appendChild(bar);
       });
-      // Show continuation dots compactly
-      const uniqueConts = [...new Map(conts.map(n => [n.id, n])).values()].slice(0, 4);
-      if (uniqueConts.length) {
-        const dots = uniqueConts.map(n => {
-          const meta = CAT_META[n.c] || CAT_META.other;
-          const opacity = n._span === 'end' ? '0.4' : '0.6';
-          return `<span class="ev-cont" style="background:${meta.color};opacity:${opacity};flex:1;min-width:8px"></span>`;
-        }).join('');
-        evHtml += `<div style="display:flex;gap:2px;margin-top:2px">${dots}</div>`;
+
+      if (overflow) {
+        const more = document.createElement('div');
+        more.className = 'ev-more-row';
+        more.style.gridRow = maxRow + 1;
+        more.textContent = `+${overflow} ещё`;
+        evArea.appendChild(more);
       }
-      const total = starts.length + uniqueConts.length;
-      if (total > 3) evHtml += `<div class="ev-more">+${total - 3}</div>`;
+
+      weekEl.appendChild(evArea);
     }
 
-    html += `<div class="${cls}" data-date="${dateStr}">
-      <div class="day-num">${d}</div>
-      <div class="day-events">${evHtml}</div>
-    </div>`;
+    body.appendChild(weekEl);
   }
 
-  grid.innerHTML = html;
-
-  // Attach click handlers
-  grid.querySelectorAll('.day-cell.clickable').forEach(cell => {
-    cell.addEventListener('click', () => showDetail(cell.dataset.date));
-  });
-
-  // If selected day is in this month, keep panel open
-  if (selectedDay && selectedDay.startsWith(`${curYear}-${String(curMonth+1).padStart(2,'0')}`)) {
+  // Reopen detail if selected day visible
+  if (selectedDay && allDates.includes(selectedDay)) {
     showDetail(selectedDay, false);
-  } else {
+  } else if (selectedDay) {
     closeDetail();
   }
 }
@@ -503,55 +595,56 @@ function renderCalendar() {
 // ══════════════════════════════════════════
 //  DETAIL PANEL
 // ══════════════════════════════════════════
+function detailItemHtml(n) {
+  const meta = CAT_META[n.c] || CAT_META.other;
+  const color = catColor(n.c);
+  const durInfo = n.e ? formatDuration(n.d, n.e, n.approx) : null;
+  const link = `<a href="${newsUrl(n.id)}" target="_blank" rel="noopener" class="detail-link">Новость →</a>`;
+  const durHtml = durInfo
+    ? `<div class="detail-duration${durInfo.approx?' approx':''}">${durInfo.range} · ${durInfo.dur}</div>`
+    : '';
+  return `<div class="detail-item">
+    <div class="detail-ico">${meta.ico}</div>
+    <div class="detail-info" style="flex:1;min-width:0">
+      <div class="detail-title">${n.t}</div>
+      <div class="detail-meta" style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:4px">
+        <span class="detail-cat-badge" style="color:${color};border-color:${color}44;background:${color}12">${meta.label}</span>
+        ${link}
+      </div>
+      ${durHtml}
+    </div>
+  </div>`;
+}
+
+function openDetailPanel(title, items, scroll) {
+  if (!items.length) { closeDetail(); return; }
+  document.getElementById('detailDateLabel').textContent = title;
+  document.getElementById('detailBody').innerHTML = items.map(detailItemHtml).join('');
+  const panel = document.getElementById('detailPanel');
+  panel.style.display = 'block';
+  if (scroll) setTimeout(() => panel.scrollIntoView({ behavior:'smooth', block:'nearest' }), 50);
+}
+
 function showDetail(dateStr, scroll=true) {
   selectedDay = dateStr;
-  // Update selected state
-  document.querySelectorAll('.day-cell').forEach(c => {
-    c.classList.toggle('selected', c.dataset.date === dateStr);
-  });
+  document.querySelectorAll('.wday').forEach(c => c.classList.toggle('selected', c.dataset.date === dateStr));
 
-  const allItems = (dayMap[dateStr] || []).filter(n => isVisible(n.c));
-  if (!allItems.length) { closeDetail(); return; }
+  // All events active on this day
+  const evEnd = ev => ev.e || ev.d;
+  const items = allNews.filter(n => isVisible(n.c) && n.d <= dateStr && evEnd(n) >= dateStr);
+  items.sort((a,b) => a.d < b.d ? -1 : a.d > b.d ? 1 : 0);
 
-  // Deduplicate by id — show each news item once
-  const seen = new Set();
-  const items = allItems.filter(n => { if (seen.has(n.id)) return false; seen.add(n.id); return true; });
+  if (!items.length) { closeDetail(); return; }
 
   const d = parseIso(dateStr);
   const dow = ['Воскресенье','Понедельник','Вторник','Среда','Четверг','Пятница','Суббота'][d.getDay()];
-  document.getElementById('detailDateLabel').textContent =
-    `${dow}, ${d.getDate()} ${MONTHS_GEN[d.getMonth()]} ${d.getFullYear()}`;
+  openDetailPanel(`${dow}, ${d.getDate()} ${MONTHS_GEN[d.getMonth()]} ${d.getFullYear()}`, items, scroll);
+}
 
-  const body = document.getElementById('detailBody');
-  body.innerHTML = items.map(n => {
-    const meta = CAT_META[n.c] || CAT_META.other;
-    const isActive = n._span !== 'start'; // started before this day
-    const durInfo = n.e ? formatDuration(n.d, n.e, n.approx) : null;
-    const link = `<a href="${newsUrl(n.id)}" target="_blank" rel="noopener" class="detail-link">Новость →</a>`;
-    const durHtml = durInfo
-      ? `<div class="detail-duration${durInfo.approx ? ' approx' : ''}">${durInfo.range} · ${durInfo.dur}</div>`
-      : '';
-    const activeBadge = isActive
-      ? `<span style="font-size:11px;color:var(--txt3);margin-left:4px">• идёт</span>`
-      : '';
-    return `<div class="detail-item">
-      <div class="detail-ico">${meta.ico}</div>
-      <div class="detail-info" style="flex:1;min-width:0">
-        <div class="detail-title" style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
-          <span>${n.t}</span>${activeBadge}
-        </div>
-        <div class="detail-meta" style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:4px">
-          <span class="detail-cat-badge" style="color:${meta.color};border-color:${meta.color}44;background:${meta.color}12">${meta.label}</span>
-          ${link}
-        </div>
-        ${durHtml}
-      </div>
-    </div>`;
-  }).join('');
-
-  const panel = document.getElementById('detailPanel');
-  panel.style.display = 'block';
-  if (scroll) panel.scrollIntoView({ behavior:'smooth', block:'nearest' });
+function showEventDetail(ev) {
+  selectedDay = ev.d;
+  document.querySelectorAll('.wday').forEach(c => c.classList.toggle('selected', c.dataset.date === ev.d));
+  openDetailPanel(ev.t, [ev], true);
 }
 
 function closeDetail() {
@@ -606,25 +699,6 @@ fetch('db/news_cal.json')
   .then(r => r.json())
   .then(data => {
     allNews = data;
-    // Build day map: each item appears on start day + all continuation days up to end
-    data.forEach(n => {
-      const startD = n.d;
-      if (!dayMap[startD]) dayMap[startD] = [];
-      dayMap[startD].push({ ...n, _span: 'start' });
-
-      if (n.e && n.e > startD) {
-        // Add continuation entries for each day in range
-        let cur = new Date(parseIso(startD).getTime() + 86400000);
-        const end = parseIso(n.e);
-        while (cur <= end) {
-          const key = isoDate(cur);
-          if (!dayMap[key]) dayMap[key] = [];
-          const isEnd = isoDate(cur) === n.e;
-          dayMap[key].push({ ...n, _span: isEnd ? 'end' : 'cont' });
-          cur = new Date(cur.getTime() + 86400000);
-        }
-      }
-    });
     buildFilters();
     buildYearNav();
     buildMonthTabs();
