@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Календарь — Королевство</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap');
+
+:root {
+  --amber: #b8860b; --gold: #d4a843; --goldl: #f0cc6a;
+  --text: #ede5cc; --txt2: #b8a882; --txt3: #7a6a50;
+  --bg: #0a0704;
+
+  --c-offer:      #d4a843;
+  --c-tournament: #5ab4e0;
+  --c-event:      #7acc50;
+  --c-fair:       #e09030;
+  --c-holiday:    #e060a0;
+  --c-season:     #8ab860;
+  --c-bonus:      #f0c040;
+  --c-tech:       #707060;
+  --c-other:      #504030;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  min-height: 100vh; color: var(--text);
+  font-family: 'Cormorant Garamond', serif; font-size: 16px;
+  background-color: var(--bg);
+  background-image:
+    radial-gradient(ellipse 80% 60% at 0% 0%, rgba(120,70,10,.5) 0%, transparent 55%),
+    radial-gradient(ellipse 60% 70% at 100% 100%, rgba(90,30,20,.4) 0%, transparent 50%);
+}
+
+/* ── HEADER ── */
+header {
+  position: relative; z-index: 10; padding: 0 40px;
+  background: linear-gradient(180deg, rgba(20,13,6,.9) 0%, rgba(10,7,3,.7) 100%);
+  border-bottom: 1px solid rgba(184,134,11,.18);
+}
+.h-inner { max-width: 1200px; margin: 0 auto; padding: 14px 0; display: flex; align-items: center; gap: 16px; }
+.h-back {
+  text-decoration: none; color: var(--txt2);
+  font-family: 'Cinzel', serif; font-size: 12px; letter-spacing: .05em;
+  padding: 6px 12px; border: 1px solid rgba(184,134,11,.2); border-radius: 6px;
+  transition: color .2s, border-color .2s; flex-shrink: 0;
+}
+.h-back:hover { color: var(--gold); border-color: rgba(184,134,11,.5); }
+.h-title { font-family: 'Cinzel', serif; font-size: 18px; font-weight: 700; color: var(--gold); letter-spacing: .08em; }
+.h-sub { font-size: 13px; color: var(--txt2); font-style: italic; }
+
+/* ── PAGE ── */
+.page { max-width: 1200px; margin: 0 auto; padding: 24px 40px 80px; }
+
+/* ── FILTERS ── */
+.filters {
+  display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 20px;
+  padding: 14px 16px;
+  background: rgba(10,7,3,.7); border: 1px solid rgba(184,134,11,.1); border-radius: 10px;
+}
+.filter-label { font-family: 'Cinzel', serif; font-size: 10px; letter-spacing: 2px; color: var(--txt3); text-transform: uppercase; display: flex; align-items: center; margin-right: 4px; }
+.ftag {
+  display: flex; align-items: center; gap: 5px;
+  padding: 5px 10px; border-radius: 20px; cursor: pointer; user-select: none;
+  font-size: 13px; border: 1px solid; transition: opacity .15s, background .15s;
+}
+.ftag.off { opacity: .3; }
+.ftag-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+/* ── CALENDAR NAV ── */
+.cal-nav {
+  display: flex; align-items: center; gap: 0;
+  margin-bottom: 16px; border-radius: 10px; overflow: hidden;
+  border: 1px solid rgba(184,134,11,.14);
+  background: rgba(10,7,3,.7);
+}
+.nav-arrow {
+  padding: 12px 16px; cursor: pointer; font-size: 18px; color: var(--txt3);
+  background: none; border: none; font-family: inherit;
+  transition: color .15s, background .15s; flex-shrink: 0;
+}
+.nav-arrow:hover { color: var(--gold); background: rgba(184,134,11,.06); }
+.nav-cur {
+  font-family: 'Cinzel', serif; font-size: 15px; font-weight: 700;
+  color: var(--goldl); letter-spacing: .08em; padding: 0 4px; min-width: 200px; text-align: center;
+}
+.month-tabs { display: flex; flex: 1; overflow-x: auto; }
+.month-tabs::-webkit-scrollbar { height: 3px; }
+.month-tabs::-webkit-scrollbar-thumb { background: rgba(184,134,11,.3); }
+.mtab {
+  flex-shrink: 0; padding: 12px 10px; cursor: pointer;
+  font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: .05em;
+  color: var(--txt3); border-left: 1px solid rgba(184,134,11,.08);
+  transition: color .15s, background .15s; white-space: nowrap;
+  border-bottom: 2px solid transparent;
+}
+.mtab:hover { color: var(--txt2); background: rgba(184,134,11,.04); }
+.mtab.active { color: var(--goldl); border-bottom-color: var(--gold); background: rgba(184,134,11,.08); }
+.mtab.has-data { color: var(--txt2); }
+
+/* ── CALENDAR GRID ── */
+.cal-wrap { background: rgba(10,7,3,.6); border: 1px solid rgba(184,134,11,.12); border-radius: 10px; overflow: hidden; }
+.cal-dow { display: grid; grid-template-columns: repeat(7, 1fr); background: rgba(184,134,11,.05); border-bottom: 1px solid rgba(184,134,11,.1); }
+.cal-dow > div { padding: 8px 0; text-align: center; font-family: 'Cinzel', serif; font-size: 10px; letter-spacing: 2px; color: var(--txt3); text-transform: uppercase; }
+.cal-days { display: grid; grid-template-columns: repeat(7, 1fr); }
+
+.day-cell {
+  min-height: 90px; padding: 6px 7px;
+  border-right: 1px solid rgba(184,134,11,.07);
+  border-bottom: 1px solid rgba(184,134,11,.07);
+  vertical-align: top; position: relative;
+  transition: background .12s;
+}
+.day-cell:nth-child(7n) { border-right: none; }
+.day-cell.other-month { opacity: .2; pointer-events: none; }
+.day-cell.clickable { cursor: pointer; }
+.day-cell.clickable:hover { background: rgba(184,134,11,.06); }
+.day-cell.today .day-num {
+  background: rgba(212,168,67,.25); border-radius: 50%;
+  width: 22px; height: 22px; display: flex; align-items: center; justify-content: center;
+  color: var(--goldl); font-weight: 700;
+}
+.day-cell.selected { background: rgba(184,134,11,.1) !important; outline: 1px solid rgba(184,134,11,.3); }
+.day-cell.future { opacity: .65; }
+
+.day-num { font-family: 'Cinzel', serif; font-size: 12px; color: var(--txt3); margin-bottom: 4px; line-height: 1; }
+
+.day-events { display: flex; flex-direction: column; gap: 2px; }
+.ev-chip {
+  display: flex; align-items: center; gap: 4px;
+  font-size: 11px; line-height: 1.3; color: var(--txt2);
+  overflow: hidden;
+}
+.ev-dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
+.ev-text { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; max-width: 100%; }
+.ev-more { font-size: 10px; color: var(--txt3); padding-left: 9px; font-style: italic; }
+
+/* ── DETAIL PANEL ── */
+.detail {
+  margin-top: 16px; background: rgba(10,7,3,.85);
+  border: 1px solid rgba(184,134,11,.25); border-radius: 10px; overflow: hidden;
+}
+.detail-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 20px; background: rgba(184,134,11,.07);
+  border-bottom: 1px solid rgba(184,134,11,.15);
+}
+.detail-date-label {
+  font-family: 'Cinzel', serif; font-size: 14px; font-weight: 700;
+  color: var(--goldl); letter-spacing: .06em;
+}
+.detail-close {
+  background: none; border: none; color: var(--txt3); font-size: 20px;
+  cursor: pointer; padding: 0 4px; line-height: 1; font-family: inherit;
+  transition: color .15s;
+}
+.detail-close:hover { color: var(--gold); }
+.detail-body { padding: 16px 20px; display: flex; flex-direction: column; gap: 10px; }
+.detail-item {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 10px 12px; border-radius: 7px;
+  background: rgba(184,134,11,.04); border: 1px solid rgba(184,134,11,.1);
+}
+.detail-ico { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+.detail-info { flex: 1; }
+.detail-title { font-size: 15px; color: var(--text); line-height: 1.3; font-weight: 600; }
+.detail-meta { font-size: 12px; color: var(--txt3); margin-top: 3px; }
+.detail-cat-badge {
+  font-size: 11px; padding: 2px 8px; border-radius: 10px;
+  border: 1px solid; font-family: 'Cinzel', serif; letter-spacing: .03em;
+}
+
+/* ── YEAR SELECTOR ── */
+.year-nav { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
+.ytab {
+  padding: 5px 11px; border-radius: 6px; cursor: pointer;
+  font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: .05em;
+  border: 1px solid rgba(184,134,11,.18); background: rgba(10,7,3,.6);
+  color: var(--txt3); transition: all .15s; user-select: none;
+}
+.ytab:hover { border-color: rgba(184,134,11,.4); color: var(--txt2); }
+.ytab.active { background: rgba(184,134,11,.18); border-color: rgba(184,134,11,.55); color: var(--goldl); }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 700px) {
+  header { padding: 0 16px; }
+  .page { padding: 16px 12px 60px; }
+  .day-cell { min-height: 64px; padding: 4px 4px; }
+  .ev-text { display: none; }
+  .ev-dot { width: 7px; height: 7px; }
+  .day-events { flex-direction: row; flex-wrap: wrap; gap: 3px; margin-top: 2px; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="h-inner">
+    <a href="index.html" class="h-back">← Назад</a>
+    <div>
+      <div class="h-title">Календарь</div>
+      <div class="h-sub">Ивенты · Турниры · Акции · 2008–2026</div>
+    </div>
+  </div>
+</header>
+
+<div class="page">
+
+  <!-- Фильтры -->
+  <div class="filters" id="filtersRow"></div>
+
+  <!-- Выбор года -->
+  <div class="year-nav" id="yearNav"></div>
+
+  <!-- Выбор месяца -->
+  <div class="cal-nav">
+    <button class="nav-arrow" id="btnPrev">‹</button>
+    <div class="nav-cur" id="navCur"></div>
+    <div class="month-tabs" id="monthTabs"></div>
+    <button class="nav-arrow" id="btnNext">›</button>
+  </div>
+
+  <!-- Календарная сетка -->
+  <div class="cal-wrap">
+    <div class="cal-dow">
+      <div>Пн</div><div>Вт</div><div>Ср</div><div>Чт</div><div>Пт</div><div>Сб</div><div>Вс</div>
+    </div>
+    <div class="cal-days" id="calDays"></div>
+  </div>
+
+  <!-- Детали дня -->
+  <div class="detail" id="detailPanel" style="display:none">
+    <div class="detail-head">
+      <span class="detail-date-label" id="detailDateLabel"></span>
+      <button class="detail-close" id="detailClose">×</button>
+    </div>
+    <div class="detail-body" id="detailBody"></div>
+  </div>
+
+</div>
+
+<script>
+// ══════════════════════════════════════════
+//  CONFIG
+// ══════════════════════════════════════════
+const MONTHS_NOM  = ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
+const MONTHS_GEN  = ['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
+const DOW_RU      = ['Пн','Вт','Ср','Чт','Пт','Сб','Вс'];
+const TODAY       = new Date();
+const TODAY_STR   = isoDate(TODAY);
+
+const CAT_META = {
+  offer:          { label:'Акции',          ico:'🎁', color:'var(--c-offer)',      group:'offer' },
+  bonus:          { label:'Бонус рубины',   ico:'💎', color:'var(--c-bonus)',      group:'offer' },
+  tournament:     { label:'Турнир (старт)', ico:'⚔️', color:'var(--c-tournament)', group:'tournament' },
+  tournament_end: { label:'Турнир (итог)',  ico:'🏆', color:'var(--c-tournament)', group:'tournament' },
+  event:          { label:'Ивенты',         ico:'🎭', color:'var(--c-event)',      group:'event' },
+  fair:           { label:'Ярмарки',        ico:'🛒', color:'var(--c-fair)',       group:'fair' },
+  holiday:        { label:'Праздники',      ico:'🎉', color:'var(--c-holiday)',    group:'holiday' },
+  season:         { label:'Сезоны',         ico:'📅', color:'var(--c-season)',     group:'season' },
+  maintenance:    { label:'Техработы',      ico:'🔧', color:'var(--c-tech)',       group:'tech' },
+  update:         { label:'Обновления',     ico:'📋', color:'var(--c-tech)',       group:'tech' },
+  auction:        { label:'Аукционы',       ico:'🎨', color:'var(--c-other)',      group:'other' },
+  other:          { label:'Прочее',         ico:'📰', color:'var(--c-other)',      group:'other' },
+};
+
+// Группы для фильтра (каждый тоггл управляет группой)
+const FILTER_GROUPS = [
+  { id:'offer',      label:'Акции',      ico:'🎁', cats:['offer','bonus'],              on:true  },
+  { id:'tournament', label:'Турниры',    ico:'⚔️', cats:['tournament','tournament_end'], on:true  },
+  { id:'event',      label:'Ивенты',     ico:'🎭', cats:['event'],                      on:true  },
+  { id:'fair',       label:'Ярмарки',    ico:'🛒', cats:['fair'],                       on:true  },
+  { id:'holiday',    label:'Праздники',  ico:'🎉', cats:['holiday'],                    on:true  },
+  { id:'season',     label:'Сезоны',     ico:'📅', cats:['season'],                     on:true  },
+  { id:'tech',       label:'Техническое',ico:'🔧', cats:['maintenance','update'],        on:false },
+  { id:'other',      label:'Прочее',     ico:'📰', cats:['auction','other'],             on:false },
+];
+
+const GROUP_COLOR = {
+  offer:'var(--c-offer)', tournament:'var(--c-tournament)', event:'var(--c-event)',
+  fair:'var(--c-fair)', holiday:'var(--c-holiday)', season:'var(--c-season)',
+  tech:'var(--c-tech)', other:'var(--c-other)',
+};
+
+// ══════════════════════════════════════════
+//  STATE
+// ══════════════════════════════════════════
+let allNews = [];
+let dayMap  = {};      // 'YYYY-MM-DD' → [news items]
+let curYear = TODAY.getFullYear();
+let curMonth= TODAY.getMonth(); // 0-based
+let selectedDay = null;
+const filterState = {};  // group.id → bool
+
+FILTER_GROUPS.forEach(g => { filterState[g.id] = g.on; });
+
+// ══════════════════════════════════════════
+//  HELPERS
+// ══════════════════════════════════════════
+function isoDate(d) {
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+function parseIso(s) {
+  const [y,m,d] = s.split('-').map(Number);
+  return new Date(y, m-1, d);
+}
+function isVisible(cat) {
+  const g = FILTER_GROUPS.find(fg => fg.cats.includes(cat));
+  return g ? filterState[g.id] : false;
+}
+
+// ══════════════════════════════════════════
+//  BUILD FILTERS UI
+// ══════════════════════════════════════════
+function buildFilters() {
+  const row = document.getElementById('filtersRow');
+  row.innerHTML = '<span class="filter-label">Показать:</span>';
+  FILTER_GROUPS.forEach(g => {
+    const el = document.createElement('div');
+    el.className = 'ftag' + (filterState[g.id] ? '' : ' off');
+    el.style.cssText = `border-color:${GROUP_COLOR[g.id]}33;background:${GROUP_COLOR[g.id]}18;color:${GROUP_COLOR[g.id]};`;
+    el.innerHTML = `<span class="ftag-dot" style="background:${GROUP_COLOR[g.id]}"></span>${g.ico} ${g.label}`;
+    el.addEventListener('click', () => {
+      filterState[g.id] = !filterState[g.id];
+      el.classList.toggle('off', !filterState[g.id]);
+      renderCalendar();
+    });
+    row.appendChild(el);
+  });
+}
+
+// ══════════════════════════════════════════
+//  BUILD YEAR TABS
+// ══════════════════════════════════════════
+function buildYearNav() {
+  const years = [...new Set(allNews.map(n => n.d.substring(0,4)))].sort().reverse();
+  const nav = document.getElementById('yearNav');
+  nav.innerHTML = '';
+  years.forEach(y => {
+    const el = document.createElement('div');
+    el.className = 'ytab' + (String(curYear) === y ? ' active' : '');
+    el.textContent = y;
+    el.addEventListener('click', () => {
+      curYear = parseInt(y);
+      document.querySelectorAll('.ytab').forEach(t => t.classList.remove('active'));
+      el.classList.add('active');
+      buildMonthTabs();
+      renderCalendar();
+    });
+    nav.appendChild(el);
+  });
+}
+
+// ══════════════════════════════════════════
+//  BUILD MONTH TABS
+// ══════════════════════════════════════════
+function buildMonthTabs() {
+  const tabs = document.getElementById('monthTabs');
+  tabs.innerHTML = '';
+  // Count events per month for this year
+  const monthCounts = Array(12).fill(0);
+  allNews.forEach(n => {
+    if (n.d.startsWith(String(curYear)) && isVisible(n.c)) {
+      const m = parseInt(n.d.substring(5,7)) - 1;
+      monthCounts[m]++;
+    }
+  });
+  MONTHS_NOM.forEach((name, idx) => {
+    const el = document.createElement('div');
+    el.className = 'mtab' +
+      (idx === curMonth ? ' active' : '') +
+      (monthCounts[idx] > 0 ? ' has-data' : '');
+    el.textContent = name.substring(0,3);
+    el.title = name + (monthCounts[idx] ? ` (${monthCounts[idx]})` : '');
+    el.addEventListener('click', () => {
+      curMonth = idx;
+      document.querySelectorAll('.mtab').forEach(t => t.classList.remove('active'));
+      el.classList.add('active');
+      renderCalendar();
+    });
+    tabs.appendChild(el);
+  });
+  document.getElementById('navCur').textContent = `${MONTHS_NOM[curMonth]} ${curYear}`;
+}
+
+// ══════════════════════════════════════════
+//  RENDER CALENDAR
+// ══════════════════════════════════════════
+function renderCalendar() {
+  const grid = document.getElementById('calDays');
+  document.getElementById('navCur').textContent = `${MONTHS_NOM[curMonth]} ${curYear}`;
+
+  // Update month tab active state
+  document.querySelectorAll('.mtab').forEach((t, idx) => {
+    t.classList.toggle('active', idx === curMonth);
+  });
+
+  // First day of month (0=Sun → convert to Mon-based)
+  const firstDate = new Date(curYear, curMonth, 1);
+  let startDow = firstDate.getDay(); // 0=Sun
+  startDow = startDow === 0 ? 6 : startDow - 1; // convert to Mon=0
+
+  const daysInMonth = new Date(curYear, curMonth + 1, 0).getDate();
+  const daysInPrev  = new Date(curYear, curMonth, 0).getDate();
+  const totalCells  = Math.ceil((startDow + daysInMonth) / 7) * 7;
+
+  // Build day map for this month (± overflow days)
+  const prefix = isoDate(new Date(curYear, curMonth, 1)).substring(0, 7); // YYYY-MM
+
+  let html = '';
+  for (let cell = 0; cell < totalCells; cell++) {
+    const dayOffset = cell - startDow + 1;
+    let d, m, y, isOther = false;
+    if (dayOffset < 1) {
+      d = daysInPrev + dayOffset; m = curMonth - 1; y = curYear;
+      if (m < 0) { m = 11; y--; }
+      isOther = true;
+    } else if (dayOffset > daysInMonth) {
+      d = dayOffset - daysInMonth; m = curMonth + 1; y = curYear;
+      if (m > 11) { m = 0; y++; }
+      isOther = true;
+    } else {
+      d = dayOffset; m = curMonth; y = curYear;
+    }
+
+    const dateStr = `${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const isToday = dateStr === TODAY_STR;
+    const isFuture = dateStr > TODAY_STR;
+    const isSelected = dateStr === selectedDay;
+    const items = (dayMap[dateStr] || []).filter(n => isVisible(n.c));
+
+    let cls = 'day-cell';
+    if (isOther)    cls += ' other-month';
+    if (isToday)    cls += ' today';
+    if (isFuture)   cls += ' future';
+    if (isSelected) cls += ' selected';
+    if (items.length && !isOther) cls += ' clickable';
+
+    let evHtml = '';
+    if (!isOther && items.length) {
+      const show = items.slice(0, 3);
+      show.forEach(n => {
+        const meta = CAT_META[n.c] || CAT_META.other;
+        const short = n.t.replace(/^Акция!\s*/i,'').replace(/^Завершение\s+/i,'↩ ').substring(0, 32);
+        evHtml += `<div class="ev-chip"><span class="ev-dot" style="background:${meta.color}"></span><span class="ev-text">${short}</span></div>`;
+      });
+      if (items.length > 3) evHtml += `<div class="ev-more">+${items.length-3}</div>`;
+    }
+
+    html += `<div class="${cls}" data-date="${dateStr}">
+      <div class="day-num">${d}</div>
+      <div class="day-events">${evHtml}</div>
+    </div>`;
+  }
+
+  grid.innerHTML = html;
+
+  // Attach click handlers
+  grid.querySelectorAll('.day-cell.clickable').forEach(cell => {
+    cell.addEventListener('click', () => showDetail(cell.dataset.date));
+  });
+
+  // If selected day is in this month, keep panel open
+  if (selectedDay && selectedDay.startsWith(`${curYear}-${String(curMonth+1).padStart(2,'0')}`)) {
+    showDetail(selectedDay, false);
+  } else {
+    closeDetail();
+  }
+}
+
+// ══════════════════════════════════════════
+//  DETAIL PANEL
+// ══════════════════════════════════════════
+function showDetail(dateStr, scroll=true) {
+  selectedDay = dateStr;
+  // Update selected state
+  document.querySelectorAll('.day-cell').forEach(c => {
+    c.classList.toggle('selected', c.dataset.date === dateStr);
+  });
+
+  const items = (dayMap[dateStr] || []).filter(n => isVisible(n.c));
+  if (!items.length) { closeDetail(); return; }
+
+  const d = parseIso(dateStr);
+  const dow = ['Воскресенье','Понедельник','Вторник','Среда','Четверг','Пятница','Суббота'][d.getDay()];
+  document.getElementById('detailDateLabel').textContent =
+    `${dow}, ${d.getDate()} ${MONTHS_GEN[d.getMonth()]} ${d.getFullYear()}`;
+
+  const body = document.getElementById('detailBody');
+  body.innerHTML = items.map(n => {
+    const meta = CAT_META[n.c] || CAT_META.other;
+    return `<div class="detail-item">
+      <div class="detail-ico">${meta.ico}</div>
+      <div class="detail-info">
+        <div class="detail-title">${n.t}</div>
+        <div class="detail-meta">
+          <span class="detail-cat-badge" style="color:${meta.color};border-color:${meta.color}44;background:${meta.color}12">${meta.label}</span>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+
+  const panel = document.getElementById('detailPanel');
+  panel.style.display = 'block';
+  if (scroll) panel.scrollIntoView({ behavior:'smooth', block:'nearest' });
+}
+
+function closeDetail() {
+  selectedDay = null;
+  document.getElementById('detailPanel').style.display = 'none';
+  document.querySelectorAll('.day-cell.selected').forEach(c => c.classList.remove('selected'));
+}
+
+// ══════════════════════════════════════════
+//  NAVIGATION
+// ══════════════════════════════════════════
+function navigate(delta) {
+  let m = curMonth + delta;
+  let y = curYear;
+  if (m < 0)  { m = 11; y--; }
+  if (m > 11) { m = 0;  y++; }
+  // Check if year changed
+  if (y !== curYear) {
+    curYear = y;
+    buildYearNav();
+    buildMonthTabs();
+  }
+  curMonth = m;
+  buildMonthTabs();
+  renderCalendar();
+}
+document.getElementById('btnPrev').addEventListener('click', () => navigate(-1));
+document.getElementById('btnNext').addEventListener('click', () => navigate(+1));
+document.getElementById('detailClose').addEventListener('click', closeDetail);
+
+// ══════════════════════════════════════════
+//  INIT
+// ══════════════════════════════════════════
+fetch('db/news_cal.json')
+  .then(r => r.json())
+  .then(data => {
+    allNews = data;
+    // Build day map
+    data.forEach(n => {
+      if (!dayMap[n.d]) dayMap[n.d] = [];
+      dayMap[n.d].push(n);
+    });
+    buildFilters();
+    buildYearNav();
+    buildMonthTabs();
+    renderCalendar();
+  })
+  .catch(err => {
+    document.getElementById('calDays').innerHTML =
+      '<div style="grid-column:1/-1;padding:40px;text-align:center;color:var(--txt3)">Не удалось загрузить данные</div>';
+    console.error(err);
+  });
+</script>
+</body>
+</html>
