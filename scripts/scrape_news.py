@@ -54,7 +54,7 @@ def classify(title, text):
 
 def parse_page(html):
     posts = []
-    # Extract all date+post groups
+    # Extract all date+post groups (обычные посты с date-div)
     day_pattern = re.compile(
         r'<div class="posts_day">.*?<div class="date" id="date_(\d{4}-\d{2}-\d{2})">(.*?)</div>(.*?)(?=<div class="posts_day">|<div class="numbers")',
         re.DOTALL
@@ -65,6 +65,8 @@ def parse_page(html):
     )
     heading_pattern = re.compile(r'<div class="heading"[^>]*>.*?<a[^>]+>(.*?)</a>', re.DOTALL)
     text_pattern = re.compile(r'<span class="text">(.*?)</span>', re.DOTALL)
+
+    seen_ids = set()
 
     for day_m in day_pattern.finditer(html):
         date_iso = day_m.group(1)  # YYYY-MM-DD
@@ -81,6 +83,7 @@ def parse_page(html):
             text = strip_tags(tx.group(1)) if tx else ''
 
             cat = classify(title, text)
+            seen_ids.add(post_id)
             posts.append({
                 'id': post_id,
                 'date': date_iso,
@@ -88,6 +91,32 @@ def parse_page(html):
                 'text': text[:600],  # truncate long texts
                 'cat': cat,
             })
+
+    # Закреплённые посты без date-div: ищем по паттерну id="post_X" + id="line_blog_YYYY-MM-DD"
+    pinned_pat = re.compile(
+        r'<div class="inner" id="post_(\d+)">(.*?)id="line_blog_(\d{4}-\d{2}-\d{2})"',
+        re.DOTALL
+    )
+    for m in pinned_pat.finditer(html):
+        post_id = int(m.group(1))
+        if post_id in seen_ids:
+            continue
+        post_html = m.group(2)
+        date_iso  = m.group(3)
+        h  = heading_pattern.search(post_html)
+        title = strip_tags(h.group(1)) if h else ''
+        tx = text_pattern.search(post_html)
+        text = strip_tags(tx.group(1)) if tx else ''
+        cat = classify(title, text)
+        seen_ids.add(post_id)
+        posts.append({
+            'id': post_id,
+            'date': date_iso,
+            'title': title,
+            'text': text[:600],
+            'cat': cat,
+        })
+
     return posts
 
 def main():

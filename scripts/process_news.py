@@ -62,9 +62,21 @@ def parse_end(title, text, base_iso):
             r = mk_date(y, end_m, end_d)
             if r: return r
 
-    # Паттерн 3: "по X месяц включительно" или "до X месяц"
-    # "по 31 июля 2026 включительно", "до 26 мая включительно"
-    m = re.search(r'(?:по|до)\s+(\d+)\s+' + MON_PAT + r'(?:\s+(\d{4}))?\s+включительно', full)
+    # Паттерн 3: "по/до X(-го/-й) месяц (включительно)" — с необязательными суффиксами
+    # "по 31 июля 2026 включительно", "до 10-го мая (включительно)", "до 26 мая включительно"
+    m = re.search(r'(?:по|до)\s+(\d+)(?:-\w+)?\s+' + MON_PAT + r'(?:\s+(\d{4}))?\s*\(?включительно', full)
+    if m:
+        end_d, end_m = int(m.group(1)), mon(m.group(2))
+        y = int(m.group(3)) if m.group(3) else base_y
+        if end_m:
+            if not m.group(3) and end_m < base_m - 1:
+                y += 1
+            r = mk_date(y, end_m, end_d)
+            if r: return r
+
+    # Паттерн 3б: "только до X(-го/-й) месяц" — без слова включительно
+    # "только до 10-го мая", "только до 15 июня"
+    m = re.search(r'только до\s+(\d+)(?:-\w+)?\s+' + MON_PAT + r'(?:\s+(\d{4}))?', full)
     if m:
         end_d, end_m = int(m.group(1)), mon(m.group(2))
         y = int(m.group(3)) if m.group(3) else base_y
@@ -225,23 +237,11 @@ def main():
             item['e'] = (date.fromisoformat(item['d']) + timedelta(days=26)).isoformat()
             item['approx'] = True
 
-    # Ярмарки: конец = день перед следующей ярмаркой (или +28 дней)
-    fairs = sorted([x for x in compact if x['c'] == 'fair'], key=lambda x: x['d'])
-    for i, f in enumerate(fairs):
-        if 'e' not in f:
-            if i + 1 < len(fairs):
-                next_d = date.fromisoformat(fairs[i+1]['d'])
-                this_d = date.fromisoformat(f['d'])
-                gap = (next_d - this_d).days
-                # Ярмарка длится до следующей (обычно 28-35 дней)
-                if gap <= 45:
-                    f['e'] = (next_d - timedelta(days=1)).isoformat()
-                else:
-                    f['e'] = (this_d + timedelta(days=30)).isoformat()
-                    f['approx'] = True
-            else:
-                f['e'] = (date.fromisoformat(f['d']) + timedelta(days=30)).isoformat()
-                f['approx'] = True
+    # Ярмарки: длятся ~13 дней (стартуют ~27-го, заканчиваются ~10-го следующего месяца)
+    for f in compact:
+        if f['c'] == 'fair' and 'e' not in f:
+            f['e'] = (date.fromisoformat(f['d']) + timedelta(days=13)).isoformat()
+            f['approx'] = True
 
     # Ивенты без даты: +14 дней (примерная длительность)
     for item in compact:
