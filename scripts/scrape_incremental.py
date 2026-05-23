@@ -11,7 +11,7 @@ ctx = ssl._create_unverified_context()
 HEADERS = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36'}
 BASE = 'https://www.kor.ru'
 DB_PATH = os.path.join(os.path.dirname(__file__), '..', 'db', 'news.json')
-PAGES_TO_SCAN = int(os.environ.get('SCRAPE_PAGES', '5'))
+PAGES_TO_SCAN = int(os.environ.get('SCRAPE_PAGES', '1'))
 
 def fetch(url, retries=3):
     for attempt in range(retries):
