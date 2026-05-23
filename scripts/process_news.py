@@ -129,40 +129,60 @@ def main():
     with open('/Users/sriblo/Korolevstvo/db/news.json', encoding='utf-8') as f:
         news = json.load(f)
 
-    # Пересчитываем категории (та же логика что в scrape_news.py)
+    # Пересчитываем категории
+    # Правило: для ивентов проверяем ТОЛЬКО заголовок, точные имена.
+    # Обновления/техработы — в приоритете, чтобы не утонуть в false positives.
     def reclassify(n):
+        t   = n['title'].lower().strip()
+        tx  = n.get('text', '').lower()
         cat = n['cat']
-        t = n['title'].lower()
-        tx = n.get('text', '').lower()
-        full = t + ' ' + tx
+
+        # ── Приоритет 1: турниры (уже размечены правильно) ──
         if cat in ('tournament', 'tournament_end'): return cat
-        if re.search(r'технич\w+ работ', full): return 'maintenance'
-        if re.search(r'зов глубин', full): return 'event'
-        if re.search(r'небесн\w+ дракон', full): return 'event'
-        if re.search(r'месяц .{0,15}(хмел|цветущ|пробужден)', full): return 'event'
-        if re.search(r'колдер', full): return 'event'
-        if re.search(r'тыквенн\w+ фестивал', full): return 'event'
-        if re.search(r'день пирата|пиратск\w+ (ден|неде|праздник)', full): return 'event'
-        if re.search(r'гоблинск\w+ рай', full): return 'event'
-        if re.search(r'экспедиц\w+.{0,30}(сбор|припас|старт|начал|открыт)', full): return 'event'
-        if re.search(r'земли мёртвых', full): return 'event'
-        if re.search(r'день рожден\w+ королевства', full): return 'event'
-        if re.search(r'акция!|акция\s+с\s+\d', t): return 'offer'
-        if re.search(r'наборы стража', full): return 'offer'
-        if re.search(r'распродажа аватар|распродажа костюм', full): return 'offer'
-        if re.search(r'бонусн\w+ рубин', full): return 'bonus'
-        if cat == 'fair': return 'fair'
-        if re.search(r'ярмарк', full): return 'fair'
-        if re.search(r'8 марта', full): return 'holiday'
-        if re.search(r'23 феврал', full): return 'holiday'
-        if re.search(r'\b9 мая\b|день побед', full): return 'holiday'
-        if re.search(r'1 апрел|день смеха', full): return 'holiday'
-        if re.search(r'с новым год|новый год\b', full): return 'holiday'
-        if re.search(r'день рожден\w+ королевства|итоги.{0,20}день рожден', full): return 'holiday'
-        if re.search(r'королевски\w+ сезон', full): return 'season'
+
+        # ── Приоритет 2: обновления и техработы (по заголовку) ──
         if re.search(r'^обновлени', t): return 'update'
+        if re.search(r'технич\w+ работ', t): return 'maintenance'
+        if re.search(r'^тех\.?\s*работ', t): return 'maintenance'
+
+        # ── Приоритет 3: акции (по заголовку) ──
+        if re.search(r'^акция!', t): return 'offer'
+        if re.search(r'^акция\s+с\s+\d', t): return 'offer'
+        if re.search(r'^наборы стража', t): return 'offer'
+        if re.search(r'^распродажа (аватар|костюм)', t): return 'offer'
+        if re.search(r'^бонусн\w+ рубин', t): return 'bonus'
+
+        # ── Приоритет 4: ивенты — ТОЛЬКО точные имена в заголовке ──
+        if re.search(r'^зов глубин', t): return 'event'
+        if re.search(r'^небесные драконы?', t): return 'event'
+        if re.search(r'^месяц (цветущего хмеля|хмеля|пробуждения цветов|цветов)', t): return 'event'
+        if re.search(r'^новый год\.?\s*(колдер)?$', t): return 'event'
+        if re.search(r'^колдер', t): return 'event'
+        if re.search(r'^тыквенный фестиваль', t): return 'event'
+        if re.search(r'^день пирата', t): return 'event'
+        if re.search(r'^гоблинский рай', t): return 'event'
+        if re.search(r'^экспедиция[\s:!]', t): return 'event'
+        if re.search(r'^земли мёртвых', t): return 'event'
+        if re.search(r'^(празднование.{0,10}летия королевства|день рождения королевства)', t): return 'event'
+
+        # ── Ярмарки ──
+        if re.search(r'^ярмарка', t): return 'fair'
+
+        # ── Праздники ──
+        if re.search(r'8 марта', t): return 'holiday'
+        if re.search(r'23 феврал', t): return 'holiday'
+        if re.search(r'\b9 мая\b|день победы', t): return 'holiday'
+        if re.search(r'^(день смеха|1 апрел)', t): return 'holiday'
+        if re.search(r'^(с новым годом|новый год!)', t): return 'holiday'
+        if re.search(r'^поздравля', t): return 'holiday'
+
+        # ── Сезоны ──
+        if re.search(r'^королевские сезоны', t): return 'season'
+
+        # Всё остальное — как было в оригинальном скрапе, но update/other
         if cat == 'update': return 'update'
-        return cat
+        if cat in ('fair', 'bonus', 'auction', 'season', 'holiday', 'maintenance'): return cat
+        return 'other'
 
     # Собираем compact items
     compact = []
