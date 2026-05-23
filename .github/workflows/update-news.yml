@@ -1,0 +1,42 @@
+name: Обновление новостей
+
+on:
+  schedule:
+    # Каждый понедельник в 06:00 UTC (09:00 МСК)
+    - cron: '0 6 * * 1'
+  workflow_dispatch:
+    # Ручной запуск из вкладки Actions на GitHub
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Скрапинг новых новостей (только первые 3 страницы)
+        run: python scripts/scrape_incremental.py
+
+      - name: Пересборка news_cal.json
+        run: python scripts/process_news.py
+
+      - name: Коммит если есть изменения
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add db/news.json db/news_cal.json
+          if git diff --cached --quiet; then
+            echo "Новых данных нет, коммит не нужен"
+          else
+            ADDED=$(git diff --cached --stat | tail -1)
+            git commit -m "Авто-обновление новостей: $ADDED"
+            git push
+          fi
