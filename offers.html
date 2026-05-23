@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Акции и источники — Королевство</title>
+<title>Рубиновый магазин — Королевство</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&display=swap');
 
@@ -125,99 +125,76 @@ header::after {
 .offer-more:hover { color: var(--goldl); }
 .empty { text-align: center; padding: 80px 20px; color: var(--txt3); font-style: italic; font-size: 16px; }
 
-/* ── SOURCES VIEW ── */
-.src-intro { font-size: 15px; color: var(--txt2); line-height: 1.65; margin-bottom: 32px; font-style: italic; }
-.src-intro strong { color: var(--text); font-style: normal; }
-
-.src-grid { display: flex; flex-direction: column; gap: 16px; }
-
-.src-card {
-  border-radius: 12px; overflow: hidden;
-  background: rgba(10,7,3,.75); border: 1px solid rgba(184,134,11,.14);
-  transition: border-color .2s;
-}
-.src-card:hover { border-color: rgba(184,134,11,.28); }
-
-.src-header {
-  display: flex; align-items: center; gap: 14px;
-  padding: 14px 20px;
-  background: rgba(184,134,11,.05);
-  border-bottom: 1px solid rgba(184,134,11,.1);
-}
-.src-slot-name {
-  font-family: 'Cinzel', serif; font-size: 14px; font-weight: 700;
-  color: var(--goldl); letter-spacing: .06em; flex: 1;
-}
-.src-slot-hint { font-size: 12px; color: var(--txt3); font-style: italic; }
-
-.src-body { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
-@media (max-width: 700px) { .src-body { grid-template-columns: 1fr; } }
-
-.src-col { padding: 16px 20px; }
-.src-col + .src-col { border-left: 1px solid rgba(184,134,11,.08); }
-@media (max-width: 700px) { .src-col + .src-col { border-left: none; border-top: 1px solid rgba(184,134,11,.08); } }
-
-.src-col-label {
-  font-family: 'Cinzel', serif; font-size: 10px; font-weight: 600; letter-spacing: 3px;
-  text-transform: uppercase; color: rgba(212,168,67,.5); margin-bottom: 12px;
+/* ── RUNES VIEW ── */
+.runes-note {
+  font-size: 14px; color: var(--txt3); line-height: 1.6; margin-bottom: 24px;
+  padding: 12px 16px; border-left: 2px solid rgba(184,134,11,.3);
+  background: rgba(184,134,11,.04); border-radius: 0 6px 6px 0;
 }
 
-/* event source items */
-.src-events { display: flex; flex-direction: column; gap: 8px; }
-.src-event-row { display: flex; align-items: flex-start; gap: 10px; }
-.src-event-ico { font-size: 18px; line-height: 1; flex-shrink: 0; margin-top: 1px; }
-.src-event-info { flex: 1; }
-.src-event-name { font-size: 14px; color: var(--text); font-weight: 600; line-height: 1.2; }
-.src-event-when { font-size: 12px; color: var(--txt3); margin-top: 2px; }
-.src-event-items { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 5px; }
-.src-item-badge {
-  font-size: 11px; padding: 1px 7px; border-radius: 10px; line-height: 1.6;
-  border: 1px solid; display: inline-block;
-}
-.src-item-badge.q-green   { color: #8acd5a; border-color: rgba(138,205,90,.3); background: rgba(138,205,90,.07); }
-.src-item-badge.q-blue    { color: #5ab4e0; border-color: rgba(90,180,224,.3); background: rgba(90,180,224,.07); }
-.src-item-badge.q-purple  { color: #b87ae0; border-color: rgba(184,122,224,.3); background: rgba(184,122,224,.07); }
-.src-item-badge.q-red     { color: #e05555; border-color: rgba(224,85,85,.3); background: rgba(224,85,85,.07); }
-.src-item-badge.q-orange  { color: #e0a030; border-color: rgba(224,160,48,.3); background: rgba(224,160,48,.07); }
-.src-no-event { font-size: 13px; color: var(--txt3); font-style: italic; padding: 4px 0; }
+.rune-list { display: flex; flex-direction: column; gap: 2px; }
 
-/* rune source */
-.src-rune-block { display: flex; flex-direction: column; gap: 10px; }
-.src-rune-name { font-size: 15px; color: var(--text); font-weight: 600; }
-.src-rune-stats { font-size: 13px; color: var(--txt2); line-height: 1.55; }
-.src-rune-stats strong { color: var(--text); }
-
-/* timeline bar */
-.src-rune-bar-wrap { margin-top: 4px; }
-.src-rune-bar-label { font-size: 11px; color: var(--txt3); margin-bottom: 4px; }
-.src-rune-bar { height: 6px; background: rgba(184,134,11,.12); border-radius: 3px; overflow: visible; position: relative; }
-.src-rune-bar-fill { height: 100%; border-radius: 3px; background: linear-gradient(90deg, rgba(184,134,11,.4), rgba(212,168,67,.7)); transition: width .5s; }
-.src-rune-bar-marker {
-  position: absolute; top: -3px; width: 12px; height: 12px; border-radius: 50%;
-  background: var(--gold); border: 2px solid var(--bg);
-  box-shadow: 0 0 6px rgba(212,168,67,.6); transform: translateX(-50%);
+.rune-section-title {
+  font-family: 'Cinzel', serif; font-size: 10px; font-weight: 700; letter-spacing: 4px;
+  color: rgba(212,168,67,.45); padding: 20px 0 8px; text-transform: uppercase;
 }
-.src-rune-bar-marker.today { background: #5ab4e0; box-shadow: 0 0 6px rgba(90,180,224,.7); }
 
-.src-rune-next { display: inline-flex; align-items: center; gap: 8px; margin-top: 8px; }
-.src-rune-next-badge {
-  font-size: 12px; padding: 3px 10px; border-radius: 12px; font-weight: 600;
-  font-family: 'Cinzel', serif; letter-spacing: .03em;
+.rune-row {
+  display: grid;
+  grid-template-columns: 120px 1fr 180px 160px;
+  align-items: center; gap: 0;
+  padding: 12px 16px; border-radius: 8px;
+  background: rgba(10,7,3,.65); border: 1px solid rgba(184,134,11,.1);
+  transition: background .15s, border-color .15s;
 }
-.src-rune-next-badge.soon { background: rgba(90,122,58,.2); border: 1px solid rgba(138,184,96,.4); color: #b0e080; }
-.src-rune-next-badge.future { background: rgba(184,134,11,.1); border: 1px solid rgba(184,134,11,.3); color: var(--gold); }
-.src-rune-next-badge.overdue { background: rgba(139,58,42,.2); border: 1px solid rgba(200,96,64,.4); color: #e08060; }
-.src-rune-next-text { font-size: 12px; color: var(--txt3); }
-.src-no-rune { font-size: 13px; color: var(--txt3); font-style: italic; }
+.rune-row:hover { background: rgba(20,13,6,.85); border-color: rgba(184,134,11,.22); }
+@media (max-width: 760px) {
+  .rune-row { grid-template-columns: 1fr 1fr; grid-template-rows: auto auto; gap: 6px 0; }
+}
 
-/* month badges in event */
-.month-chips { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
-.month-chip {
-  font-size: 11px; padding: 2px 8px; border-radius: 10px;
-  background: rgba(184,134,11,.1); border: 1px solid rgba(184,134,11,.2);
-  color: var(--txt2); font-family: 'Cinzel', serif; letter-spacing: .03em;
+.rune-slot {
+  font-family: 'Cinzel', serif; font-size: 13px; font-weight: 700;
+  color: var(--goldl); letter-spacing: .04em;
 }
-.month-chip.current { background: rgba(90,122,58,.2); border-color: rgba(138,184,96,.4); color: #b0e080; }
+
+.rune-name {
+  font-size: 14px; color: var(--text); padding: 0 16px;
+  border-left: 1px solid rgba(184,134,11,.1);
+}
+
+.rune-events {
+  display: flex; flex-wrap: wrap; gap: 4px; align-items: center;
+  padding: 0 16px; border-left: 1px solid rgba(184,134,11,.1);
+}
+.rune-ev-chip {
+  font-size: 12px; color: var(--txt2);
+  display: flex; align-items: center; gap: 4px;
+}
+.rune-ev-month {
+  font-size: 11px; color: var(--txt3);
+  padding: 1px 6px; border-radius: 8px;
+  background: rgba(184,134,11,.08); border: 1px solid rgba(184,134,11,.15);
+}
+.rune-ev-month.cur { background: rgba(90,122,58,.2); border-color: rgba(138,184,96,.35); color: #b0e080; }
+.rune-no-ev { font-size: 12px; color: var(--txt3); font-style: italic; }
+
+.rune-when {
+  text-align: right; padding-left: 16px;
+  border-left: 1px solid rgba(184,134,11,.1);
+}
+.rune-when-date { font-size: 14px; color: var(--text); font-weight: 600; }
+.rune-when-days { font-size: 12px; margin-top: 2px; }
+.rune-when-days.soon  { color: #b0e080; }
+.rune-when-days.far   { color: var(--txt3); }
+.rune-when-days.late  { color: #e08060; }
+
+@media (max-width: 760px) {
+  .rune-name, .rune-events, .rune-when { border-left: none; padding: 0; }
+  .rune-slot { grid-column: 1; }
+  .rune-name { grid-column: 2; text-align: right; }
+  .rune-events { grid-column: 1 / 3; }
+  .rune-when { grid-column: 1 / 3; text-align: left; border-top: 1px solid rgba(184,134,11,.08); padding-top: 8px; }
+}
 
 /* ── RESPONSIVE ── */
 @media (max-width: 680px) {
@@ -238,8 +215,8 @@ header::after {
   <div class="h-inner">
     <a href="index.html" class="h-back">← Назад</a>
     <div>
-      <div class="h-title">Акции и источники</div>
-      <div class="h-sub">Рубиновый магазин · 2011–2026</div>
+      <div class="h-title">Рубиновый магазин</div>
+      <div class="h-sub">Архив акций · 2011–2026</div>
     </div>
   </div>
 </header>
@@ -247,8 +224,8 @@ header::after {
 <div class="page">
 
   <div class="page-tabs">
-    <div class="ptab active" data-tab="history">История акций</div>
-    <div class="ptab" data-tab="sources">Откуда брать предметы</div>
+    <div class="ptab active" data-tab="history">Архив</div>
+    <div class="ptab" data-tab="sources">Руны</div>
   </div>
 
   <!-- ══ TAB: HISTORY ══ -->
@@ -266,13 +243,12 @@ header::after {
     <div class="timeline" id="timeline"></div>
   </div>
 
-  <!-- ══ TAB: SOURCES ══ -->
+  <!-- ══ TAB: RUNES ══ -->
   <div id="view-sources">
-    <p class="src-intro">
-      Многие предметы доступны из <strong>нескольких источников одновременно</strong>: ивент-локация даёт саму экипировку,
-      рубиновый магазин — руну для её улучшения. Зная оба окна, можно планировать наперёд.
-    </p>
-    <div class="src-grid" id="srcGrid"></div>
+    <div class="runes-note">
+      Акции на руны выходят синхронно с ивентами — в тот же месяц, когда ивент даёт предмет под этот слот.
+    </div>
+    <div class="rune-list" id="runeList"></div>
   </div>
 
 </div>
@@ -306,6 +282,7 @@ const EVENTS_BY_TAG = {
 
 // Rune offers per slot (pre-computed from 490 offers, 2022-2026)
 const SLOT_RUNE = {
+  weapon2:    { rune:'Руна Пяти Камней',           count:11, avg_days:145, last:'17-03-2026', next:'08.08.2026', days_until:77  },
   flask:      { rune:'Руна рома Двух Морей',      count:9,  avg_days:176, last:'21-04-2026', next:'13.10.2026', days_until:143 },
   amulet:     { rune:'Руна Хенгиста',             count:8,  avg_days:192, last:'02-12-2025', next:'12.06.2026', days_until:20  },
   talisman:   { rune:'Руна "Превосходство Аргира"',count:8, avg_days:197, last:'20-01-2026', next:'04.08.2026', days_until:73  },
@@ -346,6 +323,13 @@ const SLOT_EVENT_ITEMS = {
       { name:'Талисман Лорда клевера',  q:'red' },
     ]},
   ],
+  weapon2: [
+    { event:'flowers', items:[
+      { name:'Второе оружие (ивент-предмет)', q:'blue' },
+      { name:'Второе оружие (ивент-предмет)', q:'purple' },
+      { name:'Второе оружие (ивент-предмет)', q:'red' },
+    ]},
+  ],
   amulet: [
     { event:'flowers', items:[
       { name:'Амулет (ивент-предмет)', q:'blue' },
@@ -376,9 +360,10 @@ const SLOT_META = {
   helm:       { label:'Шлем',           hint:'голова' },
   battle_bag: { label:'Боевая сумка',   hint:'слот инвентаря' },
   ring:       { label:'Кольцо',         hint:'ring1 / ring2' },
+  weapon2:    { label:'Второе оружие',  hint:'offhand / weapon2' },
   badge:      { label:'Жетон (значок)', hint:'medallion / badge' },
 };
-const SLOT_ORDER = ['flask','trinket','talisman','amulet','helm','battle_bag','ring','badge'];
+const SLOT_ORDER = ['flask','trinket','talisman','amulet','weapon2','helm','battle_bag','ring','badge'];
 
 // ══════════════════════════════════════════════
 //  HISTORY TAB
@@ -495,109 +480,110 @@ document.getElementById('search').addEventListener('input', function() {
 });
 
 // ══════════════════════════════════════════════
-//  SOURCES TAB
+//  RUNES TAB
 // ══════════════════════════════════════════════
 const curMonth = new Date().getMonth() + 1; // 1-12
 
-function monthChips(months) {
-  if (!months || !months.length) return '<span style="color:var(--txt3);font-size:12px;font-style:italic">Без фиксированного месяца</span>';
-  return `<div class="month-chips">${months.map(m => {
-    const active = m === curMonth;
-    return `<span class="month-chip${active?' current':''}">${MONTHS_RU_NOM[m-1]}${active?' ◂':''}</span>`;
-  }).join('')}</div>`;
+function fmtNextDate(ddDotMmDotYyyy) {
+  // input: "13.10.2026"
+  const p = ddDotMmDotYyyy.split('.');
+  if (p.length < 3) return ddDotMmDotYyyy;
+  return `${parseInt(p[0])} ${MONTHS_RU_FULL[parseInt(p[1])-1]} ${p[2]}`;
 }
 
-function buildRuneSection(slotId) {
+function buildEventChips(slotId) {
+  const evItems = SLOT_EVENT_ITEMS[slotId];
+  if (!evItems || !evItems.length) return `<span class="rune-no-ev">—</span>`;
+
+  // Deduplicate by event tag
+  const seen = new Set();
+  return evItems.filter(ei => { if (seen.has(ei.event)) return false; seen.add(ei.event); return true; })
+    .map(ei => {
+      const ev = EVENTS_BY_TAG[ei.event];
+      if (!ev) return '';
+      const months = ev.months || [];
+      const monthHtml = months.map(m => {
+        const isCur = m === curMonth;
+        return `<span class="rune-ev-month${isCur?' cur':''}">${MONTHS_RU_NOM[m-1]}</span>`;
+      }).join('');
+      return `<span class="rune-ev-chip">${ev.ico} ${ev.name}</span>${monthHtml}`;
+    }).join('<span style="color:var(--txt3);padding:0 4px">·</span>');
+}
+
+function buildRuneRow(slotId) {
   const r = SLOT_RUNE[slotId];
-  if (!r) return `<div class="src-no-rune">Данных об улучшении через акции нет</div>`;
+  const meta = SLOT_META[slotId];
+  if (!r || !meta) return '';
 
-  const avgMonths = (r.avg_days / 30).toFixed(1);
-  const lastParts = r.last.split('-');
-  const lastFmt = `${parseInt(lastParts[0])} ${MONTHS_RU_FULL[parseInt(lastParts[1])-1]} ${lastParts[2]}`;
-
-  let badgeClass, badgeText;
+  let whenDate, whenDays, daysClass;
   if (r.overdue || r.days_until < 0) {
-    badgeClass = 'overdue';
-    badgeText = `Просрочена на ${Math.abs(r.days_until)} дн`;
-  } else if (r.days_until <= 30) {
-    badgeClass = 'soon';
-    badgeText = `~${r.next} (через ${r.days_until} дн)`;
+    whenDate = 'Не выходит';
+    whenDays = `просрочена на ${Math.abs(r.days_until)} дн`;
+    daysClass = 'late';
   } else {
-    badgeClass = 'future';
-    badgeText = `~${r.next}`;
+    whenDate = fmtNextDate(r.next);
+    if (r.days_until <= 45) {
+      whenDays = `через ${r.days_until} дн`;
+      daysClass = 'soon';
+    } else {
+      whenDays = `через ${r.days_until} дн`;
+      daysClass = 'far';
+    }
   }
 
-  // Timeline bar: show position in cycle
-  const cyclePct = r.overdue ? 100 : Math.min(100, Math.round((1 - r.days_until / r.avg_days) * 100));
-  const todayPct = r.overdue ? 100 : cyclePct;
-
   return `
-  <div class="src-rune-block">
-    <div class="src-rune-name">${r.rune}</div>
-    <div class="src-rune-stats">
-      Появлялась <strong>${r.count}×</strong> за 2022–2026 · раз в <strong>~${avgMonths} мес</strong><br>
-      Последний раз: ${lastFmt}
-    </div>
-    <div class="src-rune-bar-wrap">
-      <div class="src-rune-bar-label">Прогресс цикла</div>
-      <div class="src-rune-bar">
-        <div class="src-rune-bar-fill" style="width:${cyclePct}%"></div>
-        <div class="src-rune-bar-marker today" style="left:${Math.min(todayPct,100)}%"></div>
-      </div>
-    </div>
-    <div class="src-rune-next">
-      <span class="src-rune-next-badge ${badgeClass}">${badgeText}</span>
+  <div class="rune-row">
+    <div class="rune-slot">${meta.label}</div>
+    <div class="rune-name">${r.rune}</div>
+    <div class="rune-events">${buildEventChips(slotId)}</div>
+    <div class="rune-when">
+      <div class="rune-when-date">${whenDate}</div>
+      <div class="rune-when-days ${daysClass}">${whenDays}</div>
     </div>
   </div>`;
 }
 
-function buildEventSection(slotId) {
-  const evItems = SLOT_EVENT_ITEMS[slotId];
-  if (!evItems || !evItems.length) {
-    return `<div class="src-no-event">Не выдаётся на ивентах — только в магазине или постоянно</div>`;
+function renderSources() {
+  const list = document.getElementById('runeList');
+
+  // Sort: soon first, then far, then overdue
+  const sorted = [...SLOT_ORDER].sort((a, b) => {
+    const ra = SLOT_RUNE[a], rb = SLOT_RUNE[b];
+    if (!ra && !rb) return 0;
+    if (!ra) return 1;
+    if (!rb) return -1;
+    const da = ra.overdue ? 9999 : ra.days_until;
+    const db = rb.overdue ? 9999 : rb.days_until;
+    return da - db;
+  });
+
+  const active   = sorted.filter(s => SLOT_RUNE[s] && !SLOT_RUNE[s].overdue && SLOT_RUNE[s].days_until >= 0);
+  const overdue  = sorted.filter(s => SLOT_RUNE[s] && (SLOT_RUNE[s].overdue || SLOT_RUNE[s].days_until < 0));
+  const noRune   = sorted.filter(s => !SLOT_RUNE[s]);
+
+  let html = '';
+  if (active.length) {
+    html += `<div class="rune-section-title">Ожидаемые акции</div>`;
+    html += active.map(buildRuneRow).join('');
+  }
+  if (overdue.length) {
+    html += `<div class="rune-section-title">Давно не выходили</div>`;
+    html += overdue.map(buildRuneRow).join('');
+  }
+  if (noRune.length) {
+    html += `<div class="rune-section-title">Только ивент-локация</div>`;
+    html += noRune.map(s => {
+      const meta = SLOT_META[s]; if (!meta) return '';
+      return `<div class="rune-row">
+        <div class="rune-slot">${meta.label}</div>
+        <div class="rune-name" style="color:var(--txt3);font-style:italic">Руны нет</div>
+        <div class="rune-events">${buildEventChips(s)}</div>
+        <div class="rune-when"><div class="rune-when-date" style="color:var(--txt3)">—</div></div>
+      </div>`;
+    }).join('');
   }
 
-  return `<div class="src-events">` + evItems.map(ei => {
-    const ev = EVENTS_BY_TAG[ei.event];
-    if (!ev) return '';
-    const itemBadges = ei.items.map(item =>
-      `<span class="src-item-badge ${Q_CLASS[item.q] || ''}">${item.name} (${Q_NAME[item.q] || item.q})</span>`
-    ).join('');
-    return `
-    <div class="src-event-row">
-      <div class="src-event-ico">${ev.ico}</div>
-      <div class="src-event-info">
-        <div class="src-event-name">${ev.name}</div>
-        ${monthChips(ev.months)}
-        <div class="src-event-items">${itemBadges}</div>
-      </div>
-    </div>`;
-  }).join('') + '</div>';
-}
-
-function renderSources() {
-  const grid = document.getElementById('srcGrid');
-  grid.innerHTML = SLOT_ORDER.map(slotId => {
-    const meta = SLOT_META[slotId];
-    if (!meta) return '';
-    return `
-    <div class="src-card">
-      <div class="src-header">
-        <div class="src-slot-name">${meta.label}</div>
-        <div class="src-slot-hint">${meta.hint}</div>
-      </div>
-      <div class="src-body">
-        <div class="src-col">
-          <div class="src-col-label">Ивент-локации</div>
-          ${buildEventSection(slotId)}
-        </div>
-        <div class="src-col">
-          <div class="src-col-label">Руна из рубинового магазина</div>
-          ${buildRuneSection(slotId)}
-        </div>
-      </div>
-    </div>`;
-  }).join('');
+  list.innerHTML = html;
 }
 
 // ══════════════════════════════════════════════
