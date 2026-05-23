@@ -169,6 +169,22 @@ header {
   font-size: 11px; padding: 2px 8px; border-radius: 10px;
   border: 1px solid; font-family: 'Cinzel', serif; letter-spacing: .03em;
 }
+.detail-link {
+  font-size: 12px; color: var(--txt3); text-decoration: none;
+  border: 1px solid rgba(184,134,11,.2); border-radius: 4px;
+  padding: 2px 8px; margin-left: 6px; transition: color .15s, border-color .15s;
+  white-space: nowrap; flex-shrink: 0;
+}
+.detail-link:hover { color: var(--gold); border-color: rgba(184,134,11,.5); }
+.detail-duration {
+  font-size: 12px; color: var(--txt2); margin-top: 4px;
+}
+.detail-duration.approx { color: var(--txt3); font-style: italic; }
+/* Continuation indicator in day cells */
+.ev-cont {
+  height: 4px; border-radius: 2px; margin-top: 1px;
+  opacity: 0.5;
+}
 
 /* ── YEAR SELECTOR ── */
 .year-nav { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
@@ -438,13 +454,29 @@ function renderCalendar() {
 
     let evHtml = '';
     if (!isOther && items.length) {
-      const show = items.slice(0, 3);
-      show.forEach(n => {
+      // Separate starts from continuations
+      const starts = items.filter(n => n._span === 'start');
+      const conts  = items.filter(n => n._span !== 'start');
+
+      // Show start items as chips (max 3)
+      const showStarts = starts.slice(0, 3);
+      showStarts.forEach(n => {
         const meta = CAT_META[n.c] || CAT_META.other;
-        const short = n.t.replace(/^Акция!\s*/i,'').replace(/^Завершение\s+/i,'↩ ').substring(0, 32);
+        const short = n.t.replace(/^Акция!\s*/i,'').replace(/^Завершение\s+/i,'↩ ').substring(0, 28);
         evHtml += `<div class="ev-chip"><span class="ev-dot" style="background:${meta.color}"></span><span class="ev-text">${short}</span></div>`;
       });
-      if (items.length > 3) evHtml += `<div class="ev-more">+${items.length-3}</div>`;
+      // Show continuation dots compactly
+      const uniqueConts = [...new Map(conts.map(n => [n.id, n])).values()].slice(0, 4);
+      if (uniqueConts.length) {
+        const dots = uniqueConts.map(n => {
+          const meta = CAT_META[n.c] || CAT_META.other;
+          const opacity = n._span === 'end' ? '0.4' : '0.6';
+          return `<span class="ev-cont" style="background:${meta.color};opacity:${opacity};flex:1;min-width:8px"></span>`;
+        }).join('');
+        evHtml += `<div style="display:flex;gap:2px;margin-top:2px">${dots}</div>`;
+      }
+      const total = starts.length + uniqueConts.length;
+      if (total > 3) evHtml += `<div class="ev-more">+${total - 3}</div>`;
     }
 
     html += `<div class="${cls}" data-date="${dateStr}">
@@ -478,8 +510,12 @@ function showDetail(dateStr, scroll=true) {
     c.classList.toggle('selected', c.dataset.date === dateStr);
   });
 
-  const items = (dayMap[dateStr] || []).filter(n => isVisible(n.c));
-  if (!items.length) { closeDetail(); return; }
+  const allItems = (dayMap[dateStr] || []).filter(n => isVisible(n.c));
+  if (!allItems.length) { closeDetail(); return; }
+
+  // Deduplicate by id — show each news item once
+  const seen = new Set();
+  const items = allItems.filter(n => { if (seen.has(n.id)) return false; seen.add(n.id); return true; });
 
   const d = parseIso(dateStr);
   const dow = ['Воскресенье','Понедельник','Вторник','Среда','Четверг','Пятница','Суббота'][d.getDay()];
@@ -489,13 +525,26 @@ function showDetail(dateStr, scroll=true) {
   const body = document.getElementById('detailBody');
   body.innerHTML = items.map(n => {
     const meta = CAT_META[n.c] || CAT_META.other;
+    const isActive = n._span !== 'start'; // started before this day
+    const durInfo = n.e ? formatDuration(n.d, n.e, n.approx) : null;
+    const link = `<a href="${newsUrl(n.id)}" target="_blank" rel="noopener" class="detail-link">Новость →</a>`;
+    const durHtml = durInfo
+      ? `<div class="detail-duration${durInfo.approx ? ' approx' : ''}">${durInfo.range} · ${durInfo.dur}</div>`
+      : '';
+    const activeBadge = isActive
+      ? `<span style="font-size:11px;color:var(--txt3);margin-left:4px">• идёт</span>`
+      : '';
     return `<div class="detail-item">
       <div class="detail-ico">${meta.ico}</div>
-      <div class="detail-info">
-        <div class="detail-title">${n.t}</div>
-        <div class="detail-meta">
-          <span class="detail-cat-badge" style="color:${meta.color};border-color:${meta.color}44;background:${meta.color}12">${meta.label}</span>
+      <div class="detail-info" style="flex:1;min-width:0">
+        <div class="detail-title" style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+          <span>${n.t}</span>${activeBadge}
         </div>
+        <div class="detail-meta" style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:4px">
+          <span class="detail-cat-badge" style="color:${meta.color};border-color:${meta.color}44;background:${meta.color}12">${meta.label}</span>
+          ${link}
+        </div>
+        ${durHtml}
       </div>
     </div>`;
   }).join('');
@@ -534,16 +583,47 @@ document.getElementById('btnNext').addEventListener('click', () => navigate(+1))
 document.getElementById('detailClose').addEventListener('click', closeDetail);
 
 // ══════════════════════════════════════════
+//  NEWS URL
+// ══════════════════════════════════════════
+function newsUrl(id) {
+  return `http://pridvornyirobot.kor.ru/blog/comments/${id}`;
+}
+
+function formatDuration(startIso, endIso, approx) {
+  const s = parseIso(startIso), e = parseIso(endIso);
+  const days = Math.round((e - s) / 86400000);
+  const sStr = `${s.getDate()} ${MONTHS_GEN[s.getMonth()]}`;
+  const eStr = `${e.getDate()} ${MONTHS_GEN[e.getMonth()]}${e.getFullYear() !== s.getFullYear() ? ' '+e.getFullYear() : ''}`;
+  const dur = days === 0 ? '1 день' : days === 1 ? '2 дня' : days < 5 ? `${days+1} дня` : `${days+1} дней`;
+  const prefix = approx ? '~' : '';
+  return { range: `${sStr} — ${prefix}${eStr}`, dur: `${prefix}${dur}`, approx };
+}
+
+// ══════════════════════════════════════════
 //  INIT
 // ══════════════════════════════════════════
 fetch('db/news_cal.json')
   .then(r => r.json())
   .then(data => {
     allNews = data;
-    // Build day map
+    // Build day map: each item appears on start day + all continuation days up to end
     data.forEach(n => {
-      if (!dayMap[n.d]) dayMap[n.d] = [];
-      dayMap[n.d].push(n);
+      const startD = n.d;
+      if (!dayMap[startD]) dayMap[startD] = [];
+      dayMap[startD].push({ ...n, _span: 'start' });
+
+      if (n.e && n.e > startD) {
+        // Add continuation entries for each day in range
+        let cur = new Date(parseIso(startD).getTime() + 86400000);
+        const end = parseIso(n.e);
+        while (cur <= end) {
+          const key = isoDate(cur);
+          if (!dayMap[key]) dayMap[key] = [];
+          const isEnd = isoDate(cur) === n.e;
+          dayMap[key].push({ ...n, _span: isEnd ? 'end' : 'cont' });
+          cur = new Date(cur.getTime() + 86400000);
+        }
+      }
     });
     buildFilters();
     buildYearNav();
