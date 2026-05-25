@@ -3,8 +3,12 @@
 Добавляет поле end_date к news items и матчит турниры.
 Сохраняет обновлённый news_cal.json.
 """
-import json, re
+import json, re, os
 from datetime import date, timedelta
+
+_BASE = os.path.join(os.path.dirname(__file__), '..')
+NEWS_PATH    = os.path.join(_BASE, 'db', 'news.json')
+NEWS_CAL_PATH = os.path.join(_BASE, 'db', 'news_cal.json')
 
 # Склонения месяцев → номер
 MONTHS = {
@@ -138,7 +142,7 @@ def match_tournaments(items):
 
 
 def main():
-    with open('/Users/sriblo/Korolevstvo/db/news.json', encoding='utf-8') as f:
+    with open(NEWS_PATH, encoding='utf-8') as f:
         news = json.load(f)
 
     # Пересчитываем категории
@@ -273,11 +277,11 @@ def main():
         print(f"  {x['d']} → {x['e']}  [{x['c']}]  {x['t'][:55]}")
 
     compact.sort(key=lambda x: (x['d'], x['id']), reverse=True)
-    with open('/Users/sriblo/Korolevstvo/db/news_cal.json', 'w', encoding='utf-8') as f:
+    with open(NEWS_CAL_PATH, 'w', encoding='utf-8') as f:
         json.dump(compact, f, ensure_ascii=False, separators=(',', ':'))
 
     import os
-    size = os.path.getsize('/Users/sriblo/Korolevstvo/db/news_cal.json')
+    size = os.path.getsize(NEWS_CAL_PATH)
     print(f'\nСохранено: {size//1024} KB')
 
 if __name__ == '__main__':
