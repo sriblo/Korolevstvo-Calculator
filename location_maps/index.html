@@ -250,7 +250,8 @@ function calcBounds(pts) {
 function worldToPixel(wx, wy, r) {
   const { minX, maxX, minY, maxY } = worldBounds;
   const px = (wx - minX) / (maxX - minX) * r.imgW;
-  const py = (wy - minY) / (maxY - minY) * r.imgH;
+  // Y в игре растёт вверх (север), на экране вниз — флипаем
+  const py = (maxY - wy) / (maxY - minY) * r.imgH;
   return { px, py };
 }
 
