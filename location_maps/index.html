@@ -218,11 +218,16 @@ const REGIONS = {
     name: 'Флоринг',
     img: 'images/floring.jpg',
     imgW: 384, imgH: 400,
+    // калибровка: игрок (-334,-161) виден на ~46% от левого края и ~28% сверху
+    bounds: { left: -744, right: 140, top: 90, bottom: -831 },
     border: '-434,-192;-466,-112;-448,-26;-392,36;-336,72;-278,82;-236,90;-182,84;-136,82;-82,66;-38,8;-12,-38;30,-58;92,-84;118,-112;140,-154;74,-238;-32,-238;-38,-352;-56,-432;-52,-478;-10,-448;18,-416;70,-414;116,-424;144,-472;110,-582;74,-606;36,-612;-16,-668;-56,-678;-106,-778;-190,-816;-436,-652;-592,-418;-546,-324',
-    // area x,y,w,h из regions.swf
+    // area x,y,w,h из regions.swf (центр области)
     locations: [
-      { id:'pallagon',  name:'Паллагон',  x:15,  y:-591, w:59, h:66, color:'#f0a040' },
-      { id:'gliara',    name:'Гальяра',   x:-86, y:-86,  w:58, h:58, color:'#f0a040' },
+      { id:'outpost_wp1',  name:'Застава Белого Престола', x:-99,  y:-518, w:31, h:31, color:'#6ab0f5' },
+      { id:'outpost_bl1',  name:'Застава Лиги Крови',      x:-109, y:-207, w:44, h:38, color:'#f56a6a' },
+      { id:'tabor',        name:'Табор Кларенса',           x:-400, y:-349, w:61, h:65, color:'#f0a040' },
+      { id:'green_hill',   name:'Зеленый холм',             x:-263, y:-637, w:32, h:39, color:'#6af07a' },
+      { id:'moen_no_me',   name:'Моэн но Мэ',               x:-282, y:-48,  w:35, h:35, color:'#f0a040' },
     ],
   },
   // остальные добавляются по мере загрузки карт
@@ -230,7 +235,8 @@ const REGIONS = {
 
 // ── Состояние ────────────────────────────────────────────────────────────────
 let currentRegion = null;
-let playerX = -349, playerY = -164;
+let playerX = 0, playerY = 0;
+let playerSearched = false;
 let scale = 1;
 let border = [];
 let worldBounds = { minX:0, maxX:1, minY:0, maxY:1 };
@@ -253,10 +259,14 @@ function calcBounds(pts) {
 
 // ── Преобразование координат ─────────────────────────────────────────────────
 function worldToPixel(wx, wy, r) {
-  const { minX, maxX, minY, maxY } = worldBounds;
-  const px = (wx - minX) / (maxX - minX) * r.imgW;
+  const b = r.bounds || worldBounds;
+  const left   = b.left   ?? b.minX;
+  const right  = b.right  ?? b.maxX;
+  const top    = b.top    ?? b.maxY;
+  const bottom = b.bottom ?? b.minY;
+  const px = (wx - left)  / (right - left)  * r.imgW;
   // Y в игре растёт вверх (север), на экране вниз — флипаем
-  const py = (maxY - wy) / (maxY - minY) * r.imgH;
+  const py = (top  - wy)  / (top   - bottom) * r.imgH;
   return { px, py };
 }
 
@@ -324,35 +334,39 @@ function drawMap() {
   ctx.fillStyle = 'rgba(232,184,75,0.04)';
   ctx.fill();
 
-  // Позиция игрока
-  const { px, py } = worldToPixel(playerX, playerY, r);
-  const cx = px * s, cy = py * s;
+  // Позиция игрока (только после поиска)
+  let inBounds = false;
+  if (playerSearched) {
+    const { px, py } = worldToPixel(playerX, playerY, r);
+    const cx = px * s, cy = py * s;
+    inBounds = px >= 0 && px <= r.imgW && py >= 0 && py <= r.imgH;
 
-  // Внешнее кольцо
-  ctx.beginPath();
-  ctx.arc(cx, cy, 9 * s, 0, Math.PI * 2);
-  ctx.strokeStyle = 'rgba(255,68,68,0.5)';
-  ctx.lineWidth = 1;
-  ctx.stroke();
+    // Внешнее кольцо
+    ctx.beginPath();
+    ctx.arc(cx, cy, 9 * s, 0, Math.PI * 2);
+    ctx.strokeStyle = 'rgba(255,68,68,0.5)';
+    ctx.lineWidth = 1;
+    ctx.stroke();
 
-  // Крест
-  ctx.strokeStyle = '#ff4444';
-  ctx.lineWidth = 1.5;
-  ctx.beginPath();
-  ctx.moveTo(cx - 6 * s, cy); ctx.lineTo(cx + 6 * s, cy);
-  ctx.moveTo(cx, cy - 6 * s); ctx.lineTo(cx, cy + 6 * s);
-  ctx.stroke();
+    // Крест
+    ctx.strokeStyle = '#ff4444';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(cx - 6 * s, cy); ctx.lineTo(cx + 6 * s, cy);
+    ctx.moveTo(cx, cy - 6 * s); ctx.lineTo(cx, cy + 6 * s);
+    ctx.stroke();
 
-  // Точка
-  ctx.beginPath();
-  ctx.arc(cx, cy, 3 * s, 0, Math.PI * 2);
-  ctx.fillStyle = '#ff4444';
-  ctx.fill();
+    // Точка
+    ctx.beginPath();
+    ctx.arc(cx, cy, 3 * s, 0, Math.PI * 2);
+    ctx.fillStyle = '#ff4444';
+    ctx.fill();
 
-  // Подпись
-  ctx.font = `${11 * s}px Inter, sans-serif`;
-  ctx.fillStyle = '#ff6666';
-  ctx.fillText(`${playerX}, ${playerY}`, cx + 10 * s, cy - 4 * s);
+    // Подпись
+    ctx.font = `${11 * s}px Inter, sans-serif`;
+    ctx.fillStyle = '#ff6666';
+    ctx.fillText(`${playerX}, ${playerY}`, cx + 10 * s, cy - 4 * s);
+  }
 
   // Города для калибровки
   if (r.locations) {
@@ -373,17 +387,20 @@ function drawMap() {
   }
 
   // Инфо
-  const inBounds = px >= 0 && px <= r.imgW && py >= 0 && py <= r.imgH;
   document.getElementById('coord-status').textContent =
-    inBounds ? `→ найден на карте` : '⚠ вне границ карты';
+    !playerSearched ? '' : inBounds ? '→ найден на карте' : '⚠ вне границ карты';
   document.getElementById('info-coords').textContent =
-    `Персонаж: ${playerX}, ${playerY}`;
+    playerSearched ? `Персонаж: ${playerX}, ${playerY}` : 'Персонаж: —';
 }
 
 // ── Кнопка Найти ─────────────────────────────────────────────────────────────
 function findPlayer() {
-  playerX = parseFloat(document.getElementById('inp-x').value) || 0;
-  playerY = parseFloat(document.getElementById('inp-y').value) || 0;
+  const xVal = document.getElementById('inp-x').value.trim();
+  const yVal = document.getElementById('inp-y').value.trim();
+  if (xVal === '' || yVal === '') return;
+  playerX = parseFloat(xVal) || 0;
+  playerY = parseFloat(yVal) || 0;
+  playerSearched = true;
   drawMap();
 }
 
