@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Карты локаций — Королевство</title>
+<style>
+  :root {
+    --gold:   #e8b84b;
+    --gold-l: #fce87a;
+    --gold-d: #b8912e;
+    --gold-tint: 232,184,75;
+    --bg:   #0f0c08;
+    --bg2:  #181208;
+    --bg3:  #221a0e;
+    --bg4:  #2c2010;
+    --line: rgba(var(--gold-tint),.14);
+    --line2:rgba(var(--gold-tint),.28);
+    --txt:  #f5ecd8;
+    --txt2: #c8a96e;
+    --txt3: #8a7250;
+    --serif:'Georgia',serif;
+    --sans: 'Inter',system-ui,sans-serif;
+  }
+  * { box-sizing:border-box; margin:0; padding:0 }
+  html, body { height:100%; background:var(--bg); color:var(--txt); font-family:var(--sans); font-size:14px }
+
+  /* ── Top bar ── */
+  .top {
+    padding:14px 32px;
+    border-bottom:1px solid var(--line);
+    background:rgba(11,9,7,.85);
+    backdrop-filter:blur(20px);
+    display:flex; align-items:center; gap:16px;
+  }
+  .top-title { font-family:var(--serif); font-size:18px; font-weight:600; color:var(--gold); letter-spacing:.02em }
+  .top-back { font-size:12px; color:var(--txt3); padding:5px 10px; border-radius:5px; text-decoration:none; transition:.12s }
+  .top-back:hover { color:var(--gold-l); background:var(--bg3) }
+
+  /* ── Layout ── */
+  .layout { display:flex; height:calc(100vh - 53px) }
+
+  /* ── Sidebar ── */
+  .sidebar {
+    width:220px; flex-shrink:0;
+    background:var(--bg2); border-right:1px solid var(--line);
+    display:flex; flex-direction:column; overflow-y:auto;
+  }
+  .sb-head { padding:16px 18px 10px; font-size:10px; color:var(--txt3); letter-spacing:.18em; text-transform:uppercase; font-weight:600 }
+  .sb-item {
+    padding:10px 18px; cursor:pointer; font-size:13px; color:var(--txt2);
+    border-left:2px solid transparent; transition:.12s;
+    display:flex; align-items:center; gap:10px;
+  }
+  .sb-item:hover { color:var(--txt); background:var(--bg3) }
+  .sb-item.on { color:var(--gold-l); border-left-color:var(--gold); background:rgba(var(--gold-tint),.06) }
+  .sb-lvl {
+    font-size:10px; padding:2px 5px; border-radius:3px;
+    background:var(--bg4); color:var(--txt3); font-weight:600;
+    margin-left:auto; flex-shrink:0;
+  }
+  .sb-item.on .sb-lvl { color:var(--gold-d) }
+
+  /* ── Main ── */
+  .main {
+    flex:1; display:flex; flex-direction:column; overflow:hidden;
+  }
+
+  /* ── Controls ── */
+  .controls {
+    padding:14px 24px; border-bottom:1px solid var(--line);
+    background:var(--bg2);
+    display:flex; align-items:center; gap:16px; flex-wrap:wrap;
+  }
+  .ctrl-label { font-size:11px; color:var(--txt3); letter-spacing:.1em; text-transform:uppercase; font-weight:600 }
+  .coord-group { display:flex; align-items:center; gap:8px }
+  .coord-input {
+    width:90px; padding:7px 10px;
+    background:var(--bg3); border:1px solid var(--line2);
+    border-radius:6px; color:var(--txt); font-size:14px;
+    font-family:monospace; outline:none; transition:.12s;
+  }
+  .coord-input:focus { border-color:var(--gold); box-shadow:0 0 0 2px rgba(var(--gold-tint),.12) }
+  .coord-sep { color:var(--txt3); font-size:16px }
+  .btn-find {
+    padding:7px 18px; background:rgba(var(--gold-tint),.12);
+    border:1px solid var(--gold-d); border-radius:6px;
+    color:var(--gold-l); font-size:13px; font-weight:600;
+    cursor:pointer; transition:.12s; outline:none;
+  }
+  .btn-find:hover { background:rgba(var(--gold-tint),.22); border-color:var(--gold) }
+  .coord-hint { font-size:11px; color:var(--txt3); font-style:italic; margin-left:4px }
+
+  /* ── Map area ── */
+  .map-area {
+    flex:1; display:flex; align-items:center; justify-content:center;
+    overflow:auto; padding:24px;
+    background:radial-gradient(ellipse 60% 60% at 50% 50%, rgba(var(--gold-tint),.03), transparent 70%), var(--bg);
+  }
+  .map-wrap {
+    position:relative; display:inline-block;
+    border:1px solid var(--line2);
+    box-shadow:0 0 40px rgba(0,0,0,.6), 0 0 0 1px rgba(var(--gold-tint),.08);
+    border-radius:4px; overflow:hidden;
+  }
+  #map-img {
+    display:block;
+    image-rendering:pixelated;
+  }
+  #map-canvas {
+    position:absolute; inset:0; pointer-events:none;
+  }
+
+  /* ── Info bar ── */
+  .info-bar {
+    padding:8px 24px; border-top:1px solid var(--line);
+    background:var(--bg2); font-size:11px; color:var(--txt3);
+    display:flex; align-items:center; gap:20px;
+  }
+  .info-item { display:flex; align-items:center; gap:6px }
+  .info-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0 }
+  .info-dot.player { background:#ff4444; box-shadow:0 0 6px #ff4444 }
+  .info-dot.border { background:rgba(var(--gold-tint),.6) }
+
+  /* ── Zoom controls ── */
+  .zoom-controls {
+    position:absolute; bottom:16px; right:16px;
+    display:flex; flex-direction:column; gap:4px; z-index:10;
+  }
+  .zoom-btn {
+    width:28px; height:28px; background:rgba(15,12,8,.85);
+    border:1px solid var(--line2); border-radius:4px;
+    color:var(--txt2); font-size:16px; cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    transition:.12s; outline:none;
+  }
+  .zoom-btn:hover { border-color:var(--gold); color:var(--gold-l) }
+
+  /* ── No map state ── */
+  .no-map {
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    height:100%; gap:12px; color:var(--txt3); font-family:var(--serif); font-style:italic;
+  }
+</style>
+</head>
+<body>
+
+<div class="top">
+  <a class="top-back" href="../index_new.html">← Главная</a>
+  <div class="top-title">Карты локаций</div>
+</div>
+
+<div class="layout">
+
+  <nav class="sidebar">
+    <div class="sb-head">Локации</div>
+    <div class="sb-item on" onclick="selectRegion('floring')" data-id="floring">
+      Флоринг <span class="sb-lvl">3</span>
+    </div>
+    <div class="sb-item soon" onclick="selectRegion('kohill_islands')" data-id="kohill_islands">
+      Кохилл <span class="sb-lvl">4</span>
+    </div>
+    <div class="sb-item soon" onclick="selectRegion('gaina')" data-id="gaina">
+      Гайна <span class="sb-lvl">5</span>
+    </div>
+    <div class="sb-item soon" onclick="selectRegion('spring_shore')" data-id="spring_shore">
+      Весенний берег <span class="sb-lvl">6</span>
+    </div>
+    <div class="sb-item soon" onclick="selectRegion('hirn')" data-id="hirn">
+      Хирн <span class="sb-lvl">7</span>
+    </div>
+    <div class="sb-item soon" onclick="selectRegion('south_fyorl')" data-id="south_fyorl">
+      Южный Фьорл <span class="sb-lvl">8</span>
+    </div>
+    <div class="sb-item soon" onclick="selectRegion('north_fyorl')" data-id="north_fyorl">
+      Северный Фьорл <span class="sb-lvl">9</span>
+    </div>
+  </nav>
+
+  <div class="main">
+    <div class="controls">
+      <span class="ctrl-label">Координаты</span>
+      <div class="coord-group">
+        <input class="coord-input" id="inp-x" type="number" placeholder="X" value="-349">
+        <span class="coord-sep">,</span>
+        <input class="coord-input" id="inp-y" type="number" placeholder="Y" value="-164">
+      </div>
+      <button class="btn-find" onclick="findPlayer()">Найти</button>
+      <span class="coord-hint" id="coord-status"></span>
+    </div>
+
+    <div class="map-area" id="map-area">
+      <div class="map-wrap" id="map-wrap">
+        <img id="map-img" src="" alt="">
+        <canvas id="map-canvas"></canvas>
+        <div class="zoom-controls">
+          <button class="zoom-btn" onclick="zoom(1.25)">+</button>
+          <button class="zoom-btn" onclick="zoom(0.8)">−</button>
+          <button class="zoom-btn" onclick="resetZoom()" title="Сброс">⊙</button>
+        </div>
+      </div>
+      <div class="no-map" id="no-map" style="display:none">Карта не загружена</div>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-item"><div class="info-dot player"></div> Персонаж</div>
+      <div class="info-item"><div class="info-dot border"></div> Граница региона</div>
+      <div class="info-item" id="info-coords" style="margin-left:auto"></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ── Данные регионов ──────────────────────────────────────────────────────────
+const REGIONS = {
+  floring: {
+    name: 'Флоринг',
+    img: 'images/floring.jpg',
+    imgW: 384, imgH: 400,
+    border: '-434,-192;-466,-112;-448,-26;-392,36;-336,72;-278,82;-236,90;-182,84;-136,82;-82,66;-38,8;-12,-38;30,-58;92,-84;118,-112;140,-154;74,-238;-32,-238;-38,-352;-56,-432;-52,-478;-10,-448;18,-416;70,-414;116,-424;144,-472;110,-582;74,-606;36,-612;-16,-668;-56,-678;-106,-778;-190,-816;-436,-652;-592,-418;-546,-324',
+  },
+  // остальные добавляются по мере загрузки карт
+};
+
+// ── Состояние ────────────────────────────────────────────────────────────────
+let currentRegion = null;
+let playerX = -349, playerY = -164;
+let scale = 1;
+let border = [];
+let worldBounds = { minX:0, maxX:1, minY:0, maxY:1 };
+
+// ── Парсинг границ ───────────────────────────────────────────────────────────
+function parseBorder(str) {
+  return str.split(';').map(p => {
+    const [x, y] = p.split(',').map(Number);
+    return { x, y };
+  });
+}
+
+function calcBounds(pts) {
+  const xs = pts.map(p => p.x), ys = pts.map(p => p.y);
+  return {
+    minX: Math.min(...xs), maxX: Math.max(...xs),
+    minY: Math.min(...ys), maxY: Math.max(...ys),
+  };
+}
+
+// ── Преобразование координат ─────────────────────────────────────────────────
+function worldToPixel(wx, wy, r) {
+  const { minX, maxX, minY, maxY } = worldBounds;
+  const px = (wx - minX) / (maxX - minX) * r.imgW;
+  const py = (wy - minY) / (maxY - minY) * r.imgH;
+  return { px, py };
+}
+
+// ── Загрузка региона ─────────────────────────────────────────────────────────
+function selectRegion(id) {
+  document.querySelectorAll('.sb-item').forEach(el => el.classList.remove('on'));
+  document.querySelector(`.sb-item[data-id="${id}"]`).classList.add('on');
+
+  const r = REGIONS[id];
+  if (!r) {
+    document.getElementById('no-map').style.display = 'flex';
+    document.getElementById('map-wrap').style.display = 'none';
+    document.getElementById('coord-status').textContent = 'Карта этой локации ещё не добавлена';
+    return;
+  }
+
+  document.getElementById('no-map').style.display = 'none';
+  document.getElementById('map-wrap').style.display = 'inline-block';
+
+  currentRegion = id;
+  border = parseBorder(r.border);
+  worldBounds = calcBounds(border);
+  scale = 1;
+
+  const img = document.getElementById('map-img');
+  const canvas = document.getElementById('map-canvas');
+
+  img.onload = () => {
+    canvas.width  = r.imgW;
+    canvas.height = r.imgH;
+    img.width  = r.imgW;
+    img.height = r.imgH;
+    drawMap();
+  };
+  img.src = r.img;
+}
+
+// ── Отрисовка ────────────────────────────────────────────────────────────────
+function drawMap() {
+  const r = REGIONS[currentRegion];
+  if (!r) return;
+
+  const canvas = document.getElementById('map-canvas');
+  canvas.width  = r.imgW * scale;
+  canvas.height = r.imgH * scale;
+  document.getElementById('map-img').width  = r.imgW * scale;
+  document.getElementById('map-img').height = r.imgH * scale;
+
+  const ctx = canvas.getContext('2d');
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  const s = scale;
+
+  // Граница региона
+  ctx.beginPath();
+  border.forEach((pt, i) => {
+    const { px, py } = worldToPixel(pt.x, pt.y, r);
+    if (i === 0) ctx.moveTo(px * s, py * s);
+    else ctx.lineTo(px * s, py * s);
+  });
+  ctx.closePath();
+  ctx.strokeStyle = 'rgba(232,184,75,0.55)';
+  ctx.lineWidth = 1.5;
+  ctx.stroke();
+  ctx.fillStyle = 'rgba(232,184,75,0.04)';
+  ctx.fill();
+
+  // Позиция игрока
+  const { px, py } = worldToPixel(playerX, playerY, r);
+  const cx = px * s, cy = py * s;
+
+  // Внешнее кольцо
+  ctx.beginPath();
+  ctx.arc(cx, cy, 9 * s, 0, Math.PI * 2);
+  ctx.strokeStyle = 'rgba(255,68,68,0.5)';
+  ctx.lineWidth = 1;
+  ctx.stroke();
+
+  // Крест
+  ctx.strokeStyle = '#ff4444';
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.moveTo(cx - 6 * s, cy); ctx.lineTo(cx + 6 * s, cy);
+  ctx.moveTo(cx, cy - 6 * s); ctx.lineTo(cx, cy + 6 * s);
+  ctx.stroke();
+
+  // Точка
+  ctx.beginPath();
+  ctx.arc(cx, cy, 3 * s, 0, Math.PI * 2);
+  ctx.fillStyle = '#ff4444';
+  ctx.fill();
+
+  // Подпись
+  ctx.font = `${11 * s}px Inter, sans-serif`;
+  ctx.fillStyle = '#ff6666';
+  ctx.fillText(`${playerX}, ${playerY}`, cx + 10 * s, cy - 4 * s);
+
+  // Инфо
+  const inBounds = px >= 0 && px <= r.imgW && py >= 0 && py <= r.imgH;
+  document.getElementById('coord-status').textContent =
+    inBounds ? `→ найден на карте` : '⚠ вне границ карты';
+  document.getElementById('info-coords').textContent =
+    `Персонаж: ${playerX}, ${playerY}`;
+}
+
+// ── Кнопка Найти ─────────────────────────────────────────────────────────────
+function findPlayer() {
+  playerX = parseFloat(document.getElementById('inp-x').value) || 0;
+  playerY = parseFloat(document.getElementById('inp-y').value) || 0;
+  drawMap();
+}
+
+// ── Зум ──────────────────────────────────────────────────────────────────────
+function zoom(factor) {
+  scale = Math.max(0.5, Math.min(4, scale * factor));
+  drawMap();
+}
+function resetZoom() {
+  scale = 1;
+  drawMap();
+}
+
+// ── Enter ─────────────────────────────────────────────────────────────────────
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter') findPlayer();
+});
+
+// ── Init ─────────────────────────────────────────────────────────────────────
+selectRegion('floring');
+</script>
+</body>
+</html>
