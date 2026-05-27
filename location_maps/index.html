@@ -221,13 +221,13 @@ const REGIONS = {
     // калибровка: игрок (-334,-161) виден на ~46% от левого края и ~28% сверху
     bounds: { left: -744, right: 140, top: 90, bottom: -831 },
     border: '-434,-192;-466,-112;-448,-26;-392,36;-336,72;-278,82;-236,90;-182,84;-136,82;-82,66;-38,8;-12,-38;30,-58;92,-84;118,-112;140,-154;74,-238;-32,-238;-38,-352;-56,-432;-52,-478;-10,-448;18,-416;70,-414;116,-424;144,-472;110,-582;74,-606;36,-612;-16,-668;-56,-678;-106,-778;-190,-816;-436,-652;-592,-418;-546,-324',
-    // area x,y,w,h из regions.swf (центр области)
+    // координаты = центр области (x + w/2, y + h/2) из regions.swf
     locations: [
-      { id:'outpost_wp1',  name:'Застава Белого Престола', x:-99,  y:-518, w:31, h:31, color:'#6ab0f5' },
-      { id:'outpost_bl1',  name:'Застава Лиги Крови',      x:-109, y:-207, w:44, h:38, color:'#f56a6a' },
-      { id:'tabor',        name:'Табор Кларенса',           x:-400, y:-349, w:61, h:65, color:'#f0a040' },
-      { id:'green_hill',   name:'Зеленый холм',             x:-263, y:-637, w:32, h:39, color:'#6af07a' },
-      { id:'moen_no_me',   name:'Моэн но Мэ',               x:-282, y:-48,  w:35, h:35, color:'#f0a040' },
+      { id:'outpost_wp1',  name:'Застава Белого Престола', x:-84,  y:-503, color:'#6ab0f5' },
+      { id:'outpost_bl1',  name:'Застава Лиги Крови',      x:-87,  y:-188, color:'#f56a6a' },
+      { id:'tabor',        name:'Табор Кларенса',           x:-370, y:-317, color:'#f0a040' },
+      { id:'green_hill',   name:'Зеленый холм',             x:-247, y:-618, color:'#6af07a' },
+      { id:'moen_no_me',   name:'Моэн но Мэ',               x:-265, y:-31,  color:'#f0a040' },
     ],
   },
   // остальные добавляются по мере загрузки карт
@@ -371,7 +371,7 @@ function drawMap() {
   // Города для калибровки
   if (r.locations) {
     r.locations.forEach(loc => {
-      const { px: lx, py: ly } = worldToPixel(loc.x + loc.w/2, loc.y + loc.h/2, r);
+      const { px: lx, py: ly } = worldToPixel(loc.x, loc.y, r);
       const lcx = lx * s, lcy = ly * s;
       ctx.beginPath();
       ctx.arc(lcx, lcy, 5 * s, 0, Math.PI * 2);
