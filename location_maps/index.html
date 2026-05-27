@@ -219,6 +219,11 @@ const REGIONS = {
     img: 'images/floring.jpg',
     imgW: 384, imgH: 400,
     border: '-434,-192;-466,-112;-448,-26;-392,36;-336,72;-278,82;-236,90;-182,84;-136,82;-82,66;-38,8;-12,-38;30,-58;92,-84;118,-112;140,-154;74,-238;-32,-238;-38,-352;-56,-432;-52,-478;-10,-448;18,-416;70,-414;116,-424;144,-472;110,-582;74,-606;36,-612;-16,-668;-56,-678;-106,-778;-190,-816;-436,-652;-592,-418;-546,-324',
+    // area x,y,w,h из regions.swf
+    locations: [
+      { id:'pallagon',  name:'Паллагон',  x:15,  y:-591, w:59, h:66, color:'#f0a040' },
+      { id:'gliara',    name:'Гальяра',   x:-86, y:-86,  w:58, h:58, color:'#f0a040' },
+    ],
   },
   // остальные добавляются по мере загрузки карт
 };
@@ -348,6 +353,24 @@ function drawMap() {
   ctx.font = `${11 * s}px Inter, sans-serif`;
   ctx.fillStyle = '#ff6666';
   ctx.fillText(`${playerX}, ${playerY}`, cx + 10 * s, cy - 4 * s);
+
+  // Города для калибровки
+  if (r.locations) {
+    r.locations.forEach(loc => {
+      const { px: lx, py: ly } = worldToPixel(loc.x + loc.w/2, loc.y + loc.h/2, r);
+      const lcx = lx * s, lcy = ly * s;
+      ctx.beginPath();
+      ctx.arc(lcx, lcy, 5 * s, 0, Math.PI * 2);
+      ctx.fillStyle = loc.color || '#f0a040';
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(0,0,0,0.5)';
+      ctx.lineWidth = 1;
+      ctx.stroke();
+      ctx.font = `bold ${11 * s}px Inter, sans-serif`;
+      ctx.fillStyle = loc.color || '#f0a040';
+      ctx.fillText(loc.name, lcx + 7 * s, lcy + 4 * s);
+    });
+  }
 
   // Инфо
   const inBounds = px >= 0 && px <= r.imgW && py >= 0 && py <= r.imgH;
