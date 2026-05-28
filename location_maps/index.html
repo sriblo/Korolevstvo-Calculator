@@ -484,11 +484,13 @@ document.addEventListener('keydown', e => {
 (function() {
   const tooltip = document.getElementById('loc-tooltip');
 
-  document.getElementById('map-canvas').addEventListener('mousemove', e => {
+  const wrap = document.getElementById('map-wrap');
+
+  wrap.addEventListener('mousemove', e => {
     if (!drawnLocations.length) return;
 
     const canvas = document.getElementById('map-canvas');
-    const rect = canvas.getBoundingClientRect();
+    const rect = wrap.getBoundingClientRect();
     // Пересчёт из CSS-пикселей в canvas-пиксели
     const mx = (e.clientX - rect.left) * (canvas.width  / rect.width);
     const my = (e.clientY - rect.top)  * (canvas.height / rect.height);
@@ -504,15 +506,16 @@ document.addEventListener('keydown', e => {
       tooltip.style.display = 'block';
       tooltip.style.left = (e.clientX + 14) + 'px';
       tooltip.style.top  = (e.clientY - 10) + 'px';
-      canvas.style.cursor = 'default';
+      wrap.style.cursor = 'crosshair';
     } else {
       tooltip.style.display = 'none';
-      canvas.style.cursor = '';
+      wrap.style.cursor = '';
     }
   });
 
-  document.getElementById('map-canvas').addEventListener('mouseleave', () => {
+  wrap.addEventListener('mouseleave', () => {
     tooltip.style.display = 'none';
+    document.getElementById('map-wrap').style.cursor = '';
   });
 })();
 
