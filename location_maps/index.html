@@ -310,9 +310,37 @@ const REGIONS = {
       { id:'arch_chest_15', name:'Сундук археолога', x:-133, y:-470, color:'#d4a017' },
       { id:'arch_chest_16', name:'Сундук археолога', x:-164, y:-406, color:'#d4a017' },
       { id:'arch_chest_17', name:'Сундук археолога', x:-238, y:-345, color:'#d4a017' },
+      { id:'arch_chest_18', name:'Сундук археолога', x:-270, y:-285, color:'#d4a017' },
     ],
   },
-  // остальные добавляются по мере загрузки карт
+  kohill_islands: {
+    name: 'Кохилльский архипелаг',
+    img: 'images/kohill_islands.jpg',
+    imgW: 322, imgH: 600,
+    bounds: { left: -1250, right: 256, top: -158, bottom: -1578 },
+    locations: [],
+  },
+  gaina: {
+    name: 'Гайна',
+    img: 'images/gaina.jpg',
+    imgW: 444, imgH: 400,
+    bounds: { left: -948, right: 66, top: 592, bottom: -332 },
+    locations: [],
+  },
+  spring_shore: {
+    name: 'Весенний берег',
+    img: 'images/spring_shore.jpg',
+    imgW: 433, imgH: 400,
+    bounds: { left: -878, right: -2, top: 1294, bottom: 408 },
+    locations: [],
+  },
+  hirn: {
+    name: 'Хирн',
+    img: 'images/hirn.jpg',
+    imgW: 389, imgH: 400,
+    bounds: { left: -312, right: 572, top: 1004, bottom: 230 },
+    locations: [],
+  },
 };
 
 // ── Иконка персонажа ─────────────────────────────────────────────────────────
@@ -404,8 +432,8 @@ function selectRegion(id) {
   document.getElementById('map-wrap').style.display = 'inline-block';
 
   currentRegion = id;
-  border = parseBorder(r.border);
-  worldBounds = calcBounds(border);
+  border = r.border ? parseBorder(r.border) : [];
+  worldBounds = border.length ? calcBounds(border) : { minX:0, maxX:1, minY:0, maxY:1 };
   scale = 1;
 
   const img = document.getElementById('map-img');
