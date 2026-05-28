@@ -225,6 +225,11 @@
         <span class="chk-box"></span>
         Города
       </label>
+      <label class="ctrl-toggle">
+        <input type="checkbox" id="chk-chests" checked onchange="drawMap()">
+        <span class="chk-box"></span>
+        Сундуки
+      </label>
     </div>
 
     <div class="map-area" id="map-area">
@@ -244,6 +249,7 @@
       <div class="info-item"><div class="info-dot player"></div> Персонаж</div>
       <div class="info-item"><div class="info-dot" style="background:#f0a040;box-shadow:0 0 4px #f0a040"></div> Города</div>
       <div class="info-item"><div class="info-dot" style="background:#c8a050;box-shadow:0 0 4px #c8a050"></div> Арх. лагерь</div>
+      <div class="info-item"><div style="width:8px;height:8px;background:#d4a017;box-shadow:0 0 4px #d4a017;flex-shrink:0"></div> Сундук</div>
 
       <div class="info-item" id="info-hover" style="margin-left:auto;font-family:monospace;opacity:.7"></div>
       <div class="info-item" id="info-coords" style="font-family:monospace"></div>
@@ -285,6 +291,9 @@ const REGIONS = {
       // Лагеря археолога
       { id:'arch_camp_wp', name:'Археологический лагерь Белого Престола', x:-68,  y:-435, color:'#c8a050' },
       { id:'arch_camp_bl', name:'Археологический лагерь Лиги Крови',      x:-66,  y:-239, color:'#c8a050' },
+    ],
+    chests: [
+      { id:'arch_chest_1', name:'Сундук археолога', x:44, y:-142, color:'#d4a017' },
     ],
   },
   // остальные добавляются по мере загрузки карт
@@ -442,8 +451,28 @@ function drawMap() {
     ctx.fillText(`${playerX}, ${playerY}`, cx + 10 * s, cy - 4 * s);
   }
 
-  // Города
+  // Сундуки и города
   drawnLocations = [];
+  const showChests = document.getElementById('chk-chests').checked;
+  if (showChests && r.chests) {
+    r.chests.forEach(ch => {
+      const { px: lx, py: ly } = worldToPixel(ch.x, ch.y, r);
+      const lcx = lx * s, lcy = ly * s;
+      drawnLocations.push({ loc: ch, cx: lcx, cy: lcy });
+      const sz = 4 * s;
+      // Ореол
+      ctx.fillStyle = (ch.color || '#d4a017') + '30';
+      ctx.fillRect(lcx - sz - 2*s, lcy - sz - 2*s, (sz + 2*s)*2, (sz + 2*s)*2);
+      // Квадрат-сундук
+      ctx.fillStyle = ch.color || '#d4a017';
+      ctx.fillRect(lcx - sz, lcy - sz, sz*2, sz*2);
+      ctx.strokeStyle = 'rgba(0,0,0,0.55)';
+      ctx.lineWidth = 0.8;
+      ctx.strokeRect(lcx - sz, lcy - sz, sz*2, sz*2);
+    });
+  }
+
+  // Города
   const showCities = document.getElementById('chk-cities').checked;
   if (showCities && r.locations) {
     r.locations.forEach(loc => {
