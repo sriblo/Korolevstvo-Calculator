@@ -604,35 +604,28 @@ document.addEventListener('keydown', e => {
   const wrap = document.getElementById('map-wrap');
 
   wrap.addEventListener('mousemove', e => {
-    if (!drawnLocations.length) return;
-
     const canvas = document.getElementById('map-canvas');
     const rect = wrap.getBoundingClientRect();
-    // Пересчёт из CSS-пикселей в canvas-пиксели
     const mx = (e.clientX - rect.left) * (canvas.width  / rect.width);
     const my = (e.clientY - rect.top)  * (canvas.height / rect.height);
 
+    // Координаты под курсором — всегда
+    const r = REGIONS[currentRegion];
+    if (r) {
+      const px = Math.round(mx / scale), py = Math.round(my / scale);
+      const coords = pixelToWorld(px, py, r);
+      document.getElementById('info-hover').textContent = coords
+        ? `Курсор: ${coords.gx}, ${coords.gy}`
+        : `Пиксель: ${px}, ${py}`;
+    }
+
+    // Тултип локаций
+    if (!drawnLocations.length) { tooltip.style.display = 'none'; return; }
     const HIT = 8 * scale;
     let found = null;
     for (const { loc, cx, cy } of drawnLocations) {
       if (Math.hypot(mx - cx, my - cy) < HIT) { found = loc; break; }
     }
-
-    // Координаты под курсором
-    const r = REGIONS[currentRegion];
-    if (r) {
-      const px = Math.round(mx / scale), py = Math.round(my / scale);
-      const coords = pixelToWorld(px, py, r);
-      if (coords) {
-        document.getElementById('info-hover').textContent =
-          `Курсор: ${coords.gx}, ${coords.gy}`;
-      } else {
-        // нет калибровки — показываем пиксели на изображении
-        document.getElementById('info-hover').textContent =
-          `Пиксель: ${px}, ${py}`;
-      }
-    }
-
     if (found) {
       tooltip.innerHTML = `${found.name} <span style="color:var(--txt3);font-size:11px">${found.x}, ${found.y}</span>`;
       tooltip.style.display = 'block';
