@@ -621,10 +621,15 @@ document.addEventListener('keydown', e => {
     // Координаты под курсором
     const r = REGIONS[currentRegion];
     if (r) {
-      const coords = pixelToWorld(mx / scale, my / scale, r);
+      const px = Math.round(mx / scale), py = Math.round(my / scale);
+      const coords = pixelToWorld(px, py, r);
       if (coords) {
         document.getElementById('info-hover').textContent =
           `Курсор: ${coords.gx}, ${coords.gy}`;
+      } else {
+        // нет калибровки — показываем пиксели на изображении
+        document.getElementById('info-hover').textContent =
+          `Пиксель: ${px}, ${py}`;
       }
     }
 
