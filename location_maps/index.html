@@ -136,6 +136,38 @@
   }
   .zoom-btn:hover { border-color:var(--gold); color:var(--gold-l) }
 
+  /* ── Checkbox toggle ── */
+  .ctrl-toggle {
+    display:flex; align-items:center; gap:7px;
+    cursor:pointer; font-size:13px; color:var(--txt2);
+    padding:4px 0; user-select:none;
+  }
+  .ctrl-toggle input { display:none }
+  .ctrl-toggle .chk-box {
+    width:16px; height:16px; border-radius:3px;
+    border:1px solid var(--line2); background:var(--bg3);
+    display:flex; align-items:center; justify-content:center;
+    flex-shrink:0; transition:.12s;
+  }
+  .ctrl-toggle input:checked + .chk-box {
+    border-color:var(--gold-d); background:rgba(var(--gold-tint),.15);
+  }
+  .ctrl-toggle input:checked + .chk-box::after {
+    content:''; display:block;
+    width:8px; height:8px; border-radius:50%;
+    background:var(--gold);
+  }
+  .ctrl-div { width:1px; height:20px; background:var(--line); flex-shrink:0 }
+
+  /* ── Tooltip локации ── */
+  .loc-tooltip {
+    position:fixed; z-index:100; pointer-events:none; display:none;
+    padding:5px 11px; border-radius:5px;
+    background:rgba(11,9,7,.88); border:1px solid rgba(var(--gold-tint),.35);
+    backdrop-filter:blur(6px);
+    font-size:12px; color:var(--txt); white-space:nowrap;
+  }
+
   /* ── No map state ── */
   .no-map {
     display:flex; flex-direction:column; align-items:center; justify-content:center;
@@ -187,6 +219,12 @@
       </div>
       <button class="btn-find" onclick="findPlayer()">Найти</button>
       <span class="coord-hint" id="coord-status"></span>
+      <div class="ctrl-div"></div>
+      <label class="ctrl-toggle">
+        <input type="checkbox" id="chk-cities" checked onchange="drawMap()">
+        <span class="chk-box"></span>
+        Города
+      </label>
     </div>
 
     <div class="map-area" id="map-area">
@@ -204,12 +242,15 @@
 
     <div class="info-bar">
       <div class="info-item"><div class="info-dot player"></div> Персонаж</div>
+      <div class="info-item"><div class="info-dot" style="background:#f0a040;box-shadow:0 0 4px #f0a040"></div> Города</div>
 
       <div class="info-item" id="info-coords" style="margin-left:auto"></div>
     </div>
   </div>
 
 </div>
+
+<div class="loc-tooltip" id="loc-tooltip"></div>
 
 <script>
 // ── Данные регионов ──────────────────────────────────────────────────────────
@@ -248,6 +289,7 @@ let playerSearched = false;
 let scale = 1;
 let border = [];
 let worldBounds = { minX:0, maxX:1, minY:0, maxY:1 };
+let drawnLocations = []; // [{loc, cx, cy}] — для hover
 
 // ── Парсинг границ ───────────────────────────────────────────────────────────
 function parseBorder(str) {
@@ -379,21 +421,29 @@ function drawMap() {
     ctx.fillText(`${playerX}, ${playerY}`, cx + 10 * s, cy - 4 * s);
   }
 
-  // Города для калибровки
-  if (r.locations) {
+  // Города
+  drawnLocations = [];
+  const showCities = document.getElementById('chk-cities').checked;
+  if (showCities && r.locations) {
     r.locations.forEach(loc => {
       const { px: lx, py: ly } = worldToPixel(loc.x, loc.y, r);
       const lcx = lx * s, lcy = ly * s;
+      drawnLocations.push({ loc, cx: lcx, cy: lcy });
+
+      // Внешнее кольцо-ореол
       ctx.beginPath();
       ctx.arc(lcx, lcy, 5 * s, 0, Math.PI * 2);
+      ctx.fillStyle = (loc.color || '#f0a040') + '28';
+      ctx.fill();
+
+      // Точка
+      ctx.beginPath();
+      ctx.arc(lcx, lcy, 3 * s, 0, Math.PI * 2);
       ctx.fillStyle = loc.color || '#f0a040';
       ctx.fill();
-      ctx.strokeStyle = 'rgba(0,0,0,0.5)';
-      ctx.lineWidth = 1;
+      ctx.strokeStyle = 'rgba(0,0,0,0.55)';
+      ctx.lineWidth = 0.8;
       ctx.stroke();
-      ctx.font = `bold ${11 * s}px Inter, sans-serif`;
-      ctx.fillStyle = loc.color || '#f0a040';
-      ctx.fillText(loc.name, lcx + 7 * s, lcy + 4 * s);
     });
   }
 
@@ -429,6 +479,42 @@ function resetZoom() {
 document.addEventListener('keydown', e => {
   if (e.key === 'Enter') findPlayer();
 });
+
+// ── Hover тултип ─────────────────────────────────────────────────────────────
+(function() {
+  const tooltip = document.getElementById('loc-tooltip');
+
+  document.getElementById('map-canvas').addEventListener('mousemove', e => {
+    if (!drawnLocations.length) return;
+
+    const canvas = document.getElementById('map-canvas');
+    const rect = canvas.getBoundingClientRect();
+    // Пересчёт из CSS-пикселей в canvas-пиксели
+    const mx = (e.clientX - rect.left) * (canvas.width  / rect.width);
+    const my = (e.clientY - rect.top)  * (canvas.height / rect.height);
+
+    const HIT = 8 * scale;
+    let found = null;
+    for (const { loc, cx, cy } of drawnLocations) {
+      if (Math.hypot(mx - cx, my - cy) < HIT) { found = loc; break; }
+    }
+
+    if (found) {
+      tooltip.textContent = found.name;
+      tooltip.style.display = 'block';
+      tooltip.style.left = (e.clientX + 14) + 'px';
+      tooltip.style.top  = (e.clientY - 10) + 'px';
+      canvas.style.cursor = 'default';
+    } else {
+      tooltip.style.display = 'none';
+      canvas.style.cursor = '';
+    }
+  });
+
+  document.getElementById('map-canvas').addEventListener('mouseleave', () => {
+    tooltip.style.display = 'none';
+  });
+})();
 
 // ── Init ─────────────────────────────────────────────────────────────────────
 selectRegion('floring');
