@@ -181,9 +181,9 @@
     <div class="controls">
       <span class="ctrl-label">Координаты</span>
       <div class="coord-group">
-        <input class="coord-input" id="inp-x" type="number" placeholder="X" value="-349">
+        <input class="coord-input" id="inp-x" type="number" placeholder="X">
         <span class="coord-sep">,</span>
-        <input class="coord-input" id="inp-y" type="number" placeholder="Y" value="-164">
+        <input class="coord-input" id="inp-y" type="number" placeholder="Y">
       </div>
       <button class="btn-find" onclick="findPlayer()">Найти</button>
       <span class="coord-hint" id="coord-status"></span>
@@ -204,7 +204,7 @@
 
     <div class="info-bar">
       <div class="info-item"><div class="info-dot player"></div> Персонаж</div>
-      <div class="info-item"><div class="info-dot border"></div> Граница региона</div>
+
       <div class="info-item" id="info-coords" style="margin-left:auto"></div>
     </div>
   </div>
@@ -323,20 +323,6 @@ function drawMap() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   const s = scale;
-
-  // Граница региона
-  ctx.beginPath();
-  border.forEach((pt, i) => {
-    const { px, py } = worldToPixel(pt.x, pt.y, r);
-    if (i === 0) ctx.moveTo(px * s, py * s);
-    else ctx.lineTo(px * s, py * s);
-  });
-  ctx.closePath();
-  ctx.strokeStyle = 'rgba(232,184,75,0.55)';
-  ctx.lineWidth = 1.5;
-  ctx.stroke();
-  ctx.fillStyle = 'rgba(232,184,75,0.04)';
-  ctx.fill();
 
   // Позиция игрока (только после поиска)
   let inBounds = false;
