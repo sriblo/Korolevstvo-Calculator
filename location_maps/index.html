@@ -500,7 +500,7 @@ document.addEventListener('keydown', e => {
     }
 
     if (found) {
-      tooltip.textContent = found.name;
+      tooltip.innerHTML = `${found.name} <span style="color:var(--txt3);font-size:11px">${found.x}, ${found.y}</span>`;
       tooltip.style.display = 'block';
       tooltip.style.left = (e.clientX + 14) + 'px';
       tooltip.style.top  = (e.clientY - 10) + 'px';
