@@ -244,7 +244,8 @@
       <div class="info-item"><div class="info-dot player"></div> Персонаж</div>
       <div class="info-item"><div class="info-dot" style="background:#f0a040;box-shadow:0 0 4px #f0a040"></div> Города</div>
 
-      <div class="info-item" id="info-coords" style="margin-left:auto"></div>
+      <div class="info-item" id="info-hover" style="margin-left:auto;font-family:monospace;opacity:.7"></div>
+      <div class="info-item" id="info-coords" style="font-family:monospace"></div>
     </div>
   </div>
 
@@ -305,6 +306,19 @@ function calcBounds(pts) {
     minX: Math.min(...xs), maxX: Math.max(...xs),
     minY: Math.min(...ys), maxY: Math.max(...ys),
   };
+}
+
+// ── Обратное преобразование: пиксель → игровые координаты ───────────────────
+function pixelToWorld(px, py, r) {
+  if (r.affine) {
+    const { a, b, c, d, e, f } = r.affine;
+    const det = a * e - b * d;
+    if (Math.abs(det) < 1e-9) return null;
+    const gx = (e * (px - c) - b * (py - f)) / det;
+    const gy = (a * (py - f) - d * (px - c)) / det;
+    return { gx: Math.round(gx), gy: Math.round(gy) };
+  }
+  return null;
 }
 
 // ── Преобразование координат ─────────────────────────────────────────────────
@@ -501,21 +515,29 @@ document.addEventListener('keydown', e => {
       if (Math.hypot(mx - cx, my - cy) < HIT) { found = loc; break; }
     }
 
+    // Координаты под курсором
+    const r = REGIONS[currentRegion];
+    if (r) {
+      const coords = pixelToWorld(mx / scale, my / scale, r);
+      if (coords) {
+        document.getElementById('info-hover').textContent =
+          `Курсор: ${coords.gx}, ${coords.gy}`;
+      }
+    }
+
     if (found) {
       tooltip.innerHTML = `${found.name} <span style="color:var(--txt3);font-size:11px">${found.x}, ${found.y}</span>`;
       tooltip.style.display = 'block';
       tooltip.style.left = (e.clientX + 14) + 'px';
       tooltip.style.top  = (e.clientY - 10) + 'px';
-      wrap.style.cursor = 'crosshair';
     } else {
       tooltip.style.display = 'none';
-      wrap.style.cursor = '';
     }
   });
 
   wrap.addEventListener('mouseleave', () => {
     tooltip.style.display = 'none';
-    document.getElementById('map-wrap').style.cursor = '';
+    document.getElementById('info-hover').textContent = '';
   });
 })();
 
