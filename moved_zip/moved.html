@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Korolevstvo — проект переехал</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,300;1,9..144,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<!--
+═══════════════════════════════════════════════════════════════════
+  НАСТРОЙКА: подставьте новый URL ниже, когда репозиторий будет готов.
+  Поиск по строке: NEW_URL
+═══════════════════════════════════════════════════════════════════
+-->
+
+<style>
+  :root{
+    --gold:#d4a843;
+    --gold-l:#f5d878;
+    --gold-d:#a07d2b;
+    --gold-tint:212,168,67;
+
+    --bg:#0b0907;
+    --bg2:#120e09;
+    --bg3:#1a160f;
+    --line:rgba(var(--gold-tint),.09);
+    --line2:rgba(var(--gold-tint),.18);
+    --txt:#ece4cf;
+    --txt2:#a99775;
+    --txt3:#6c5d44;
+    --green:#8ab860;
+
+    --serif:'Fraunces',Georgia,serif;
+    --sans:'Inter',system-ui,sans-serif;
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg);color:var(--txt);font-family:var(--sans);font-size:14px;-webkit-font-smoothing:antialiased}
+  body{
+    min-height:100vh;
+    display:flex;flex-direction:column;
+    background:
+      radial-gradient(ellipse 80% 50% at 20% -10%, rgba(var(--gold-tint),.14), transparent 60%),
+      radial-gradient(ellipse 60% 50% at 100% 110%, rgba(80,30,15,.22), transparent 60%),
+      radial-gradient(ellipse 50% 40% at 100% 5%, rgba(80,30,15,.18), transparent 60%),
+      var(--bg);
+  }
+  a{color:inherit;text-decoration:none}
+
+  /* ──────────────────────────── Top bar (minimal) ──────────────────────────── */
+  .top{
+    padding:18px 40px;border-bottom:1px solid var(--line);
+    background:rgba(11,9,7,.78);backdrop-filter:blur(20px);
+    display:flex;align-items:center;gap:14px;
+  }
+  .logo{display:flex;align-items:center;gap:12px}
+  .logo img{width:30px;height:30px;filter:drop-shadow(0 0 10px rgba(var(--gold-tint),.4))}
+  .logo-t{display:flex;flex-direction:column;line-height:1}
+  .logo-n{font-family:var(--serif);font-size:17px;font-weight:600;letter-spacing:-.01em}
+  .logo-s{font-size:11px;color:var(--txt3);margin-top:2px;letter-spacing:.02em}
+  .top-r{
+    margin-left:auto;font-size:11px;color:var(--txt3);
+    letter-spacing:.14em;text-transform:uppercase;font-weight:600;
+    display:flex;align-items:center;gap:8px;
+  }
+  .top-r::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--gold-d);box-shadow:0 0 8px var(--gold-d)}
+
+  /* ──────────────────────────── Hero ──────────────────────────── */
+  .wrap{
+    flex:1;
+    max-width:760px;width:100%;
+    margin:0 auto;padding:88px 40px 56px;
+    position:relative;
+  }
+  .wrap::after{
+    content:'';position:absolute;
+    top:-20px;right:-200px;width:620px;height:740px;
+    background:url('kor_logo.svg') no-repeat center/contain;
+    opacity:.07;pointer-events:none;z-index:0;
+    transform:rotate(-8deg);
+    -webkit-mask-image:linear-gradient(to top, transparent 0%, rgba(0,0,0,.2) 30%, rgba(0,0,0,.55) 55%, black 85%);
+            mask-image:linear-gradient(to top, transparent 0%, rgba(0,0,0,.2) 30%, rgba(0,0,0,.55) 55%, black 85%);
+  }
+  .wrap > *{position:relative;z-index:1}
+
+  .eyebrow{
+    font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);font-weight:600;
+    display:inline-flex;align-items:center;gap:10px;margin-bottom:28px;
+  }
+  .eyebrow::before{content:'';width:24px;height:1px;background:var(--gold)}
+
+  .h1{
+    font-family:var(--serif);font-size:64px;line-height:1.02;font-weight:400;letter-spacing:-.025em;
+    margin-bottom:28px;
+  }
+  .h1 em{font-style:italic;color:var(--gold-l);font-weight:300}
+
+  .lede{
+    font-family:var(--serif);font-size:19px;line-height:1.6;color:var(--txt2);
+    max-width:580px;font-weight:400;
+  }
+  .lede + .lede{margin-top:14px}
+  .lede strong{color:var(--txt);font-weight:500}
+
+  /* ──────────────────────────── CTA block ──────────────────────────── */
+  .cta{
+    margin-top:48px;
+    background:var(--bg2);border:1px solid var(--line2);border-radius:12px;
+    padding:28px 30px;
+    display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;
+    position:relative;overflow:hidden;
+  }
+  .cta::before{
+    content:'';position:absolute;left:0;top:0;bottom:0;width:3px;
+    background:linear-gradient(180deg,var(--gold-l),var(--gold-d));
+  }
+  .cta-l{flex:1;min-width:240px}
+  .cta-k{
+    font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-d);
+    font-weight:700;margin-bottom:8px;
+  }
+  .cta-t{
+    font-family:var(--serif);font-size:22px;font-weight:500;letter-spacing:-.01em;
+    color:var(--txt);margin-bottom:6px;
+  }
+  .cta-t em{font-style:italic;color:var(--gold-l);font-weight:400}
+  .cta-d{font-family:var(--serif);font-size:13px;color:var(--txt3);line-height:1.5}
+
+  .btn{
+    display:inline-flex;align-items:center;gap:10px;
+    background:linear-gradient(180deg,var(--gold-l),var(--gold));
+    color:#1a1208;font-family:var(--sans);font-weight:600;font-size:13px;
+    letter-spacing:.04em;padding:14px 22px;border-radius:8px;
+    border:1px solid var(--gold-d);
+    box-shadow:0 6px 24px rgba(var(--gold-tint),.18), inset 0 1px 0 rgba(255,255,255,.3);
+    transition:transform .12s,box-shadow .15s;
+    white-space:nowrap;cursor:pointer;
+  }
+  .btn:hover{
+    transform:translateY(-1px);
+    box-shadow:0 10px 30px rgba(var(--gold-tint),.28), inset 0 1px 0 rgba(255,255,255,.3);
+  }
+  .btn .arr{font-family:var(--serif);font-size:18px;line-height:1;margin-top:-1px}
+  .btn.disabled{
+    background:var(--bg3);color:var(--txt3);border-color:var(--line2);
+    box-shadow:none;cursor:not-allowed;pointer-events:none;
+  }
+
+  /* ──────────────────────────── What's new chips ──────────────────────────── */
+  .meta{
+    margin-top:44px;padding-top:32px;border-top:1px solid var(--line);
+  }
+  .meta-h{
+    font-family:var(--serif);font-style:italic;font-size:14px;color:var(--txt3);
+    margin-bottom:14px;
+  }
+  .chips{display:flex;flex-wrap:wrap;gap:8px}
+  .chip{
+    font-size:12px;padding:6px 12px;border-radius:14px;
+    background:var(--bg2);border:1px solid var(--line);
+    color:var(--txt2);letter-spacing:.02em;
+  }
+  .chip b{color:var(--gold-l);font-weight:500;margin-right:4px}
+
+  .url-fallback{
+    margin-top:32px;font-size:12px;color:var(--txt3);
+    line-height:1.6;
+  }
+  .url-fallback code{
+    font-family:'SF Mono','Menlo',monospace;font-size:12px;
+    background:var(--bg2);border:1px solid var(--line);border-radius:4px;
+    padding:3px 8px;color:var(--gold-l);word-break:break-all;
+    display:inline-block;margin-top:4px;
+  }
+
+  /* ──────────────────────────── Footer ──────────────────────────── */
+  .ftr{
+    max-width:760px;margin:0 auto;padding:24px 40px 40px;
+    border-top:1px solid var(--line);
+    display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;
+    font-size:12px;color:var(--txt3);
+  }
+  .ftr-l{font-family:var(--serif);font-style:italic}
+
+  /* ──────────────────────────── Mobile ──────────────────────────── */
+  @media(max-width:640px){
+    .top{padding:14px 18px}
+    .wrap{padding:48px 20px 40px}
+    .wrap::after{right:-120px;width:420px;height:520px;opacity:.05}
+    .h1{font-size:42px}
+    .lede{font-size:16px}
+    .cta{padding:22px;flex-direction:column;align-items:stretch}
+    .btn{justify-content:center}
+    .ftr{padding:20px 20px 32px;flex-direction:column;align-items:flex-start;gap:8px}
+  }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <a class="logo" href="#">
+    <img src="kor_logo.svg" alt="">
+    <div class="logo-t">
+      <div class="logo-n">Korolevstvo</div>
+      <div class="logo-s">База знаний</div>
+    </div>
+  </a>
+  <div class="top-r">Проект переехал</div>
+</header>
+
+<main class="wrap">
+  <div class="eyebrow">Важное сообщение</div>
+
+  <h1 class="h1">
+    Дорогие <em>друзья</em>,<br>
+    мы переехали
+  </h1>
+
+  <p class="lede">
+    Всё начиналось с обычных <strong>ивентовых калькуляторов</strong>, но со временем
+    проект эволюционировал. Теперь это полноценная <strong>База знаний</strong> по игре
+    Королевство: ивентовые калькуляторы, база предметов, гайды и многое другое.
+  </p>
+
+  <p class="lede">
+    Чтобы всё это удобно жило вместе, <strong>с 1 июня 2026 года</strong> мы переехали
+    на отдельный репозиторий. Эта страница останется здесь для тех, у кого старая
+    ссылка в закладках — переходите и пользуйтесь обновлённым проектом!
+  </p>
+
+  <!-- ═══════════ NEW_URL: подставьте сюда финальный адрес ═══════════ -->
+  <a class="cta" id="goto" href="https://sriblo.github.io/kor_knowledge_base/" target="_self">
+    <div class="cta-l">
+      <div class="cta-k">Новый адрес</div>
+      <div class="cta-t">Перейти на <em>обновлённый сайт</em></div>
+      <div class="cta-d">Все калькуляторы, гайды и инструменты — там же, плюс новое.</div>
+    </div>
+    <span class="btn">
+      Открыть <span class="arr">→</span>
+    </span>
+  </a>
+
+  <div class="url-fallback">
+    Если кнопка не работает, скопируйте адрес:<br>
+    <code id="newurl">https://sriblo.github.io/kor_knowledge_base/</code>
+  </div>
+</main>
+
+<script>
+  // ════════════════════════════════════════════════════════════════
+  // НАСТРОЙКА — подставьте сюда финальный URL нового сайта.
+  // Если AUTO_REDIRECT_SECONDS > 0, страница автоматически перейдёт
+  // через указанное число секунд. Поставьте 0 чтобы отключить.
+  // ════════════════════════════════════════════════════════════════
+  const NEW_URL = "https://sriblo.github.io/kor_knowledge_base/";
+  const AUTO_REDIRECT_SECONDS = 0;
+
+  // Apply URL to all relevant elements
+  document.getElementById('goto').href = NEW_URL;
+  document.getElementById('newurl').textContent = NEW_URL;
+
+  // Optional auto-redirect
+  if (AUTO_REDIRECT_SECONDS > 0) {
+    setTimeout(() => { window.location.href = NEW_URL; }, AUTO_REDIRECT_SECONDS * 1000);
+  }
+</script>
+
+</body>
+</html>
