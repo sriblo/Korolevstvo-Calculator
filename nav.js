@@ -12,9 +12,10 @@
     'glubin_calc.html', 'glubin_calc_v2.html', 'loc_calc.html', 'rep_calc.html',
   ];
 
-  var isHome  = page === 'index_new.html' || page === 'index.html' || page === '';
-  var isCalc  = calcPages.indexOf(page) !== -1;
-  var isItems = page === 'items_base.html';
+  var isHome   = page === 'index_new.html' || page === 'index.html' || page === '';
+  var isCalc   = calcPages.indexOf(page) !== -1;
+  var isItems  = page === 'items_base.html';
+  var isGuides = page === 'all_guides.html';
 
   // ── CSS ────────────────────────────────────────────────────────────────────
   if (!document.getElementById('nav-shared-css')) {
@@ -30,6 +31,7 @@
       '.nav a{padding:7px 12px;border-radius:6px;font-size:13px;color:var(--txt2);font-weight:500;transition:background .12s,color .12s}',
       '.nav a:hover{color:var(--txt);background:var(--bg2)}',
       '.nav a.on{color:var(--gold-l);background:var(--bg3)}',
+      '.nav-soon{padding:7px 12px;border-radius:6px;font-size:13px;color:var(--txt3);font-weight:500;cursor:default;user-select:none}',
       // dropdown nav
       '.nav-dd{position:relative;display:flex;align-items:center}',
       '.dd-trigger{display:flex;align-items:center;gap:6px;padding:6px 11px;border-radius:6px;',
@@ -131,8 +133,8 @@
       '</div>' +
     '</div>' +
     a(_base + 'items_base.html', 'База предметов', isItems) +
-    '<a>Гайды<span class="count">скоро</span></a>' +
-    '<a>Сообщество</a>';
+    a(_base + 'guides/all_guides.html', 'Гайды', isGuides) +
+    '<span class="nav-soon">Сообщество</span>';
 
   var logo = document.getElementById('site-logo');
   if (logo) {
@@ -187,7 +189,7 @@
       '<a class="' + mbLinkClass(page === 'rep_calc.html', false) + '" href="' + _base + 'reputation_calc/rep_calc.html">Прокачка репутаций</a>' +
       '<a class="' + mbLinkClass(page === 'stats_calc.html', false) + '" href="' + _base + 'stats_calc.html">Характеристики</a>' +
       '<div class="nav-mb-sec">Скоро</div>' +
-      '<span class="nav-mb-link soon">Гайды</span>' +
+      '<a class="' + mbLinkClass(isGuides, false) + '" href="' + _base + 'guides/all_guides.html">Гайды</a>' +
       '<span class="nav-mb-link soon">Сообщество</span>' +
     '</div>';
   document.body.appendChild(mbOverlay);
@@ -204,6 +206,7 @@
     { title: 'Месяц цветущего хмеля', desc: 'Ивент — хмель, золотой клевер, монеты леприкона', url: 'leprecon/hmeli_calc.html', tags: 'хмель леприкон клевер ивент монеты' },
     { title: 'Загруженность копий', desc: 'Оптимальные копии локаций для фарма', url: 'location_calc/loc_calc.html', tags: 'локации копии загруженность фарм подземелья' },
     { title: 'Прокачка репутаций', desc: 'Калькулятор репутаций всех фракций Королевства', url: 'reputation_calc/rep_calc.html', tags: 'репутации фракции прокачка гвардия гладиатор орден завоеватель' },
+    { title: 'Гайды', desc: 'Разборы ивентов, локаций, классов и экономики', url: 'guides/all_guides.html', tags: 'гайды ивенты локации классы билды экономика новичкам pvp' },
   ];
 
   var sw = document.createElement('div');
