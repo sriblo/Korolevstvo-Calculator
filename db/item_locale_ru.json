@@ -51743,5 +51743,14 @@
   },
   "mob_fair_turkey": {
     "name": "Индюк"
+  },
+  "pirate_day_2015_flask_12": {
+    "name": "Пиратская Фляжка"
+  },
+  "pirate_day_2026_flask_box": {
+    "name": "Пиратский Ящик с Флягами"
+  },
+  "fair_artefact_666": {
+    "name": "Скрижаль Удачи"
   }
 }

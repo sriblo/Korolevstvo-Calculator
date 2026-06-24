@@ -18087,5 +18087,28 @@
     "ruby_price": 1.2,
     "durability": 50,
     "blocktrade": "always"
+  },
+  {
+    "id": "pirate_day_2026_flask_box",
+    "class": "none",
+    "slot": "",
+    "category": "inventory",
+    "quality": "orange",
+    "reqlvl": 1,
+    "set": null,
+    "tags": "pirate_day",
+    "visual": "scrap_metal_quest",
+    "price": 0,
+    "ruby_price": null,
+    "durability": 0,
+    "blocktrade": "always",
+    "stats": {
+      "max_health": 14.0,
+      "mana": 500,
+      "change_health_regeneration_speed": 180,
+      "change_absorb_critical": 21.0,
+      "change_damage_sent_percent": 50.0,
+      "change_damage_received_percent": 36.0
+    }
   }
 ]

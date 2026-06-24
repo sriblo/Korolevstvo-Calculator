@@ -10049,5 +10049,50 @@
       "mana": 100,
       "change_damage_sent_percent": 2.0
     }
+  },
+  {
+    "id": "pirate_day_2015_flask_12",
+    "class": "none",
+    "slot": "accessory1",
+    "category": "equipment",
+    "quality": "orange",
+    "reqlvl": 3,
+    "set": null,
+    "tags": "pirate_day",
+    "visual": "pirate_day_flask_icon",
+    "price": 10000,
+    "ruby_price": 12,
+    "durability": 19,
+    "blocktrade": "always",
+    "stats": {
+      "max_health": 14.0,
+      "mana": 500,
+      "change_health_regeneration_speed": 180,
+      "change_absorb_critical": 21.0,
+      "change_damage_sent_percent": 50.0,
+      "change_damage_received_percent": 36.0
+    }
+  },
+  {
+    "id": "fair_artefact_666",
+    "class": "none",
+    "slot": "artefact1,artefact2,artefact3,artefact4,artefact5,artefact6,artefact7,artefact8,artefact9",
+    "category": "equipment",
+    "quality": "orange",
+    "reqlvl": 3,
+    "set": null,
+    "tags": "equipment",
+    "visual": "artefact_cards_fair",
+    "price": 1,
+    "ruby_price": 1,
+    "durability": 100,
+    "blocktrade": "always",
+    "stats": {
+      "attack": 5,
+      "max_health": 500,
+      "change_damage_sent_percent": 5.0,
+      "change_damage_received_percent": 5.0,
+      "change_heal_sent_percent": 5.0
+    }
   }
 ]
